@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+
+<!--
+  SPED Scheduling Dashboard
+
+  Comprehensive dashboard for managing IEP services and special education scheduling:
+  - View all students with active IEPs
+  - Monitor service compliance and minutes delivered
+  - Schedule pull-out services
+  - Track provider workload
+  - Generate compliance reports
+  - View and resolve scheduling conflicts
+
+  Location: src/main/resources/fxml/SPEDSchedulingDashboard.fxml
+-->
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.eduscheduler.ui.controller.SPEDSchedulingDashboardController"
+            stylesheets="@../css/modern-theme.css">
+
+    <!-- Top: Header and Quick Stats -->
+    <top>
+        <VBox styleClass="dashboard-header" spacing="15">
+            <padding>
+                <Insets top="20" right="20" bottom="15" left="20"/>
+            </padding>
+
+            <!-- Title -->
+            <HBox alignment="CENTER_LEFT" spacing="15">
+                <Label text="SPED Scheduling Dashboard" styleClass="dashboard-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="Refresh" fx:id="refreshButton" onAction="#handleRefresh"
+                        styleClass="primary-button"/>
+                <Button text="Generate Report" fx:id="generateReportButton"
+                        onAction="#handleGenerateReport" styleClass="accent-button"/>
+            </HBox>
+
+            <!-- Quick Stats Cards -->
+            <HBox spacing="15" alignment="CENTER">
+                <!-- Total Active IEPs -->
+                <VBox styleClass="stat-card" spacing="5" alignment="CENTER">
+                    <padding>
+                        <Insets top="15" right="20" bottom="15" left="20"/>
+                    </padding>
+                    <Label text="Active IEPs" styleClass="stat-label"/>
+                    <Label fx:id="totalIEPsLabel" text="0" styleClass="stat-value"/>
+                </VBox>
+
+                <!-- Services Scheduled -->
+                <VBox styleClass="stat-card" spacing="5" alignment="CENTER">
+                    <padding>
+                        <Insets top="15" right="20" bottom="15" left="20"/>
+                    </padding>
+                    <Label text="Services Scheduled" styleClass="stat-label"/>
+                    <Label fx:id="servicesScheduledLabel" text="0" styleClass="stat-value"/>
+                </VBox>
+
+                <!-- Compliance Rate -->
+                <VBox styleClass="stat-card stat-card-success" spacing="5" alignment="CENTER">
+                    <padding>
+                        <Insets top="15" right="20" bottom="15" left="20"/>
+                    </padding>
+                    <Label text="Compliance Rate" styleClass="stat-label"/>
+                    <Label fx:id="complianceRateLabel" text="0%" styleClass="stat-value"/>
+                </VBox>
+
+                <!-- Students with Conflicts -->
+                <VBox styleClass="stat-card stat-card-warning" spacing="5" alignment="CENTER">
+                    <padding>
+                        <Insets top="15" right="20" bottom="15" left="20"/>
+                    </padding>
+                    <Label text="Scheduling Conflicts" styleClass="stat-label"/>
+                    <Label fx:id="conflictsLabel" text="0" styleClass="stat-value"/>
+                </VBox>
+
+                <!-- Unscheduled Services -->
+                <VBox styleClass="stat-card stat-card-danger" spacing="5" alignment="CENTER">
+                    <padding>
+                        <Insets top="15" right="20" bottom="15" left="20"/>
+                    </padding>
+                    <Label text="Unscheduled Services" styleClass="stat-label"/>
+                    <Label fx:id="unscheduledLabel" text="0" styleClass="stat-value"/>
+                </VBox>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- Center: Main Content Tabs -->
+    <center>
+        <TabPane fx:id="mainTabPane" tabClosingPolicy="UNAVAILABLE">
+            <padding>
+                <Insets top="10" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <!-- Tab 1: Students with IEPs -->
+            <Tab text="Students">
+                <VBox spacing="15">
+                    <padding>
+                        <Insets top="15" right="15" bottom="15" left="15"/>
+                    </padding>
+
+                    <!-- Search and Filter -->
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Search:"/>
+                        <TextField fx:id="studentSearchField" promptText="Search by name..."
+                                   HBox.hgrow="ALWAYS"/>
+                        <Label text="Grade:"/>
+                        <ComboBox fx:id="gradeFilterCombo" promptText="All Grades"/>
+                        <Label text="Disability:"/>
+                        <ComboBox fx:id="disabilityFilterCombo" promptText="All"/>
+                        <Button text="Clear Filters" onAction="#handleClearFilters"/>
+                    </HBox>
+
+                    <!-- Students Table -->
+                    <TableView fx:id="studentsTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn text="Student ID" fx:id="studentIdColumn" prefWidth="100"/>
+                            <TableColumn text="Name" fx:id="studentNameColumn" prefWidth="200"/>
+                            <TableColumn text="Grade" fx:id="studentGradeColumn" prefWidth="80"/>
+                            <TableColumn text="IEP Status" fx:id="iepStatusColumn" prefWidth="100"/>
+                            <TableColumn text="Disability" fx:id="disabilityColumn" prefWidth="150"/>
+                            <TableColumn text="Services" fx:id="servicesCountColumn" prefWidth="80"/>
+                            <TableColumn text="Compliance %" fx:id="complianceColumn" prefWidth="100"/>
+                            <TableColumn text="Case Manager" fx:id="caseManagerColumn" prefWidth="150"/>
+                            <TableColumn text="Actions" fx:id="studentActionsColumn" prefWidth="150"/>
+                        </columns>
+                    </TableView>
+
+                    <!-- Student Details Panel -->
+                    <VBox fx:id="studentDetailsPanel" spacing="10" styleClass="details-panel" visible="false">
+                        <padding>
+                            <Insets top="15" right="15" bottom="15" left="15"/>
+                        </padding>
+
+                        <Label text="Student Details" styleClass="section-title"/>
+
+                        <GridPane hgap="15" vgap="10">
+                            <Label text="IEP Effective:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                            <Label fx:id="iepEffectiveDateLabel" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                            <Label text="IEP Expires:" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
+                            <Label fx:id="iepExpirationDateLabel" GridPane.rowIndex="0" GridPane.columnIndex="3"/>
+
+                            <Label text="Annual Review:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                            <Label fx:id="annualReviewDateLabel" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                            <Label text="LRE Setting:" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
+                            <Label fx:id="lreSettingLabel" GridPane.rowIndex="1" GridPane.columnIndex="3"/>
+                        </GridPane>
+
+                        <Label text="IEP Services" styleClass="subsection-title"/>
+
+                        <TableView fx:id="studentServicesTable" prefHeight="200">
+                            <columns>
+                                <TableColumn text="Service Type" fx:id="serviceTypeColumn" prefWidth="150"/>
+                                <TableColumn text="Provider" fx:id="providerColumn" prefWidth="150"/>
+                                <TableColumn text="Min/Week" fx:id="minutesPerWeekColumn" prefWidth="100"/>
+                                <TableColumn text="Scheduled" fx:id="scheduledStatusColumn" prefWidth="100"/>
+                                <TableColumn text="Compliance %" fx:id="serviceComplianceColumn" prefWidth="100"/>
+                                <TableColumn text="Actions" fx:id="serviceActionsColumn" prefWidth="200"/>
+                            </columns>
+                        </TableView>
+                    </VBox>
+                </VBox>
+            </Tab>
+
+            <!-- Tab 2: Service Scheduling -->
+            <Tab text="Service Scheduling">
+                <VBox spacing="15">
+                    <padding>
+                        <Insets top="15" right="15" bottom="15" left="15"/>
+                    </padding>
+
+                    <HBox spacing="15" alignment="CENTER_LEFT">
+                        <Label text="Filter by Service Type:"/>
+                        <ComboBox fx:id="serviceTypeFilterCombo" promptText="All Services"/>
+                        <Label text="Provider:"/>
+                        <ComboBox fx:id="providerFilterCombo" promptText="All Providers"/>
+                        <Label text="Status:"/>
+                        <ComboBox fx:id="statusFilterCombo" promptText="All Statuses"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Button text="Schedule All Unscheduled" onAction="#handleScheduleAll"
+                                styleClass="accent-button"/>
+                    </HBox>
+
+                    <!-- Services Table -->
+                    <TableView fx:id="servicesTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn text="Student" fx:id="serviceStudentColumn" prefWidth="150"/>
+                            <TableColumn text="Service" fx:id="serviceColumn" prefWidth="150"/>
+                            <TableColumn text="Provider" fx:id="serviceProviderColumn" prefWidth="150"/>
+                            <TableColumn text="Min/Session" fx:id="minPerSessionColumn" prefWidth="100"/>
+                            <TableColumn text="Sessions/Week" fx:id="sessionsPerWeekColumn" prefWidth="100"/>
+                            <TableColumn text="Total Min/Week" fx:id="totalMinWeekColumn" prefWidth="100"/>
+                            <TableColumn text="Status" fx:id="scheduleStatusColumn" prefWidth="120"/>
+                            <TableColumn text="Actions" fx:id="scheduleActionsColumn" prefWidth="200"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+            </Tab>
+
+            <!-- Tab 3: Pull-Out Schedules -->
+            <Tab text="Pull-Out Schedules">
+                <VBox spacing="15">
+                    <padding>
+                        <Insets top="15" right="15" bottom="15" left="15"/>
+                    </padding>
+
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Day:"/>
+                        <ComboBox fx:id="dayFilterCombo" promptText="All Days"/>
+                        <Label text="Student:"/>
+                        <TextField fx:id="pullOutStudentSearch" promptText="Search student..."/>
+                        <Label text="Impact:"/>
+                        <ComboBox fx:id="impactFilterCombo" promptText="All Impacts"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Button text="Export Schedule" onAction="#handleExportPullOutSchedule"/>
+                    </HBox>
+
+                    <!-- Pull-Out Schedules Table -->
+                    <TableView fx:id="pullOutSchedulesTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn text="Student" fx:id="pullOutStudentColumn" prefWidth="150"/>
+                            <TableColumn text="Service" fx:id="pullOutServiceColumn" prefWidth="120"/>
+                            <TableColumn text="Provider" fx:id="pullOutProviderColumn" prefWidth="120"/>
+                            <TableColumn text="Day" fx:id="pullOutDayColumn" prefWidth="100"/>
+                            <TableColumn text="Time" fx:id="pullOutTimeColumn" prefWidth="120"/>
+                            <TableColumn text="Duration" fx:id="pullOutDurationColumn" prefWidth="80"/>
+                            <TableColumn text="Missed Class" fx:id="missedClassColumn" prefWidth="150"/>
+                            <TableColumn text="Impact" fx:id="academicImpactColumn" prefWidth="100"/>
+                            <TableColumn text="Compliance %" fx:id="pullOutComplianceColumn" prefWidth="100"/>
+                            <TableColumn text="Actions" fx:id="pullOutActionsColumn" prefWidth="150"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+            </Tab>
+
+            <!-- Tab 4: Provider Workload -->
+            <Tab text="Provider Workload">
+                <VBox spacing="15">
+                    <padding>
+                        <Insets top="15" right="15" bottom="15" left="15"/>
+                    </padding>
+
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Service Type:"/>
+                        <ComboBox fx:id="providerServiceTypeFilter" promptText="All Types"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Button text="Balance Workload" onAction="#handleBalanceWorkload"
+                                styleClass="accent-button"/>
+                    </HBox>
+
+                    <!-- Providers Table -->
+                    <TableView fx:id="providersTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn text="Provider" fx:id="providerNameColumn" prefWidth="200"/>
+                            <TableColumn text="Certification" fx:id="certificationColumn" prefWidth="150"/>
+                            <TableColumn text="Students Served" fx:id="studentsServedColumn" prefWidth="120"/>
+                            <TableColumn text="Total Min/Week" fx:id="providerMinutesColumn" prefWidth="120"/>
+                            <TableColumn text="Sessions/Week" fx:id="providerSessionsColumn" prefWidth="120"/>
+                            <TableColumn text="Workload Status" fx:id="workloadStatusColumn" prefWidth="150"/>
+                            <TableColumn text="Actions" fx:id="providerActionsColumn" prefWidth="150"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+            </Tab>
+
+            <!-- Tab 5: Compliance Tracking -->
+            <Tab text="Compliance">
+                <VBox spacing="15">
+                    <padding>
+                        <Insets top="15" right="15" bottom="15" left="15"/>
+                    </padding>
+
+                    <!-- Compliance Summary Cards -->
+                    <HBox spacing="15" alignment="CENTER">
+                        <VBox styleClass="compliance-card" spacing="5" alignment="CENTER">
+                            <padding>
+                                <Insets top="15" right="20" bottom="15" left="20"/>
+                            </padding>
+                            <Label text="Fully Compliant" styleClass="compliance-label"/>
+                            <Label fx:id="fullyCompliantLabel" text="0" styleClass="compliance-value-success"/>
+                        </VBox>
+
+                        <VBox styleClass="compliance-card" spacing="5" alignment="CENTER">
+                            <padding>
+                                <Insets top="15" right="20" bottom="15" left="20"/>
+                            </padding>
+                            <Label text="Partially Compliant" styleClass="compliance-label"/>
+                            <Label fx:id="partiallyCompliantLabel" text="0" styleClass="compliance-value-warning"/>
+                        </VBox>
+
+                        <VBox styleClass="compliance-card" spacing="5" alignment="CENTER">
+                            <padding>
+                                <Insets top="15" right="20" bottom="15" left="20"/>
+                            </padding>
+                            <Label text="Non-Compliant" styleClass="compliance-label"/>
+                            <Label fx:id="nonCompliantLabel" text="0" styleClass="compliance-value-danger"/>
+                        </VBox>
+
+                        <VBox styleClass="compliance-card" spacing="5" alignment="CENTER">
+                            <padding>
+                                <Insets top="15" right="20" bottom="15" left="20"/>
+                            </padding>
+                            <Label text="IEPs Due for Renewal" styleClass="compliance-label"/>
+                            <Label fx:id="dueForRenewalLabel" text="0" styleClass="compliance-value-warning"/>
+                        </VBox>
+                    </HBox>
+
+                    <!-- Compliance Alerts -->
+                    <Label text="Compliance Alerts" styleClass="section-title"/>
+
+                    <TableView fx:id="complianceAlertsTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn text="Severity" fx:id="severityColumn" prefWidth="100"/>
+                            <TableColumn text="Student" fx:id="alertStudentColumn" prefWidth="200"/>
+                            <TableColumn text="Issue" fx:id="alertMessageColumn" prefWidth="400"/>
+                            <TableColumn text="Compliance %" fx:id="alertComplianceColumn" prefWidth="120"/>
+                            <TableColumn text="Actions" fx:id="alertActionsColumn" prefWidth="200"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+            </Tab>
+        </TabPane>
+    </center>
+
+    <!-- Bottom: Action Bar -->
+    <bottom>
+        <HBox spacing="10" alignment="CENTER_RIGHT" styleClass="action-bar">
+            <padding>
+                <Insets top="15" right="20" bottom="15" left="20"/>
+            </padding>
+
+            <Label fx:id="statusLabel" text="Ready" HBox.hgrow="ALWAYS"/>
+            <Button text="Schedule Selected Service" fx:id="scheduleServiceButton"
+                    onAction="#handleScheduleService" disable="true" styleClass="primary-button"/>
+            <Button text="View IEP Details" fx:id="viewIEPButton"
+                    onAction="#handleViewIEP" disable="true"/>
+            <Button text="Export Compliance Report" onAction="#handleExportComplianceReport"/>
+            <Button text="Help" onAction="#handleHelp"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

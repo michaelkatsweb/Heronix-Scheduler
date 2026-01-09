@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<!--
+    Main Window FXML - SIMPLIFIED FOR DYNAMIC LOADING
+    Location: src/main/resources/fxml/MainWindow.fxml
+    
+    This version uses BorderPane with dynamic view loading
+    instead of static TabPane
+-->
+<BorderPane xmlns="http://javafx.com/javafx"
+    xmlns:fx="http://javafx.com/fxml"
+    fx:id="mainBorderPane"
+    fx:controller="com.eduscheduler.ui.controller.MainController"
+    prefWidth="1400" prefHeight="900"
+    styleClass="root"
+    style="-fx-background-color: #1e2230;">
+
+    <!-- Top: Menu Bar -->
+    <top>
+        <VBox>
+            <!-- Menu Bar -->
+            <MenuBar>
+                <Menu text="File">
+                    <MenuItem text="New Schedule" onAction="#handleNewSchedule" />
+                    <MenuItem text="Open Schedule" onAction="#handleOpenSchedule" />
+                    <MenuItem text="Save Schedule" onAction="#handleSaveSchedule" />
+                    <SeparatorMenuItem />
+                    <MenuItem text="Import Data..." onAction="#handleImportData" />
+                    <MenuItem text="Export Schedule..." onAction="#handleExportSchedule" />
+                    <SeparatorMenuItem />
+                    <MenuItem text="Exit" onAction="#handleExit" />
+                </Menu>
+                <Menu text="Manage">
+                    <MenuItem text="Teachers" onAction="#handleManageTeachers" />
+                    <MenuItem text="Courses" onAction="#handleManageCourses" />
+                    <MenuItem text="Rooms" onAction="#handleManageRooms" />
+                    <MenuItem text="Students" onAction="#handleManageStudents" />
+                    <SeparatorMenuItem />
+                    <Menu text="📝 Gradebook">
+                        <MenuItem text="Teacher Gradebook" onAction="#loadGradebook" />
+                        <MenuItem text="Admin Gradebook" onAction="#loadAdminGradebook" />
+                    </Menu>
+                    <SeparatorMenuItem />
+                    <Menu text="📋 Enrollment">
+                        <MenuItem text="Student Enrollment" onAction="#loadStudentEnrollment" />
+                        <MenuItem text="Bulk Enrollment Manager" onAction="#handleBulkEnrollment" />
+                        <MenuItem text="Enrollment Requests" onAction="#loadEnrollmentRequests" />
+                        <MenuItem text="Waitlist Manager" onAction="#loadWaitlistManager" />
+                        <MenuItem text="Course Assignment Wizard" onAction="#loadCourseAssignmentWizard" />
+                    </Menu>
+                    <SeparatorMenuItem />
+                    <Menu text="📚 Academic Planning">
+                        <MenuItem text="Academic Plans" onAction="#loadAcademicPlanning" />
+                        <MenuItem text="Course Recommendations" onAction="#loadCourseRecommendations" />
+                        <MenuItem text="Course Sequences" onAction="#loadCourseSequenceEditor" />
+                        <MenuItem text="Subject Areas" onAction="#loadSubjectAreaManagement" />
+                    </Menu>
+                    <SeparatorMenuItem />
+                    <Menu text="🏥 Special Education (SPED)">
+                        <MenuItem text="SPED Dashboard" onAction="#loadSPEDDashboard" />
+                        <MenuItem text="IEP Management" onAction="#loadIEPManagement" />
+                        <MenuItem text="504 Plan Management" onAction="#load504PlanManagement" />
+                        <MenuItem text="Pull-out Scheduling" onAction="#loadPullOutScheduling" />
+                        <MenuItem text="IEP Wizard" onAction="#loadIEPWizard" />
+                    </Menu>
+                    <SeparatorMenuItem />
+                    <Menu text="Support Staff">
+                        <MenuItem text="Substitutes" onAction="#handleSubstitutes" />
+                        <MenuItem text="Co-Teachers" onAction="#handleCoTeachers" />
+                        <MenuItem text="Paraprofessionals" onAction="#handleParaprofessionals" />
+                    </Menu>
+                    <SeparatorMenuItem />
+                    <MenuItem text="Events" onAction="#handleManageEvents" />
+                </Menu>
+                <Menu text="Schedule">
+                    <MenuItem text="Generate Schedule" onAction="#handleGenerateSchedule" />
+                    <MenuItem text="View Schedules" onAction="#loadSchedules" />
+                    <MenuItem text="Drag-Drop Editor" onAction="#loadDragDropScheduleEditor" />
+                    <SeparatorMenuItem />
+                    <MenuItem text="Optimize Schedule..." onAction="#handleOptimizeSchedule" />
+                    <MenuItem text="Conflict Dashboard" onAction="#loadConflictDashboard" />
+                    <MenuItem text="Course Conflict Matrix" onAction="#loadCourseConflictMatrix" />
+                    <SeparatorMenuItem />
+                    <MenuItem text="Priority Rules..." onAction="#loadPriorityRules" />
+                    <MenuItem text="Lunch Period Management" onAction="#loadLunchPeriodManagement" />
+                </Menu>
+                <Menu text="Students">
+                    <MenuItem text="At-Risk Students" onAction="#loadAtRiskStudents" />
+                    <MenuItem text="Grade Progression" onAction="#loadGradeProgression" />
+                </Menu>
+                <Menu text="Reports">
+                    <MenuItem text="Reports &amp; Analytics" onAction="#loadReports" />
+                    <MenuItem text="Assignment Reports" onAction="#loadAssignmentReports" />
+                    <SeparatorMenuItem />
+                    <Menu text="📊 Advanced Analytics">
+                        <MenuItem text="Advanced Analytics Dashboard" onAction="#loadAdvancedAnalytics" />
+                        <MenuItem text="Forecasting Dashboard" onAction="#loadForecastingDashboard" />
+                        <MenuItem text="Room Utilization" onAction="#loadRoomUtilization" />
+                        <MenuItem text="Teacher Load Heatmap" onAction="#loadTeacherLoadHeatmap" />
+                        <MenuItem text="Predictive Analytics" onAction="#loadPredictiveAnalytics" />
+                    </Menu>
+                </Menu>
+                <Menu text="Tools">
+                    <MenuItem text="🎲 Test Data Generator" onAction="#loadDataGenerator" />
+                    <MenuItem text="🔔 Notification Center" onAction="#loadNotificationCenter" />
+                    <SeparatorMenuItem />
+                    <Menu text="📥 Import/Export">
+                        <MenuItem text="SIS Export..." onAction="#loadSISExport" />
+                        <MenuItem text="Frontline Import..." onAction="#loadFrontlineImport" />
+                    </Menu>
+                    <SeparatorMenuItem />
+                    <Menu text="🗄️ Database Console">
+                        <MenuItem text="H2 Console (Active)" onAction="#handleH2Console" />
+                        <MenuItem text="PostgreSQL (pgAdmin)" onAction="#handlePostgreSQLConsole" />
+                        <SeparatorMenuItem />
+                        <MenuItem text="Database Info" onAction="#handleDatabaseInfo" />
+                    </Menu>
+                    <SeparatorMenuItem />
+                    <MenuItem text="Clear Course Assignments..." onAction="#handleClearCourseAssignments" />
+                    <SeparatorMenuItem />
+                    <MenuItem text="Settings" onAction="#loadSettings" />
+                </Menu>
+                <Menu text="Admin">
+                    <MenuItem text="User Management" onAction="#handleUserManagement" />
+                    <MenuItem text="📅 Academic Year Management" onAction="#handleAcademicYearManagement" />
+                    <MenuItem text="🌐 Federation Dashboard" onAction="#loadFederationDashboard" />
+                    <SeparatorMenuItem />
+                    <Menu text="🗄️ Database">
+                        <MenuItem text="H2 Console" onAction="#handleH2Console" />
+                        <MenuItem text="PostgreSQL Tools" onAction="#handlePostgreSQLConsole" />
+                        <SeparatorMenuItem />
+                        <MenuItem text="Database Info" onAction="#handleDatabaseInfo" />
+                        <MenuItem text="Backup Database..." onAction="#handleBackupDatabase" />
+                    </Menu>
+                    <MenuItem text="⚠️ Purge Database..." onAction="#handlePurgeDatabase" />
+                    <SeparatorMenuItem />
+                    <MenuItem text="Change Password" onAction="#handleChangePassword" />
+                    <MenuItem text="Logout" onAction="#handleLogout" />
+                </Menu>
+                <Menu text="Help">
+                    <MenuItem text="User Guide" onAction="#handleUserGuide" />
+                    <MenuItem text="About" onAction="#handleAbout" />
+                </Menu>
+            </MenuBar>
+
+            <!-- Toolbar -->
+            <ToolBar styleClass="tool-bar">
+                <Button text="📊 Dashboard" onAction="#loadDashboard"
+                    fx:id="dashboardButton" styleClass="button" />
+                <Button text="👨‍🏫 Teachers" onAction="#loadTeachers"
+                    fx:id="teachersButton" styleClass="button" />
+                <Button text="📚 Courses" onAction="#loadCourses"
+                    fx:id="coursesButton" styleClass="button" />
+                <Button text="🏫 Rooms" onAction="#loadRooms"
+                    fx:id="roomsButton" styleClass="button" />
+                <Button text="🎓 Students" onAction="#loadStudents"
+                    fx:id="studentsButton" styleClass="button" />
+                <Button text="📝 Gradebook" onAction="#loadGradebook"
+                    fx:id="gradebookButton" styleClass="button" />
+                <Button text="📋 Enrollment" onAction="#loadStudentEnrollment"
+                    fx:id="enrollmentButton" styleClass="button" />
+                <Button text="📅 Schedules" onAction="#loadSchedules"
+                    fx:id="schedulesButton" styleClass="button" />
+                <Button text="📌 Events" onAction="#loadEvents"
+                    fx:id="eventsButton" styleClass="button" />
+                <!-- AI Generator Button -->
+                <Button text="🤖 AI Generator" onAction="#loadGenerator"
+                    styleClass="button" />
+                <!-- Schedule Viewer Button -->
+                <Button text="📅 Schedule Viewer" onAction="#loadScheduleViewer"
+                    styleClass="button" />
+                <!-- Special Duty Roster Button -->
+                <Button text="📋 Special Duty Roster" onAction="#loadSpecialDutyRoster"
+                    fx:id="specialDutyButton" styleClass="button" />
+                <!-- Conflict Dashboard Button -->
+                <Button text="⚠️ Conflicts" onAction="#loadConflictDashboard"
+                    fx:id="conflictDashboardButton"
+                    styleClass="sidebar-button"
+                    style="-fx-padding: 8 16; -fx-cursor: hand; -fx-background-color: #FF9800; -fx-text-fill: white;" />
+                <!-- Optimize Button -->
+                <Button text="🧬 Optimize" onAction="#handleOptimizeSchedule"
+                    fx:id="optimizeButton"
+                    styleClass="sidebar-button"
+                    style="-fx-padding: 8 16; -fx-cursor: hand; -fx-background-color: #9C27B0; -fx-text-fill: white; -fx-font-weight: bold;" />
+
+                <Separator orientation="VERTICAL" />
+
+                <Button text="📥 Import" onAction="#handleImportData"
+                    fx:id="importButton"
+                    style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-padding: 8 16; -fx-cursor: hand;" />
+                <Button text="📤 Export" onAction="#handleExportData"
+                    fx:id="exportButton"
+                    style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-padding: 8 16; -fx-cursor: hand;" />
+                <Button text="🤖 Generate" onAction="#handleGenerateSchedule"
+                    style="-fx-background-color: #FF9800; -fx-text-fill: white; -fx-padding: 8 16; -fx-cursor: hand; -fx-font-weight: bold;" />
+
+                <Region HBox.hgrow="ALWAYS" />
+
+                <Button text="📊 Reports" onAction="#loadReports"
+                    fx:id="reportsButton"
+                    style="-fx-padding: 8 16; -fx-cursor: hand;" />
+                <Button text="⚙️ Settings" onAction="#loadSettings"
+                    fx:id="settingsButton"
+                    style="-fx-padding: 8 16; -fx-cursor: hand;" />
+            </ToolBar>
+        </VBox>
+    </top>
+
+    <!-- Center: Dynamic Content Area (views loaded here) -->
+    <center>
+        <!-- Views will be loaded dynamically by MainController -->
+    </center>
+
+    <!-- Bottom: Status Bar -->
+    <bottom>
+        <HBox spacing="10" alignment="CENTER_LEFT"
+            style="-fx-background-color: #f5f5f5; -fx-border-color: #ddd; -fx-border-width: 1 0 0 0;">
+            <padding>
+                <Insets top="5" right="10" bottom="5" left="10" />
+            </padding>
+            <Label text="●" style="-fx-text-fill: #4CAF50; -fx-font-size: 14;" />
+            <Label fx:id="statusLabel" text="Ready" HBox.hgrow="ALWAYS" />
+            <Label fx:id="userInfoLabel" text="" style="-fx-text-fill: #666; -fx-font-size: 11;" />
+            <Label text="•" style="-fx-text-fill: #ddd; -fx-font-size: 11;" />
+            <Label text="Heronix Scheduling System v1.0" style="-fx-text-fill: #999; -fx-font-size: 11;" />
+        </HBox>
+    </bottom>
+
+</BorderPane>

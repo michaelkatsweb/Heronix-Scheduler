@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.eduscheduler.ui.controller.ParaprofessionalManagementController"
+      spacing="15" style="-fx-background-color: #f5f5f5; -fx-padding: 20;">
+
+    <!-- Title Section -->
+    <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;">
+        <Label text="🎓" style="-fx-font-size: 24;"/>
+        <VBox spacing="2" HBox.hgrow="ALWAYS">
+            <Label text="Paraprofessional Management" style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #9C27B0;"/>
+            <Label text="Manage paraprofessionals and their assignments" style="-fx-font-size: 12; -fx-text-fill: #666;"/>
+        </VBox>
+        <Button text="+ New Para Assignment" onAction="#handleNewAssignment"
+               style="-fx-background-color: #9C27B0; -fx-text-fill: white; -fx-padding: 10 20; -fx-cursor: hand; -fx-font-weight: bold;"/>
+    </HBox>
+
+    <!-- Quick Stats -->
+    <HBox spacing="15" style="-fx-padding: 5 0;">
+        <!-- Active Para Subs Card -->
+        <VBox style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 1);" HBox.hgrow="ALWAYS">
+            <Label text="👥 Active Paraprofessionals" style="-fx-font-size: 12; -fx-text-fill: #666;"/>
+            <Label fx:id="activeParaSubsLabel" text="0" style="-fx-font-size: 32; -fx-font-weight: bold; -fx-text-fill: #9C27B0;">
+                <padding><Insets top="8"/></padding>
+            </Label>
+            <Label text="Available for assignments" style="-fx-font-size: 10; -fx-text-fill: #999;">
+                <padding><Insets top="5"/></padding>
+            </Label>
+        </VBox>
+
+        <!-- Today's Assignments Card -->
+        <VBox style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 1);" HBox.hgrow="ALWAYS">
+            <Label text="📅 Today's Assignments" style="-fx-font-size: 12; -fx-text-fill: #666;"/>
+            <Label fx:id="todaysAssignmentsLabel" text="0" style="-fx-font-size: 32; -fx-font-weight: bold; -fx-text-fill: #2196F3;">
+                <padding><Insets top="8"/></padding>
+            </Label>
+            <Label text="Para assignments today" style="-fx-font-size: 10; -fx-text-fill: #999;">
+                <padding><Insets top="5"/></padding>
+            </Label>
+        </VBox>
+
+        <!-- Pending Card -->
+        <VBox style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 1);" HBox.hgrow="ALWAYS">
+            <Label text="⏳ Pending" style="-fx-font-size: 12; -fx-text-fill: #666;"/>
+            <Label fx:id="pendingAssignmentsLabel" text="0" style="-fx-font-size: 32; -fx-font-weight: bold; -fx-text-fill: #FF9800;">
+                <padding><Insets top="8"/></padding>
+            </Label>
+            <Label text="Awaiting confirmation" style="-fx-font-size: 10; -fx-text-fill: #999;">
+                <padding><Insets top="5"/></padding>
+            </Label>
+        </VBox>
+
+        <!-- This Month Hours Card -->
+        <VBox style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 1);" HBox.hgrow="ALWAYS">
+            <Label text="⏱️ This Month" style="-fx-font-size: 12; -fx-text-fill: #666;"/>
+            <Label fx:id="monthlyHoursLabel" text="0.0" style="-fx-font-size: 32; -fx-font-weight: bold; -fx-text-fill: #4CAF50;">
+                <padding><Insets top="8"/></padding>
+            </Label>
+            <Label text="Total hours" style="-fx-font-size: 10; -fx-text-fill: #999;">
+                <padding><Insets top="5"/></padding>
+            </Label>
+        </VBox>
+    </HBox>
+
+    <!-- Tab Pane -->
+    <TabPane fx:id="mainTabPane" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+
+        <!-- Assignments Tab -->
+        <Tab text="📅 Assignments">
+            <VBox spacing="15" style="-fx-padding: 15;">
+
+                <!-- Filters -->
+                <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-background-color: white; -fx-padding: 10; -fx-background-radius: 8;">
+                    <Label text="Filter:" style="-fx-font-weight: 500;"/>
+
+                    <VBox spacing="2">
+                        <Label text="Date Range" style="-fx-font-size: 10; -fx-text-fill: #999;"/>
+                        <DatePicker fx:id="filterStartDatePicker" promptText="Start date" style="-fx-pref-width: 130;"/>
+                    </VBox>
+
+                    <Label text="to" style="-fx-padding: 0 5;"/>
+
+                    <VBox spacing="2">
+                        <Label text=" " style="-fx-font-size: 10;"/>
+                        <DatePicker fx:id="filterEndDatePicker" promptText="End date" style="-fx-pref-width: 130;"/>
+                    </VBox>
+
+                    <VBox spacing="2">
+                        <Label text="Status" style="-fx-font-size: 10; -fx-text-fill: #999;"/>
+                        <ComboBox fx:id="filterStatusComboBox" promptText="All statuses" style="-fx-pref-width: 150;"/>
+                    </VBox>
+
+                    <VBox spacing="2">
+                        <Label text="Paraprofessional" style="-fx-font-size: 10; -fx-text-fill: #999;"/>
+                        <ComboBox fx:id="filterSubstituteComboBox" promptText="All paraprofessionals" style="-fx-pref-width: 180;"/>
+                    </VBox>
+
+                    <Region HBox.hgrow="ALWAYS"/>
+
+                    <Button text="🔍 Search" onAction="#handleSearchAssignments"
+                           style="-fx-background-color: #9C27B0; -fx-text-fill: white; -fx-padding: 8 16; -fx-cursor: hand;"/>
+                    <Button text="Clear" onAction="#handleClearFilters"
+                           style="-fx-background-color: #9E9E9E; -fx-text-fill: white; -fx-padding: 8 16; -fx-cursor: hand;"/>
+                </HBox>
+
+                <!-- Assignments Table -->
+                <VBox VBox.vgrow="ALWAYS" style="-fx-background-color: white; -fx-padding: 10; -fx-background-radius: 8;">
+                    <TableView fx:id="assignmentsTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="assignmentDateColumn" text="Date" prefWidth="100"/>
+                            <TableColumn fx:id="assignmentSubstituteColumn" text="Paraprofessional" prefWidth="150"/>
+                            <TableColumn fx:id="assignmentTimeColumn" text="Time" prefWidth="120"/>
+                            <TableColumn fx:id="assignmentDurationColumn" text="Duration" prefWidth="100"/>
+                            <TableColumn fx:id="assignmentReplacedStaffColumn" text="Replaced Para" prefWidth="150"/>
+                            <TableColumn fx:id="assignmentReasonColumn" text="Reason" prefWidth="130"/>
+                            <TableColumn fx:id="assignmentRoomColumn" text="Room" prefWidth="80"/>
+                            <TableColumn fx:id="assignmentStatusColumn" text="Status" prefWidth="100"/>
+                            <TableColumn fx:id="assignmentActionsColumn" text="Actions" prefWidth="120"/>
+                        </columns>
+                        <placeholder>
+                            <Label text="No paraprofessional assignments found. Click '+ New Para Assignment' to create one." style="-fx-text-fill: #999;"/>
+                        </placeholder>
+                    </TableView>
+
+                    <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-padding: 10 0 0 0;">
+                        <Label fx:id="assignmentCountLabel" text="Total: 0 assignments" style="-fx-font-size: 12; -fx-text-fill: #666;"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Button text="🔄 Refresh" onAction="#handleRefreshAssignments"
+                               style="-fx-background-color: #757575; -fx-text-fill: white; -fx-padding: 6 12; -fx-cursor: hand;"/>
+                    </HBox>
+                </VBox>
+
+            </VBox>
+        </Tab>
+
+        <!-- Paraprofessionals Tab -->
+        <Tab text="🎓 Paraprofessionals">
+            <VBox spacing="15" style="-fx-padding: 15;">
+
+                <!-- Search and Add -->
+                <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-background-color: white; -fx-padding: 10; -fx-background-radius: 8;">
+                    <Label text="Search:" style="-fx-font-weight: 500;"/>
+                    <TextField fx:id="substituteSearchField" promptText="Search by name, email, or phone" style="-fx-pref-width: 300;"/>
+                    <Button text="🔍 Search" onAction="#handleSearchSubstitutes"
+                           style="-fx-background-color: #9C27B0; -fx-text-fill: white; -fx-padding: 8 16; -fx-cursor: hand;"/>
+
+                    <Region HBox.hgrow="ALWAYS"/>
+
+                    <Button text="+ Add Paraprofessional" onAction="#handleAddSubstitute"
+                           style="-fx-background-color: #9C27B0; -fx-text-fill: white; -fx-padding: 8 16; -fx-cursor: hand; -fx-font-weight: bold;"/>
+                </HBox>
+
+                <!-- Substitutes Table -->
+                <VBox VBox.vgrow="ALWAYS" style="-fx-background-color: white; -fx-padding: 10; -fx-background-radius: 8;">
+                    <TableView fx:id="substitutesTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="substituteNameColumn" text="Name" prefWidth="180"/>
+                            <TableColumn fx:id="substituteTypeColumn" text="Type" prefWidth="120"/>
+                            <TableColumn fx:id="substituteEmailColumn" text="Email" prefWidth="200"/>
+                            <TableColumn fx:id="substitutePhoneColumn" text="Phone" prefWidth="130"/>
+                            <TableColumn fx:id="substituteStatusColumn" text="Status" prefWidth="100"/>
+                            <TableColumn fx:id="substituteAssignmentsColumn" text="Total Assignments" prefWidth="130"/>
+                            <TableColumn fx:id="substituteActionsColumn" text="Actions" prefWidth="120"/>
+                        </columns>
+                        <placeholder>
+                            <Label text="No paraprofessionals found. Click '+ Add Paraprofessional' to add one." style="-fx-text-fill: #999;"/>
+                        </placeholder>
+                    </TableView>
+
+                    <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-padding: 10 0 0 0;">
+                        <Label fx:id="substituteCountLabel" text="Total: 0 paraprofessionalstitutes" style="-fx-font-size: 12; -fx-text-fill: #666;"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Button text="🔄 Refresh" onAction="#handleRefreshSubstitutes"
+                               style="-fx-background-color: #757575; -fx-text-fill: white; -fx-padding: 6 12; -fx-cursor: hand;"/>
+                    </HBox>
+                </VBox>
+
+            </VBox>
+        </Tab>
+
+        <!-- Reports Tab -->
+        <Tab text="📊 Reports">
+            <VBox spacing="15" style="-fx-padding: 15;">
+
+                <VBox spacing="10" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;">
+                    <Label text="Generate Paraprofessional Reports" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+                    <Separator/>
+
+                    <HBox spacing="15" alignment="CENTER_LEFT">
+                        <VBox spacing="5">
+                            <Label text="Report Type" style="-fx-font-size: 11; -fx-text-fill: #666;"/>
+                            <ComboBox fx:id="reportTypeComboBox" promptText="Select report type" style="-fx-pref-width: 280;"/>
+                        </VBox>
+
+                        <VBox spacing="5">
+                            <Label text="Start Date" style="-fx-font-size: 11; -fx-text-fill: #666;"/>
+                            <DatePicker fx:id="reportStartDatePicker" style="-fx-pref-width: 150;"/>
+                        </VBox>
+
+                        <VBox spacing="5">
+                            <Label text="End Date" style="-fx-font-size: 11; -fx-text-fill: #666;"/>
+                            <DatePicker fx:id="reportEndDatePicker" style="-fx-pref-width: 150;"/>
+                        </VBox>
+
+                        <Region HBox.hgrow="ALWAYS"/>
+
+                        <VBox spacing="5">
+                            <Label text=" " style="-fx-font-size: 11;"/>
+                            <Button text="📊 Generate Report" onAction="#handleGenerateReport"
+                                   style="-fx-background-color: #9C27B0; -fx-text-fill: white; -fx-padding: 10 20; -fx-cursor: hand; -fx-font-weight: bold;"/>
+                        </VBox>
+                    </HBox>
+                </VBox>
+
+                <VBox VBox.vgrow="ALWAYS" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;">
+                    <Label text="Available Reports for Paraprofessionals:" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-padding: 0 0 10 0;"/>
+
+                    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" style="-fx-background-color: transparent;">
+                        <VBox spacing="10" style="-fx-padding: 10;">
+                            <VBox style="-fx-background-color: #F3E5F5; -fx-padding: 12; -fx-background-radius: 6;">
+                                <Label text="📊 Para Usage Summary" style="-fx-font-weight: bold; -fx-font-size: 13;"/>
+                                <Label text="Comprehensive overview of paraprofessional substitute usage, including hours worked, assignments completed, and utilization rates." wrapText="true" style="-fx-text-fill: #666; -fx-font-size: 11;">
+                                    <padding><Insets top="5"/></padding>
+                                </Label>
+                            </VBox>
+
+                            <VBox style="-fx-background-color: #F3E5F5; -fx-padding: 12; -fx-background-radius: 6;">
+                                <Label text="📅 Para Assignments by Date Range" style="-fx-font-weight: bold; -fx-font-size: 13;"/>
+                                <Label text="Detailed list of all paraprofessional assignments within a specific date range, including assignment details and status." wrapText="true" style="-fx-text-fill: #666; -fx-font-size: 11;">
+                                    <padding><Insets top="5"/></padding>
+                                </Label>
+                            </VBox>
+
+                            <VBox style="-fx-background-color: #F3E5F5; -fx-padding: 12; -fx-background-radius: 6;">
+                                <Label text="⏱️ Para Hours Report" style="-fx-font-weight: bold; -fx-font-size: 13;"/>
+                                <Label text="Summary of total hours worked by each paraprofessional substitute, useful for payroll and tracking." wrapText="true" style="-fx-text-fill: #666; -fx-font-size: 11;">
+                                    <padding><Insets top="5"/></padding>
+                                </Label>
+                            </VBox>
+
+                            <VBox style="-fx-background-color: #F3E5F5; -fx-padding: 12; -fx-background-radius: 6;">
+                                <Label text="💰 Para Cost Analysis" style="-fx-font-weight: bold; -fx-font-size: 13;"/>
+                                <Label text="Financial breakdown of paraprofessional substitute costs, including pay rates and total expenditures." wrapText="true" style="-fx-text-fill: #666; -fx-font-size: 11;">
+                                    <padding><Insets top="5"/></padding>
+                                </Label>
+                            </VBox>
+                        </VBox>
+                    </ScrollPane>
+                </VBox>
+
+            </VBox>
+        </Tab>
+
+    </TabPane>
+
+</VBox>

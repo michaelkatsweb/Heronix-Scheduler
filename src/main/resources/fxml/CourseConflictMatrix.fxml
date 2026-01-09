@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.eduscheduler.ui.controller.CourseConflictMatrixController"
+            stylesheets="@../css/style.css">
+
+    <!-- Top: Title and Controls -->
+    <top>
+        <VBox spacing="15" styleClass="content-area">
+            <padding>
+                <Insets top="20" right="20" bottom="10" left="20"/>
+            </padding>
+
+            <!-- Title -->
+            <Label text="Course Conflict Matrix" styleClass="page-title">
+                <font>
+                    <Font name="System Bold" size="24"/>
+                </font>
+            </Label>
+
+            <Label text="Visualize course request conflicts to optimize singleton scheduling"
+                   styleClass="subtitle" wrapText="true"/>
+
+            <Separator/>
+
+            <!-- Controls Row 1: Year and Generation -->
+            <HBox spacing="15" alignment="CENTER_LEFT">
+                <Label text="Academic Year:" styleClass="form-label">
+                    <font>
+                        <Font name="System Bold" size="12"/>
+                    </font>
+                </Label>
+                <ComboBox fx:id="yearComboBox" prefWidth="120"/>
+
+                <Button fx:id="generateButton" text="Generate Matrix" onAction="#handleGenerate"
+                        styleClass="primary-button">
+                    <font>
+                        <Font name="System Bold" size="12"/>
+                    </font>
+                </Button>
+
+                <Button text="Refresh" onAction="#handleRefresh" styleClass="secondary-button"/>
+
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <ProgressIndicator fx:id="progressIndicator" prefHeight="30" prefWidth="30" visible="false"/>
+            </HBox>
+
+            <!-- Controls Row 2: Filters -->
+            <HBox spacing="15" alignment="CENTER_LEFT">
+                <Label text="Filter by Course:" styleClass="form-label"/>
+                <ComboBox fx:id="courseFilterComboBox" prefWidth="250"/>
+
+                <Label text="Min Conflicts:" styleClass="form-label"/>
+                <Spinner fx:id="thresholdSpinner" prefWidth="80" editable="true"/>
+
+                <CheckBox fx:id="singletonsOnlyCheckBox" text="Singletons Only"/>
+
+                <Label text="Search:" styleClass="form-label"/>
+                <TextField fx:id="searchField" promptText="Search courses..." prefWidth="200"/>
+
+                <Button text="Clear Filters" onAction="#handleClearFilters" styleClass="secondary-button"/>
+            </HBox>
+
+            <!-- Statistics Row -->
+            <HBox spacing="25" alignment="CENTER_LEFT" styleClass="statistics-bar">
+                <padding>
+                    <Insets top="10" right="10" bottom="10" left="10"/>
+                </padding>
+
+                <Label fx:id="totalConflictsLabel" text="Total: 0" styleClass="stat-label">
+                    <font>
+                        <Font name="System Bold" size="12"/>
+                    </font>
+                </Label>
+
+                <Separator orientation="VERTICAL"/>
+
+                <Label fx:id="singletonConflictsLabel" text="Singletons: 0" styleClass="stat-label">
+                    <font>
+                        <Font name="System Bold" size="12"/>
+                    </font>
+                </Label>
+
+                <Separator orientation="VERTICAL"/>
+
+                <Label fx:id="highConflictsLabel" text="High (>20): 0" styleClass="stat-label">
+                    <font>
+                        <Font name="System Bold" size="12"/>
+                    </font>
+                </Label>
+
+                <Separator orientation="VERTICAL"/>
+
+                <Label fx:id="averageConflictLabel" text="Average: 0.0" styleClass="stat-label">
+                    <font>
+                        <Font name="System Bold" size="12"/>
+                    </font>
+                </Label>
+
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <Button fx:id="exportButton" text="Export to CSV" onAction="#handleExport"
+                        styleClass="secondary-button">
+                    <font>
+                        <Font name="System Bold" size="11"/>
+                    </font>
+                </Button>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- Center: Conflicts Table -->
+    <center>
+        <VBox spacing="5" styleClass="content-area">
+            <padding>
+                <Insets top="10" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <TableView fx:id="conflictsTable" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="course1Column" text="Course 1" prefWidth="200">
+                        <cellValueFactory>
+                            <javafx.scene.control.cell.PropertyValueFactory property="course1"/>
+                        </cellValueFactory>
+                    </TableColumn>
+
+                    <TableColumn fx:id="course2Column" text="Course 2" prefWidth="200">
+                        <cellValueFactory>
+                            <javafx.scene.control.cell.PropertyValueFactory property="course2"/>
+                        </cellValueFactory>
+                    </TableColumn>
+
+                    <TableColumn fx:id="conflictCountColumn" text="Conflicts" prefWidth="80"
+                                 style="-fx-alignment: CENTER;">
+                        <cellValueFactory>
+                            <javafx.scene.control.cell.PropertyValueFactory property="conflictCount"/>
+                        </cellValueFactory>
+                    </TableColumn>
+
+                    <TableColumn fx:id="percentageColumn" text="Percent" prefWidth="70"
+                                 style="-fx-alignment: CENTER;">
+                        <cellValueFactory>
+                            <javafx.scene.control.cell.PropertyValueFactory property="conflictPercentage"/>
+                        </cellValueFactory>
+                    </TableColumn>
+
+                    <TableColumn fx:id="singletonColumn" text="Singleton" prefWidth="90"
+                                 style="-fx-alignment: CENTER;">
+                        <cellValueFactory>
+                            <javafx.scene.control.cell.PropertyValueFactory property="isSingleton"/>
+                        </cellValueFactory>
+                    </TableColumn>
+
+                    <TableColumn fx:id="priorityColumn" text="Priority" prefWidth="100"
+                                 style="-fx-alignment: CENTER;">
+                        <cellValueFactory>
+                            <javafx.scene.control.cell.PropertyValueFactory property="priority"/>
+                        </cellValueFactory>
+                    </TableColumn>
+                </columns>
+
+                <placeholder>
+                    <VBox alignment="CENTER" spacing="10">
+                        <Label text="No conflict data available" styleClass="placeholder-text">
+                            <font>
+                                <Font size="14"/>
+                            </font>
+                        </Label>
+                        <Label text="Select a year and click 'Generate Matrix' to begin"
+                               styleClass="placeholder-subtext">
+                            <font>
+                                <Font size="12"/>
+                            </font>
+                        </Label>
+                    </VBox>
+                </placeholder>
+            </TableView>
+
+            <!-- Legend -->
+            <HBox spacing="20" alignment="CENTER_LEFT" styleClass="legend-box">
+                <padding>
+                    <Insets top="10" right="10" bottom="10" left="10"/>
+                </padding>
+
+                <Label text="Color Legend:" styleClass="form-label">
+                    <font>
+                        <Font name="System Bold" size="11"/>
+                    </font>
+                </Label>
+
+                <HBox spacing="5" alignment="CENTER_LEFT">
+                    <Region prefWidth="30" prefHeight="15" style="-fx-background-color: #ffcccc;"/>
+                    <Label text="Critical (Singleton >10)" styleClass="legend-text"/>
+                </HBox>
+
+                <HBox spacing="5" alignment="CENTER_LEFT">
+                    <Region prefWidth="30" prefHeight="15" style="-fx-background-color: #ffe6cc;"/>
+                    <Label text="High (Singleton)" styleClass="legend-text"/>
+                </HBox>
+
+                <HBox spacing="5" alignment="CENTER_LEFT">
+                    <Region prefWidth="30" prefHeight="15" style="-fx-background-color: #ffffcc;"/>
+                    <Label text="Medium (>20 conflicts)" styleClass="legend-text"/>
+                </HBox>
+
+                <HBox spacing="5" alignment="CENTER_LEFT">
+                    <Region prefWidth="30" prefHeight="15" style="-fx-background-color: white; -fx-border-color: #ccc;"/>
+                    <Label text="Low" styleClass="legend-text"/>
+                </HBox>
+            </HBox>
+        </VBox>
+    </center>
+
+    <!-- Right: Details Pane -->
+    <right>
+        <VBox fx:id="detailsPane" spacing="15" styleClass="details-pane" prefWidth="280" visible="false">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <Label text="Conflict Details" styleClass="section-title">
+                <font>
+                    <Font name="System Bold" size="16"/>
+                </font>
+            </Label>
+
+            <Separator/>
+
+            <VBox spacing="8">
+                <Label text="Course 1:" styleClass="detail-label">
+                    <font>
+                        <Font name="System Bold" size="11"/>
+                    </font>
+                </Label>
+                <Label fx:id="detailsCourse1Label" text="-" wrapText="true" styleClass="detail-value"/>
+            </VBox>
+
+            <VBox spacing="8">
+                <Label text="Course 2:" styleClass="detail-label">
+                    <font>
+                        <Font name="System Bold" size="11"/>
+                    </font>
+                </Label>
+                <Label fx:id="detailsCourse2Label" text="-" wrapText="true" styleClass="detail-value"/>
+            </VBox>
+
+            <Separator/>
+
+            <VBox spacing="8">
+                <Label text="Number of Conflicts:" styleClass="detail-label">
+                    <font>
+                        <Font name="System Bold" size="11"/>
+                    </font>
+                </Label>
+                <Label fx:id="detailsConflictCountLabel" text="-" styleClass="detail-value">
+                    <font>
+                        <Font size="20" name="System Bold"/>
+                    </font>
+                </Label>
+            </VBox>
+
+            <VBox spacing="8">
+                <Label text="Conflict Percentage:" styleClass="detail-label">
+                    <font>
+                        <Font name="System Bold" size="11"/>
+                    </font>
+                </Label>
+                <Label fx:id="detailsPercentageLabel" text="-" styleClass="detail-value">
+                    <font>
+                        <Font size="16"/>
+                    </font>
+                </Label>
+            </VBox>
+
+            <Separator/>
+
+            <VBox spacing="8">
+                <Label text="Singleton Status:" styleClass="detail-label">
+                    <font>
+                        <Font name="System Bold" size="11"/>
+                    </font>
+                </Label>
+                <Label fx:id="detailsSingletonLabel" text="-" wrapText="true" styleClass="detail-value"/>
+            </VBox>
+
+            <Region VBox.vgrow="ALWAYS"/>
+
+            <VBox spacing="8" styleClass="info-box">
+                <padding>
+                    <Insets top="10" right="10" bottom="10" left="10"/>
+                </padding>
+
+                <Label text="About Conflicts" styleClass="info-title">
+                    <font>
+                        <Font name="System Bold" size="11"/>
+                    </font>
+                </Label>
+
+                <Label text="Conflicts occur when students request both courses. Singleton conflicts are high priority as they cannot be resolved by scheduling multiple sections."
+                       wrapText="true" styleClass="info-text">
+                    <font>
+                        <Font size="10"/>
+                    </font>
+                </Label>
+            </VBox>
+        </VBox>
+    </right>
+</BorderPane>

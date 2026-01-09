@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    OptaPlanner Solver Configuration - PRODUCTION READY (SCHEMA FIXED)
+    Location: src/main/resources/solverConfig.xml
+    
+    @version 4.0.1 - SCHEMA FIXED
+    @since 2025-11-01
+-->
+<solver>
+
+    <!-- Solution and Entity Classes -->
+    <solutionClass>com.heronix.model.planning.SchedulingSolution</solutionClass>
+    <entityClass>com.heronix.model.domain.ScheduleSlot</entityClass>
+
+    <!-- Score Configuration -->
+    <scoreDirectorFactory>
+        <constraintProviderClass>com.heronix.solver.SchedulingConstraintProvider</constraintProviderClass>
+    </scoreDirectorFactory>
+
+    <!-- Termination: Simple time-based termination to avoid BestScoreTermination bugs -->
+    <termination>
+        <!-- Max 2 minutes for optimization (simple time-only termination) -->
+        <secondsSpentLimit>120</secondsSpentLimit>
+    </termination>
+
+    <!-- Construction Heuristic: Build initial solution -->
+    <constructionHeuristic>
+        <!-- FIRST_FIT quickly builds a feasible solution -->
+        <constructionHeuristicType>FIRST_FIT</constructionHeuristicType>
+    </constructionHeuristic>
+
+    <!-- Local Search: Advanced optimization with multiple move types -->
+    <localSearch>
+        <!-- Move Selectors: Define how solver explores solution space -->
+        <unionMoveSelector>
+            <!-- Change teacher assignment -->
+            <changeMoveSelector>
+                <valueSelector variableName="teacher"/>
+            </changeMoveSelector>
+            
+            <!-- Change room assignment -->
+            <changeMoveSelector>
+                <valueSelector variableName="room"/>
+            </changeMoveSelector>
+            
+            <!-- Change time slot assignment -->
+            <changeMoveSelector>
+                <valueSelector variableName="timeSlot"/>
+            </changeMoveSelector>
+            
+            <!-- Swap teachers between two slots -->
+            <swapMoveSelector>
+                <valueSelector variableName="teacher"/>
+            </swapMoveSelector>
+            
+            <!-- Swap rooms between two slots -->
+            <swapMoveSelector>
+                <valueSelector variableName="room"/>
+            </swapMoveSelector>
+            
+            <!-- Swap time slots between two slots -->
+            <swapMoveSelector>
+                <valueSelector variableName="timeSlot"/>
+            </swapMoveSelector>
+            
+            <!-- Pillar swap for teachers -->
+            <pillarSwapMoveSelector>
+                <valueSelector variableName="teacher"/>
+            </pillarSwapMoveSelector>
+            
+            <!-- Pillar swap for rooms -->
+            <pillarSwapMoveSelector>
+                <valueSelector variableName="room"/>
+            </pillarSwapMoveSelector>
+            
+            <!-- Pillar swap for time slots -->
+            <pillarSwapMoveSelector>
+                <valueSelector variableName="timeSlot"/>
+            </pillarSwapMoveSelector>
+        </unionMoveSelector>
+        
+        <!-- Acceptance: Late Acceptance for better exploration -->
+        <acceptor>
+            <lateAcceptanceSize>400</lateAcceptanceSize>
+        </acceptor>
+        
+        <!-- Forager: How many moves to evaluate before accepting -->
+        <forager>
+            <acceptedCountLimit>1</acceptedCountLimit>
+        </forager>
+    </localSearch>
+
+</solver>

@@ -1,0 +1,639 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<!--
+Dashboard - Condensed Grid Layout with ScrollPane
+Modern Dashboard UI with vertical scrolling support
+All metrics organized in a scrollable layout
+-->
+
+<ScrollPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.eduscheduler.ui.controller.DashboardController"
+            fitToWidth="true"
+            fitToHeight="false"
+            hbarPolicy="NEVER"
+            vbarPolicy="AS_NEEDED"
+            pannable="true"
+            style="-fx-background-color: transparent; -fx-background: transparent;">
+
+<VBox styleClass="root"
+      spacing="15"
+      style="-fx-padding: 20; -fx-background-color: transparent;">
+
+    <!-- Header Bar -->
+    <HBox alignment="CENTER_LEFT" spacing="15" styleClass="card" style="-fx-padding: 12;">
+        <Label text="📊 Dashboard Overview" styleClass="label-title" style="-fx-font-size: 20;"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="👥 Teacher Subs" onAction="#openSubstituteManagement" styleClass="button-primary" style="-fx-font-size: 11; -fx-padding: 6 12;"/>
+        <Button text="🎓 Paraprofessionals" onAction="#openParaprofessionalManagement" styleClass="button-primary" style="-fx-font-size: 11; -fx-padding: 6 12;"/>
+        <Button text="👨‍🏫 Co-Teachers" onAction="#openCoTeacherManagement" styleClass="button-success" style="-fx-font-size: 11; -fx-padding: 6 12;"/>
+        <Separator orientation="VERTICAL"/>
+        <MenuButton text="📋 SPED" styleClass="button-primary" style="-fx-font-size: 11; -fx-padding: 6 12;">
+            <items>
+                <MenuItem text="SPED Dashboard" onAction="#openSPEDDashboard"/>
+                <SeparatorMenuItem/>
+                <MenuItem text="IEP Management" onAction="#openIEPManagement"/>
+                <MenuItem text="504 Plan Management" onAction="#open504PlanManagement"/>
+                <SeparatorMenuItem/>
+                <MenuItem text="Pull-Out Scheduling" onAction="#openPullOutScheduling"/>
+                <SeparatorMenuItem/>
+                <MenuItem text="Compliance Reports" onAction="#openSPEDComplianceReports"/>
+            </items>
+        </MenuButton>
+        <Separator orientation="VERTICAL"/>
+        <MenuButton text="🎓 Course Assignment" styleClass="button-primary" style="-fx-font-size: 11; -fx-padding: 6 12;">
+            <items>
+                <MenuItem text="Create Enrollment Requests" onAction="#openEnrollmentRequestCreation"/>
+                <MenuItem text="Bulk Import from CSV" onAction="#openBulkEnrollmentImport"/>
+                <MenuItem text="Manage Enrollment Requests" onAction="#openEnrollmentRequestManagement"/>
+                <SeparatorMenuItem/>
+                <MenuItem text="Priority Rules" onAction="#openPriorityRulesConfig"/>
+                <MenuItem text="Run Assignment Wizard" onAction="#openCourseAssignmentWizard"/>
+                <MenuItem text="Manage Waitlists" onAction="#openWaitlistManager"/>
+                <MenuItem text="View Reports" onAction="#openAssignmentReports"/>
+            </items>
+        </MenuButton>
+        <Separator orientation="VERTICAL"/>
+        <MenuButton text="🗓️ Block Schedule" styleClass="button-success" style="-fx-font-size: 11; -fx-padding: 6 12;">
+            <items>
+                <MenuItem text="Generate Block Schedule" onAction="#openBlockScheduleGenerator"/>
+                <MenuItem text="ODD/EVEN Day Assignment" onAction="#openOddEvenDayAssignment"/>
+            </items>
+        </MenuButton>
+        <Separator orientation="VERTICAL"/>
+        <MenuButton text="📊 Gradebook" styleClass="button-primary" style="-fx-font-size: 11; -fx-padding: 6 12;">
+            <items>
+                <MenuItem text="Admin Gradebook" onAction="#openAdminGradebook"/>
+                <MenuItem text="Teacher Gradebook" onAction="#openTeacherGradebook" disable="true"/>
+                <SeparatorMenuItem/>
+                <MenuItem text="Student Portal" onAction="#openStudentPortal" disable="true"/>
+            </items>
+        </MenuButton>
+        <Separator orientation="VERTICAL"/>
+        <Button text="🔄 Refresh" onAction="#refreshDashboard" styleClass="button" style="-fx-font-size: 11; -fx-padding: 6 12;"/>
+        <Button text="⚙️ Settings" onAction="#openDistrictSettings" styleClass="button-warning" style="-fx-font-size: 11; -fx-padding: 6 12;"/>
+    </HBox>
+
+    <!-- Main Metrics Grid - All metrics in 3 rows × 5 columns -->
+    <GridPane hgap="10" vgap="10">
+        <columnConstraints>
+            <ColumnConstraints percentWidth="20"/>
+            <ColumnConstraints percentWidth="20"/>
+            <ColumnConstraints percentWidth="20"/>
+            <ColumnConstraints percentWidth="20"/>
+            <ColumnConstraints percentWidth="20"/>
+        </columnConstraints>
+
+        <!-- ============================================================ -->
+        <!-- ROW 1: CORE SCHOOL METRICS -->
+        <!-- ============================================================ -->
+
+        <!-- Teachers -->
+        <VBox GridPane.columnIndex="0" GridPane.rowIndex="0" styleClass="stat-card" style="-fx-padding: 10;">
+            <Label text="👨‍🏫 Teachers" styleClass="stat-label" style="-fx-font-size: 11;"/>
+            <Label fx:id="teacherCountLabel" text="0" styleClass="stat-value, accent-blue" style="-fx-font-size: 24;"/>
+            <Label text="Active" styleClass="stat-description" style="-fx-font-size: 10;"/>
+        </VBox>
+
+        <!-- Students -->
+        <VBox GridPane.columnIndex="1" GridPane.rowIndex="0" styleClass="stat-card" style="-fx-padding: 10;">
+            <Label text="🎓 Students" styleClass="stat-label" style="-fx-font-size: 11;"/>
+            <Label fx:id="studentCountLabel" text="0" styleClass="stat-value, accent-purple" style="-fx-font-size: 24;"/>
+            <Label text="Enrolled" styleClass="stat-description" style="-fx-font-size: 10;"/>
+        </VBox>
+
+        <!-- Courses -->
+        <VBox GridPane.columnIndex="2" GridPane.rowIndex="0" styleClass="stat-card" style="-fx-padding: 10;">
+            <Label text="📚 Courses" styleClass="stat-label" style="-fx-font-size: 11;"/>
+            <Label fx:id="courseCountLabel" text="0" styleClass="stat-value, accent-success" style="-fx-font-size: 24;"/>
+            <Label text="Offerings" styleClass="stat-description" style="-fx-font-size: 10;"/>
+        </VBox>
+
+        <!-- Rooms -->
+        <VBox GridPane.columnIndex="3" GridPane.rowIndex="0" styleClass="stat-card" style="-fx-padding: 10;">
+            <Label text="🏫 Rooms" styleClass="stat-label" style="-fx-font-size: 11;"/>
+            <Label fx:id="roomCountLabel" text="0" styleClass="stat-value, accent-warning" style="-fx-font-size: 24;"/>
+            <Label text="Total" styleClass="stat-description" style="-fx-font-size: 10;"/>
+        </VBox>
+
+        <!-- Schedules -->
+        <VBox GridPane.columnIndex="4" GridPane.rowIndex="0" styleClass="stat-card" style="-fx-padding: 10;">
+            <Label text="📅 Schedules" styleClass="stat-label" style="-fx-font-size: 11;"/>
+            <Label fx:id="scheduleCountLabel" text="0" styleClass="stat-value, accent-cyan" style="-fx-font-size: 24;"/>
+            <Label text="Generated" styleClass="stat-description" style="-fx-font-size: 10;"/>
+        </VBox>
+
+        <!-- ============================================================ -->
+        <!-- ROW 2: STAFF & CERTIFICATION METRICS -->
+        <!-- ============================================================ -->
+
+        <!-- Certified Teachers -->
+        <VBox GridPane.columnIndex="0" GridPane.rowIndex="1" styleClass="stat-card" style="-fx-padding: 10;">
+            <Label text="✓ Certified" styleClass="stat-label" style="-fx-font-size: 11;"/>
+            <Label fx:id="certifiedTeachersLabel" text="0" styleClass="stat-value, accent-success" style="-fx-font-size: 24;"/>
+            <Label text="Fully certified" styleClass="stat-description" style="-fx-font-size: 10;"/>
+        </VBox>
+
+        <!-- Co-Teachers -->
+        <VBox GridPane.columnIndex="1" GridPane.rowIndex="1" styleClass="stat-card" style="-fx-padding: 10;">
+            <Label text="👥 Co-Teachers" styleClass="stat-label" style="-fx-font-size: 11;"/>
+            <Label fx:id="coTeachersLabel" text="0" styleClass="stat-value, accent-purple" style="-fx-font-size: 24;"/>
+            <Label text="Active" styleClass="stat-description" style="-fx-font-size: 10;"/>
+        </VBox>
+
+        <!-- Paraprofessionals -->
+        <VBox GridPane.columnIndex="2" GridPane.rowIndex="1" styleClass="stat-card" style="-fx-padding: 10;">
+            <Label text="🎓 Paras" styleClass="stat-label" style="-fx-font-size: 11;"/>
+            <Label fx:id="paraprofessionalsLabel" text="0" styleClass="stat-value, accent-cyan" style="-fx-font-size: 24;"/>
+            <Label text="Active" styleClass="stat-description" style="-fx-font-size: 10;"/>
+        </VBox>
+
+        <!-- Substitutes -->
+        <VBox GridPane.columnIndex="3" GridPane.rowIndex="1" styleClass="stat-card" style="-fx-padding: 10;">
+            <Label text="👔 Subs" styleClass="stat-label" style="-fx-font-size: 11;"/>
+            <Label fx:id="activeSubstitutesLabel" text="0" styleClass="stat-value, accent-blue" style="-fx-font-size: 24;"/>
+            <Label text="Active" styleClass="stat-description" style="-fx-font-size: 10;"/>
+        </VBox>
+
+        <!-- Para Subs -->
+        <VBox GridPane.columnIndex="4" GridPane.rowIndex="1" styleClass="stat-card" style="-fx-padding: 10;">
+            <Label text="🎓 Para Subs" styleClass="stat-label" style="-fx-font-size: 11;"/>
+            <Label fx:id="activeParaSubsLabel" text="0" styleClass="stat-value, accent-warning" style="-fx-font-size: 24;"/>
+            <Label text="Active" styleClass="stat-description" style="-fx-font-size: 10;"/>
+        </VBox>
+
+        <!-- ============================================================ -->
+        <!-- ROW 3: QUALITY, COMPLIANCE & UTILIZATION METRICS -->
+        <!-- ============================================================ -->
+
+        <!-- Conflicts -->
+        <VBox GridPane.columnIndex="0" GridPane.rowIndex="2" styleClass="stat-card" style="-fx-padding: 10;">
+            <Label text="⚠️ Conflicts" styleClass="stat-label" style="-fx-font-size: 11;"/>
+            <Label fx:id="conflictCountLabel" text="0" styleClass="stat-value, accent-danger" style="-fx-font-size: 24;"/>
+            <Label text="Schedule conflicts" styleClass="stat-description" style="-fx-font-size: 10;"/>
+        </VBox>
+
+        <!-- Quality Score -->
+        <VBox GridPane.columnIndex="1" GridPane.rowIndex="2" styleClass="stat-card" style="-fx-padding: 10;">
+            <Label text="⭐ Quality" styleClass="stat-label" style="-fx-font-size: 11;"/>
+            <Label fx:id="qualityScoreLabel" text="N/A" styleClass="stat-value, accent-success" style="-fx-font-size: 24;"/>
+            <Label text="Schedule score" styleClass="stat-description" style="-fx-font-size: 10;"/>
+        </VBox>
+
+        <!-- IEP/504 Combined -->
+        <VBox GridPane.columnIndex="2" GridPane.rowIndex="2" styleClass="stat-card" style="-fx-padding: 10;">
+            <Label text="📋 IEP/504" styleClass="stat-label" style="-fx-font-size: 11;"/>
+            <Label fx:id="totalAccommodationsLabel" text="0" styleClass="stat-value, accent-purple" style="-fx-font-size: 24;"/>
+            <Label text="Total students" styleClass="stat-description" style="-fx-font-size: 10;"/>
+        </VBox>
+
+        <!-- Utilization -->
+        <VBox GridPane.columnIndex="3" GridPane.rowIndex="2" styleClass="stat-card" style="-fx-padding: 10;">
+            <Label text="📊 Utilization" styleClass="stat-label" style="-fx-font-size: 11;"/>
+            <Label fx:id="teacherUtilizationLabel" text="N/A" styleClass="stat-value, accent-blue" style="-fx-font-size: 24;"/>
+            <Label text="Avg workload" styleClass="stat-description" style="-fx-font-size: 10;"/>
+        </VBox>
+
+        <!-- Events -->
+        <VBox GridPane.columnIndex="4" GridPane.rowIndex="2" styleClass="stat-card" style="-fx-padding: 10;">
+            <Label text="📅 Events" styleClass="stat-label" style="-fx-font-size: 11;"/>
+            <Label fx:id="eventCountLabel" text="0" styleClass="stat-value, accent-blue" style="-fx-font-size: 24;"/>
+            <Label text="Scheduled" styleClass="stat-description" style="-fx-font-size: 10;"/>
+        </VBox>
+    </GridPane>
+
+    <!-- Course Assignment Status Widget -->
+    <VBox styleClass="card" style="-fx-padding: 15;">
+        <HBox alignment="CENTER_LEFT" spacing="10">
+            <Label text="📊 COURSE ASSIGNMENT STATUS" styleClass="label-title" style="-fx-font-size: 14;"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="View All Courses" onAction="#openCoursesView" styleClass="button" style="-fx-font-size: 10; -fx-padding: 4 8;"/>
+        </HBox>
+
+        <Separator style="-fx-padding: 5 0 5 0;"/>
+
+        <!-- Status Metrics Grid -->
+        <GridPane hgap="15" vgap="10" style="-fx-padding: 10 0 0 0;">
+            <columnConstraints>
+                <ColumnConstraints percentWidth="25"/>
+                <ColumnConstraints percentWidth="25"/>
+                <ColumnConstraints percentWidth="25"/>
+                <ColumnConstraints percentWidth="25"/>
+            </columnConstraints>
+
+            <!-- Total Courses -->
+            <VBox GridPane.columnIndex="0" GridPane.rowIndex="0" spacing="5">
+                <Label text="Total Courses" styleClass="stat-label" style="-fx-font-size: 11;"/>
+                <Label fx:id="totalCoursesMetricLabel" text="0" styleClass="stat-value" style="-fx-font-size: 28;"/>
+                <Label text="All offerings" styleClass="stat-description" style="-fx-font-size: 10;"/>
+            </VBox>
+
+            <!-- Fully Assigned -->
+            <VBox GridPane.columnIndex="1" GridPane.rowIndex="0" spacing="5">
+                <HBox alignment="CENTER_LEFT" spacing="5">
+                    <Label text="🟢" style="-fx-font-size: 14;"/>
+                    <Label text="Fully Assigned" styleClass="stat-label, accent-success" style="-fx-font-size: 11;"/>
+                </HBox>
+                <HBox alignment="BASELINE_LEFT" spacing="5">
+                    <Label fx:id="fullyAssignedLabel" text="0" styleClass="stat-value, accent-success" style="-fx-font-size: 28;"/>
+                    <Label fx:id="fullyAssignedPercentLabel" text="(0%)" styleClass="stat-description, accent-success" style="-fx-font-size: 12;"/>
+                </HBox>
+                <Label text="Teacher + Room" styleClass="stat-description" style="-fx-font-size: 10;"/>
+            </VBox>
+
+            <!-- Partially Assigned -->
+            <VBox GridPane.columnIndex="2" GridPane.rowIndex="0" spacing="5">
+                <HBox alignment="CENTER_LEFT" spacing="5">
+                    <Label text="🟡" style="-fx-font-size: 14;"/>
+                    <Label text="Partially Assigned" styleClass="stat-label, accent-warning" style="-fx-font-size: 11;"/>
+                </HBox>
+                <HBox alignment="BASELINE_LEFT" spacing="5">
+                    <Label fx:id="partiallyAssignedLabel" text="0" styleClass="stat-value, accent-warning" style="-fx-font-size: 28;"/>
+                    <Label fx:id="partiallyAssignedPercentLabel" text="(0%)" styleClass="stat-description, accent-warning" style="-fx-font-size: 12;"/>
+                </HBox>
+                <Label text="Teacher OR Room" styleClass="stat-description" style="-fx-font-size: 10;"/>
+            </VBox>
+
+            <!-- Unassigned -->
+            <VBox GridPane.columnIndex="3" GridPane.rowIndex="0" spacing="5">
+                <HBox alignment="CENTER_LEFT" spacing="5">
+                    <Label text="🔴" style="-fx-font-size: 14;"/>
+                    <Label text="Unassigned" styleClass="stat-label, accent-danger" style="-fx-font-size: 11;"/>
+                </HBox>
+                <HBox alignment="BASELINE_LEFT" spacing="5">
+                    <Label fx:id="unassignedLabel" text="0" styleClass="stat-value, accent-danger" style="-fx-font-size: 28;"/>
+                    <Label fx:id="unassignedPercentLabel" text="(0%)" styleClass="stat-description, accent-danger" style="-fx-font-size: 12;"/>
+                </HBox>
+                <Button text="View List" onAction="#viewUnassignedCourses" styleClass="button-danger" style="-fx-font-size: 9; -fx-padding: 3 6;"/>
+            </VBox>
+        </GridPane>
+
+        <Separator style="-fx-padding: 10 0 5 0;"/>
+
+        <!-- Issues Requiring Attention -->
+        <VBox spacing="8" style="-fx-padding: 10 0 0 0;">
+            <Label text="⚠️  ISSUES REQUIRING ATTENTION:" styleClass="label-title" style="-fx-font-size: 12;"/>
+
+            <!-- Dynamic Issues List -->
+            <VBox fx:id="issuesListContainer" spacing="5">
+                <!-- Issues will be added dynamically by controller -->
+                <Label fx:id="overloadedTeachersIssue" text="• Loading..." styleClass="stat-description" style="-fx-font-size: 11;"/>
+                <Label fx:id="certificationIssue" text="• Loading..." styleClass="stat-description" style="-fx-font-size: 11;"/>
+                <Label fx:id="labRoomIssue" text="• Loading..." styleClass="stat-description" style="-fx-font-size: 11;"/>
+            </VBox>
+        </VBox>
+
+        <Separator style="-fx-padding: 10 0 5 0;"/>
+
+        <!-- Smart Assignment Actions -->
+        <VBox spacing="8" style="-fx-padding: 10 0 0 0;">
+            <Label text="🤖 SMART ASSIGNMENT:" styleClass="label-title" style="-fx-font-size: 12;"/>
+
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Button text="✨ Smart Assign Teachers" onAction="#smartAssignTeachers"
+                        styleClass="button-primary" style="-fx-font-size: 11; -fx-padding: 8 15;"/>
+                <Button text="🏫 Smart Assign Rooms" onAction="#smartAssignRooms"
+                        styleClass="button-primary" style="-fx-font-size: 11; -fx-padding: 8 15;"/>
+                <Button text="⚡ Smart Assign All" onAction="#smartAssignAll"
+                        styleClass="button-success" style="-fx-font-size: 11; -fx-padding: 8 15;"/>
+                <Button text="🗑️ Clear All Assignments" onAction="#clearAllAssignments"
+                        styleClass="button-danger" style="-fx-font-size: 11; -fx-padding: 8 15;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="assignmentStatusLabel" text="Ready"
+                       styleClass="stat-description" style="-fx-font-size: 10;"/>
+            </HBox>
+        </VBox>
+    </VBox>
+
+    <!-- Academic Performance (GPA) Widget -->
+    <VBox styleClass="card" style="-fx-padding: 15;">
+        <HBox alignment="CENTER_LEFT" spacing="10">
+            <Label text="🎓 ACADEMIC PERFORMANCE" styleClass="label-title" style="-fx-font-size: 14;"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="View All Grades" onAction="#openStudentsView" styleClass="button" style="-fx-font-size: 10; -fx-padding: 4 8;"/>
+        </HBox>
+
+        <Separator style="-fx-padding: 5 0 5 0;"/>
+
+        <!-- GPA Summary Metrics Grid -->
+        <GridPane hgap="15" vgap="10" style="-fx-padding: 10 0 0 0;">
+            <columnConstraints>
+                <ColumnConstraints percentWidth="20"/>
+                <ColumnConstraints percentWidth="20"/>
+                <ColumnConstraints percentWidth="20"/>
+                <ColumnConstraints percentWidth="20"/>
+                <ColumnConstraints percentWidth="20"/>
+            </columnConstraints>
+
+            <!-- Average GPA -->
+            <VBox GridPane.columnIndex="0" GridPane.rowIndex="0" spacing="3">
+                <Label text="📊 Average GPA" styleClass="stat-label" style="-fx-font-size: 11;"/>
+                <Label fx:id="averageGPALabel" text="0.00" styleClass="stat-value, accent-blue" style="-fx-font-size: 28;"/>
+                <Label text="School-wide" styleClass="stat-description" style="-fx-font-size: 10;"/>
+            </VBox>
+
+            <!-- Honor Roll -->
+            <VBox GridPane.columnIndex="1" GridPane.rowIndex="0" spacing="3">
+                <HBox alignment="CENTER_LEFT" spacing="5">
+                    <Label text="🌟" style="-fx-font-size: 14;"/>
+                    <Label text="Honor Roll" styleClass="stat-label, accent-success" style="-fx-font-size: 11;"/>
+                </HBox>
+                <HBox alignment="BASELINE_LEFT" spacing="5">
+                    <Label fx:id="honorRollCountLabel" text="0" styleClass="stat-value, accent-success" style="-fx-font-size: 28;"/>
+                    <Label fx:id="honorRollPercentLabel" text="(0%)" styleClass="stat-description, accent-success" style="-fx-font-size: 12;"/>
+                </HBox>
+                <Label text="GPA ≥ 3.5" styleClass="stat-description" style="-fx-font-size: 10;"/>
+            </VBox>
+
+            <!-- High Honor Roll -->
+            <VBox GridPane.columnIndex="2" GridPane.rowIndex="0" spacing="3">
+                <HBox alignment="CENTER_LEFT" spacing="5">
+                    <Label text="⭐" style="-fx-font-size: 14;"/>
+                    <Label text="High Honors" styleClass="stat-label, accent-success" style="-fx-font-size: 11;"/>
+                </HBox>
+                <HBox alignment="BASELINE_LEFT" spacing="5">
+                    <Label fx:id="highHonorsCountLabel" text="0" styleClass="stat-value, accent-success" style="-fx-font-size: 28;"/>
+                    <Label fx:id="highHonorsPercentLabel" text="(0%)" styleClass="stat-description, accent-success" style="-fx-font-size: 12;"/>
+                </HBox>
+                <Label text="GPA ≥ 3.75" styleClass="stat-description" style="-fx-font-size: 10;"/>
+            </VBox>
+
+            <!-- Academic Warning -->
+            <VBox GridPane.columnIndex="3" GridPane.rowIndex="0" spacing="3">
+                <HBox alignment="CENTER_LEFT" spacing="5">
+                    <Label text="⚠️" style="-fx-font-size: 14;"/>
+                    <Label text="Warnings" styleClass="stat-label, accent-warning" style="-fx-font-size: 11;"/>
+                </HBox>
+                <HBox alignment="BASELINE_LEFT" spacing="5">
+                    <Label fx:id="academicWarningCountLabel" text="0" styleClass="stat-value, accent-warning" style="-fx-font-size: 28;"/>
+                    <Label fx:id="academicWarningPercentLabel" text="(0%)" styleClass="stat-description, accent-warning" style="-fx-font-size: 12;"/>
+                </HBox>
+                <Label text="GPA &lt; 2.0" styleClass="stat-description" style="-fx-font-size: 10;"/>
+            </VBox>
+
+            <!-- Students with Grades -->
+            <VBox GridPane.columnIndex="4" GridPane.rowIndex="0" spacing="3">
+                <Label text="📝 Graded" styleClass="stat-label" style="-fx-font-size: 11;"/>
+                <HBox alignment="BASELINE_LEFT" spacing="5">
+                    <Label fx:id="studentsWithGradesLabel" text="0" styleClass="stat-value, accent-purple" style="-fx-font-size: 28;"/>
+                    <Label fx:id="studentsGradedPercentLabel" text="(0%)" styleClass="stat-description, accent-purple" style="-fx-font-size: 12;"/>
+                </HBox>
+                <Label text="Have grades" styleClass="stat-description" style="-fx-font-size: 10;"/>
+            </VBox>
+        </GridPane>
+
+        <Separator style="-fx-padding: 10 0 5 0;"/>
+
+        <!-- Grade Distribution -->
+        <VBox spacing="8" style="-fx-padding: 10 0 0 0;">
+            <Label text="GRADE DISTRIBUTION (A's to F's):" styleClass="label-title" style="-fx-font-size: 12;"/>
+
+            <GridPane hgap="10" vgap="5">
+                <columnConstraints>
+                    <ColumnConstraints percentWidth="20"/>
+                    <ColumnConstraints percentWidth="20"/>
+                    <ColumnConstraints percentWidth="20"/>
+                    <ColumnConstraints percentWidth="20"/>
+                    <ColumnConstraints percentWidth="20"/>
+                </columnConstraints>
+
+                <!-- A's -->
+                <HBox GridPane.columnIndex="0" GridPane.rowIndex="0" spacing="5" alignment="CENTER_LEFT">
+                    <Label text="A:" styleClass="stat-label" style="-fx-font-size: 11; -fx-min-width: 20;"/>
+                    <Label fx:id="gradeACountLabel" text="0" styleClass="accent-success" style="-fx-font-size: 14; -fx-font-weight: bold;"/>
+                    <Label fx:id="gradeAPercentLabel" text="(0%)" styleClass="stat-description" style="-fx-font-size: 10;"/>
+                </HBox>
+
+                <!-- B's -->
+                <HBox GridPane.columnIndex="1" GridPane.rowIndex="0" spacing="5" alignment="CENTER_LEFT">
+                    <Label text="B:" styleClass="stat-label" style="-fx-font-size: 11; -fx-min-width: 20;"/>
+                    <Label fx:id="gradeBCountLabel" text="0" styleClass="accent-blue" style="-fx-font-size: 14; -fx-font-weight: bold;"/>
+                    <Label fx:id="gradeBPercentLabel" text="(0%)" styleClass="stat-description" style="-fx-font-size: 10;"/>
+                </HBox>
+
+                <!-- C's -->
+                <HBox GridPane.columnIndex="2" GridPane.rowIndex="0" spacing="5" alignment="CENTER_LEFT">
+                    <Label text="C:" styleClass="stat-label" style="-fx-font-size: 11; -fx-min-width: 20;"/>
+                    <Label fx:id="gradeCCountLabel" text="0" styleClass="accent-warning" style="-fx-font-size: 14; -fx-font-weight: bold;"/>
+                    <Label fx:id="gradeCPercentLabel" text="(0%)" styleClass="stat-description" style="-fx-font-size: 10;"/>
+                </HBox>
+
+                <!-- D's -->
+                <HBox GridPane.columnIndex="3" GridPane.rowIndex="0" spacing="5" alignment="CENTER_LEFT">
+                    <Label text="D:" styleClass="stat-label" style="-fx-font-size: 11; -fx-min-width: 20;"/>
+                    <Label fx:id="gradeDCountLabel" text="0" styleClass="accent-danger" style="-fx-font-size: 14; -fx-font-weight: bold;"/>
+                    <Label fx:id="gradeDPercentLabel" text="(0%)" styleClass="stat-description" style="-fx-font-size: 10;"/>
+                </HBox>
+
+                <!-- F's -->
+                <HBox GridPane.columnIndex="4" GridPane.rowIndex="0" spacing="5" alignment="CENTER_LEFT">
+                    <Label text="F:" styleClass="stat-label" style="-fx-font-size: 11; -fx-min-width: 20;"/>
+                    <Label fx:id="gradeFCountLabel" text="0" styleClass="accent-danger" style="-fx-font-size: 14; -fx-font-weight: bold;"/>
+                    <Label fx:id="gradeFPercentLabel" text="(0%)" styleClass="stat-description" style="-fx-font-size: 10;"/>
+                </HBox>
+            </GridPane>
+        </VBox>
+    </VBox>
+
+    <!-- Academic Planning Widget -->
+    <VBox styleClass="card" style="-fx-padding: 15;">
+        <HBox alignment="CENTER_LEFT" spacing="10">
+            <Label text="📚 ACADEMIC PLANNING" styleClass="label-title" style="-fx-font-size: 14;"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="Open Academic Planning" onAction="#openAcademicPlanning" styleClass="button-primary" style="-fx-font-size: 10; -fx-padding: 4 8;"/>
+        </HBox>
+
+        <Separator style="-fx-padding: 5 0 5 0;"/>
+
+        <!-- Planning Metrics Grid -->
+        <GridPane hgap="15" vgap="10" style="-fx-padding: 10 0 0 0;">
+            <columnConstraints>
+                <ColumnConstraints percentWidth="25"/>
+                <ColumnConstraints percentWidth="25"/>
+                <ColumnConstraints percentWidth="25"/>
+                <ColumnConstraints percentWidth="25"/>
+            </columnConstraints>
+
+            <!-- Total Plans -->
+            <VBox GridPane.columnIndex="0" GridPane.rowIndex="0" spacing="5">
+                <Label text="Total Plans" styleClass="stat-label" style="-fx-font-size: 11;"/>
+                <Label fx:id="totalPlansLabel" text="0" styleClass="stat-value" style="-fx-font-size: 28;"/>
+                <Label text="All academic plans" styleClass="stat-description" style="-fx-font-size: 10;"/>
+            </VBox>
+
+            <!-- Active Plans -->
+            <VBox GridPane.columnIndex="1" GridPane.rowIndex="0" spacing="5">
+                <HBox alignment="CENTER_LEFT" spacing="5">
+                    <Label text="🟢" style="-fx-font-size: 14;"/>
+                    <Label text="Active Plans" styleClass="stat-label, accent-success" style="-fx-font-size: 11;"/>
+                </HBox>
+                <HBox alignment="BASELINE_LEFT" spacing="5">
+                    <Label fx:id="activePlansLabel" text="0" styleClass="stat-value, accent-success" style="-fx-font-size: 28;"/>
+                    <Label fx:id="activePlansPercentLabel" text="(0%)" styleClass="stat-description, accent-success" style="-fx-font-size: 12;"/>
+                </HBox>
+                <Label text="In use" styleClass="stat-description" style="-fx-font-size: 10;"/>
+            </VBox>
+
+            <!-- Pending Approval -->
+            <VBox GridPane.columnIndex="2" GridPane.rowIndex="0" spacing="5">
+                <HBox alignment="CENTER_LEFT" spacing="5">
+                    <Label text="🟡" style="-fx-font-size: 14;"/>
+                    <Label text="Pending Approval" styleClass="stat-label, accent-warning" style="-fx-font-size: 11;"/>
+                </HBox>
+                <HBox alignment="BASELINE_LEFT" spacing="5">
+                    <Label fx:id="pendingApprovalLabel" text="0" styleClass="stat-value, accent-warning" style="-fx-font-size: 28;"/>
+                    <Label fx:id="pendingApprovalPercentLabel" text="(0%)" styleClass="stat-description, accent-warning" style="-fx-font-size: 12;"/>
+                </HBox>
+                <Label text="Awaiting counselor" styleClass="stat-description" style="-fx-font-size: 10;"/>
+            </VBox>
+
+            <!-- At-Risk Students -->
+            <VBox GridPane.columnIndex="3" GridPane.rowIndex="0" spacing="5">
+                <HBox alignment="CENTER_LEFT" spacing="5">
+                    <Label text="🔴" style="-fx-font-size: 14;"/>
+                    <Label text="At-Risk Students" styleClass="stat-label, accent-danger" style="-fx-font-size: 11;"/>
+                </HBox>
+                <HBox alignment="BASELINE_LEFT" spacing="5">
+                    <Label fx:id="atRiskStudentsLabel" text="0" styleClass="stat-value, accent-danger" style="-fx-font-size: 28;"/>
+                    <Label fx:id="atRiskStudentsPercentLabel" text="(0%)" styleClass="stat-description, accent-danger" style="-fx-font-size: 12;"/>
+                </HBox>
+                <Button text="View List" onAction="#viewAtRiskStudents" styleClass="button-danger" style="-fx-font-size: 9; -fx-padding: 3 6;"/>
+            </VBox>
+        </GridPane>
+
+        <Separator style="-fx-padding: 10 0 5 0;"/>
+
+        <!-- Recommendation Summary -->
+        <VBox spacing="8" style="-fx-padding: 10 0 0 0;">
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label text="🤖 AI RECOMMENDATIONS:" styleClass="label-title" style="-fx-font-size: 12;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="View All" onAction="#viewRecommendations" styleClass="button" style="-fx-font-size: 9; -fx-padding: 3 6;"/>
+            </HBox>
+
+            <HBox spacing="15" alignment="CENTER_LEFT">
+                <VBox spacing="3">
+                    <Label text="Pending" styleClass="stat-label" style="-fx-font-size: 10;"/>
+                    <Label fx:id="pendingRecommendationsLabel" text="0" styleClass="stat-value, accent-blue" style="-fx-font-size: 20;"/>
+                </VBox>
+                <Separator orientation="VERTICAL"/>
+                <VBox spacing="3">
+                    <Label text="High Priority" styleClass="stat-label" style="-fx-font-size: 10;"/>
+                    <Label fx:id="highPriorityRecommendationsLabel" text="0" styleClass="stat-value, accent-danger" style="-fx-font-size: 20;"/>
+                </VBox>
+                <Separator orientation="VERTICAL"/>
+                <VBox spacing="3">
+                    <Label text="Accepted" styleClass="stat-label" style="-fx-font-size: 10;"/>
+                    <Label fx:id="acceptedRecommendationsLabel" text="0" styleClass="stat-value, accent-success" style="-fx-font-size: 20;"/>
+                </VBox>
+            </HBox>
+        </VBox>
+    </VBox>
+
+    <!-- AI Schedule Health Widget -->
+    <VBox fx:id="aiStatusWidget" styleClass="card" style="-fx-padding: 15;" managed="false" visible="false">
+        <HBox alignment="CENTER_LEFT" spacing="10">
+            <Label text="🤖 AI SCHEDULE HEALTH" styleClass="label-title" style="-fx-font-size: 14;"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button fx:id="aiAnalyzeNowButton" text="🔄 Analyze Now" onAction="#triggerAIAnalysis"
+                    styleClass="button-primary" style="-fx-font-size: 10; -fx-padding: 4 8;"/>
+            <Button text="View Details" onAction="#viewAIDetails"
+                    styleClass="button" style="-fx-font-size: 10; -fx-padding: 4 8;"/>
+        </HBox>
+
+        <Separator style="-fx-padding: 5 0 5 0;"/>
+
+        <!-- Health Score Meter -->
+        <HBox spacing="20" style="-fx-padding: 10 0 0 0;" alignment="CENTER_LEFT">
+            <!-- Health Score Display -->
+            <VBox spacing="5" alignment="CENTER">
+                <Label text="Health Score" styleClass="stat-label" style="-fx-font-size: 11;"/>
+                <HBox alignment="BASELINE_CENTER" spacing="5">
+                    <Label fx:id="aiHealthScoreLabel" text="--" styleClass="stat-value"
+                           style="-fx-font-size: 48; -fx-font-weight: bold;"/>
+                    <Label text="/100" styleClass="stat-description" style="-fx-font-size: 16;"/>
+                </HBox>
+                <Label fx:id="aiHealthStatusLabel" text="Not analyzed" styleClass="stat-description"
+                       style="-fx-font-size: 12; -fx-font-weight: 500;"/>
+            </VBox>
+
+            <!-- Visual Health Bar -->
+            <VBox spacing="5" HBox.hgrow="ALWAYS">
+                <Label text="Schedule Status" styleClass="stat-label" style="-fx-font-size: 11;"/>
+                <ProgressBar fx:id="aiHealthProgressBar" progress="0" prefHeight="25" maxWidth="Infinity"
+                             styleClass="health-progress-bar"/>
+                <Label fx:id="aiLastAnalysisLabel" text="Last analysis: Never"
+                       styleClass="stat-description" style="-fx-font-size: 10;"/>
+            </VBox>
+        </HBox>
+
+        <Separator style="-fx-padding: 10 0 5 0;"/>
+
+        <!-- Issue Counts -->
+        <GridPane hgap="15" vgap="10" style="-fx-padding: 10 0 0 0;">
+            <columnConstraints>
+                <ColumnConstraints percentWidth="33.33"/>
+                <ColumnConstraints percentWidth="33.33"/>
+                <ColumnConstraints percentWidth="33.33"/>
+            </columnConstraints>
+
+            <!-- Critical Issues -->
+            <VBox GridPane.columnIndex="0" GridPane.rowIndex="0" spacing="3">
+                <HBox alignment="CENTER_LEFT" spacing="5">
+                    <Label text="🔴" style="-fx-font-size: 14;"/>
+                    <Label text="Critical Issues" styleClass="stat-label, accent-danger" style="-fx-font-size: 11;"/>
+                </HBox>
+                <Label fx:id="aiCriticalIssuesLabel" text="0" styleClass="stat-value, accent-danger"
+                       style="-fx-font-size: 24;"/>
+                <Label text="Requires action" styleClass="stat-description" style="-fx-font-size: 10;"/>
+            </VBox>
+
+            <!-- Warnings -->
+            <VBox GridPane.columnIndex="1" GridPane.rowIndex="0" spacing="3">
+                <HBox alignment="CENTER_LEFT" spacing="5">
+                    <Label text="⚠️" style="-fx-font-size: 14;"/>
+                    <Label text="Warnings" styleClass="stat-label, accent-warning" style="-fx-font-size: 11;"/>
+                </HBox>
+                <Label fx:id="aiWarningsLabel" text="0" styleClass="stat-value, accent-warning"
+                       style="-fx-font-size: 24;"/>
+                <Label text="Should address" styleClass="stat-description" style="-fx-font-size: 10;"/>
+            </VBox>
+
+            <!-- Suggestions -->
+            <VBox GridPane.columnIndex="2" GridPane.rowIndex="0" spacing="3">
+                <HBox alignment="CENTER_LEFT" spacing="5">
+                    <Label text="💡" style="-fx-font-size: 14;"/>
+                    <Label text="Suggestions" styleClass="stat-label, accent-blue" style="-fx-font-size: 11;"/>
+                </HBox>
+                <Label fx:id="aiSuggestionsLabel" text="0" styleClass="stat-value, accent-blue"
+                       style="-fx-font-size: 24;"/>
+                <Label text="Optimizations" styleClass="stat-description" style="-fx-font-size: 10;"/>
+            </VBox>
+        </GridPane>
+
+        <Separator style="-fx-padding: 10 0 5 0;"/>
+
+        <!-- AI Summary -->
+        <VBox spacing="5" style="-fx-padding: 10 0 0 0;">
+            <Label text="AI ANALYSIS SUMMARY:" styleClass="label-title" style="-fx-font-size: 11;"/>
+            <Label fx:id="aiSummaryLabel" text="No analysis available. Click 'Analyze Now' to start."
+                   styleClass="stat-description" wrapText="true"
+                   style="-fx-font-size: 11; -fx-padding: 5; -fx-background-color: rgba(100,100,100,0.1); -fx-background-radius: 5;"/>
+        </VBox>
+    </VBox>
+
+    <!-- System Status Bar (Compact) -->
+    <HBox alignment="CENTER_LEFT" spacing="8" styleClass="card" style="-fx-padding: 8;">
+        <Label text="ℹ️" styleClass="stat-label" style="-fx-font-size: 12;"/>
+        <Label text="●" styleClass="accent-success" style="-fx-font-size: 12;"/>
+        <Label text="All systems operational" styleClass="accent-success" style="-fx-font-weight: 500; -fx-font-size: 11;"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Label text="Last updated: Just now" styleClass="stat-description" style="-fx-font-size: 10;"/>
+    </HBox>
+
+</VBox>
+</ScrollPane>

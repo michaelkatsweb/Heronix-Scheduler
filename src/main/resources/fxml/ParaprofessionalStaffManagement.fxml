@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.eduscheduler.ui.controller.ParaprofessionalStaffManagementController">
+
+    <top>
+        <VBox spacing="10" style="-fx-background-color: white;">
+            <padding>
+                <Insets top="15" right="15" bottom="15" left="15"/>
+            </padding>
+
+            <!-- Title -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Paraprofessional Staff Management" style="-fx-font-size: 20; -fx-font-weight: bold;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="paraprofessionalCountLabel" text="Total: 0 paraprofessionals" style="-fx-font-size: 12;"/>
+            </HBox>
+
+            <!-- Search and Actions -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <TextField fx:id="paraprofessionalSearchField" promptText="Search paraprofessionals by name..." prefWidth="300"/>
+                <Button text="Search" onAction="#handleSearchParaprofessionals"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="+ Add Paraprofessional" onAction="#handleAddParaprofessional" styleClass="button-primary"/>
+                <Button text="Refresh" onAction="#handleRefreshParaprofessionals"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <TableView fx:id="paraprofessionalsTable" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="paraNameColumn" text="Name" prefWidth="180"/>
+                <TableColumn fx:id="paraEmployeeIdColumn" text="Employee ID" prefWidth="120"/>
+                <TableColumn fx:id="paraRoleTypeColumn" text="Role Type" prefWidth="150"/>
+                <TableColumn fx:id="paraSkillsColumn" text="Skills" prefWidth="180"/>
+                <TableColumn fx:id="paraCertificationsColumn" text="Certifications" prefWidth="200"/>
+                <TableColumn fx:id="paraStatusColumn" text="Status" prefWidth="80"/>
+                <TableColumn fx:id="paraActionsColumn" text="Actions" prefWidth="120"/>
+            </columns>
+            <placeholder>
+                <Label text="No paraprofessionals found. Click '+ Add Paraprofessional' to add one." style="-fx-text-fill: #999;"/>
+            </placeholder>
+        </TableView>
+    </center>
+
+    <bottom>
+        <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-background-color: #f0f0f0;">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            <Label text="Paraprofessional Staff - Educational aides, classroom assistants, and support staff"/>
+            <Region HBox.hgrow="ALWAYS"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

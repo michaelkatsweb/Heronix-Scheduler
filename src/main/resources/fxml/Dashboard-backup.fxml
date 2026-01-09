@@ -1,0 +1,514 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<VBox fx:id="dashboardRoot" xmlns="http://javafx.com/javafx/21"
+    xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="com.eduscheduler.ui.controller.DashboardController"
+    spacing="20"
+    styleClass="root"
+    style="-fx-background-color: #1e2230;">
+
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20" />
+    </padding>
+
+    <!-- Header with Navigation Buttons -->
+    <HBox alignment="CENTER_LEFT" spacing="15"
+        styleClass="card"
+        style="-fx-padding: 16;">
+        <Label text="📊 Dashboard Overview"
+            styleClass="label-title"
+            style="-fx-font-size: 24;" />
+        <Region HBox.hgrow="ALWAYS" />
+
+        <!-- Substitute Management Buttons -->
+        <Button text="👥 Teacher Subs" onAction="#openSubstituteManagement"
+            styleClass="button-primary" />
+        <Button text="🎓 Para Subs" onAction="#openParaprofessionalManagement"
+            styleClass="button-primary" />
+        <Button text="👨‍🏫 Co-Teachers" onAction="#openCoTeacherManagement"
+            styleClass="button-success" />
+
+        <Separator orientation="VERTICAL" />
+
+        <Button text="🔄 Refresh" onAction="#refreshDashboard"
+            styleClass="button" />
+    </HBox>
+
+    <!-- Statistics Grid -->
+    <GridPane hgap="15" vgap="15">
+
+        <columnConstraints>
+            <ColumnConstraints percentWidth="25" />
+            <ColumnConstraints percentWidth="25" />
+            <ColumnConstraints percentWidth="25" />
+            <ColumnConstraints percentWidth="25" />
+        </columnConstraints>
+
+        <!-- Row 1: TEACHER METRICS -->
+
+        <!-- Teachers Card -->
+        <VBox GridPane.columnIndex="0" GridPane.rowIndex="0" styleClass="stat-card">
+            <Label text="👨‍🏫 Teachers" styleClass="stat-label" />
+            <Label fx:id="teacherCountLabel" text="0" styleClass="stat-value, accent-blue">
+                <padding>
+                    <Insets top="6" />
+                </padding>
+            </Label>
+            <Label text="Active staff members" styleClass="stat-description">
+                <padding>
+                    <Insets top="3" />
+                </padding>
+            </Label>
+        </VBox>
+
+        <!-- Substitutes This Week Card -->
+        <VBox GridPane.columnIndex="1" GridPane.rowIndex="0" styleClass="stat-card">
+            <Label text="📅 Subs This Week" styleClass="stat-label" />
+            <Label fx:id="substitutesWeekLabel" text="0" styleClass="stat-value, accent-danger">
+                <padding>
+                    <Insets top="6" />
+                </padding>
+            </Label>
+            <Label text="Substitutes this week" styleClass="stat-description">
+                <padding>
+                    <Insets top="3" />
+                </padding>
+            </Label>
+        </VBox>
+
+        <!-- Substitutes This Month Card -->
+        <VBox GridPane.columnIndex="2" GridPane.rowIndex="0" styleClass="stat-card">
+            <Label text="📆 Subs This Month" styleClass="stat-label" />
+            <Label fx:id="substitutesMonthLabel" text="0" styleClass="stat-value, accent-warning">
+                <padding>
+                    <Insets top="6" />
+                </padding>
+            </Label>
+            <Label text="Substitutes this month" styleClass="stat-description">
+                <padding>
+                    <Insets top="3" />
+                </padding>
+            </Label>
+        </VBox>
+
+        <!-- Teacher Utilization Card -->
+        <VBox GridPane.columnIndex="3" GridPane.rowIndex="0" styleClass="stat-card">
+            <Label text="📊 Utilization" styleClass="stat-label" />
+            <Label fx:id="teacherUtilizationLabel" text="N/A" styleClass="stat-value, accent-blue">
+                <padding>
+                    <Insets top="6" />
+                </padding>
+            </Label>
+            <Label text="Average workload" styleClass="stat-description">
+                <padding>
+                    <Insets top="3" />
+                </padding>
+            </Label>
+        </VBox>
+
+        <!-- Row 2: TEACHER CERTIFICATIONS & ROLES -->
+
+        <!-- Certified Teachers Card -->
+        <VBox GridPane.columnIndex="0" GridPane.rowIndex="1" styleClass="stat-card">
+            <Label text="✓ Certified" styleClass="stat-label" />
+            <Label fx:id="certifiedTeachersLabel" text="0" styleClass="stat-value, accent-success">
+                <padding>
+                    <Insets top="6" />
+                </padding>
+            </Label>
+            <Label text="Fully certified" styleClass="stat-description">
+                <padding>
+                    <Insets top="3" />
+                </padding>
+            </Label>
+        </VBox>
+
+        <!-- Professional Cert Card -->
+        <VBox GridPane.columnIndex="1" GridPane.rowIndex="1" styleClass="stat-card">
+            <Label text="⭐ Professional" styleClass="stat-label" />
+            <Label fx:id="professionalCertLabel" text="0" styleClass="stat-value, accent-blue">
+                <padding>
+                    <Insets top="6" />
+                </padding>
+            </Label>
+            <Label text="Professional cert" styleClass="stat-description">
+                <padding>
+                    <Insets top="3" />
+                </padding>
+            </Label>
+        </VBox>
+
+        <!-- Temporary Cert Card -->
+        <VBox GridPane.columnIndex="2" GridPane.rowIndex="1" styleClass="stat-card">
+            <Label text="⏳ Temporary" styleClass="stat-label" />
+            <Label fx:id="temporaryCertLabel" text="0" styleClass="stat-value, accent-warning">
+                <padding>
+                    <Insets top="6" />
+                </padding>
+            </Label>
+            <Label text="Temporary cert" styleClass="stat-description">
+                <padding>
+                    <Insets top="3" />
+                </padding>
+            </Label>
+        </VBox>
+
+        <!-- Co-Teachers + Paraprofessionals Combined Card -->
+        <VBox GridPane.columnIndex="3" GridPane.rowIndex="1" styleClass="stat-card">
+            <Label text="👥 Support Staff" styleClass="stat-label" />
+            <HBox spacing="5">
+                <Label fx:id="coTeachersLabel" text="0" styleClass="stat-value, accent-purple">
+                    <padding>
+                        <Insets top="6" />
+                    </padding>
+                </Label>
+                <Label text="/" styleClass="stat-description"
+                    style="-fx-font-size: 20;">
+                    <padding>
+                        <Insets top="12" />
+                    </padding>
+                </Label>
+                <Label fx:id="paraprofessionalsLabel" text="0" styleClass="stat-value, accent-cyan">
+                    <padding>
+                        <Insets top="6" />
+                    </padding>
+                </Label>
+            </HBox>
+            <Label text="Co-teachers / Paras" styleClass="stat-description">
+                <padding>
+                    <Insets top="3" />
+                </padding>
+            </Label>
+        </VBox>
+
+        <!-- Row 3: BASIC COUNTS -->
+
+        <!-- Students Card -->
+        <VBox GridPane.columnIndex="0" GridPane.rowIndex="2" styleClass="stat-card">
+            <Label text="🎓 Students" styleClass="stat-label" />
+            <Label fx:id="studentCountLabel" text="0" styleClass="stat-value, accent-purple">
+                <padding>
+                    <Insets top="6" />
+                </padding>
+            </Label>
+            <Label text="Enrolled students" styleClass="stat-description">
+                <padding>
+                    <Insets top="3" />
+                </padding>
+            </Label>
+        </VBox>
+
+        <!-- Courses Card -->
+        <VBox GridPane.columnIndex="1" GridPane.rowIndex="2" styleClass="stat-card">
+            <Label text="📚 Courses" styleClass="stat-label" />
+            <Label fx:id="courseCountLabel" text="0" styleClass="stat-value, accent-success">
+                <padding>
+                    <Insets top="6" />
+                </padding>
+            </Label>
+            <Label text="Course offerings" styleClass="stat-description">
+                <padding>
+                    <Insets top="3" />
+                </padding>
+            </Label>
+        </VBox>
+
+        <!-- Rooms Card -->
+        <VBox GridPane.columnIndex="2" GridPane.rowIndex="2" styleClass="stat-card">
+            <Label text="🏫 Rooms" styleClass="stat-label" />
+            <Label fx:id="roomCountLabel" text="0" styleClass="stat-value, accent-warning">
+                <padding>
+                    <Insets top="6" />
+                </padding>
+            </Label>
+            <Label text="Total classrooms" styleClass="stat-description">
+                <padding>
+                    <Insets top="3" />
+                </padding>
+            </Label>
+        </VBox>
+
+        <!-- Schedules Card -->
+        <VBox GridPane.columnIndex="3" GridPane.rowIndex="2" styleClass="stat-card">
+            <Label text="📅 Schedules" styleClass="stat-label" />
+            <Label fx:id="scheduleCountLabel" text="0" styleClass="stat-value, accent-cyan">
+                <padding>
+                    <Insets top="6" />
+                </padding>
+            </Label>
+            <Label text="Generated schedules" styleClass="stat-description">
+                <padding>
+                    <Insets top="3" />
+                </padding>
+            </Label>
+        </VBox>
+
+        <!-- Row 4: SCHEDULE METRICS & ROOM UTILIZATION -->
+
+        <!-- Quality Score Card -->
+        <VBox GridPane.columnIndex="0" GridPane.rowIndex="3" styleClass="stat-card">
+            <Label text="⭐ Quality Score" styleClass="stat-label" />
+            <Label fx:id="qualityScoreLabel" text="N/A" styleClass="stat-value, accent-success">
+                <padding>
+                    <Insets top="6" />
+                </padding>
+            </Label>
+            <Label text="Schedule optimization" styleClass="stat-description">
+                <padding>
+                    <Insets top="3" />
+                </padding>
+            </Label>
+        </VBox>
+
+        <!-- Conflicts Card -->
+        <VBox GridPane.columnIndex="1" GridPane.rowIndex="3" styleClass="stat-card">
+            <Label text="⚠️ Conflicts" styleClass="stat-label" />
+            <Label fx:id="conflictCountLabel" text="0" styleClass="stat-value, accent-danger">
+                <padding>
+                    <Insets top="6" />
+                </padding>
+            </Label>
+            <Label text="Schedule conflicts" styleClass="stat-description">
+                <padding>
+                    <Insets top="3" />
+                </padding>
+            </Label>
+        </VBox>
+
+        <!-- Rooms In Use Card -->
+        <VBox GridPane.columnIndex="2" GridPane.rowIndex="3" styleClass="stat-card">
+            <Label text="🏫 Rooms In Use" styleClass="stat-label" />
+            <Label fx:id="roomsInUseLabel" text="0" styleClass="stat-value, accent-success">
+                <padding>
+                    <Insets top="6" />
+                </padding>
+            </Label>
+            <Label text="Currently scheduled" styleClass="stat-description">
+                <padding>
+                    <Insets top="3" />
+                </padding>
+            </Label>
+        </VBox>
+
+        <!-- Rooms Available Card -->
+        <VBox GridPane.columnIndex="3" GridPane.rowIndex="3" styleClass="stat-card">
+            <Label text="🚪 Rooms Available" styleClass="stat-label" />
+            <Label fx:id="roomsNotInUseLabel" text="0" styleClass="stat-value, accent-muted">
+                <padding>
+                    <Insets top="6" />
+                </padding>
+            </Label>
+            <Label text="Not scheduled" styleClass="stat-description">
+                <padding>
+                    <Insets top="3" />
+                </padding>
+            </Label>
+        </VBox>
+
+        <!-- Row 5: IEP TRACKING -->
+
+        <!-- IEP Today Card -->
+        <VBox GridPane.columnIndex="0" GridPane.rowIndex="4" styleClass="stat-card">
+            <Label text="📋 IEPs Today" styleClass="stat-label" />
+            <Label fx:id="iepTodayLabel" text="0" styleClass="stat-value, accent-warning">
+                <padding>
+                    <Insets top="6" />
+                </padding>
+            </Label>
+            <Label text="IEP reviews due today" styleClass="stat-description">
+                <padding>
+                    <Insets top="3" />
+                </padding>
+            </Label>
+        </VBox>
+
+        <!-- IEP This Month Card -->
+        <VBox GridPane.columnIndex="1" GridPane.rowIndex="4" styleClass="stat-card">
+            <Label text="📅 IEPs This Month" styleClass="stat-label" />
+            <Label fx:id="iepMonthLabel" text="0" styleClass="stat-value, accent-danger">
+                <padding>
+                    <Insets top="6" />
+                </padding>
+            </Label>
+            <Label text="IEP reviews this month" styleClass="stat-description">
+                <padding>
+                    <Insets top="3" />
+                </padding>
+            </Label>
+        </VBox>
+
+        <!-- IEP Until Year End Card -->
+        <VBox GridPane.columnIndex="2" GridPane.rowIndex="4" styleClass="stat-card">
+            <Label text="📊 IEPs Until Year End" styleClass="stat-label" />
+            <Label fx:id="iepYearLabel" text="0" styleClass="stat-value, accent-danger">
+                <padding>
+                    <Insets top="6" />
+                </padding>
+            </Label>
+            <Label text="Until school year end" styleClass="stat-description">
+                <padding>
+                    <Insets top="3" />
+                </padding>
+            </Label>
+        </VBox>
+
+        <!-- Events Card -->
+        <VBox GridPane.columnIndex="3" GridPane.rowIndex="4" styleClass="stat-card">
+            <Label text="📌 Events" styleClass="stat-label" />
+            <Label fx:id="eventCountLabel" text="0" styleClass="stat-value, accent-danger">
+                <padding>
+                    <Insets top="6" />
+                </padding>
+            </Label>
+            <Label text="Scheduled events" styleClass="stat-description">
+                <padding>
+                    <Insets top="3" />
+                </padding>
+            </Label>
+        </VBox>
+
+        <!-- Row 6: 504 PLAN TRACKING -->
+
+        <!-- 504 Today Card -->
+        <VBox GridPane.columnIndex="0" GridPane.rowIndex="5" styleClass="stat-card">
+            <Label text="📝 504s Today" styleClass="stat-label" />
+            <Label fx:id="plan504TodayLabel" text="0" styleClass="stat-value, accent-cyan">
+                <padding>
+                    <Insets top="6" />
+                </padding>
+            </Label>
+            <Label text="504 reviews due today" styleClass="stat-description">
+                <padding>
+                    <Insets top="3" />
+                </padding>
+            </Label>
+        </VBox>
+
+        <!-- 504 This Month Card -->
+        <VBox GridPane.columnIndex="1" GridPane.rowIndex="5" styleClass="stat-card">
+            <Label text="📆 504s This Month" styleClass="stat-label" />
+            <Label fx:id="plan504MonthLabel" text="0" styleClass="stat-value, accent-blue">
+                <padding>
+                    <Insets top="6" />
+                </padding>
+            </Label>
+            <Label text="504 reviews this month" styleClass="stat-description">
+                <padding>
+                    <Insets top="3" />
+                </padding>
+            </Label>
+        </VBox>
+
+        <!-- 504 Until Year End Card -->
+        <VBox GridPane.columnIndex="2" GridPane.rowIndex="5" styleClass="stat-card">
+            <Label text="📊 504s Until Year End" styleClass="stat-label" />
+            <Label fx:id="plan504YearLabel" text="0" styleClass="stat-value, accent-purple">
+                <padding>
+                    <Insets top="6" />
+                </padding>
+            </Label>
+            <Label text="Until school year end" styleClass="stat-description">
+                <padding>
+                    <Insets top="3" />
+                </padding>
+            </Label>
+        </VBox>
+
+        <!-- Total Students with IEP/504 Card -->
+        <VBox GridPane.columnIndex="3" GridPane.rowIndex="5" styleClass="stat-card">
+            <Label text="🎓 Total IEP/504" styleClass="stat-label" />
+            <Label fx:id="totalAccommodationsLabel" text="0" styleClass="stat-value, accent-success">
+                <padding>
+                    <Insets top="6" />
+                </padding>
+            </Label>
+            <Label text="Students with plans" styleClass="stat-description">
+                <padding>
+                    <Insets top="3" />
+                </padding>
+            </Label>
+        </VBox>
+
+        <!-- Row 7: ALL SUBSTITUTE METRICS (COMBINED) -->
+
+        <!-- Active Teacher Substitutes Card -->
+        <VBox GridPane.columnIndex="0" GridPane.rowIndex="6" styleClass="stat-card">
+            <Label text="👥 Teacher Subs" styleClass="stat-label" />
+            <Label fx:id="activeSubstitutesLabel" text="0" styleClass="stat-value, accent-blue">
+                <padding>
+                    <Insets top="6" />
+                </padding>
+            </Label>
+            <Label text="Active teacher substitutes" styleClass="stat-description">
+                <padding>
+                    <Insets top="3" />
+                </padding>
+            </Label>
+        </VBox>
+
+        <!-- Active Para Subs Card -->
+        <VBox GridPane.columnIndex="1" GridPane.rowIndex="6" styleClass="stat-card">
+            <Label text="🎓 Para Subs" styleClass="stat-label" />
+            <Label fx:id="activeParaSubsLabel" text="0" styleClass="stat-value, accent-purple">
+                <padding>
+                    <Insets top="6" />
+                </padding>
+            </Label>
+            <Label text="Active para substitutes" styleClass="stat-description">
+                <padding>
+                    <Insets top="3" />
+                </padding>
+            </Label>
+        </VBox>
+
+        <!-- Active Co-Teacher Subs Card -->
+        <VBox GridPane.columnIndex="2" GridPane.rowIndex="6" styleClass="stat-card">
+            <Label text="👨‍🏫 Co-Teacher Subs" styleClass="stat-label" />
+            <Label fx:id="activeCoTeacherSubsLabel" text="0" styleClass="stat-value, accent-success">
+                <padding>
+                    <Insets top="6" />
+                </padding>
+            </Label>
+            <Label text="Active co-teacher subs" styleClass="stat-description">
+                <padding>
+                    <Insets top="3" />
+                </padding>
+            </Label>
+        </VBox>
+
+        <!-- Total Hours & Pending Combined Card -->
+        <VBox GridPane.columnIndex="3" GridPane.rowIndex="6" styleClass="stat-card">
+            <Label text="⏱️ Hours / ⏳ Pending" styleClass="stat-label" />
+            <HBox spacing="8" alignment="CENTER_LEFT">
+                <Label fx:id="substituteHoursLabel" text="0.0" styleClass="stat-value, accent-warning"
+                    style="-fx-font-size: 24;" />
+                <Label text="/" styleClass="stat-description" style="-fx-font-size: 20;" />
+                <Label fx:id="pendingAssignmentsLabel" text="0" styleClass="stat-value, accent-danger"
+                    style="-fx-font-size: 24;" />
+            </HBox>
+            <Label text="Total hours / Pending" styleClass="stat-description">
+                <padding>
+                    <Insets top="3" />
+                </padding>
+            </Label>
+        </VBox>
+
+    </GridPane>
+
+    <!-- System Info -->
+    <HBox alignment="CENTER_LEFT" spacing="8" styleClass="card"
+        style="-fx-padding: 10;">
+        <Label text="ℹ️ System Status:" styleClass="stat-description" style="-fx-font-size: 11;" />
+        <Label text="●" styleClass="accent-success" style="-fx-font-size: 14;" />
+        <Label text="All systems operational" styleClass="accent-success"
+            style="-fx-font-size: 11; -fx-font-weight: 500;" />
+        <Region HBox.hgrow="ALWAYS" />
+        <Label text="Last updated: Just now" styleClass="stat-description" style="-fx-font-size: 10;" />
+    </HBox>
+
+</VBox>

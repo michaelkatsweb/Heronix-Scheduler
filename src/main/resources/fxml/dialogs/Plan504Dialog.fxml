@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<DialogPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.eduscheduler.ui.controller.dialogs.Plan504DialogController"
+            stylesheets="@../../css/main-style.css"
+            prefWidth="600" prefHeight="550">
+
+    <headerText>504 Plan Details</headerText>
+
+    <content>
+        <ScrollPane fitToWidth="true" fitToHeight="true">
+            <VBox spacing="20" style="-fx-padding: 20;">
+
+                <!-- Student Selection -->
+                <VBox spacing="5">
+                    <Label text="Student *" styleClass="field-label"/>
+                    <ComboBox fx:id="studentComboBox" promptText="Select student..." maxWidth="Infinity"/>
+                    <Label fx:id="studentErrorLabel" styleClass="error-label" visible="false" managed="false"/>
+                </VBox>
+
+                <!-- Plan Number and Status -->
+                <HBox spacing="20">
+                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                        <Label text="Plan Number" styleClass="field-label"/>
+                        <TextField fx:id="planNumberField" promptText="Auto-generated if blank"/>
+                    </VBox>
+                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                        <Label text="Status *" styleClass="field-label"/>
+                        <ComboBox fx:id="statusComboBox" maxWidth="Infinity"/>
+                    </VBox>
+                </HBox>
+
+                <!-- Dates -->
+                <HBox spacing="20">
+                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                        <Label text="Start Date *" styleClass="field-label"/>
+                        <DatePicker fx:id="startDatePicker" maxWidth="Infinity"/>
+                    </VBox>
+                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                        <Label text="End Date *" styleClass="field-label"/>
+                        <DatePicker fx:id="endDatePicker" maxWidth="Infinity"/>
+                    </VBox>
+                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                        <Label text="Next Review Date" styleClass="field-label"/>
+                        <DatePicker fx:id="reviewDatePicker" maxWidth="Infinity"/>
+                    </VBox>
+                </HBox>
+
+                <!-- Disability and Coordinator -->
+                <HBox spacing="20">
+                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                        <Label text="Disability/Condition *" styleClass="field-label"/>
+                        <ComboBox fx:id="disabilityComboBox" maxWidth="Infinity" editable="true" promptText="Enter or select..."/>
+                    </VBox>
+                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                        <Label text="504 Coordinator" styleClass="field-label"/>
+                        <TextField fx:id="coordinatorField" promptText="Enter coordinator name"/>
+                    </VBox>
+                </HBox>
+
+                <!-- Accommodations -->
+                <VBox spacing="5">
+                    <Label text="Accommodations *" styleClass="field-label"/>
+                    <TextArea fx:id="accommodationsTextArea" promptText="Enter accommodations (one per line)..." prefRowCount="6"/>
+                    <Label text="Enter each accommodation on a new line" styleClass="hint-label"/>
+                </VBox>
+
+                <!-- Notes -->
+                <VBox spacing="5">
+                    <Label text="Notes" styleClass="field-label"/>
+                    <TextArea fx:id="notesTextArea" promptText="Additional notes..." prefRowCount="3"/>
+                </VBox>
+
+            </VBox>
+        </ScrollPane>
+    </content>
+
+    <buttonTypes>
+        <ButtonType fx:constant="CANCEL"/>
+        <ButtonType fx:constant="OK"/>
+    </buttonTypes>
+</DialogPane>

@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.eduscheduler.ui.controller.BulkEnrollmentImportController"
+            prefWidth="1000" prefHeight="700">
+
+    <!-- Top: Header -->
+    <top>
+        <VBox spacing="10" styleClass="header-section">
+            <padding>
+                <Insets top="15" right="20" bottom="15" left="20"/>
+            </padding>
+
+            <Label text="Bulk Enrollment Import from CSV" styleClass="header-title"/>
+            <Label text="Import enrollment requests for multiple students from a CSV file. Download a template to get started."
+                   styleClass="header-subtitle" wrapText="true"/>
+
+            <Separator/>
+        </VBox>
+    </top>
+
+    <!-- Center: TabPane -->
+    <center>
+        <TabPane tabClosingPolicy="UNAVAILABLE" styleClass="tab-pane">
+            <padding>
+                <Insets top="10" right="20" bottom="10" left="20"/>
+            </padding>
+
+            <!-- ============================================================ -->
+            <!-- TAB 1: File Selection -->
+            <!-- ============================================================ -->
+            <Tab text="1. Select File">
+                <VBox spacing="15" styleClass="tab-content">
+                    <padding>
+                        <Insets top="15" right="15" bottom="15" left="15"/>
+                    </padding>
+
+                    <Label text="Step 1: Select CSV File" styleClass="section-title"/>
+
+                    <!-- File Selection -->
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <TextField fx:id="filePathField" promptText="No file selected"
+                                   HBox.hgrow="ALWAYS" editable="false" styleClass="file-path-field"/>
+                        <Button fx:id="browseButton" text="Browse..." onAction="#handleBrowse"
+                                styleClass="secondary-button" prefWidth="100"/>
+                    </HBox>
+
+                    <!-- Options -->
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <CheckBox fx:id="skipHeaderCheck" text="Skip header row (first row contains column names)" selected="true"/>
+                    </HBox>
+
+                    <!-- File Info -->
+                    <VBox spacing="5" styleClass="info-box">
+                        <padding>
+                            <Insets top="10" right="10" bottom="10" left="10"/>
+                        </padding>
+                        <Label fx:id="fileInfoLabel" text="No file selected" styleClass="info-label"/>
+                    </VBox>
+
+                    <Separator/>
+
+                    <!-- CSV Format Help -->
+                    <Label text="CSV Format Requirements:" styleClass="section-subtitle"/>
+                    <TextArea editable="false" wrapText="true" prefHeight="120" styleClass="help-text"
+                              text="Expected CSV Format:&#10;StudentID,FirstChoice,SecondChoice,ThirdChoice,FourthChoice&#10;&#10;Example:&#10;S001,ART101,MUSIC101,DRAMA101,PHOTO101&#10;S002,MUSIC101,ART101,PE101,TECH101&#10;&#10;Notes:&#10;- StudentID must match existing student records&#10;- Course codes must match existing active courses&#10;- At least one course preference is required&#10;- Maximum 4 preferences per student"/>
+
+                    <Separator/>
+
+                    <!-- Template & Sample Generation -->
+                    <Label text="Need Help Getting Started?" styleClass="section-subtitle"/>
+                    <HBox spacing="15" alignment="CENTER_LEFT">
+                        <Button fx:id="downloadTemplateButton" text="Download CSV Template"
+                                onAction="#handleDownloadTemplate" styleClass="primary-button"/>
+                        <Button fx:id="generateSampleButton" text="Generate Sample Data"
+                                onAction="#handleGenerateSample" styleClass="secondary-button"/>
+                    </HBox>
+                    <Label text="💡 Download the template for the correct format, or generate sample data for testing."
+                           styleClass="hint-label" wrapText="true"/>
+
+                    <Region VBox.vgrow="ALWAYS"/>
+                </VBox>
+            </Tab>
+
+            <!-- ============================================================ -->
+            <!-- TAB 2: Validation -->
+            <!-- ============================================================ -->
+            <Tab text="2. Validate">
+                <VBox spacing="15" styleClass="tab-content">
+                    <padding>
+                        <Insets top="15" right="15" bottom="15" left="15"/>
+                    </padding>
+
+                    <Label text="Step 2: Validate CSV Data" styleClass="section-title"/>
+                    <Label text="Validate the CSV file before importing to catch errors early."
+                           styleClass="section-subtitle" wrapText="true"/>
+
+                    <!-- Validation Status -->
+                    <HBox spacing="15" alignment="CENTER_LEFT">
+                        <Label text="Status:" styleClass="label-bold"/>
+                        <Label fx:id="validationStatusLabel" text="Not validated" styleClass="status-label"/>
+                        <ProgressIndicator fx:id="validationProgress" visible="false" prefWidth="30" prefHeight="30"/>
+                    </HBox>
+
+                    <!-- Validation Results -->
+                    <TextArea fx:id="validationResultsArea" editable="false" wrapText="true"
+                              VBox.vgrow="ALWAYS" styleClass="results-text-area"
+                              promptText="Click 'Validate' to check the CSV file for errors..."/>
+
+                    <HBox spacing="10" alignment="CENTER_RIGHT">
+                        <Button fx:id="validateButton" text="Validate File" onAction="#handleValidate"
+                                styleClass="primary-button" disable="true" prefWidth="120"/>
+                    </HBox>
+                </VBox>
+            </Tab>
+
+            <!-- ============================================================ -->
+            <!-- TAB 3: Import -->
+            <!-- ============================================================ -->
+            <Tab text="3. Import">
+                <VBox spacing="15" styleClass="tab-content">
+                    <padding>
+                        <Insets top="15" right="15" bottom="15" left="15"/>
+                    </padding>
+
+                    <Label text="Step 3: Import Enrollment Requests" styleClass="section-title"/>
+                    <Label text="Import validated data and create enrollment requests in the database."
+                           styleClass="section-subtitle" wrapText="true"/>
+
+                    <!-- Import Status -->
+                    <HBox spacing="15" alignment="CENTER_LEFT">
+                        <Label text="Status:" styleClass="label-bold"/>
+                        <Label fx:id="importStatusLabel" text="Ready to import" styleClass="status-label"/>
+                    </HBox>
+
+                    <!-- Progress Bar -->
+                    <ProgressBar fx:id="importProgress" progress="0" prefWidth="Infinity" prefHeight="25"/>
+
+                    <!-- Import Log -->
+                    <TextArea fx:id="importLogArea" editable="false" wrapText="true"
+                              VBox.vgrow="ALWAYS" styleClass="log-text-area"
+                              promptText="Import log will appear here..."/>
+
+                    <HBox spacing="10" alignment="CENTER_RIGHT">
+                        <Button fx:id="importButton" text="Import Now" onAction="#handleImport"
+                                styleClass="primary-button" disable="true" prefWidth="120"/>
+                    </HBox>
+                </VBox>
+            </Tab>
+
+            <!-- ============================================================ -->
+            <!-- TAB 4: Results -->
+            <!-- ============================================================ -->
+            <Tab text="4. Results">
+                <VBox spacing="15" styleClass="tab-content">
+                    <padding>
+                        <Insets top="15" right="15" bottom="15" left="15"/>
+                    </padding>
+
+                    <Label text="Step 4: Import Results" styleClass="section-title"/>
+
+                    <!-- Results Summary -->
+                    <HBox spacing="15" alignment="CENTER_LEFT">
+                        <Label text="Summary:" styleClass="label-bold"/>
+                        <Label fx:id="resultsSummaryLabel" text="No import performed yet" styleClass="status-label"/>
+                    </HBox>
+
+                    <!-- Detailed Results -->
+                    <TextArea fx:id="resultsArea" editable="false" wrapText="true"
+                              VBox.vgrow="ALWAYS" styleClass="results-text-area"
+                              promptText="Import results will appear here..."/>
+
+                    <Separator/>
+
+                    <Label text="💡 After successful import, navigate to 'Run Assignment Wizard' to process the enrollment requests."
+                           styleClass="hint-label" wrapText="true"/>
+                </VBox>
+            </Tab>
+
+        </TabPane>
+    </center>
+
+    <!-- Bottom: Action Buttons -->
+    <bottom>
+        <HBox spacing="15" alignment="CENTER_RIGHT" styleClass="button-bar">
+            <padding>
+                <Insets top="10" right="20" bottom="15" left="20"/>
+            </padding>
+            <Label text="Follow the tabs from left to right: Select File → Validate → Import → Results"
+                   styleClass="hint-label"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button fx:id="closeButton" text="Close" onAction="#handleClose" styleClass="secondary-button"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

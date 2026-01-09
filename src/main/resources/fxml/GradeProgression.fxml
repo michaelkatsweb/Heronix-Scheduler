@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<!--
+    Grade Progression Dialog
+    Location: src/main/resources/fxml/GradeProgression.fxml
+
+    Confirmation dialog for progressing to next academic year.
+    Shows preview of what will happen and allows user to confirm.
+-->
+<VBox xmlns="http://javafx.com/javafx/21"
+    xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="com.eduscheduler.ui.controller.GradeProgressionController"
+    spacing="20"
+    prefWidth="700"
+    prefHeight="650"
+    style="-fx-background-color: #E4EBF5;"
+    styleClass="root">
+
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20" />
+    </padding>
+
+    <!-- Header -->
+    <HBox alignment="CENTER_LEFT" spacing="15"
+        style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 10;">
+        <Label text="⏭️ Progress to Next Academic Year"
+            style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #FF9800;" />
+    </HBox>
+
+    <!-- Warning Banner -->
+    <VBox spacing="10" style="-fx-background-color: #FFF3CD; -fx-padding: 15; -fx-background-radius: 8; -fx-border-color: #FFC107; -fx-border-width: 2; -fx-border-radius: 8;">
+        <Label text="⚠️ WARNING: This is a major operation!" style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #856404;" />
+        <Label text="This will:" style="-fx-font-weight: bold; -fx-text-fill: #856404;" wrapText="true" />
+        <VBox spacing="5" style="-fx-padding: 0 0 0 20;">
+            <Label text="• Archive all current student enrollments" style="-fx-text-fill: #856404;" />
+            <Label text="• Graduate all 12th grade students" style="-fx-text-fill: #856404;" />
+            <Label text="• Promote students: 11→12, 10→11, 9→10" style="-fx-text-fill: #856404;" />
+            <Label text="• Clear all course enrollments (ready for new assignments)" style="-fx-text-fill: #856404;" />
+            <Label text="• Create a new academic year" style="-fx-text-fill: #856404;" />
+        </VBox>
+    </VBox>
+
+    <!-- Current Year Info -->
+    <VBox spacing="10" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 10;">
+        <Label text="Current Academic Year" style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #333;" />
+        <Separator />
+        <GridPane hgap="15" vgap="10">
+            <columnConstraints>
+                <ColumnConstraints percentWidth="30" />
+                <ColumnConstraints percentWidth="70" />
+            </columnConstraints>
+
+            <Label text="Year:" GridPane.columnIndex="0" GridPane.rowIndex="0" style="-fx-font-weight: bold;" />
+            <Label fx:id="currentYearLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="0" style="-fx-text-fill: #2196F3; -fx-font-weight: bold;" />
+
+            <Label text="Dates:" GridPane.columnIndex="0" GridPane.rowIndex="1" style="-fx-font-weight: bold;" />
+            <Label fx:id="currentDatesLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+        </GridPane>
+    </VBox>
+
+    <!-- Preview Statistics -->
+    <VBox spacing="10" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 10;">
+        <Label text="Impact Preview" style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #333;" />
+        <Separator />
+
+        <GridPane hgap="20" vgap="10">
+            <columnConstraints>
+                <ColumnConstraints percentWidth="50" />
+                <ColumnConstraints percentWidth="50" />
+            </columnConstraints>
+
+            <!-- Row 1 -->
+            <VBox GridPane.columnIndex="0" GridPane.rowIndex="0" spacing="5" style="-fx-background-color: #FCE4EC; -fx-padding: 10; -fx-background-radius: 6;">
+                <Label text="12th Graders (Will Graduate)" style="-fx-font-weight: bold; -fx-text-fill: #C2185B;" />
+                <Label fx:id="grade12CountLabel" text="0" style="-fx-font-size: 28; -fx-font-weight: bold; -fx-text-fill: #E91E63;" />
+            </VBox>
+
+            <VBox GridPane.columnIndex="1" GridPane.rowIndex="0" spacing="5" style="-fx-background-color: #FFF3E0; -fx-padding: 10; -fx-background-radius: 6;">
+                <Label text="11th Graders (→ 12th)" style="-fx-font-weight: bold; -fx-text-fill: #F57C00;" />
+                <Label fx:id="grade11CountLabel" text="0" style="-fx-font-size: 28; -fx-font-weight: bold; -fx-text-fill: #FF9800;" />
+            </VBox>
+
+            <!-- Row 2 -->
+            <VBox GridPane.columnIndex="0" GridPane.rowIndex="1" spacing="5" style="-fx-background-color: #E8F5E9; -fx-padding: 10; -fx-background-radius: 6;">
+                <Label text="10th Graders (→ 11th)" style="-fx-font-weight: bold; -fx-text-fill: #388E3C;" />
+                <Label fx:id="grade10CountLabel" text="0" style="-fx-font-size: 28; -fx-font-weight: bold; -fx-text-fill: #4CAF50;" />
+            </VBox>
+
+            <VBox GridPane.columnIndex="1" GridPane.rowIndex="1" spacing="5" style="-fx-background-color: #E3F2FD; -fx-padding: 10; -fx-background-radius: 6;">
+                <Label text="9th Graders (→ 10th)" style="-fx-font-weight: bold; -fx-text-fill: #1976D2;" />
+                <Label fx:id="grade9CountLabel" text="0" style="-fx-font-size: 28; -fx-font-weight: bold; -fx-text-fill: #2196F3;" />
+            </VBox>
+        </GridPane>
+
+        <HBox spacing="10" alignment="CENTER" style="-fx-padding: 10 0 0 0;">
+            <Label text="Total Enrollments to Archive:" style="-fx-font-weight: bold; -fx-font-size: 14;" />
+            <Label fx:id="totalEnrollmentsLabel" text="0" style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #FF9800;" />
+        </HBox>
+    </VBox>
+
+    <!-- New Year Configuration -->
+    <VBox spacing="10" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 10;">
+        <Label text="New Academic Year Configuration" style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #333;" />
+        <Separator />
+
+        <GridPane hgap="15" vgap="15">
+            <columnConstraints>
+                <ColumnConstraints percentWidth="30" />
+                <ColumnConstraints percentWidth="70" />
+            </columnConstraints>
+
+            <!-- Row 1 -->
+            <Label text="Year Name:" GridPane.columnIndex="0" GridPane.rowIndex="0" style="-fx-font-weight: bold;" />
+            <TextField fx:id="newYearNameField" promptText="e.g., 2025-2026" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+            <!-- Row 2 -->
+            <Label text="Start Date:" GridPane.columnIndex="0" GridPane.rowIndex="1" style="-fx-font-weight: bold;" />
+            <DatePicker fx:id="newStartDatePicker" GridPane.columnIndex="1" GridPane.rowIndex="1" prefWidth="200" />
+
+            <!-- Row 3 -->
+            <Label text="End Date:" GridPane.columnIndex="0" GridPane.rowIndex="2" style="-fx-font-weight: bold;" />
+            <DatePicker fx:id="newEndDatePicker" GridPane.columnIndex="1" GridPane.rowIndex="2" prefWidth="200" />
+
+            <!-- Row 4 -->
+            <Label text="Graduation Date:" GridPane.columnIndex="0" GridPane.rowIndex="3" style="-fx-font-weight: bold;" />
+            <DatePicker fx:id="newGraduationDatePicker" GridPane.columnIndex="1" GridPane.rowIndex="3" prefWidth="200" />
+        </GridPane>
+    </VBox>
+
+    <!-- Progress Indicator -->
+    <VBox fx:id="progressBox" spacing="10" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 10;" visible="false" managed="false">
+        <Label text="Progression in Progress..." style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #FF9800;" />
+        <ProgressBar fx:id="progressBar" prefWidth="Infinity" />
+        <Label fx:id="progressLabel" text="Initializing..." style="-fx-text-fill: #666;" wrapText="true" />
+    </VBox>
+
+    <!-- Buttons -->
+    <HBox spacing="15" alignment="CENTER">
+        <Button text="Cancel" onAction="#handleCancel"
+            style="-fx-background-color: #607D8B; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 12 30; -fx-cursor: hand; -fx-background-radius: 6;"
+            fx:id="cancelButton" />
+
+        <Button text="⏭️ START PROGRESSION" onAction="#handleStartProgression"
+            style="-fx-background-color: #FF9800; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14; -fx-padding: 12 30; -fx-cursor: hand; -fx-background-radius: 6;"
+            fx:id="startButton">
+            <font>
+                <Font name="System Bold" size="14" />
+            </font>
+        </Button>
+    </HBox>
+
+</VBox>

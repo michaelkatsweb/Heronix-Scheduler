@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.eduscheduler.ui.controller.LunchPeriodManagementController">
+
+    <top>
+        <VBox spacing="10" style="-fx-background-color: white;">
+            <padding>
+                <Insets top="15" right="15" bottom="15" left="15"/>
+            </padding>
+
+            <!-- Title -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Lunch Period Management" style="-fx-font-size: 20; -fx-font-weight: bold;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="lunchPeriodCountLabel" text="Total: 0 lunch periods" style="-fx-font-size: 12;"/>
+            </HBox>
+
+            <!-- Search and Actions -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <TextField fx:id="lunchPeriodSearchField" promptText="Search lunch periods by name..." prefWidth="300"/>
+                <Button text="Search" onAction="#handleSearchLunchPeriods"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="+ Add Lunch Period" onAction="#handleAddLunchPeriod" styleClass="button-primary"/>
+                <Button text="Refresh" onAction="#handleRefreshLunchPeriods"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <TableView fx:id="lunchPeriodsTable" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="lpNameColumn" text="Name" prefWidth="120"/>
+                <TableColumn fx:id="lpGroupColumn" text="Group" prefWidth="100"/>
+                <TableColumn fx:id="lpTimeColumn" text="Time" prefWidth="130"/>
+                <TableColumn fx:id="lpCapacityColumn" text="Max" prefWidth="70"/>
+                <TableColumn fx:id="lpCurrentColumn" text="Current" prefWidth="80"/>
+                <TableColumn fx:id="lpLocationColumn" text="Location" prefWidth="120"/>
+                <TableColumn fx:id="lpStatusColumn" text="Status" prefWidth="80"/>
+                <TableColumn fx:id="lpActionsColumn" text="Actions" prefWidth="120"/>
+            </columns>
+            <placeholder>
+                <Label text="No lunch periods found. Click '+ Add Lunch Period' to add one." style="-fx-text-fill: #999;"/>
+            </placeholder>
+        </TableView>
+    </center>
+
+    <bottom>
+        <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-background-color: #f0f0f0;">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            <Label text="Lunch Period Management - Configure lunch rotations and scheduling"/>
+            <Region HBox.hgrow="ALWAYS"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.eduscheduler.ui.controller.TeacherManagementController"
+            styleClass="root">
+
+    <top>
+        <VBox spacing="10" styleClass="card">
+            <padding>
+                <Insets top="15" right="15" bottom="15" left="15"/>
+            </padding>
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <TextField fx:id="searchField" promptText="Search teachers..." prefWidth="300"/>
+                <Button text="Search" onAction="#handleSearch" styleClass="button"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="Add Teacher" onAction="#handleAddTeacher" styleClass="button-primary"/>
+                <Button text="Refresh" onAction="#handleRefresh" styleClass="button"/>
+            </HBox>
+
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Filter by Department:" styleClass="label"/>
+                <ComboBox fx:id="departmentFilter" promptText="All Departments" onAction="#handleFilter"/>
+                <Label text="Status:" styleClass="label"/>
+                <ComboBox fx:id="statusFilter" promptText="All" onAction="#handleFilter"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <VBox spacing="0">
+            <!-- Selection Toolbar (will be populated programmatically) -->
+            <HBox fx:id="selectionToolbar"/>
+
+            <TableView fx:id="teacherTable" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="idColumn" text="ID" prefWidth="60" minWidth="50"/>
+                <TableColumn fx:id="employeeIdColumn" text="Employee ID" prefWidth="110" minWidth="90"/>
+                <TableColumn fx:id="nameColumn" text="Name" prefWidth="180" minWidth="150"/>
+                <TableColumn fx:id="emailColumn" text="Email" prefWidth="220" minWidth="180"/>
+                <TableColumn fx:id="departmentColumn" text="Department" prefWidth="140" minWidth="120"/>
+                <TableColumn fx:id="phoneColumn" text="Phone" prefWidth="130" minWidth="110"/>
+                <TableColumn fx:id="certificationsColumn" text="Certs" prefWidth="80" minWidth="60"/>
+                <TableColumn fx:id="assignedCoursesColumn" text="Courses" prefWidth="90" minWidth="70"/>
+                <TableColumn fx:id="maxHoursColumn" text="Hours" prefWidth="80" minWidth="60"/>
+                <TableColumn fx:id="activeColumn" text="Active" prefWidth="80" minWidth="60"/>
+                <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="200" minWidth="180"/>
+            </columns>
+        </TableView>
+        </VBox>
+    </center>
+
+    <bottom>
+        <HBox spacing="10" alignment="CENTER_LEFT" styleClass="card">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            <Label fx:id="recordCountLabel" text="0 teachers" styleClass="label"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="Export to Excel" onAction="#handleExport" styleClass="button"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

@@ -1,0 +1,535 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import java.lang.String?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.eduscheduler.ui.controller.TeacherQuickEntryController"
+            styleClass="teacher-dashboard-container">
+
+    <!-- Stylesheets -->
+    <stylesheets>
+        <String fx:value="@../css/glassmorphic-theme.css"/>
+        <String fx:value="@../css/teacher-dashboard.css"/>
+    </stylesheets>
+
+    <!-- Top Section: Header and Course Selector -->
+    <top>
+        <VBox spacing="12" styleClass="glass-header">
+            <padding>
+                <Insets top="16" right="20" bottom="16" left="20"/>
+            </padding>
+
+            <!-- Header Row -->
+            <HBox alignment="CENTER_LEFT" spacing="12">
+                <Label text="👨‍🏫 Teacher Quick Entry Dashboard" styleClass="header-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="teacherNameLabel" text="Welcome, Teacher" styleClass="text-secondary"/>
+                <Button text="💾 Save All" onAction="#handleSaveAll" styleClass="glass-button, btn-success"/>
+                <Button text="🔄 Refresh" onAction="#handleRefresh" styleClass="glass-button, btn-primary"/>
+            </HBox>
+
+            <!-- Course Selector Row -->
+            <HBox alignment="CENTER_LEFT" spacing="16" styleClass="course-selector-row">
+                <Label text="Current Class:" styleClass="label-secondary"/>
+                <ComboBox fx:id="courseSelector"
+                          prefWidth="350"
+                          promptText="Select a course..."
+                          onAction="#handleCourseSelected"
+                          styleClass="combo-box"/>
+
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <Label text="Academic Year:" styleClass="label-secondary"/>
+                <Label fx:id="academicYearLabel" text="2025-2026" styleClass="text-secondary"/>
+
+                <Separator orientation="VERTICAL"/>
+
+                <Label text="Students:" styleClass="label-secondary"/>
+                <Label fx:id="studentCountLabel" text="0" styleClass="stat-value-small"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- Left Section: Student List -->
+    <left>
+        <VBox spacing="8" styleClass="glass-sidebar" minWidth="280" maxWidth="280">
+            <padding>
+                <Insets top="16" right="12" bottom="16" left="12"/>
+            </padding>
+
+            <!-- Student List Header -->
+            <HBox alignment="CENTER_LEFT" spacing="8">
+                <Label text="📋 Students" styleClass="sidebar-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="🔍" onAction="#handleSearchStudents" styleClass="icon-button"
+                        tooltip="Search students"/>
+            </HBox>
+
+            <!-- Search Box -->
+            <TextField fx:id="studentSearchField"
+                      promptText="Search students..."
+                      styleClass="search-field"
+                      onKeyReleased="#handleStudentSearch"/>
+
+            <!-- Student List -->
+            <ListView fx:id="studentListView"
+                     VBox.vgrow="ALWAYS"
+                     styleClass="student-list"
+                     onMouseClicked="#handleStudentSelected"/>
+
+            <!-- Selected Student Quick Info -->
+            <VBox fx:id="selectedStudentCard" spacing="4" styleClass="selected-student-card" visible="false">
+                <Label fx:id="selectedStudentName" text="No student selected" styleClass="student-name"/>
+                <Label fx:id="selectedStudentId" text="" styleClass="text-muted"/>
+                <HBox spacing="8">
+                    <Label fx:id="selectedStudentGrade" text="" styleClass="badge"/>
+                    <Label fx:id="selectedStudentRisk" text="" styleClass="badge"/>
+                </HBox>
+            </VBox>
+        </VBox>
+    </left>
+
+    <!-- Center Section: Main Content Tabs -->
+    <center>
+        <TabPane fx:id="mainTabPane" tabClosingPolicy="UNAVAILABLE" styleClass="glass-tab-pane">
+
+            <!-- Grade Entry Tab -->
+            <Tab text="📝 Grade Entry" closable="false">
+                <VBox spacing="16">
+                    <padding>
+                        <Insets top="20" right="20" bottom="20" left="20"/>
+                    </padding>
+
+                    <!-- Grade Entry Form -->
+                    <VBox spacing="12" styleClass="entry-form">
+                        <Label text="New Grade Entry" styleClass="section-title"/>
+
+                        <GridPane hgap="16" vgap="12">
+                            <columnConstraints>
+                                <ColumnConstraints minWidth="120" prefWidth="120"/>
+                                <ColumnConstraints minWidth="200" prefWidth="250" hgrow="ALWAYS"/>
+                                <ColumnConstraints minWidth="120" prefWidth="120"/>
+                                <ColumnConstraints minWidth="200" prefWidth="250" hgrow="ALWAYS"/>
+                            </columnConstraints>
+
+                            <!-- Row 1 -->
+                            <Label text="Assignment Name:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                            <TextField fx:id="assignmentNameField"
+                                      promptText="e.g., Quiz #1, Homework Chapter 5"
+                                      GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                            <Label text="Assignment Type:" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+                            <ComboBox fx:id="assignmentTypeCombo"
+                                     promptText="Select type..."
+                                     prefWidth="250"
+                                     GridPane.columnIndex="3" GridPane.rowIndex="0"/>
+
+                            <!-- Row 2 -->
+                            <Label text="Points Possible:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                            <TextField fx:id="pointsPossibleField"
+                                      promptText="100"
+                                      GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                            <Label text="Points Earned:" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+                            <TextField fx:id="pointsEarnedField"
+                                      promptText="Enter points..."
+                                      GridPane.columnIndex="3" GridPane.rowIndex="1"
+                                      onKeyReleased="#handlePointsChanged"/>
+
+                            <!-- Row 3 -->
+                            <Label text="Assignment Date:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                            <DatePicker fx:id="assignmentDatePicker"
+                                       promptText="Select date..."
+                                       GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                            <Label text="Calculated Grade:" GridPane.columnIndex="2" GridPane.rowIndex="2"/>
+                            <HBox spacing="8" GridPane.columnIndex="3" GridPane.rowIndex="2" alignment="CENTER_LEFT">
+                                <Label fx:id="calculatedPercentageLabel" text="—" styleClass="calculated-grade"/>
+                                <Label fx:id="calculatedLetterGradeLabel" text="" styleClass="letter-grade-badge"/>
+                            </HBox>
+
+                            <!-- Row 4: Flags -->
+                            <Label text="Flags:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                            <HBox spacing="16" GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.columnSpan="3">
+                                <CheckBox fx:id="missingWorkCheckbox" text="Missing Work"/>
+                                <CheckBox fx:id="benchmarkAssessmentCheckbox" text="Benchmark Assessment"/>
+                                <CheckBox fx:id="extraCreditCheckbox" text="Extra Credit"/>
+                            </HBox>
+                        </GridPane>
+
+                        <!-- Action Buttons -->
+                        <HBox spacing="12" alignment="CENTER_RIGHT">
+                            <Button text="💾 Save Grade"
+                                   onAction="#handleSaveGrade"
+                                   styleClass="glass-button, btn-success"
+                                   disable="true"
+                                   fx:id="saveGradeButton"/>
+                            <Button text="🧹 Clear Form"
+                                   onAction="#handleClearGradeForm"
+                                   styleClass="glass-button, btn-secondary"/>
+                            <Button text="📊 Bulk Entry"
+                                   onAction="#handleBulkGradeEntry"
+                                   styleClass="glass-button, btn-primary"/>
+                        </HBox>
+                    </VBox>
+
+                    <!-- Recent Grades Table -->
+                    <VBox spacing="8" VBox.vgrow="ALWAYS">
+                        <Label text="Recent Grades (Past 30 Days)" styleClass="section-title"/>
+                        <TableView fx:id="recentGradesTable" styleClass="data-table" VBox.vgrow="ALWAYS">
+                            <columns>
+                                <TableColumn text="Date" prefWidth="100" fx:id="gradeTableDateCol"/>
+                                <TableColumn text="Assignment" prefWidth="200" fx:id="gradeTableAssignmentCol"/>
+                                <TableColumn text="Type" prefWidth="120" fx:id="gradeTableTypeCol"/>
+                                <TableColumn text="Points" prefWidth="100" fx:id="gradeTablePointsCol"/>
+                                <TableColumn text="Percentage" prefWidth="100" fx:id="gradeTablePercentageCol"/>
+                                <TableColumn text="Letter" prefWidth="80" fx:id="gradeTableLetterCol"/>
+                                <TableColumn text="Flags" prefWidth="150" fx:id="gradeTableFlagsCol"/>
+                            </columns>
+                            <placeholder>
+                                <Label text="No recent grades. Select a student to view their grades."/>
+                            </placeholder>
+                        </TableView>
+                    </VBox>
+                </VBox>
+            </Tab>
+
+            <!-- Behavior Incident Tab -->
+            <Tab text="🎭 Behavior" closable="false">
+                <VBox spacing="16">
+                    <padding>
+                        <Insets top="20" right="20" bottom="20" left="20"/>
+                    </padding>
+
+                    <!-- Behavior Entry Form -->
+                    <VBox spacing="12" styleClass="entry-form">
+                        <Label text="New Behavior Incident" styleClass="section-title"/>
+
+                        <!-- Preset Behavior Buttons -->
+                        <VBox spacing="8">
+                            <Label text="Quick Entry - Positive Behaviors:" styleClass="label-secondary"/>
+                            <FlowPane hgap="8" vgap="8">
+                                <Button text="👍 Participation"
+                                       onAction="#handlePresetBehavior"
+                                       styleClass="preset-button, positive-behavior"
+                                       userData="PARTICIPATION"/>
+                                <Button text="🤝 Collaboration"
+                                       onAction="#handlePresetBehavior"
+                                       styleClass="preset-button, positive-behavior"
+                                       userData="COLLABORATION"/>
+                                <Button text="🌟 Leadership"
+                                       onAction="#handlePresetBehavior"
+                                       styleClass="preset-button, positive-behavior"
+                                       userData="LEADERSHIP"/>
+                                <Button text="💯 Improvement"
+                                       onAction="#handlePresetBehavior"
+                                       styleClass="preset-button, positive-behavior"
+                                       userData="IMPROVEMENT"/>
+                            </FlowPane>
+                        </VBox>
+
+                        <VBox spacing="8">
+                            <Label text="Quick Entry - Negative Behaviors:" styleClass="label-secondary"/>
+                            <FlowPane hgap="8" vgap="8">
+                                <Button text="🗣️ Disruption"
+                                       onAction="#handlePresetBehavior"
+                                       styleClass="preset-button, negative-behavior"
+                                       userData="DISRUPTION"/>
+                                <Button text="⏰ Tardiness"
+                                       onAction="#handlePresetBehavior"
+                                       styleClass="preset-button, negative-behavior"
+                                       userData="TARDINESS"/>
+                                <Button text="❌ Non-Compliance"
+                                       onAction="#handlePresetBehavior"
+                                       styleClass="preset-button, negative-behavior"
+                                       userData="NON_COMPLIANCE"/>
+                                <Button text="📱 Phone Use"
+                                       onAction="#handlePresetBehavior"
+                                       styleClass="preset-button, negative-behavior"
+                                       userData="PHONE_USE"/>
+                            </FlowPane>
+                        </VBox>
+
+                        <Separator/>
+
+                        <!-- Detailed Entry Form -->
+                        <GridPane hgap="16" vgap="12">
+                            <columnConstraints>
+                                <ColumnConstraints minWidth="120" prefWidth="120"/>
+                                <ColumnConstraints minWidth="200" hgrow="ALWAYS"/>
+                                <ColumnConstraints minWidth="120" prefWidth="120"/>
+                                <ColumnConstraints minWidth="200" hgrow="ALWAYS"/>
+                            </columnConstraints>
+
+                            <Label text="Behavior Type:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                            <ComboBox fx:id="behaviorTypeCombo"
+                                     promptText="Select type..."
+                                     GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                            <Label text="Severity Level:" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+                            <ComboBox fx:id="severityLevelCombo"
+                                     promptText="Select severity..."
+                                     GridPane.columnIndex="3" GridPane.rowIndex="0"/>
+
+                            <Label text="Description:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                            <TextArea fx:id="behaviorDescriptionArea"
+                                     promptText="Describe the incident..."
+                                     prefRowCount="3"
+                                     wrapText="true"
+                                     GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.columnSpan="3"/>
+
+                            <Label text="Action Taken:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                            <TextField fx:id="actionTakenField"
+                                      promptText="e.g., Verbal warning, Moved seat"
+                                      GridPane.columnIndex="1" GridPane.rowIndex="2" GridPane.columnSpan="3"/>
+
+                            <Label text="Options:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                            <CheckBox fx:id="adminReferralCheckbox"
+                                     text="Requires Admin Referral"
+                                     GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.columnSpan="3"/>
+                        </GridPane>
+
+                        <!-- Action Buttons -->
+                        <HBox spacing="12" alignment="CENTER_RIGHT">
+                            <Button text="💾 Save Incident"
+                                   onAction="#handleSaveBehavior"
+                                   styleClass="glass-button, btn-success"
+                                   disable="true"
+                                   fx:id="saveBehaviorButton"/>
+                            <Button text="🧹 Clear Form"
+                                   onAction="#handleClearBehaviorForm"
+                                   styleClass="glass-button, btn-secondary"/>
+                        </HBox>
+                    </VBox>
+
+                    <!-- Recent Incidents List -->
+                    <VBox spacing="8" VBox.vgrow="ALWAYS">
+                        <Label text="Recent Behavior Incidents (Past 30 Days)" styleClass="section-title"/>
+                        <TableView fx:id="recentBehaviorTable" styleClass="data-table" VBox.vgrow="ALWAYS">
+                            <columns>
+                                <TableColumn text="Date" prefWidth="100" fx:id="behaviorDateCol"/>
+                                <TableColumn text="Type" prefWidth="120" fx:id="behaviorTypeCol"/>
+                                <TableColumn text="Category" prefWidth="150" fx:id="behaviorCategoryCol"/>
+                                <TableColumn text="Severity" prefWidth="100" fx:id="behaviorSeverityCol"/>
+                                <TableColumn text="Description" prefWidth="250" fx:id="behaviorDescriptionCol"/>
+                                <TableColumn text="Action" prefWidth="150" fx:id="behaviorActionCol"/>
+                            </columns>
+                            <placeholder>
+                                <Label text="No recent behavior incidents. Select a student to view their history."/>
+                            </placeholder>
+                        </TableView>
+                    </VBox>
+                </VBox>
+            </Tab>
+
+            <!-- Teacher Observations Tab -->
+            <Tab text="👁️ Observations" closable="false">
+                <VBox spacing="16">
+                    <padding>
+                        <Insets top="20" right="20" bottom="20" left="20"/>
+                    </padding>
+
+                    <!-- Observation Entry Form -->
+                    <VBox spacing="12" styleClass="entry-form">
+                        <Label text="New Teacher Observation" styleClass="section-title"/>
+
+                        <GridPane hgap="16" vgap="12">
+                            <columnConstraints>
+                                <ColumnConstraints minWidth="150" prefWidth="150"/>
+                                <ColumnConstraints minWidth="200" hgrow="ALWAYS"/>
+                            </columnConstraints>
+
+                            <Label text="Observation Category:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                            <ComboBox fx:id="observationCategoryCombo"
+                                     promptText="Select category..."
+                                     prefWidth="300"
+                                     GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                            <Label text="Observation Rating:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                            <HBox spacing="8" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                <ToggleGroup fx:id="ratingToggleGroup"/>
+                                <RadioButton text="⭐ Excellent" toggleGroup="$ratingToggleGroup" userData="EXCELLENT" styleClass="rating-excellent"/>
+                                <RadioButton text="✓ Good" toggleGroup="$ratingToggleGroup" userData="GOOD" styleClass="rating-good" selected="true"/>
+                                <RadioButton text="⚠️ Needs Improvement" toggleGroup="$ratingToggleGroup" userData="NEEDS_IMPROVEMENT" styleClass="rating-warning"/>
+                                <RadioButton text="❌ Concern" toggleGroup="$ratingToggleGroup" userData="CONCERN" styleClass="rating-danger"/>
+                            </HBox>
+
+                            <Label text="Observation Notes:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                            <TextArea fx:id="observationNotesArea"
+                                     promptText="Enter your observations about student performance, comprehension, participation, etc."
+                                     prefRowCount="4"
+                                     wrapText="true"
+                                     GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                            <Label text="Intervention:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                            <VBox spacing="8" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                <CheckBox fx:id="flagForInterventionCheckbox"
+                                         text="Flag for Intervention"
+                                         onAction="#handleInterventionFlagChanged"/>
+                                <TextField fx:id="interventionTypeField"
+                                          promptText="Suggested intervention type (e.g., tutoring, counseling, parent conference)"
+                                          disable="true"/>
+                            </VBox>
+                        </GridPane>
+
+                        <!-- Action Buttons -->
+                        <HBox spacing="12" alignment="CENTER_RIGHT">
+                            <Button text="💾 Save Observation"
+                                   onAction="#handleSaveObservation"
+                                   styleClass="glass-button, btn-success"
+                                   disable="true"
+                                   fx:id="saveObservationButton"/>
+                            <Button text="🧹 Clear Form"
+                                   onAction="#handleClearObservationForm"
+                                   styleClass="glass-button, btn-secondary"/>
+                        </HBox>
+                    </VBox>
+
+                    <!-- Recent Observations Timeline -->
+                    <VBox spacing="8" VBox.vgrow="ALWAYS">
+                        <Label text="Recent Observations (Past 30 Days)" styleClass="section-title"/>
+                        <TableView fx:id="recentObservationsTable" styleClass="data-table" VBox.vgrow="ALWAYS">
+                            <columns>
+                                <TableColumn text="Date" prefWidth="100" fx:id="observationDateCol"/>
+                                <TableColumn text="Category" prefWidth="150" fx:id="observationCategoryCol"/>
+                                <TableColumn text="Rating" prefWidth="150" fx:id="observationRatingCol"/>
+                                <TableColumn text="Notes" prefWidth="300" fx:id="observationNotesCol"/>
+                                <TableColumn text="Intervention" prefWidth="150" fx:id="observationInterventionCol"/>
+                            </columns>
+                            <placeholder>
+                                <Label text="No recent observations. Select a student to view observation history."/>
+                            </placeholder>
+                        </TableView>
+                    </VBox>
+                </VBox>
+            </Tab>
+
+            <!-- Student Overview Tab -->
+            <Tab text="📊 Student View" closable="false">
+                <ScrollPane fitToWidth="true" styleClass="glass-scroll-pane">
+                    <VBox spacing="20">
+                        <padding>
+                            <Insets top="20" right="20" bottom="20" left="20"/>
+                        </padding>
+
+                        <!-- Student Summary Card -->
+                        <VBox spacing="12" styleClass="student-summary-card">
+                            <HBox alignment="CENTER_LEFT" spacing="16">
+                                <!-- Student Photo Placeholder -->
+                                <VBox alignment="CENTER" styleClass="student-photo-placeholder">
+                                    <Label text="👤" style="-fx-font-size: 48px;"/>
+                                </VBox>
+
+                                <VBox spacing="6" HBox.hgrow="ALWAYS">
+                                    <Label fx:id="studentViewNameLabel" text="No Student Selected" styleClass="student-view-name"/>
+                                    <HBox spacing="12">
+                                        <Label fx:id="studentViewIdLabel" text="" styleClass="text-secondary"/>
+                                        <Label fx:id="studentViewGradeLabel" text="" styleClass="badge"/>
+                                    </HBox>
+                                    <HBox spacing="12">
+                                        <Label fx:id="studentViewEmailLabel" text="" styleClass="text-muted"/>
+                                    </HBox>
+                                </VBox>
+
+                                <VBox spacing="8" alignment="CENTER_RIGHT">
+                                    <Label text="Current GPA" styleClass="text-secondary"/>
+                                    <Label fx:id="studentViewGPALabel" text="—" styleClass="gpa-display"/>
+                                </VBox>
+                            </HBox>
+                        </VBox>
+
+                        <!-- Risk Assessment Alert -->
+                        <HBox fx:id="riskAssessmentAlert" spacing="12" styleClass="alert-box" visible="false" managed="false">
+                            <Label fx:id="riskAssessmentIcon" text="⚠️" styleClass="alert-icon"/>
+                            <VBox spacing="4" HBox.hgrow="ALWAYS">
+                                <Label fx:id="riskAssessmentTitle" text="At-Risk Student" styleClass="alert-title"/>
+                                <Label fx:id="riskAssessmentMessage" text="" wrapText="true" styleClass="alert-message"/>
+                            </VBox>
+                        </HBox>
+
+                        <!-- Current Grades Section -->
+                        <VBox spacing="8">
+                            <Label text="Current Grades - All Courses" styleClass="section-title"/>
+                            <TableView fx:id="studentCurrentGradesTable" styleClass="data-table" prefHeight="200">
+                                <columns>
+                                    <TableColumn text="Course" prefWidth="250" fx:id="studentGradeCourseCol"/>
+                                    <TableColumn text="Current %" prefWidth="120" fx:id="studentGradePercentCol"/>
+                                    <TableColumn text="Letter" prefWidth="100" fx:id="studentGradeLetterCol"/>
+                                    <TableColumn text="Missing" prefWidth="100" fx:id="studentGradeMissingCol"/>
+                                    <TableColumn text="Status" prefWidth="150" fx:id="studentGradeStatusCol"/>
+                                </columns>
+                            </TableView>
+                        </VBox>
+
+                        <!-- Attendance Summary -->
+                        <HBox spacing="16">
+                            <VBox spacing="8" HBox.hgrow="ALWAYS" styleClass="summary-card">
+                                <Label text="📅 Attendance Summary (Past 30 Days)" styleClass="summary-title"/>
+                                <GridPane hgap="12" vgap="8">
+                                    <Label text="Present:" GridPane.columnIndex="0" GridPane.rowIndex="0" styleClass="text-secondary"/>
+                                    <Label fx:id="attendancePresentLabel" text="—" GridPane.columnIndex="1" GridPane.rowIndex="0" styleClass="stat-value-small"/>
+
+                                    <Label text="Tardies:" GridPane.columnIndex="0" GridPane.rowIndex="1" styleClass="text-secondary"/>
+                                    <Label fx:id="attendanceTardiesLabel" text="—" GridPane.columnIndex="1" GridPane.rowIndex="1" styleClass="stat-value-small, text-warning"/>
+
+                                    <Label text="Absences:" GridPane.columnIndex="0" GridPane.rowIndex="2" styleClass="text-secondary"/>
+                                    <Label fx:id="attendanceAbsencesLabel" text="—" GridPane.columnIndex="1" GridPane.rowIndex="2" styleClass="stat-value-small, text-danger"/>
+                                </GridPane>
+                            </VBox>
+
+                            <VBox spacing="8" HBox.hgrow="ALWAYS" styleClass="summary-card">
+                                <Label text="🎭 Behavior Summary (Past 30 Days)" styleClass="summary-title"/>
+                                <GridPane hgap="12" vgap="8">
+                                    <Label text="Positive:" GridPane.columnIndex="0" GridPane.rowIndex="0" styleClass="text-secondary"/>
+                                    <Label fx:id="behaviorPositiveLabel" text="—" GridPane.columnIndex="1" GridPane.rowIndex="0" styleClass="stat-value-small, text-success"/>
+
+                                    <Label text="Negative:" GridPane.columnIndex="0" GridPane.rowIndex="1" styleClass="text-secondary"/>
+                                    <Label fx:id="behaviorNegativeLabel" text="—" GridPane.columnIndex="1" GridPane.rowIndex="1" styleClass="stat-value-small, text-danger"/>
+
+                                    <Label text="Major Incidents:" GridPane.columnIndex="0" GridPane.rowIndex="2" styleClass="text-secondary"/>
+                                    <Label fx:id="behaviorMajorLabel" text="—" GridPane.columnIndex="1" GridPane.rowIndex="2" styleClass="stat-value-small, text-danger"/>
+                                </GridPane>
+                            </VBox>
+                        </HBox>
+
+                        <!-- Recent Observations Summary -->
+                        <VBox spacing="8">
+                            <Label text="👁️ Recent Teacher Observations" styleClass="section-title"/>
+                            <VBox fx:id="observationTimelineView" spacing="8">
+                                <!-- Observations will be dynamically added here -->
+                                <Label text="No observations recorded" styleClass="text-muted"/>
+                            </VBox>
+                        </VBox>
+
+                        <!-- Action Buttons -->
+                        <HBox spacing="12" alignment="CENTER_RIGHT">
+                            <Button text="📧 Contact Parent" onAction="#handleContactParent" styleClass="glass-button, btn-primary"/>
+                            <Button text="📄 Generate Report" onAction="#handleGenerateReport" styleClass="glass-button, btn-success"/>
+                            <Button text="🚨 Create Alert" onAction="#handleCreateAlert" styleClass="glass-button, btn-warning"/>
+                        </HBox>
+                    </VBox>
+                </ScrollPane>
+            </Tab>
+
+        </TabPane>
+    </center>
+
+    <!-- Bottom Section: Status Bar -->
+    <bottom>
+        <HBox spacing="16" alignment="CENTER_LEFT" styleClass="status-bar">
+            <padding>
+                <Insets top="8" right="20" bottom="8" left="20"/>
+            </padding>
+
+            <Label fx:id="statusLabel" text="Ready" styleClass="status-text"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="lastSavedLabel" text="Last saved: Never" styleClass="text-muted"/>
+            <Separator orientation="VERTICAL"/>
+            <Label fx:id="connectionStatusLabel" text="🟢 Connected" styleClass="text-success"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

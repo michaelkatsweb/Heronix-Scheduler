@@ -1,0 +1,340 @@
+package com.eduscheduler.service;
+
+import com.eduscheduler.model.domain.Course;
+import com.eduscheduler.model.domain.Room;
+import com.eduscheduler.model.enums.RoomType;
+import com.eduscheduler.repository.CourseRepository;
+import com.eduscheduler.repository.RoomRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
+/**
+ * Smart Room Assignment Service
+ * Location: src/main/java/com/eduscheduler/service/SmartRoomAssignmentService.java
+ *
+ * Automatically assigns rooms to courses using intelligent matching:
+ * 1. Room type matching (lab for science, gym for PE, etc.)
+ * 2. Capacity matching (room size >= expected enrollment)
+ * 3. Room availability (prefer less-used rooms for balance)
+ * 4. Efficient space usage (smallest suitable room)
+ *
+ * @version 1.0.0
+ * @since 2025-11-19
+ */
+@Slf4j
+@Service
+public class SmartRoomAssignmentService {
+
+    @Autowired
+    private CourseRepository courseRepository;
+
+    @Autowired
+    private RoomRepository roomRepository;
+
+    /**
+     * Smart assign rooms to all unassigned courses
+     * Uses room type and capacity matching
+     *
+     * @return AssignmentResult with statistics
+     */
+    @Transactional
+    public SmartTeacherAssignmentService.AssignmentResult smartAssignAllRooms() {
+        log.info("Starting smart room assignment...");
+
+        SmartTeacherAssignmentService.AssignmentResult result = new SmartTeacherAssignmentService.AssignmentResult();
+        result.setStartTime(System.currentTimeMillis());
+
+        try {
+            // Get all courses that need room assignment
+            List<Course> unassignedCourses = courseRepository.findAll().stream()
+                .filter(c -> c.getRoom() == null)
+                .collect(Collectors.toList());
+
+            result.setTotalCoursesProcessed(unassignedCourses.size());
+            log.info("Found {} courses without rooms", unassignedCourses.size());
+
+            if (unassignedCourses.isEmpty()) {
+                result.setMessage("All courses already have rooms assigned");
+                result.setEndTime(System.currentTimeMillis());
+                return result;
+            }
+
+            // Get all available rooms
+            List<Room> allRooms = roomRepository.findAll();
+            log.info("Found {} rooms available for assignment", allRooms.size());
+
+            if (allRooms.isEmpty()) {
+                result.setMessage("No rooms available for assignment");
+                result.setEndTime(System.currentTimeMillis());
+                return result;
+            }
+
+            // Sort courses by priority and enrollment (larger classes first)
+            unassignedCourses.sort(Comparator
+                .comparing(Course::getPriorityLevel, Comparator.nullsLast(Comparator.naturalOrder()))
+                .thenComparing(Course::getMaxStudents, Comparator.nullsLast(Comparator.reverseOrder())));
+
+            // Assign rooms to courses
+            for (Course course : unassignedCourses) {
+                Room bestRoom = findBestRoom(course, allRooms);
+
+                if (bestRoom != null) {
+                    course.setRoom(bestRoom);
+                    courseRepository.save(course);
+                    result.incrementAssigned();
+
+                    // Check if room capacity is tight
+                    if (course.getMaxStudents() != null &&
+                        course.getMaxStudents() > bestRoom.getCapacity() * 0.9) {
+                        result.addWarning(String.format("Room %s capacity (%d) is near limit for course %s (%d students)",
+                            bestRoom.getRoomNumber(), bestRoom.getCapacity(),
+                            course.getCourseName(), course.getMaxStudents()));
+                    }
+
+                    log.debug("Assigned room {} to course {} (type: {}, capacity: {})",
+                        bestRoom.getRoomNumber(), course.getCourseName(),
+                        bestRoom.getRoomType(), bestRoom.getCapacity());
+                } else {
+                    result.incrementFailed();
+                    result.addError(String.format("No suitable room found for course %s (needs: %s, capacity: %d)",
+                        course.getCourseName(),
+                        determineRequiredRoomType(course),
+                        course.getMaxStudents() != null ? course.getMaxStudents() : 0));
+                    log.warn("Could not find suitable room for course: {} (subject: {}, max students: {})",
+                        course.getCourseName(), course.getSubject(), course.getMaxStudents());
+                }
+            }
+
+            result.setEndTime(System.currentTimeMillis());
+            result.setMessage(String.format("Assigned %d of %d courses. %d courses could not be assigned.",
+                result.getCoursesAssigned(), result.getTotalCoursesProcessed(), result.getCoursesFailed()));
+
+            log.info("Smart room assignment completed: {} assigned, {} failed in {}ms",
+                result.getCoursesAssigned(), result.getCoursesFailed(),
+                result.getEndTime() - result.getStartTime());
+
+        } catch (Exception e) {
+            log.error("Error during smart room assignment", e);
+            result.addError("System error: " + e.getMessage());
+            result.setMessage("Assignment failed due to error: " + e.getMessage());
+            result.setEndTime(System.currentTimeMillis());
+        }
+
+        return result;
+    }
+
+    /**
+     * Find the best room for a course using intelligent scoring
+     *
+     * @param course The course to assign
+     * @param availableRooms List of available rooms
+     * @return Best matching room, or null if none suitable
+     */
+    private Room findBestRoom(Course course, List<Room> availableRooms) {
+        RoomType requiredType = determineRequiredRoomType(course);
+        int requiredCapacity = course.getMaxStudents() != null ? course.getMaxStudents() : 30;
+
+        // Filter rooms that meet minimum requirements
+        List<Room> suitableRooms = availableRooms.stream()
+            .filter(r -> r.getCapacity() >= requiredCapacity)  // Has enough capacity
+            .collect(Collectors.toList());
+
+        if (suitableRooms.isEmpty()) {
+            // Try again with slightly relaxed capacity (90% of required)
+            suitableRooms = availableRooms.stream()
+                .filter(r -> r.getCapacity() >= requiredCapacity * 0.9)
+                .collect(Collectors.toList());
+
+            if (suitableRooms.isEmpty()) {
+                return null;
+            }
+        }
+
+        // Score each room
+        Map<Room, Double> scores = new HashMap<>();
+
+        for (Room room : suitableRooms) {
+            double score = calculateRoomScore(room, course, requiredType, requiredCapacity);
+            scores.put(room, score);
+        }
+
+        // Find room with highest score
+        return scores.entrySet().stream()
+            .max(Map.Entry.comparingByValue())
+            .map(Map.Entry::getKey)
+            .orElse(null);
+    }
+
+    /**
+     * Calculate suitability score for a room-course pairing
+     * Higher score = better match
+     *
+     * Scoring factors:
+     * - Room type match: +100 points (exact), +50 points (compatible)
+     * - Capacity efficiency: 0-50 points (prefer smallest suitable room)
+     * - Room availability: 0-25 points (prefer less-used rooms)
+     *
+     * @param room The room to evaluate
+     * @param course The course to assign
+     * @param requiredType Required room type
+     * @param requiredCapacity Required capacity
+     * @return Suitability score (higher is better)
+     */
+    private double calculateRoomScore(Room room, Course course, RoomType requiredType, int requiredCapacity) {
+        double score = 0.0;
+
+        // Factor 1: Room type match
+        if (room.getRoomType() == requiredType) {
+            score += 100.0;  // Exact match
+            log.trace("Room {} type matches exactly: +100 points", room.getRoomNumber());
+        } else if (isCompatibleRoomType(room.getRoomType(), requiredType)) {
+            score += 50.0;   // Compatible
+            log.trace("Room {} type is compatible: +50 points", room.getRoomNumber());
+        }
+
+        // Factor 2: Capacity efficiency (prefer smallest suitable room)
+        double capacityScore = calculateCapacityScore(room.getCapacity(), requiredCapacity);
+        score += capacityScore;
+        log.trace("Room {} capacity score: +{} points", room.getRoomNumber(), capacityScore);
+
+        // Factor 3: Room availability (would need to check schedule slots, simplified here)
+        // For now, give bonus to rooms with higher capacity (assuming they're used less)
+        if (room.getCapacity() > 40) {
+            score += 10.0;
+            log.trace("Room {} is large capacity: +10 points", room.getRoomNumber());
+        }
+
+        log.trace("Room {} total score for course {}: {}",
+            room.getRoomNumber(), course.getCourseName(), score);
+
+        return score;
+    }
+
+    /**
+     * Calculate capacity efficiency score
+     * Prefer rooms that are close to required capacity (not too big)
+     *
+     * Perfect fit (100-110%): 50 points
+     * Good fit (110-125%): 40 points
+     * Acceptable fit (125-150%): 30 points
+     * Loose fit (150%+): 20 points
+     */
+    private double calculateCapacityScore(int roomCapacity, int requiredCapacity) {
+        if (requiredCapacity == 0) return 25.0;
+
+        double ratio = (double) roomCapacity / requiredCapacity;
+
+        if (ratio >= 1.0 && ratio <= 1.1) return 50.0;  // Perfect fit
+        if (ratio > 1.1 && ratio <= 1.25) return 40.0;  // Good fit
+        if (ratio > 1.25 && ratio <= 1.5) return 30.0;  // Acceptable
+        return 20.0;  // Loose fit
+    }
+
+    /**
+     * Determine the required room type based on course characteristics
+     */
+    private RoomType determineRequiredRoomType(Course course) {
+        String subject = course.getSubject() != null ? course.getSubject().toLowerCase() : "";
+        String courseName = course.getCourseName() != null ? course.getCourseName().toLowerCase() : "";
+
+        // Physical Education
+        if (subject.contains("physical education") || subject.contains("pe") ||
+            courseName.contains("physical education") || courseName.contains("gym")) {
+            return RoomType.GYMNASIUM;
+        }
+
+        // Science labs
+        if (course.isRequiresLab() || subject.contains("chemistry") ||
+            subject.contains("biology") || subject.contains("physics") ||
+            courseName.contains("lab")) {
+            return RoomType.SCIENCE_LAB;
+        }
+
+        // Computer science
+        if (subject.contains("computer") || subject.contains("technology") ||
+            courseName.contains("computer")) {
+            return RoomType.COMPUTER_LAB;
+        }
+
+        // Music
+        if (subject.contains("music") || subject.contains("band") ||
+            subject.contains("orchestra") || subject.contains("chorus")) {
+            return RoomType.MUSIC_ROOM;
+        }
+
+        // Art
+        if (subject.contains("art")) {
+            return RoomType.ART_STUDIO;
+        }
+
+        // Default to standard classroom
+        return RoomType.CLASSROOM;
+    }
+
+    /**
+     * Check if two room types are compatible
+     */
+    private boolean isCompatibleRoomType(RoomType roomType, RoomType requiredType) {
+        if (roomType == requiredType) return true;
+
+        // Lab types are interchangeable in some cases
+        if ((roomType == RoomType.LAB || roomType == RoomType.SCIENCE_LAB) &&
+            (requiredType == RoomType.LAB || requiredType == RoomType.SCIENCE_LAB)) {
+            return true;
+        }
+
+        // Classroom can be used for most things (fallback)
+        if (roomType == RoomType.CLASSROOM &&
+            (requiredType == RoomType.CLASSROOM || requiredType == RoomType.LIBRARY)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Preview what would happen without actually making assignments
+     *
+     * @return AssignmentResult with preview statistics
+     */
+    public SmartTeacherAssignmentService.AssignmentResult previewRoomAssignments() {
+        log.info("Previewing smart room assignment...");
+
+        SmartTeacherAssignmentService.AssignmentResult result = new SmartTeacherAssignmentService.AssignmentResult();
+        result.setStartTime(System.currentTimeMillis());
+
+        List<Course> unassignedCourses = courseRepository.findAll().stream()
+            .filter(c -> c.getRoom() == null)
+            .collect(Collectors.toList());
+
+        result.setTotalCoursesProcessed(unassignedCourses.size());
+
+        if (unassignedCourses.isEmpty()) {
+            result.setMessage("All courses already have rooms assigned");
+            result.setEndTime(System.currentTimeMillis());
+            return result;
+        }
+
+        List<Room> allRooms = roomRepository.findAll();
+
+        for (Course course : unassignedCourses) {
+            Room bestRoom = findBestRoom(course, allRooms);
+            if (bestRoom != null) {
+                result.incrementAssigned();
+            } else {
+                result.incrementFailed();
+            }
+        }
+
+        result.setEndTime(System.currentTimeMillis());
+        result.setMessage(String.format("Preview: Would assign %d of %d courses",
+            result.getCoursesAssigned(), result.getTotalCoursesProcessed()));
+
+        return result;
+    }
+}

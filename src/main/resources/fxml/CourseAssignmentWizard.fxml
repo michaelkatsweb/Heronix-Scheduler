@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.eduscheduler.ui.controller.CourseAssignmentWizardController"
+      spacing="20" style="-fx-background-color: white;" prefWidth="800" prefHeight="600">
+
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <!-- Header -->
+    <VBox spacing="5">
+        <Label text="Intelligent Course Assignment Wizard" styleClass="header-label">
+            <font>
+                <Font name="System Bold" size="22.0"/>
+            </font>
+        </Label>
+        <Label fx:id="statusLabel" text="Step 1: Pre-Assignment Check" styleClass="subheader-label">
+            <font>
+                <Font name="System Bold" size="14.0"/>
+            </font>
+        </Label>
+        <Separator/>
+    </VBox>
+
+    <!-- Progress Bar -->
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <ProgressBar fx:id="progressBar" progress="0.25" prefWidth="600"/>
+        <Label fx:id="progressLabel" text="Step 1 of 4"/>
+    </HBox>
+
+    <!-- Content Area -->
+    <StackPane VBox.vgrow="ALWAYS">
+
+        <!-- Step 1: Pre-Check -->
+        <VBox fx:id="step1Panel" spacing="20" visible="true">
+            <Label text="System Readiness Check" style="-fx-font-weight: bold; -fx-font-size: 16;"/>
+
+            <GridPane hgap="15" vgap="15">
+                <columnConstraints>
+                    <ColumnConstraints minWidth="200"/>
+                    <ColumnConstraints minWidth="300"/>
+                </columnConstraints>
+
+                <Label text="Pending Requests:" GridPane.rowIndex="0" GridPane.columnIndex="0"
+                       style="-fx-font-weight: bold;"/>
+                <Label fx:id="pendingRequestsLabel" text="Loading..." GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                <Label text="Active Priority Rules:" GridPane.rowIndex="1" GridPane.columnIndex="0"
+                       style="-fx-font-weight: bold;"/>
+                <Label fx:id="activeRulesLabel" text="Loading..." GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                <Label text="Courses:" GridPane.rowIndex="2" GridPane.columnIndex="0"
+                       style="-fx-font-weight: bold;"/>
+                <Label fx:id="coursesLabel" text="Loading..." GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+                <Label text="Students:" GridPane.rowIndex="3" GridPane.columnIndex="0"
+                       style="-fx-font-weight: bold;"/>
+                <Label fx:id="studentsLabel" text="Loading..." GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+            </GridPane>
+
+            <Separator/>
+
+            <Label fx:id="preCheckStatusLabel" text="Checking system..." style="-fx-font-size: 14; -fx-font-weight: bold;"/>
+
+            <VBox spacing="5" style="-fx-padding: 10; -fx-background-color: #e8f4f8; -fx-background-radius: 5;">
+                <Label text="ℹ️ Before proceeding:" style="-fx-font-weight: bold;"/>
+                <Label text="• Ensure all enrollment requests have been created" wrapText="true"/>
+                <Label text="• Configure priority rules if you want GPA-based prioritization" wrapText="true"/>
+                <Label text="• Review course capacity settings (min/max students)" wrapText="true"/>
+            </VBox>
+        </VBox>
+
+        <!-- Step 2: Configuration -->
+        <VBox fx:id="step2Panel" spacing="20" visible="false">
+            <Label text="Assignment Configuration" style="-fx-font-weight: bold; -fx-font-size: 16;"/>
+
+            <VBox spacing="10">
+                <Label text="Assignment Mode:" style="-fx-font-weight: bold;"/>
+                <RadioButton fx:id="runSimulationRadio" text="Run Simulation (preview results without changes)"
+                             selected="true"/>
+                <RadioButton fx:id="runActualRadio" text="Run Actual Assignment (apply changes to database)"/>
+            </VBox>
+
+            <Separator/>
+
+            <VBox spacing="10">
+                <Label text="Assignment Options:" style="-fx-font-weight: bold;"/>
+                <CheckBox fx:id="applyRulesCheck" text="Apply priority rules" selected="true"/>
+                <CheckBox fx:id="enableWaitlistCheck" text="Enable waitlist management" selected="true"/>
+                <CheckBox fx:id="allowAlternatesCheck" text="Allow alternate course assignment" selected="true"/>
+            </VBox>
+
+            <VBox spacing="5" style="-fx-padding: 10; -fx-background-color: #fff3cd; -fx-background-radius: 5;">
+                <Label text="⚠️ Important:" style="-fx-font-weight: bold;"/>
+                <Label text="• Simulation mode is recommended first to preview results" wrapText="true"/>
+                <Label text="• Actual assignment will modify the database and cannot be automatically undone" wrapText="true"/>
+                <Label text="• Review simulation results carefully before running actual assignment" wrapText="true"/>
+            </VBox>
+        </VBox>
+
+        <!-- Step 3: Simulation Results -->
+        <VBox fx:id="step3Panel" spacing="15" visible="false">
+            <Label text="Simulation Results" style="-fx-font-weight: bold; -fx-font-size: 16;"/>
+
+            <HBox spacing="30">
+                <VBox spacing="5" alignment="CENTER">
+                    <Label text="Success Rate" style="-fx-font-weight: bold;"/>
+                    <Label fx:id="simSuccessRateLabel" text="0.0%" style="-fx-font-size: 24; -fx-font-weight: bold;"/>
+                </VBox>
+                <VBox spacing="5" alignment="CENTER">
+                    <Label text="Approved" style="-fx-font-weight: bold;"/>
+                    <Label fx:id="simApprovedLabel" text="0" style="-fx-font-size: 18;"/>
+                </VBox>
+                <VBox spacing="5" alignment="CENTER">
+                    <Label text="Waitlisted" style="-fx-font-weight: bold;"/>
+                    <Label fx:id="simWaitlistedLabel" text="0" style="-fx-font-size: 18;"/>
+                </VBox>
+                <VBox spacing="5" alignment="CENTER">
+                    <Label text="Denied" style="-fx-font-weight: bold;"/>
+                    <Label fx:id="simDeniedLabel" text="0" style="-fx-font-size: 18;"/>
+                </VBox>
+            </HBox>
+
+            <Label text="Detailed Report:" style="-fx-font-weight: bold;"/>
+            <ScrollPane VBox.vgrow="ALWAYS">
+                <TextArea fx:id="simulationResultsArea" editable="false" wrapText="true"
+                          style="-fx-font-family: 'Courier New'; -fx-font-size: 11;"/>
+            </ScrollPane>
+
+            <VBox spacing="5" style="-fx-padding: 10; -fx-background-color: #d4edda; -fx-background-radius: 5;">
+                <Label text="✅ Next Steps:" style="-fx-font-weight: bold;"/>
+                <Label text="• Review the simulation results above" wrapText="true"/>
+                <Label text="• If results look good, click 'Run Actual Assignment'" wrapText="true"/>
+                <Label text="• If adjustments needed, go back and modify priority rules" wrapText="true"/>
+            </VBox>
+        </VBox>
+
+        <!-- Step 4: Execution & Results -->
+        <VBox fx:id="step4Panel" spacing="15" visible="false">
+            <Label text="Assignment Execution" style="-fx-font-weight: bold; -fx-font-size: 16;"/>
+
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <ProgressIndicator fx:id="executionProgress" progress="0" prefWidth="50" prefHeight="50"/>
+                <Label text="Processing..." style="-fx-font-size: 14; -fx-font-weight: bold;"/>
+            </HBox>
+
+            <Label text="Execution Log:" style="-fx-font-weight: bold;"/>
+            <ScrollPane VBox.vgrow="ALWAYS">
+                <TextArea fx:id="executionLogArea" editable="false" wrapText="true"
+                          style="-fx-font-family: 'Courier New'; -fx-font-size: 11;"/>
+            </ScrollPane>
+        </VBox>
+
+    </StackPane>
+
+    <!-- Button Bar -->
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Button fx:id="backButton" text="Back" onAction="#handleBack"
+                prefWidth="100" disable="true"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button fx:id="cancelButton" text="Cancel" onAction="#handleCancel"
+                prefWidth="100" cancelButton="true"/>
+        <Button fx:id="nextButton" text="Next" onAction="#handleNext"
+                styleClass="primary-button" prefWidth="100" defaultButton="true"/>
+    </HBox>
+
+</VBox>

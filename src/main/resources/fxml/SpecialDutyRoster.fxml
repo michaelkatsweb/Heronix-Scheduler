@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.eduscheduler.ui.controller.SpecialDutyRosterController"
+      styleClass="root"
+      spacing="20">
+
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <!-- Header -->
+    <HBox alignment="CENTER_LEFT" spacing="15" styleClass="card">
+        <Label text="📋 Special Duty Roster" styleClass="label-title"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="➕ Add Daily Duty" onAction="#handleAddDailyDuty"
+                styleClass="button-success"/>
+        <Button text="🎉 Add Special Event" onAction="#handleAddSpecialEvent"
+                styleClass="button-primary"/>
+        <Button text="🔄 Refresh" onAction="#handleRefresh"
+                styleClass="button-primary"/>
+    </HBox>
+
+    <!-- Tab Pane for Daily vs Special Events -->
+    <TabPane fx:id="dutyTabPane" VBox.vgrow="ALWAYS" tabClosingPolicy="UNAVAILABLE"
+             styleClass="card" style=" -fx-background-radius: 8;">
+
+        <!-- Daily Duties Tab -->
+        <Tab text="📅 Daily Routine Duties">
+            <VBox spacing="15" style="-fx-padding: 15;">
+
+                <!-- Daily Duties Filters -->
+                <HBox spacing="15" alignment="CENTER_LEFT" styleClass="filter-panel" style="-fx-padding: 10;">
+                    <Label text="Filter by Day:" styleClass="label" style="-fx-font-weight: bold;"/>
+                    <ComboBox fx:id="dailyDayFilter" promptText="All Days" prefWidth="150" onAction="#handleDailyFilter"/>
+                    <Label text="Duty Type:" styleClass="label" style="-fx-font-weight: bold;"/>
+                    <ComboBox fx:id="dailyDutyTypeFilter" promptText="All Types" prefWidth="200" onAction="#handleDailyFilter"/>
+                    <Label text="Staff:" styleClass="label" style="-fx-font-weight: bold;"/>
+                    <TextField fx:id="dailyStaffSearch" promptText="Search staff..." prefWidth="200" onKeyReleased="#handleDailyFilter"/>
+                    <Button text="Clear Filters" onAction="#handleClearDailyFilters" styleClass="button"/>
+                </HBox>
+
+                <!-- Daily Duties Table -->
+                <VBox VBox.vgrow="ALWAYS" styleClass="card" style="-fx-border-color: rgba(91, 141, 239, 0.25); -fx-border-radius: 5;">
+                    <HBox alignment="CENTER_LEFT" spacing="10" styleClass="table-header" style="-fx-padding: 10;">
+                        <Label text="Daily Routine Duties" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="dailyCountLabel" text="Total: 0" styleClass="text-secondary"/>
+                    </HBox>
+
+                    <TableView fx:id="dailyDutiesTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="dailyIdColumn" text="ID" prefWidth="50" minWidth="40"/>
+                            <TableColumn fx:id="dailyDayColumn" text="Day" prefWidth="100" minWidth="80"/>
+                            <TableColumn fx:id="dailyDutyTypeColumn" text="Duty Type" prefWidth="180" minWidth="150"/>
+                            <TableColumn fx:id="dailyLocationColumn" text="Location" prefWidth="150" minWidth="120"/>
+                            <TableColumn fx:id="dailyTimeColumn" text="Time" prefWidth="150" minWidth="120"/>
+                            <TableColumn fx:id="dailyAssignedToColumn" text="Assigned To" prefWidth="180" minWidth="150"/>
+                            <TableColumn fx:id="dailyStaffTypeColumn" text="Staff Type" prefWidth="120" minWidth="100"/>
+                            <TableColumn fx:id="dailyPriorityColumn" text="Priority" prefWidth="80" minWidth="70"/>
+                            <TableColumn fx:id="dailyConfirmedColumn" text="Confirmed" prefWidth="90" minWidth="80"/>
+                            <TableColumn fx:id="dailyActionsColumn" text="Actions" prefWidth="150" minWidth="120"/>
+                        </columns>
+
+                        <placeholder>
+                            <VBox alignment="CENTER" spacing="10" style="-fx-padding: 50;">
+                                <Label text="📅" style="-fx-font-size: 48;"/>
+                                <Label text="No daily duties scheduled" styleClass="text-secondary" style="-fx-font-size: 16;"/>
+                                <Label text="Click 'Add Daily Duty' to create recurring duties" styleClass="text-muted" style="-fx-font-size: 12;"/>
+                            </VBox>
+                        </placeholder>
+                    </TableView>
+                </VBox>
+
+                <!-- Daily Duties Summary -->
+                <HBox spacing="20" alignment="CENTER_LEFT" styleClass="info-panel-primary" style="-fx-padding: 10;">
+                    <VBox spacing="5">
+                        <Label text="Weekly Load Summary" styleClass="primary-text" style="-fx-font-weight: bold;"/>
+                        <Label fx:id="weeklyLoadLabel" text="0 duties across 7 days" styleClass="text-secondary"/>
+                    </VBox>
+                    <Separator orientation="VERTICAL"/>
+                    <VBox spacing="5">
+                        <Label text="Most Common Duty" styleClass="primary-text" style="-fx-font-weight: bold;"/>
+                        <Label fx:id="commonDutyLabel" text="None" styleClass="text-secondary"/>
+                    </VBox>
+                </HBox>
+            </VBox>
+        </Tab>
+
+        <!-- Special Events Tab -->
+        <Tab text="🎉 Special Event Duties">
+            <VBox spacing="15" style="-fx-padding: 15;">
+
+                <!-- Special Events Filters -->
+                <HBox spacing="15" alignment="CENTER_LEFT" styleClass="filter-panel" style="-fx-padding: 10;">
+                    <Label text="Date Range:" styleClass="label" style="-fx-font-weight: bold;"/>
+                    <DatePicker fx:id="eventStartDateFilter" promptText="From Date" prefWidth="140"/>
+                    <Label text="to"/>
+                    <DatePicker fx:id="eventEndDateFilter" promptText="To Date" prefWidth="140"/>
+                    <Label text="Event Type:" styleClass="label" style="-fx-font-weight: bold;"/>
+                    <ComboBox fx:id="eventTypeFilter" promptText="All Types" prefWidth="200" onAction="#handleEventFilter"/>
+                    <Button text="Apply" onAction="#handleEventFilter" styleClass="button-primary"/>
+                    <Button text="Clear" onAction="#handleClearEventFilters" styleClass="button"/>
+                </HBox>
+
+                <!-- Special Events Table -->
+                <VBox VBox.vgrow="ALWAYS" styleClass="card" style="-fx-border-color: rgba(91, 141, 239, 0.25); -fx-border-radius: 5;">
+                    <HBox alignment="CENTER_LEFT" spacing="10" styleClass="table-header" style="-fx-padding: 10;">
+                        <Label text="Special Event Duties" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="eventsCountLabel" text="Total: 0" styleClass="text-secondary"/>
+                    </HBox>
+
+                    <TableView fx:id="specialEventsTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="eventIdColumn" text="ID" prefWidth="50" minWidth="40"/>
+                            <TableColumn fx:id="eventDateColumn" text="Event Date" prefWidth="120" minWidth="100"/>
+                            <TableColumn fx:id="eventDutyTypeColumn" text="Event Type" prefWidth="180" minWidth="150"/>
+                            <TableColumn fx:id="eventLocationColumn" text="Location" prefWidth="150" minWidth="120"/>
+                            <TableColumn fx:id="eventTimeColumn" text="Time" prefWidth="150" minWidth="120"/>
+                            <TableColumn fx:id="eventAssignedToColumn" text="Assigned To" prefWidth="180" minWidth="150"/>
+                            <TableColumn fx:id="eventStaffTypeColumn" text="Staff Type" prefWidth="120" minWidth="100"/>
+                            <TableColumn fx:id="eventPriorityColumn" text="Priority" prefWidth="80" minWidth="70"/>
+                            <TableColumn fx:id="eventCompletedColumn" text="Status" prefWidth="90" minWidth="80"/>
+                            <TableColumn fx:id="eventActionsColumn" text="Actions" prefWidth="150" minWidth="120"/>
+                        </columns>
+
+                        <placeholder>
+                            <VBox alignment="CENTER" spacing="10" style="-fx-padding: 50;">
+                                <Label text="🎉" style="-fx-font-size: 48;"/>
+                                <Label text="No special events scheduled" styleClass="text-secondary" style="-fx-font-size: 16;"/>
+                                <Label text="Click 'Add Special Event' to create one-time event duties" styleClass="text-muted" style="-fx-font-size: 12;"/>
+                            </VBox>
+                        </placeholder>
+                    </TableView>
+                </VBox>
+
+                <!-- Upcoming Events Summary -->
+                <HBox spacing="20" alignment="CENTER_LEFT" styleClass="info-panel-accent" style="-fx-padding: 10;">
+                    <VBox spacing="5">
+                        <Label text="Next Event" styleClass="accent-text" style="-fx-font-weight: bold;"/>
+                        <Label fx:id="nextEventLabel" text="None scheduled" styleClass="text-secondary"/>
+                    </VBox>
+                    <Separator orientation="VERTICAL"/>
+                    <VBox spacing="5">
+                        <Label text="This Month" styleClass="accent-text" style="-fx-font-weight: bold;"/>
+                        <Label fx:id="monthEventsLabel" text="0 events" styleClass="text-secondary"/>
+                    </VBox>
+                    <Separator orientation="VERTICAL"/>
+                    <VBox spacing="5">
+                        <Label text="Unconfirmed" styleClass="danger-text" style="-fx-font-weight: bold;"/>
+                        <Label fx:id="unconfirmedLabel" text="0 pending" styleClass="text-secondary"/>
+                    </VBox>
+                </HBox>
+            </VBox>
+        </Tab>
+
+        <!-- Staff Workload Tab -->
+        <Tab text="👥 Staff Workload">
+            <VBox spacing="15" style="-fx-padding: 15;">
+                <Label text="Staff Duty Workload Analysis" style="-fx-font-size: 18; -fx-font-weight: bold;"/>
+
+                <!-- Workload Table -->
+                <TableView fx:id="workloadTable" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="workloadStaffColumn" text="Staff Member" prefWidth="200" minWidth="150"/>
+                        <TableColumn fx:id="workloadTypeColumn" text="Staff Type" prefWidth="150" minWidth="120"/>
+                        <TableColumn fx:id="workloadDailyColumn" text="Daily Duties" prefWidth="120" minWidth="100"/>
+                        <TableColumn fx:id="workloadEventsColumn" text="Special Events" prefWidth="120" minWidth="100"/>
+                        <TableColumn fx:id="workloadTotalColumn" text="Total Duties" prefWidth="120" minWidth="100"/>
+                        <TableColumn fx:id="workloadHoursColumn" text="Est. Hours/Week" prefWidth="130" minWidth="110"/>
+                    </columns>
+
+                    <placeholder>
+                        <VBox alignment="CENTER" spacing="10" style="-fx-padding: 50;">
+                            <Label text="📊" style="-fx-font-size: 48;"/>
+                            <Label text="No workload data available" styleClass="text-secondary" style="-fx-font-size: 16;"/>
+                        </VBox>
+                    </placeholder>
+                </TableView>
+
+                <!-- Export/Print Options -->
+                <HBox spacing="10" alignment="CENTER_RIGHT">
+                    <Button text="📤 Export Roster" onAction="#handleExportRoster"
+                            styleClass="button-warning"/>
+                    <Button text="🖨️ Print Schedule" onAction="#handlePrintSchedule"
+                            styleClass="button"/>
+                </HBox>
+            </VBox>
+        </Tab>
+    </TabPane>
+
+    <!-- Status Bar -->
+    <HBox alignment="CENTER_LEFT" spacing="10" styleClass="card" style=" -fx-padding: 10; -fx-background-radius: 8;">
+        <Label text="●" styleClass="success-text" style="-fx-font-size: 14;"/>
+        <Label text="Special Duty Roster module loaded successfully" styleClass="text-secondary"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Label fx:id="lastUpdatedLabel" text="Last updated: Never" styleClass="text-muted" style="-fx-font-size: 11;"/>
+    </HBox>
+
+</VBox>

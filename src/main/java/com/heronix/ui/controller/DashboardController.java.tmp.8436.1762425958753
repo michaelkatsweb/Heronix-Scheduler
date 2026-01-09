@@ -1,0 +1,622 @@
+package com.eduscheduler.ui.controller;
+
+import com.eduscheduler.model.domain.Schedule;
+import com.eduscheduler.model.domain.Student;
+import com.eduscheduler.model.domain.Teacher;
+import com.eduscheduler.repository.*;
+import javafx.application.Platform;
+import javafx.fxml.FXML;
+import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+
+import java.time.LocalDate;
+import java.time.YearMonth;
+import java.time.temporal.TemporalAdjusters;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+
+/**
+ * Dashboard Controller - Enhanced with Special Education & Staff Metrics
+ * Location: src/main/java/com/eduscheduler/ui/controller/DashboardController.java
+ *
+ * @version 2.1.0 - Enhanced Dashboard
+ */
+@Slf4j
+@Controller
+public class DashboardController {
+
+    @Autowired
+    private TeacherRepository teacherRepository;
+
+    @Autowired
+    private CourseRepository courseRepository;
+
+    @Autowired
+    private RoomRepository roomRepository;
+
+    @Autowired
+    private StudentRepository studentRepository;
+
+    @Autowired
+    private ScheduleRepository scheduleRepository;
+
+    @Autowired
+    private EventRepository eventRepository;
+
+    @Autowired
+    private ScheduleSlotRepository scheduleSlotRepository;
+
+    @Autowired
+    private com.eduscheduler.service.SubstituteManagementService substituteManagementService;
+
+    @Autowired
+    private org.springframework.context.ApplicationContext applicationContext;
+
+    // ========================================================================
+    // FXML UI COMPONENTS - Basic Metrics
+    // ========================================================================
+    @FXML
+    private VBox dashboardRoot;
+    @FXML
+    private Label teacherCountLabel;
+    @FXML
+    private Label courseCountLabel;
+    @FXML
+    private Label roomCountLabel;
+    @FXML
+    private Label studentCountLabel;
+    @FXML
+    private Label scheduleCountLabel;
+    @FXML
+    private Label eventCountLabel;
+    @FXML
+    private Label qualityScoreLabel;
+    @FXML
+    private Label conflictCountLabel;
+    @FXML
+    private Label teacherUtilizationLabel;
+
+    // ========================================================================
+    // FXML UI COMPONENTS - Teacher Types & Certifications
+    // ========================================================================
+    @FXML
+    private Label certifiedTeachersLabel;
+    @FXML
+    private Label professionalCertLabel;
+    @FXML
+    private Label temporaryCertLabel;
+    @FXML
+    private Label coTeachersLabel;
+    @FXML
+    private Label paraprofessionalsLabel;
+
+    // ========================================================================
+    // FXML UI COMPONENTS - Substitute Tracking
+    // ========================================================================
+    @FXML
+    private Label substitutesWeekLabel;
+    @FXML
+    private Label substitutesMonthLabel;
+    @FXML
+    private Label activeSubstitutesLabel;
+    @FXML
+    private Label substituteHoursLabel;
+    @FXML
+    private Label pendingAssignmentsLabel;
+
+    // ========================================================================
+    // FXML UI COMPONENTS - Para & Co-Teacher Substitute Tracking
+    // ========================================================================
+    @FXML
+    private Label activeParaSubsLabel;
+    @FXML
+    private Label activeCoTeacherSubsLabel;
+
+    // ========================================================================
+    // FXML UI COMPONENTS - Room Utilization
+    // ========================================================================
+    @FXML
+    private Label roomsInUseLabel;
+    @FXML
+    private Label roomsNotInUseLabel;
+
+    // ========================================================================
+    // FXML UI COMPONENTS - IEP Tracking
+    // ========================================================================
+    @FXML
+    private Label iepTodayLabel;
+    @FXML
+    private Label iepMonthLabel;
+    @FXML
+    private Label iepYearLabel;
+
+    // ========================================================================
+    // FXML UI COMPONENTS - 504 Plan Tracking
+    // ========================================================================
+    @FXML
+    private Label plan504TodayLabel;
+    @FXML
+    private Label plan504MonthLabel;
+    @FXML
+    private Label plan504YearLabel;
+    @FXML
+    private Label totalAccommodationsLabel;
+
+    /**
+     * Initialize dashboard
+     */
+    @FXML
+    public void initialize() {
+        log.info("Dashboard controller initialized - Enhanced version");
+        loadDashboardData();
+    }
+
+    /**
+     * Load all dashboard data
+     */
+    private void loadDashboardData() {
+        CompletableFuture.runAsync(() -> {
+            try {
+                // Load basic counts
+                long teacherCount = teacherRepository.count();
+                long courseCount = courseRepository.count();
+                long roomCount = roomRepository.count();
+                long studentCount = studentRepository.count();
+                long scheduleCount = scheduleRepository.count();
+
+                // Count only upcoming/future events (scheduled events)
+                LocalDateTime now = LocalDateTime.now();
+                long eventCount = eventRepository.findUpcomingEvents(now).size();
+
+                // Update UI on JavaFX thread
+                Platform.runLater(() -> {
+                    safeSetText(teacherCountLabel, String.valueOf(teacherCount));
+                    safeSetText(courseCountLabel, String.valueOf(courseCount));
+                    safeSetText(roomCountLabel, String.valueOf(roomCount));
+                    safeSetText(studentCountLabel, String.valueOf(studentCount));
+                    safeSetText(scheduleCountLabel, String.valueOf(scheduleCount));
+                    safeSetText(eventCountLabel, String.valueOf(eventCount));
+                });
+
+                // Load enhanced metrics
+                loadTeacherMetrics();
+                loadSubstituteMetrics();
+                loadRoomMetrics();
+                loadAccommodationMetrics();
+                loadLatestScheduleMetrics();
+
+                log.info("Dashboard data loaded successfully");
+
+            } catch (Exception e) {
+                log.error("Error loading dashboard data", e);
+                Platform.runLater(() -> {
+                    safeSetText(teacherCountLabel, "Error");
+                    safeSetText(courseCountLabel, "Error");
+                    safeSetText(roomCountLabel, "Error");
+                    safeSetText(studentCountLabel, "Error");
+                });
+            }
+        });
+    }
+
+    /**
+     * Load teacher certification and role metrics
+     */
+    private void loadTeacherMetrics() {
+        try {
+            List<Teacher> allTeachers = teacherRepository.findAll();
+
+            long certified = allTeachers.stream()
+                .filter(t -> "CERTIFIED".equalsIgnoreCase(t.getCertificationType()))
+                .count();
+
+            long professional = allTeachers.stream()
+                .filter(t -> "PROFESSIONAL".equalsIgnoreCase(t.getCertificationType()))
+                .count();
+
+            long temporary = allTeachers.stream()
+                .filter(t -> "TEMPORARY".equalsIgnoreCase(t.getCertificationType()))
+                .count();
+
+            long coTeachers = allTeachers.stream()
+                .filter(t -> "CO_TEACHER".equalsIgnoreCase(t.getTeacherRole()))
+                .count();
+
+            long paraprofessionals = allTeachers.stream()
+                .filter(t -> "PARAPROFESSIONAL".equalsIgnoreCase(t.getTeacherRole()))
+                .count();
+
+            Platform.runLater(() -> {
+                safeSetText(certifiedTeachersLabel, String.valueOf(certified));
+                safeSetText(professionalCertLabel, String.valueOf(professional));
+                safeSetText(temporaryCertLabel, String.valueOf(temporary));
+                safeSetText(coTeachersLabel, String.valueOf(coTeachers));
+                safeSetText(paraprofessionalsLabel, String.valueOf(paraprofessionals));
+            });
+
+            log.info("Teacher metrics loaded: {} certified, {} professional, {} temporary",
+                certified, professional, temporary);
+
+        } catch (Exception e) {
+            log.error("Error loading teacher metrics", e);
+            Platform.runLater(() -> {
+                safeSetText(certifiedTeachersLabel, "0");
+                safeSetText(professionalCertLabel, "0");
+                safeSetText(temporaryCertLabel, "0");
+                safeSetText(coTeachersLabel, "0");
+                safeSetText(paraprofessionalsLabel, "0");
+            });
+        }
+    }
+
+    /**
+     * Load substitute teacher metrics for week and month
+     * Uses SubstituteManagementService for accurate assignment tracking
+     */
+    private void loadSubstituteMetrics() {
+        try {
+            LocalDate today = LocalDate.now();
+            LocalDate weekStart = today.with(java.time.DayOfWeek.MONDAY);
+            LocalDate weekEnd = today.with(java.time.DayOfWeek.SUNDAY);
+            YearMonth currentMonth = YearMonth.from(today);
+            LocalDate monthStart = currentMonth.atDay(1);
+            LocalDate monthEnd = currentMonth.atEndOfMonth();
+
+            // Get actual substitute assignments from the new system
+            java.util.List<com.eduscheduler.model.domain.SubstituteAssignment> weekAssignments =
+                substituteManagementService.getAssignmentsBetweenDates(weekStart, weekEnd);
+
+            java.util.List<com.eduscheduler.model.domain.SubstituteAssignment> monthAssignments =
+                substituteManagementService.getAssignmentsBetweenDates(monthStart, monthEnd);
+
+            long substitutesWeek = weekAssignments.stream()
+                .filter(a -> a.getStatus() == com.eduscheduler.model.enums.AssignmentStatus.CONFIRMED ||
+                           a.getStatus() == com.eduscheduler.model.enums.AssignmentStatus.IN_PROGRESS ||
+                           a.getStatus() == com.eduscheduler.model.enums.AssignmentStatus.COMPLETED)
+                .count();
+
+            long substitutesMonth = monthAssignments.stream()
+                .filter(a -> a.getStatus() == com.eduscheduler.model.enums.AssignmentStatus.CONFIRMED ||
+                           a.getStatus() == com.eduscheduler.model.enums.AssignmentStatus.IN_PROGRESS ||
+                           a.getStatus() == com.eduscheduler.model.enums.AssignmentStatus.COMPLETED)
+                .count();
+
+            // Count active substitutes
+            long activeSubstitutes = substituteManagementService.countActiveSubstitutes();
+
+            // Calculate total hours this month
+            double totalHours = monthAssignments.stream()
+                .filter(a -> a.getStatus() == com.eduscheduler.model.enums.AssignmentStatus.CONFIRMED ||
+                           a.getStatus() == com.eduscheduler.model.enums.AssignmentStatus.IN_PROGRESS ||
+                           a.getStatus() == com.eduscheduler.model.enums.AssignmentStatus.COMPLETED)
+                .filter(a -> a.getTotalHours() != null)
+                .mapToDouble(com.eduscheduler.model.domain.SubstituteAssignment::getTotalHours)
+                .sum();
+
+            // Count pending assignments (all dates)
+            long pendingAssignments = substituteManagementService.getAllAssignments().stream()
+                .filter(a -> a.getStatus() == com.eduscheduler.model.enums.AssignmentStatus.PENDING)
+                .count();
+
+            // Count active para and co-teacher substitutes
+            long activeParaSubs = substituteManagementService.getAllSubstitutes().stream()
+                .filter(s -> Boolean.TRUE.equals(s.getActive()) && s.getType() != null &&
+                        s.getType().name().contains("PARA"))
+                .count();
+
+            long activeCoTeacherSubs = substituteManagementService.getAllSubstitutes().stream()
+                .filter(s -> Boolean.TRUE.equals(s.getActive()) && s.getType() != null &&
+                        s.getType().name().contains("CO_TEACHER"))
+                .count();
+
+            Platform.runLater(() -> {
+                safeSetText(substitutesWeekLabel, String.valueOf(substitutesWeek));
+                safeSetText(substitutesMonthLabel, String.valueOf(substitutesMonth));
+                safeSetText(activeSubstitutesLabel, String.valueOf(activeSubstitutes));
+                safeSetText(substituteHoursLabel, String.format("%.1f", totalHours));
+                safeSetText(pendingAssignmentsLabel, String.valueOf(pendingAssignments));
+                safeSetText(activeParaSubsLabel, String.valueOf(activeParaSubs));
+                safeSetText(activeCoTeacherSubsLabel, String.valueOf(activeCoTeacherSubs));
+            });
+
+            log.info("Substitute metrics loaded: {} assignments this week, {} this month, {} active subs, {:.1f} hours, {} pending",
+                substitutesWeek, substitutesMonth, activeSubstitutes, totalHours, pendingAssignments);
+
+        } catch (Exception e) {
+            log.error("Error loading substitute metrics", e);
+            Platform.runLater(() -> {
+                safeSetText(substitutesWeekLabel, "0");
+                safeSetText(substitutesMonthLabel, "0");
+                safeSetText(activeSubstitutesLabel, "0");
+                safeSetText(substituteHoursLabel, "0.0");
+                safeSetText(pendingAssignmentsLabel, "0");
+                safeSetText(activeParaSubsLabel, "0");
+                safeSetText(activeCoTeacherSubsLabel, "0");
+            });
+        }
+    }
+
+    /**
+     * Load room utilization metrics
+     */
+    private void loadRoomMetrics() {
+        try {
+            long totalRooms = roomRepository.count();
+
+            // Count rooms that are assigned to schedule slots
+            long roomsInUse = scheduleSlotRepository.findAll().stream()
+                .filter(slot -> slot.getRoom() != null)
+                .map(slot -> slot.getRoom().getId())
+                .distinct()
+                .count();
+
+            long roomsNotInUse = totalRooms - roomsInUse;
+
+            Platform.runLater(() -> {
+                safeSetText(roomsInUseLabel, String.valueOf(roomsInUse));
+                safeSetText(roomsNotInUseLabel, String.valueOf(roomsNotInUse));
+            });
+
+            log.info("Room metrics loaded: {} in use, {} available", roomsInUse, roomsNotInUse);
+
+        } catch (Exception e) {
+            log.error("Error loading room metrics", e);
+            Platform.runLater(() -> {
+                safeSetText(roomsInUseLabel, "0");
+                safeSetText(roomsNotInUseLabel, "0");
+            });
+        }
+    }
+
+    /**
+     * Load IEP and 504 Plan accommodation metrics
+     */
+    private void loadAccommodationMetrics() {
+        try {
+            List<Student> allStudents = studentRepository.findAll();
+            LocalDate today = LocalDate.now();
+            YearMonth currentMonth = YearMonth.from(today);
+            LocalDate monthStart = currentMonth.atDay(1);
+            LocalDate monthEnd = currentMonth.atEndOfMonth();
+
+            // Assuming school year ends June 30
+            final LocalDate yearEnd = today.getMonthValue() > 6
+                ? LocalDate.of(today.getYear() + 1, 6, 30)
+                : LocalDate.of(today.getYear(), 6, 30);
+
+            // IEP Metrics
+            long iepToday = allStudents.stream()
+                .filter(s -> Boolean.TRUE.equals(s.getHasIEP()))
+                .filter(s -> s.getAccommodationReviewDate() != null)
+                .filter(s -> s.getAccommodationReviewDate().isEqual(today))
+                .count();
+
+            long iepMonth = allStudents.stream()
+                .filter(s -> Boolean.TRUE.equals(s.getHasIEP()))
+                .filter(s -> s.getAccommodationReviewDate() != null)
+                .filter(s -> !s.getAccommodationReviewDate().isBefore(monthStart) &&
+                           !s.getAccommodationReviewDate().isAfter(monthEnd))
+                .count();
+
+            long iepYear = allStudents.stream()
+                .filter(s -> Boolean.TRUE.equals(s.getHasIEP()))
+                .filter(s -> s.getAccommodationReviewDate() != null)
+                .filter(s -> !s.getAccommodationReviewDate().isBefore(today) &&
+                           !s.getAccommodationReviewDate().isAfter(yearEnd))
+                .count();
+
+            // 504 Plan Metrics
+            long plan504Today = allStudents.stream()
+                .filter(s -> Boolean.TRUE.equals(s.getHas504Plan()))
+                .filter(s -> s.getAccommodationReviewDate() != null)
+                .filter(s -> s.getAccommodationReviewDate().isEqual(today))
+                .count();
+
+            long plan504Month = allStudents.stream()
+                .filter(s -> Boolean.TRUE.equals(s.getHas504Plan()))
+                .filter(s -> s.getAccommodationReviewDate() != null)
+                .filter(s -> !s.getAccommodationReviewDate().isBefore(monthStart) &&
+                           !s.getAccommodationReviewDate().isAfter(monthEnd))
+                .count();
+
+            long plan504Year = allStudents.stream()
+                .filter(s -> Boolean.TRUE.equals(s.getHas504Plan()))
+                .filter(s -> s.getAccommodationReviewDate() != null)
+                .filter(s -> !s.getAccommodationReviewDate().isBefore(today) &&
+                           !s.getAccommodationReviewDate().isAfter(yearEnd))
+                .count();
+
+            // Total students with accommodations
+            long totalAccommodations = allStudents.stream()
+                .filter(s -> Boolean.TRUE.equals(s.getHasIEP()) || Boolean.TRUE.equals(s.getHas504Plan()))
+                .count();
+
+            Platform.runLater(() -> {
+                safeSetText(iepTodayLabel, String.valueOf(iepToday));
+                safeSetText(iepMonthLabel, String.valueOf(iepMonth));
+                safeSetText(iepYearLabel, String.valueOf(iepYear));
+                safeSetText(plan504TodayLabel, String.valueOf(plan504Today));
+                safeSetText(plan504MonthLabel, String.valueOf(plan504Month));
+                safeSetText(plan504YearLabel, String.valueOf(plan504Year));
+                safeSetText(totalAccommodationsLabel, String.valueOf(totalAccommodations));
+            });
+
+            log.info("Accommodation metrics loaded: {} IEP today, {} 504 today, {} total",
+                iepToday, plan504Today, totalAccommodations);
+
+        } catch (Exception e) {
+            log.error("Error loading accommodation metrics", e);
+            Platform.runLater(() -> {
+                safeSetText(iepTodayLabel, "0");
+                safeSetText(iepMonthLabel, "0");
+                safeSetText(iepYearLabel, "0");
+                safeSetText(plan504TodayLabel, "0");
+                safeSetText(plan504MonthLabel, "0");
+                safeSetText(plan504YearLabel, "0");
+                safeSetText(totalAccommodationsLabel, "0");
+            });
+        }
+    }
+
+    /**
+     * Load metrics from the latest schedule
+     */
+    private void loadLatestScheduleMetrics() {
+        try {
+            List<Schedule> schedules = scheduleRepository.findAll();
+            if (!schedules.isEmpty()) {
+                Schedule latest = schedules.get(schedules.size() - 1);
+
+                Platform.runLater(() -> {
+                    safeSetText(qualityScoreLabel,
+                        latest.getOptimizationScore() != null ?
+                        String.format("%.1f%%", latest.getOptimizationScore()) : "N/A");
+
+                    safeSetText(conflictCountLabel,
+                        latest.getTotalConflicts() != null ?
+                        String.valueOf(latest.getTotalConflicts()) : "0");
+
+                    safeSetText(teacherUtilizationLabel,
+                        latest.getTeacherUtilization() != null ?
+                        String.format("%.1f%%", latest.getTeacherUtilization()) : "N/A");
+                });
+            } else {
+                Platform.runLater(() -> {
+                    safeSetText(qualityScoreLabel, "No schedules");
+                    safeSetText(conflictCountLabel, "N/A");
+                    safeSetText(teacherUtilizationLabel, "N/A");
+                });
+            }
+        } catch (Exception e) {
+            log.error("Error loading schedule metrics", e);
+            Platform.runLater(() -> {
+                safeSetText(qualityScoreLabel, "Error");
+                safeSetText(conflictCountLabel, "Error");
+                safeSetText(teacherUtilizationLabel, "Error");
+            });
+        }
+    }
+
+    /**
+     * Safely set text on a label (null-safe)
+     */
+    private void safeSetText(Label label, String text) {
+        if (label != null) {
+            label.setText(text);
+        } else {
+            log.warn("Attempted to set text on null label: {}", text);
+        }
+    }
+
+    /**
+     * Refresh dashboard data
+     */
+    @FXML
+    public void refreshDashboard() {
+        log.info("Refreshing dashboard");
+        loadDashboardData();
+    }
+
+    /**
+     * Open the Substitute Management interface
+     */
+    @FXML
+    public void openSubstituteManagement() {
+        try {
+            log.info("Opening Substitute Management interface");
+
+            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
+                getClass().getResource("/fxml/SubstituteManagement.fxml")
+            );
+
+            // Use Spring context for controller factory if available
+            if (applicationContext != null) {
+                loader.setControllerFactory(applicationContext::getBean);
+            }
+
+            javafx.scene.Parent root = loader.load();
+            javafx.stage.Stage stage = new javafx.stage.Stage();
+            stage.setTitle("Substitute Management");
+            stage.setScene(new javafx.scene.Scene(root, 1200, 800));
+            stage.show();
+
+        } catch (Exception e) {
+            log.error("Error opening Substitute Management", e);
+            showError("Failed to open Substitute Management: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Open the Paraprofessional Substitute Management interface
+     */
+    @FXML
+    public void openParaprofessionalManagement() {
+        try {
+            log.info("Opening Paraprofessional Management interface");
+
+            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
+                getClass().getResource("/fxml/ParaprofessionalManagement.fxml")
+            );
+
+            // Use Spring context for controller factory if available
+            if (applicationContext != null) {
+                loader.setControllerFactory(applicationContext::getBean);
+            }
+
+            javafx.scene.Parent root = loader.load();
+            javafx.stage.Stage stage = new javafx.stage.Stage();
+            stage.setTitle("Paraprofessional Substitute Management");
+            stage.setScene(new javafx.scene.Scene(root, 1200, 800));
+            stage.show();
+
+        } catch (Exception e) {
+            log.error("Error opening Paraprofessional Management", e);
+            showError("Failed to open Paraprofessional Management: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Open the Co-Teacher Substitute Management interface
+     */
+    @FXML
+    public void openCoTeacherManagement() {
+        try {
+            log.info("Opening Co-Teacher Management interface");
+
+            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
+                getClass().getResource("/fxml/CoTeacherManagement.fxml")
+            );
+
+            // Use Spring context for controller factory if available
+            if (applicationContext != null) {
+                loader.setControllerFactory(applicationContext::getBean);
+            }
+
+            javafx.scene.Parent root = loader.load();
+            javafx.stage.Stage stage = new javafx.stage.Stage();
+            stage.setTitle("Co-Teacher Substitute Management");
+            stage.setScene(new javafx.scene.Scene(root, 1200, 800));
+            stage.show();
+
+        } catch (Exception e) {
+            log.error("Error opening Co-Teacher Management", e);
+            showError("Failed to open Co-Teacher Management: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Show error dialog
+     */
+    private void showError(String message) {
+        javafx.scene.control.Alert alert = new javafx.scene.control.Alert(
+            javafx.scene.control.Alert.AlertType.ERROR
+        );
+        alert.setTitle("Error");
+        alert.setHeaderText("Operation Failed");
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+}

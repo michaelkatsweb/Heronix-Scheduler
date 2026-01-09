@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<!--
+Student Schedule Viewer
+Displays individual student class schedule with rooms, teachers, and times
+Inspired by Skyward and other SIS systems
+
+Location: src/main/resources/fxml/StudentScheduleView.fxml
+-->
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.eduscheduler.ui.controller.StudentScheduleViewController"
+            prefWidth="1000" prefHeight="700">
+
+    <top>
+        <VBox spacing="15" style="-fx-background-color: white; -fx-border-color: #e0e0e0; -fx-border-width: 0 0 2 0;">
+            <padding>
+                <Insets top="20" right="20" bottom="15" left="20"/>
+            </padding>
+
+            <!-- Header -->
+            <HBox spacing="15" alignment="CENTER_LEFT">
+                <Label text="Student Schedule" style="-fx-font-size: 24; -fx-font-weight: bold;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="Print Schedule" onAction="#handlePrint" styleClass="primary-button"/>
+                <Button text="Export PDF" onAction="#handleExportPDF" styleClass="secondary-button"/>
+                <Button text="Close" onAction="#handleClose" styleClass="secondary-button"/>
+            </HBox>
+
+            <!-- Student Selection & Info -->
+            <HBox spacing="20" alignment="CENTER_LEFT">
+                <VBox spacing="5" HBox.hgrow="ALWAYS">
+                    <Label text="Select Student:" style="-fx-font-weight: bold;"/>
+                    <ComboBox fx:id="studentComboBox" prefWidth="350"
+                              promptText="Search by name or student ID"
+                              onAction="#handleStudentSelection"/>
+                </VBox>
+
+                <Separator orientation="VERTICAL"/>
+
+                <!-- Student Info Card -->
+                <VBox fx:id="studentInfoBox" spacing="5" style="-fx-background-color: #f5f5f5; -fx-padding: 10; -fx-background-radius: 5;">
+                    <HBox spacing="10">
+                        <Label text="Name:" style="-fx-font-weight: bold; -fx-min-width: 80;"/>
+                        <Label fx:id="studentNameLabel" text="--"/>
+                    </HBox>
+                    <HBox spacing="10">
+                        <Label text="Student ID:" style="-fx-font-weight: bold; -fx-min-width: 80;"/>
+                        <Label fx:id="studentIdLabel" text="--"/>
+                    </HBox>
+                    <HBox spacing="10">
+                        <Label text="Grade:" style="-fx-font-weight: bold; -fx-min-width: 80;"/>
+                        <Label fx:id="gradeLabel" text="--"/>
+                    </HBox>
+                    <HBox spacing="10">
+                        <Label text="IEP/504:" style="-fx-font-weight: bold; -fx-min-width: 80;"/>
+                        <Label fx:id="specialNeedsLabel" text="--"/>
+                    </HBox>
+                    <HBox spacing="10">
+                        <Label text="Gifted:" style="-fx-font-weight: bold; -fx-min-width: 80;"/>
+                        <Label fx:id="giftedLabel" text="--"/>
+                    </HBox>
+                </VBox>
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <VBox spacing="10" BorderPane.alignment="CENTER">
+            <padding>
+                <Insets top="15" right="20" bottom="15" left="20"/>
+            </padding>
+
+            <!-- Schedule Table -->
+            <TableView fx:id="scheduleTable" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="periodColumn" text="Period" prefWidth="80"/>
+                    <TableColumn fx:id="timeColumn" text="Time" prefWidth="120"/>
+                    <TableColumn fx:id="courseColumn" text="Course" prefWidth="200"/>
+                    <TableColumn fx:id="courseCodeColumn" text="Code" prefWidth="100"/>
+                    <TableColumn fx:id="teacherColumn" text="Teacher" prefWidth="150"/>
+                    <TableColumn fx:id="roomColumn" text="Room" prefWidth="80"/>
+                    <TableColumn fx:id="extensionColumn" text="Ext." prefWidth="60"/>
+                    <TableColumn fx:id="notesColumn" text="Notes" prefWidth="150"/>
+                </columns>
+                <placeholder>
+                    <Label text="No schedule available. Please select a student and ensure they have assigned courses."/>
+                </placeholder>
+            </TableView>
+
+            <!-- Special Events & IEP Meetings This Week -->
+            <VBox spacing="8" style="-fx-background-color: #fff3e0; -fx-padding: 12; -fx-background-radius: 5; -fx-border-color: #ff9800; -fx-border-width: 1; -fx-border-radius: 5;">
+                <Label text="Special Events &amp; IEP Meetings This Week" style="-fx-font-weight: bold; -fx-font-size: 13; -fx-text-fill: #e65100;"/>
+                <TableView fx:id="eventsTable" prefHeight="120" maxHeight="150">
+                    <columns>
+                        <TableColumn fx:id="eventDayColumn" text="Day" prefWidth="100"/>
+                        <TableColumn fx:id="eventTimeColumn" text="Time" prefWidth="100"/>
+                        <TableColumn fx:id="eventTypeColumn" text="Type" prefWidth="120"/>
+                        <TableColumn fx:id="eventNameColumn" text="Event/Meeting" prefWidth="250"/>
+                        <TableColumn fx:id="eventLocationColumn" text="Location" prefWidth="100"/>
+                        <TableColumn fx:id="eventNotesColumn" text="Notes" prefWidth="200"/>
+                    </columns>
+                    <placeholder>
+                        <Label text="No special events or IEP meetings scheduled this week" style="-fx-text-fill: #666;"/>
+                    </placeholder>
+                </TableView>
+            </VBox>
+
+            <!-- Summary Information -->
+            <HBox spacing="20" style="-fx-background-color: #fafafa; -fx-padding: 15; -fx-background-radius: 5;">
+                <VBox spacing="5">
+                    <Label text="Schedule Summary" style="-fx-font-weight: bold; -fx-font-size: 14;"/>
+                    <HBox spacing="10">
+                        <Label text="Total Classes:" style="-fx-font-weight: bold;"/>
+                        <Label fx:id="totalClassesLabel" text="0"/>
+                    </HBox>
+                    <HBox spacing="10">
+                        <Label text="Total Credits:" style="-fx-font-weight: bold;"/>
+                        <Label fx:id="totalCreditsLabel" text="0.0"/>
+                    </HBox>
+                </VBox>
+
+                <Separator orientation="VERTICAL"/>
+
+                <VBox spacing="5">
+                    <Label text="Special Accommodations" style="-fx-font-weight: bold; -fx-font-size: 14;"/>
+                    <Label fx:id="accommodationsLabel" wrapText="true" maxWidth="400"
+                           text="No special accommodations"/>
+                </VBox>
+
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <VBox spacing="5">
+                    <Label text="Medical Alerts" style="-fx-font-weight: bold; -fx-font-size: 14; -fx-text-fill: #d32f2f;"/>
+                    <Label fx:id="medicalAlertsLabel" wrapText="true" maxWidth="300"
+                           style="-fx-text-fill: #d32f2f;" text="None"/>
+                </VBox>
+            </HBox>
+        </VBox>
+    </center>
+
+    <bottom>
+        <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-background-color: #f5f5f5; -fx-border-color: #e0e0e0; -fx-border-width: 2 0 0 0;">
+            <padding>
+                <Insets top="10" right="20" bottom="10" left="20"/>
+            </padding>
+            <Label fx:id="statusLabel" text="Ready" style="-fx-font-style: italic;"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="timestampLabel" text="" style="-fx-font-size: 10; -fx-text-fill: #666;"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

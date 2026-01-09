@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<!--
+Courses Management View - Dark Futuristic Theme
+Location: src/main/resources/fxml/Courses.fxml
+-->
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.eduscheduler.ui.controller.CoursesController"
+            styleClass="root">
+
+    <top>
+        <VBox spacing="15" style="-fx-padding: 20;">
+            <!-- Header Section -->
+            <HBox alignment="CENTER_LEFT" spacing="15" styleClass="card">
+                <Label text="📚 Course Management" styleClass="label-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="➕ Add Course" onAction="#handleAddCourse" styleClass="button-success"/>
+                <Button text="🔄 Refresh" onAction="#handleRefresh" styleClass="button-primary"/>
+            </HBox>
+
+            <!-- Search and Filter Bar -->
+            <HBox spacing="10" alignment="CENTER_LEFT" styleClass="card">
+                <Label text="🔍 Search:" styleClass="label"/>
+                <TextField fx:id="searchField" promptText="Search courses..."
+                           prefWidth="300" onKeyReleased="#handleSearch" HBox.hgrow="ALWAYS"/>
+
+                <Separator orientation="VERTICAL"/>
+
+                <Label text="Filter:" styleClass="label"/>
+                <ComboBox fx:id="subjectFilter" promptText="Subject"
+                          prefWidth="150" onAction="#handleFilter"/>
+                <ComboBox fx:id="levelFilter" promptText="Level"
+                          prefWidth="150" onAction="#handleFilter"/>
+                <Button text="Clear" onAction="#handleClearFilters" styleClass="button"/>
+            </HBox>
+
+            <!-- Assignment Status Filters -->
+            <HBox spacing="10" alignment="CENTER_LEFT" styleClass="card">
+                <Label text="📊 Status:" styleClass="label"/>
+                <Button fx:id="showAllButton" text="All Courses" onAction="#handleShowAll" styleClass="button-primary"/>
+                <Button fx:id="showUnassignedButton" text="🔴 Unassigned" onAction="#handleShowUnassigned" styleClass="button-danger"/>
+                <Button fx:id="showPartialButton" text="🟡 Partial" onAction="#handleShowPartial" styleClass="button-warning"/>
+                <Button fx:id="showCompleteButton" text="🟢 Complete" onAction="#handleShowComplete" styleClass="button-success"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="statusCountLabel" text="" styleClass="label"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <!-- Courses Table Container -->
+        <VBox spacing="10" styleClass="card">
+            <padding>
+                <Insets top="15" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label text="All Courses" styleClass="label-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="recordCountLabel" text="Total: 0" styleClass="label"/>
+            </HBox>
+
+            <TableView fx:id="coursesTable" VBox.vgrow="ALWAYS">
+                <columns>
+                    <!-- Status Indicator Column -->
+                    <TableColumn fx:id="statusColumn" text="●" prefWidth="50" minWidth="50" maxWidth="50" sortable="true" style="-fx-alignment: CENTER;"/>
+
+                    <TableColumn fx:id="codeColumn" text="Code" prefWidth="110" minWidth="90"/>
+                    <TableColumn fx:id="nameColumn" text="Course Name" prefWidth="250" minWidth="200"/>
+                    <TableColumn fx:id="subjectColumn" text="Subject" prefWidth="130" minWidth="110"/>
+                    <TableColumn fx:id="levelColumn" text="Level" prefWidth="120" minWidth="100"/>
+                    <TableColumn fx:id="creditsColumn" text="Credits" prefWidth="80" minWidth="60"/>
+                    <TableColumn fx:id="durationColumn" text="Duration" prefWidth="90" minWidth="80"/>
+                    <TableColumn fx:id="maxStudentsColumn" text="Max Students" prefWidth="120" minWidth="100"/>
+                    <TableColumn fx:id="complexityColumn" text="Complexity" prefWidth="110" minWidth="90"/>
+
+                    <!-- ENHANCED: Multi-Subject Teaching MVP - Qualification Indicator Column -->
+                    <TableColumn fx:id="qualificationColumn" text="Qualified" prefWidth="90" minWidth="70" maxWidth="120" sortable="true" style="-fx-alignment: CENTER;"/>
+
+                    <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="220" minWidth="200"/>
+                </columns>
+
+                <placeholder>
+                    <VBox alignment="CENTER" spacing="10">
+                        <Label text="📚" styleClass="label-title"/>
+                        <Label text="No courses found" styleClass="label-subtitle"/>
+                        <Label text="Click 'Add Course' to create your first course" styleClass="label-caption"/>
+                    </VBox>
+                </placeholder>
+            </TableView>
+
+            <!-- Bottom Actions -->
+            <HBox spacing="10" alignment="CENTER_RIGHT">
+                <Label text="Quick Actions:" styleClass="label"/>
+                <Button text="📤 Export" onAction="#handleExport" styleClass="button-warning"/>
+                <Button text="📊 Statistics" onAction="#handleStatistics" styleClass="button-primary"/>
+            </HBox>
+        </VBox>
+    </center>
+
+    <bottom>
+        <!-- Status Bar -->
+        <HBox alignment="CENTER_LEFT" spacing="10" styleClass="card" style="-fx-padding: 10;">
+            <Label text="●" styleClass="accent-success" style="-fx-font-size: 14;"/>
+            <Label text="Courses module loaded" styleClass="label"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label text="Heronix Scheduling System v1.0" styleClass="label-caption"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

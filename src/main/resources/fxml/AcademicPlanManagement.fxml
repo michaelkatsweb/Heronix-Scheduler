@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.eduscheduler.controller.AcademicPlanManagementController"
+            styleClass="root">
+
+    <top>
+        <VBox spacing="10" styleClass="card">
+            <padding>
+                <Insets top="15" right="15" bottom="15" left="15"/>
+            </padding>
+
+            <!-- Title and Actions -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Academic Plan Management" styleClass="header-large"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="New Plan" onAction="#handleNewPlan" styleClass="button-primary"/>
+                <Button text="Generate from Sequence" onAction="#handleGenerateFromSequence" styleClass="button"/>
+                <Button text="Generate from Recommendations" onAction="#handleGenerateFromRecommendations" styleClass="button"/>
+                <Button text="Refresh" onAction="#handleRefresh" styleClass="button"/>
+            </HBox>
+
+            <!-- Student Selection -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Student:" styleClass="label"/>
+                <ComboBox fx:id="studentSelector" promptText="Select student..." prefWidth="300" onAction="#handleStudentChange"/>
+                <Region prefWidth="20"/>
+                <Label text="Academic Plan:" styleClass="label"/>
+                <ComboBox fx:id="planSelector" promptText="Select plan..." prefWidth="250" onAction="#handlePlanChange"/>
+                <Button text="⭐ Set as Primary" onAction="#handleSetPrimary" styleClass="button" fx:id="setPrimaryButton"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="planStatusLabel" text="Draft" styleClass="status-badge"/>
+            </HBox>
+
+            <!-- Plan Info Bar -->
+            <HBox spacing="20" alignment="CENTER_LEFT" styleClass="info-bar">
+                <VBox spacing="2">
+                    <Label text="Plan Type:" styleClass="label-small"/>
+                    <Label fx:id="planTypeLabel" text="STANDARD" styleClass="value-text"/>
+                </VBox>
+                <Separator orientation="VERTICAL"/>
+                <VBox spacing="2">
+                    <Label text="Completion:" styleClass="label-small"/>
+                    <HBox spacing="5" alignment="CENTER_LEFT">
+                        <ProgressBar fx:id="completionProgress" prefWidth="150" progress="0.0"/>
+                        <Label fx:id="completionLabel" text="0%" styleClass="value-text"/>
+                    </HBox>
+                </VBox>
+                <Separator orientation="VERTICAL"/>
+                <VBox spacing="2">
+                    <Label text="Credits:" styleClass="label-small"/>
+                    <Label fx:id="creditsLabel" text="0.0 / 24.0" styleClass="value-text"/>
+                </VBox>
+                <Separator orientation="VERTICAL"/>
+                <VBox spacing="2">
+                    <Label text="Graduation Ready:" styleClass="label-small"/>
+                    <Label fx:id="graduationLabel" text="No" styleClass="value-text"/>
+                </VBox>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="Edit Plan Details" onAction="#handleEditPlan" styleClass="button"/>
+                <Button text="Delete Plan" onAction="#handleDeletePlan" styleClass="button-danger"/>
+            </HBox>
+
+            <!-- Quick Actions -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Button text="Add Course" onAction="#handleAddCourse" styleClass="button"/>
+                <Button text="View Recommendations" onAction="#handleViewRecommendations" styleClass="button"/>
+                <Button text="Export Plan" onAction="#handleExportPlan" styleClass="button"/>
+                <Button text="Print Plan" onAction="#handlePrintPlan" styleClass="button"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label text="Approval Status:" styleClass="label"/>
+                <Label fx:id="approvalStudentLabel" text="Student: ⚪" styleClass="approval-badge"/>
+                <Label fx:id="approvalParentLabel" text="Parent: ⚪" styleClass="approval-badge"/>
+                <Label fx:id="approvalCounselorLabel" text="Counselor: ⚪" styleClass="approval-badge"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <SplitPane dividerPositions="0.75" VBox.vgrow="ALWAYS">
+            <!-- Left: Four-Year Plan Grid -->
+            <VBox spacing="5">
+                <padding>
+                    <Insets top="10" right="10" bottom="10" left="10"/>
+                </padding>
+
+                <Label text="Four-Year Plan" styleClass="section-header"/>
+
+                <!-- Year Headers and Content -->
+                <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS">
+                    <VBox spacing="10">
+                        <!-- Grade 9 -->
+                        <VBox spacing="5" styleClass="year-section">
+                            <HBox spacing="10" alignment="CENTER_LEFT" styleClass="year-header">
+                                <Label text="Grade 9" styleClass="year-title"/>
+                                <Label fx:id="grade9YearLabel" text="(2025-2026)" styleClass="label-small"/>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Label fx:id="grade9CreditsLabel" text="0.0 credits" styleClass="credits-label"/>
+                            </HBox>
+
+                            <HBox spacing="10" HBox.hgrow="ALWAYS">
+                                <!-- Fall Semester -->
+                                <VBox spacing="5" HBox.hgrow="ALWAYS" styleClass="semester-column">
+                                    <Label text="Fall Semester" styleClass="semester-header"/>
+                                    <ListView fx:id="grade9FallList" VBox.vgrow="ALWAYS" styleClass="course-list"/>
+                                    <Button text="+ Add Course" onAction="#handleAddCourseGrade9Fall" styleClass="button-small"/>
+                                </VBox>
+
+                                <!-- Spring Semester -->
+                                <VBox spacing="5" HBox.hgrow="ALWAYS" styleClass="semester-column">
+                                    <Label text="Spring Semester" styleClass="semester-header"/>
+                                    <ListView fx:id="grade9SpringList" VBox.vgrow="ALWAYS" styleClass="course-list"/>
+                                    <Button text="+ Add Course" onAction="#handleAddCourseGrade9Spring" styleClass="button-small"/>
+                                </VBox>
+
+                                <!-- Full Year -->
+                                <VBox spacing="5" HBox.hgrow="ALWAYS" styleClass="semester-column">
+                                    <Label text="Full Year" styleClass="semester-header"/>
+                                    <ListView fx:id="grade9FullYearList" VBox.vgrow="ALWAYS" styleClass="course-list"/>
+                                    <Button text="+ Add Course" onAction="#handleAddCourseGrade9FullYear" styleClass="button-small"/>
+                                </VBox>
+                            </HBox>
+                        </VBox>
+
+                        <!-- Grade 10 -->
+                        <VBox spacing="5" styleClass="year-section">
+                            <HBox spacing="10" alignment="CENTER_LEFT" styleClass="year-header">
+                                <Label text="Grade 10" styleClass="year-title"/>
+                                <Label fx:id="grade10YearLabel" text="(2026-2027)" styleClass="label-small"/>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Label fx:id="grade10CreditsLabel" text="0.0 credits" styleClass="credits-label"/>
+                            </HBox>
+
+                            <HBox spacing="10" HBox.hgrow="ALWAYS">
+                                <VBox spacing="5" HBox.hgrow="ALWAYS" styleClass="semester-column">
+                                    <Label text="Fall Semester" styleClass="semester-header"/>
+                                    <ListView fx:id="grade10FallList" VBox.vgrow="ALWAYS" styleClass="course-list"/>
+                                    <Button text="+ Add Course" onAction="#handleAddCourseGrade10Fall" styleClass="button-small"/>
+                                </VBox>
+
+                                <VBox spacing="5" HBox.hgrow="ALWAYS" styleClass="semester-column">
+                                    <Label text="Spring Semester" styleClass="semester-header"/>
+                                    <ListView fx:id="grade10SpringList" VBox.vgrow="ALWAYS" styleClass="course-list"/>
+                                    <Button text="+ Add Course" onAction="#handleAddCourseGrade10Spring" styleClass="button-small"/>
+                                </VBox>
+
+                                <VBox spacing="5" HBox.hgrow="ALWAYS" styleClass="semester-column">
+                                    <Label text="Full Year" styleClass="semester-header"/>
+                                    <ListView fx:id="grade10FullYearList" VBox.vgrow="ALWAYS" styleClass="course-list"/>
+                                    <Button text="+ Add Course" onAction="#handleAddCourseGrade10FullYear" styleClass="button-small"/>
+                                </VBox>
+                            </HBox>
+                        </VBox>
+
+                        <!-- Grade 11 -->
+                        <VBox spacing="5" styleClass="year-section">
+                            <HBox spacing="10" alignment="CENTER_LEFT" styleClass="year-header">
+                                <Label text="Grade 11" styleClass="year-title"/>
+                                <Label fx:id="grade11YearLabel" text="(2027-2028)" styleClass="label-small"/>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Label fx:id="grade11CreditsLabel" text="0.0 credits" styleClass="credits-label"/>
+                            </HBox>
+
+                            <HBox spacing="10" HBox.hgrow="ALWAYS">
+                                <VBox spacing="5" HBox.hgrow="ALWAYS" styleClass="semester-column">
+                                    <Label text="Fall Semester" styleClass="semester-header"/>
+                                    <ListView fx:id="grade11FallList" VBox.vgrow="ALWAYS" styleClass="course-list"/>
+                                    <Button text="+ Add Course" onAction="#handleAddCourseGrade11Fall" styleClass="button-small"/>
+                                </VBox>
+
+                                <VBox spacing="5" HBox.hgrow="ALWAYS" styleClass="semester-column">
+                                    <Label text="Spring Semester" styleClass="semester-header"/>
+                                    <ListView fx:id="grade11SpringList" VBox.vgrow="ALWAYS" styleClass="course-list"/>
+                                    <Button text="+ Add Course" onAction="#handleAddCourseGrade11Spring" styleClass="button-small"/>
+                                </VBox>
+
+                                <VBox spacing="5" HBox.hgrow="ALWAYS" styleClass="semester-column">
+                                    <Label text="Full Year" styleClass="semester-header"/>
+                                    <ListView fx:id="grade11FullYearList" VBox.vgrow="ALWAYS" styleClass="course-list"/>
+                                    <Button text="+ Add Course" onAction="#handleAddCourseGrade11FullYear" styleClass="button-small"/>
+                                </VBox>
+                            </HBox>
+                        </VBox>
+
+                        <!-- Grade 12 -->
+                        <VBox spacing="5" styleClass="year-section">
+                            <HBox spacing="10" alignment="CENTER_LEFT" styleClass="year-header">
+                                <Label text="Grade 12" styleClass="year-title"/>
+                                <Label fx:id="grade12YearLabel" text="(2028-2029)" styleClass="label-small"/>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Label fx:id="grade12CreditsLabel" text="0.0 credits" styleClass="credits-label"/>
+                            </HBox>
+
+                            <HBox spacing="10" HBox.hgrow="ALWAYS">
+                                <VBox spacing="5" HBox.hgrow="ALWAYS" styleClass="semester-column">
+                                    <Label text="Fall Semester" styleClass="semester-header"/>
+                                    <ListView fx:id="grade12FallList" VBox.vgrow="ALWAYS" styleClass="course-list"/>
+                                    <Button text="+ Add Course" onAction="#handleAddCourseGrade12Fall" styleClass="button-small"/>
+                                </VBox>
+
+                                <VBox spacing="5" HBox.hgrow="ALWAYS" styleClass="semester-column">
+                                    <Label text="Spring Semester" styleClass="semester-header"/>
+                                    <ListView fx:id="grade12SpringList" VBox.vgrow="ALWAYS" styleClass="course-list"/>
+                                    <Button text="+ Add Course" onAction="#handleAddCourseGrade12Spring" styleClass="button-small"/>
+                                </VBox>
+
+                                <VBox spacing="5" HBox.hgrow="ALWAYS" styleClass="semester-column">
+                                    <Label text="Full Year" styleClass="semester-header"/>
+                                    <ListView fx:id="grade12FullYearList" VBox.vgrow="ALWAYS" styleClass="course-list"/>
+                                    <Button text="+ Add Course" onAction="#handleAddCourseGrade12FullYear" styleClass="button-small"/>
+                                </VBox>
+                            </HBox>
+                        </VBox>
+                    </VBox>
+                </ScrollPane>
+            </VBox>
+
+            <!-- Right: Plan Details and Notes -->
+            <VBox spacing="10">
+                <padding>
+                    <Insets top="10" right="10" bottom="10" left="10"/>
+                </padding>
+
+                <!-- Graduation Requirements -->
+                <VBox spacing="5" styleClass="card">
+                    <padding>
+                        <Insets top="10" right="10" bottom="10" left="10"/>
+                    </padding>
+                    <Label text="Graduation Requirements" styleClass="section-header"/>
+                    <TableView fx:id="requirementsTable" VBox.vgrow="SOMETIMES" prefHeight="200">
+                        <columns>
+                            <TableColumn fx:id="reqSubjectColumn" text="Subject" prefWidth="100"/>
+                            <TableColumn fx:id="reqRequiredColumn" text="Required" prefWidth="60"/>
+                            <TableColumn fx:id="reqCompletedColumn" text="Completed" prefWidth="70"/>
+                            <TableColumn fx:id="reqStatusColumn" text="Status" prefWidth="80"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+
+                <!-- Plan Notes -->
+                <VBox spacing="5" styleClass="card" VBox.vgrow="ALWAYS">
+                    <padding>
+                        <Insets top="10" right="10" bottom="10" left="10"/>
+                    </padding>
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Plan Notes" styleClass="section-header"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Button text="Save Notes" onAction="#handleSaveNotes" styleClass="button-small"/>
+                    </HBox>
+                    <TextArea fx:id="notesArea" wrapText="true" VBox.vgrow="ALWAYS" promptText="Add notes about this academic plan..."/>
+                </VBox>
+
+                <!-- Warnings/Alerts -->
+                <VBox fx:id="alertsBox" spacing="5" styleClass="alerts-panel">
+                    <padding>
+                        <Insets top="10" right="10" bottom="10" left="10"/>
+                    </padding>
+                    <Label text="Alerts" styleClass="section-header"/>
+                    <ListView fx:id="alertsList" prefHeight="100"/>
+                </VBox>
+            </VBox>
+        </SplitPane>
+    </center>
+
+    <bottom>
+        <HBox spacing="10" alignment="CENTER_LEFT" styleClass="card">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            <Label fx:id="statusLabel" text="Ready" styleClass="label"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="Submit for Approval" onAction="#handleSubmitForApproval" styleClass="button-primary"/>
+            <Button text="Approve (Counselor)" onAction="#handleCounselorApproval" styleClass="button" fx:id="counselorApprovalButton"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

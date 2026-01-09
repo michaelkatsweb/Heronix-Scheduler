@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.eduscheduler.ui.controller.RoomManagementController"
+            styleClass="root">
+
+    <top>
+        <VBox spacing="10" styleClass="card">
+            <padding>
+                <Insets top="15" right="15" bottom="15" left="15"/>
+            </padding>
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <TextField fx:id="searchField" promptText="Search rooms..." prefWidth="300"/>
+                <Button text="Search" onAction="#handleSearch" styleClass="button"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="Auto-Assign Zones" onAction="#handleAutoAssignZones" styleClass="button"/>
+                <Button text="Add Room" onAction="#handleAddRoom" styleClass="button-primary"/>
+                <Button text="Refresh" onAction="#handleRefresh" styleClass="button"/>
+            </HBox>
+
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Filter by Building:" styleClass="label"/>
+                <ComboBox fx:id="buildingFilter" promptText="All Buildings" onAction="#handleFilter"/>
+                <Label text="Type:" styleClass="label"/>
+                <ComboBox fx:id="typeFilter" promptText="All Types" onAction="#handleFilter"/>
+                <Label text="Zone:" styleClass="label"/>
+                <ComboBox fx:id="zoneFilter" promptText="All Zones" onAction="#handleFilter"/>
+                <Label text="Status:" styleClass="label"/>
+                <ComboBox fx:id="statusFilter" promptText="All" onAction="#handleFilter"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <VBox spacing="0">
+            <!-- Selection Toolbar (will be populated programmatically) -->
+            <HBox fx:id="selectionToolbar"/>
+
+            <TableView fx:id="roomTable" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="idColumn" text="ID" prefWidth="60"/>
+                <TableColumn fx:id="roomNumberColumn" text="Room #" prefWidth="80"/>
+                <TableColumn fx:id="buildingColumn" text="Building" prefWidth="120"/>
+                <TableColumn fx:id="floorColumn" text="Floor" prefWidth="60"/>
+                <TableColumn fx:id="zoneColumn" text="Zone" prefWidth="120"/>
+                <TableColumn fx:id="capacityColumn" text="Capacity" prefWidth="80"/>
+                <TableColumn fx:id="typeColumn" text="Type" prefWidth="100"/>
+                <TableColumn fx:id="projectorColumn" text="Projector" prefWidth="80"/>
+                <TableColumn fx:id="smartboardColumn" text="Smartboard" prefWidth="90"/>
+                <TableColumn fx:id="computersColumn" text="Computers" prefWidth="90"/>
+                <TableColumn fx:id="accessibleColumn" text="Accessible" prefWidth="90"/>
+                <TableColumn fx:id="activeColumn" text="Active" prefWidth="70"/>
+                <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="150"/>
+            </columns>
+        </TableView>
+        </VBox>
+    </center>
+
+    <bottom>
+        <HBox spacing="10" alignment="CENTER_LEFT" styleClass="card">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            <Label fx:id="recordCountLabel" text="0 rooms" styleClass="label"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="Export to Excel" onAction="#handleExport" styleClass="button"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

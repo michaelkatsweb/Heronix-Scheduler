@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.eduscheduler.ui.controller.StudentEnrollmentController"
+      styleClass="root"
+      spacing="15" style="-fx-padding: 20;">
+
+    <!-- Title Section -->
+    <HBox alignment="CENTER_LEFT" spacing="10" styleClass="card" style="-fx-padding: 15;">
+        <Label text="Student Course Enrollment" styleClass="header-label" style="-fx-font-size: 20; -fx-font-weight: bold;"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="Refresh" onAction="#handleRefresh" styleClass="button-secondary" style="-fx-padding: 8 16;"/>
+    </HBox>
+
+    <!-- Student Selection Section -->
+    <VBox spacing="10" styleClass="card" style="-fx-padding: 15;">
+        <Label text="Select Student" style="-fx-font-size: 14; -fx-font-weight: bold;"/>
+
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="Student:"/>
+            <ComboBox fx:id="studentComboBox" promptText="Choose a student..." prefWidth="300"/>
+            <Label text="or Search:"/>
+            <TextField fx:id="studentSearchField" promptText="Search by name..." prefWidth="200"/>
+            <Button text="Search" onAction="#handleSearchStudents" styleClass="button-primary" style="-fx-padding: 6 12;"/>
+        </HBox>
+
+        <Separator/>
+
+        <VBox spacing="5">
+            <Label fx:id="studentInfoLabel" text="No student selected" style="-fx-font-weight: bold; -fx-font-size: 13;"/>
+            <Label fx:id="enrollmentStatsLabel" text="" styleClass="text-secondary" style="-fx-font-size: 12;"/>
+        </VBox>
+    </VBox>
+
+    <!-- Two-Column Layout for Enrolled and Available Courses -->
+    <HBox spacing="15" VBox.vgrow="ALWAYS">
+
+        <!-- Enrolled Courses Section -->
+        <VBox spacing="10" HBox.hgrow="ALWAYS" styleClass="card" style="-fx-padding: 15;">
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label text="Enrolled Courses" styleClass="success-text" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button fx:id="bulkUnenrollButton" text="Drop Selected" onAction="#handleBulkUnenroll"
+                       styleClass="button-danger" style="-fx-padding: 6 12;"/>
+            </HBox>
+
+            <TableView fx:id="enrolledCoursesTable" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="enrolledCodeColumn" text="Code" prefWidth="80"/>
+                    <TableColumn fx:id="enrolledNameColumn" text="Course Name" prefWidth="180"/>
+                    <TableColumn fx:id="enrolledSubjectColumn" text="Subject" prefWidth="100"/>
+                    <TableColumn fx:id="enrolledLevelColumn" text="Level" prefWidth="100"/>
+                    <TableColumn fx:id="enrolledTeacherColumn" text="Teacher" prefWidth="120"/>
+                    <TableColumn fx:id="enrolledActionsColumn" text="Actions" prefWidth="80"/>
+                </columns>
+                <placeholder>
+                    <Label text="No enrolled courses. Select courses from the Available Courses list." styleClass="text-muted"/>
+                </placeholder>
+            </TableView>
+        </VBox>
+
+        <!-- Available Courses Section -->
+        <VBox spacing="10" HBox.hgrow="ALWAYS" styleClass="card" style="-fx-padding: 15;">
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label text="Available Courses" styleClass="primary-text" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button fx:id="bulkEnrollButton" text="Enroll Selected" onAction="#handleBulkEnroll"
+                       styleClass="button-success" style="-fx-padding: 6 12;"/>
+            </HBox>
+
+            <!-- Filters -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Filters:" style="-fx-font-weight: bold;"/>
+                <Label text="Subject:"/>
+                <ComboBox fx:id="subjectFilterComboBox" promptText="All Subjects" prefWidth="150"/>
+                <Label text="Level:"/>
+                <ComboBox fx:id="levelFilterComboBox" promptText="All Levels" prefWidth="150"/>
+                <CheckBox fx:id="showFullCoursesCheckBox" text="Show Full Courses"/>
+            </HBox>
+
+            <TableView fx:id="availableCoursesTable" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="availableCodeColumn" text="Code" prefWidth="70"/>
+                    <TableColumn fx:id="availableNameColumn" text="Course Name" prefWidth="150"/>
+                    <TableColumn fx:id="availableSubjectColumn" text="Subject" prefWidth="90"/>
+                    <TableColumn fx:id="availableLevelColumn" text="Level" prefWidth="90"/>
+                    <TableColumn fx:id="availableTeacherColumn" text="Teacher" prefWidth="110"/>
+                    <TableColumn fx:id="availableCapacityColumn" text="Capacity" prefWidth="70"/>
+                    <TableColumn fx:id="availableActionsColumn" text="Actions" prefWidth="80"/>
+                </columns>
+                <placeholder>
+                    <Label text="No available courses found. Adjust filters or select a student." styleClass="text-muted"/>
+                </placeholder>
+            </TableView>
+        </VBox>
+    </HBox>
+
+</VBox>

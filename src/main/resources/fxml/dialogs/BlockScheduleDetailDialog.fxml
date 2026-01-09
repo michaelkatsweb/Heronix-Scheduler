@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<!--
+Block Schedule Detail View Dialog
+Location: src/main/resources/fxml/dialogs/BlockScheduleDetailDialog.fxml
+Controller: com.eduscheduler.ui.controller.dialogs.BlockScheduleDetailDialogController
+Purpose: Display detailed information about a block schedule
+-->
+
+<DialogPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.eduscheduler.ui.controller.dialogs.BlockScheduleDetailDialogController"
+            styleClass="dialog-pane"
+            minWidth="800" minHeight="600">
+
+    <content>
+        <VBox spacing="15" style="-fx-padding: 20;">
+            <!-- Header -->
+            <HBox alignment="CENTER_LEFT" spacing="10" styleClass="card">
+                <Label text="🗓️" styleClass="label-title" style="-fx-font-size: 24;"/>
+                <VBox>
+                    <Label fx:id="scheduleNameLabel" text="Block Schedule Name" styleClass="label-title" style="-fx-font-size: 18;"/>
+                    <Label fx:id="dateRangeLabel" text="Aug 1, 2025 - Jun 30, 2026" styleClass="label-caption"/>
+                </VBox>
+            </HBox>
+
+            <!-- Schedule Info -->
+            <GridPane hgap="15" vgap="10" styleClass="card" style="-fx-padding: 15;">
+                <columnConstraints>
+                    <ColumnConstraints percentWidth="25"/>
+                    <ColumnConstraints percentWidth="25"/>
+                    <ColumnConstraints percentWidth="25"/>
+                    <ColumnConstraints percentWidth="25"/>
+                </columnConstraints>
+
+                <VBox GridPane.columnIndex="0" GridPane.rowIndex="0" spacing="3">
+                    <Label text="Schedule Type" styleClass="label-caption"/>
+                    <Label text="BLOCK" styleClass="label" style="-fx-text-fill: #00aaff; -fx-font-weight: bold;"/>
+                </VBox>
+
+                <VBox GridPane.columnIndex="1" GridPane.rowIndex="0" spacing="3">
+                    <Label text="Day Rotation" styleClass="label-caption"/>
+                    <Label text="ODD/EVEN" styleClass="label" style="-fx-text-fill: #00aaff; -fx-font-weight: bold;"/>
+                </VBox>
+
+                <VBox GridPane.columnIndex="2" GridPane.rowIndex="0" spacing="3">
+                    <Label text="Status" styleClass="label-caption"/>
+                    <Label fx:id="statusLabel" text="DRAFT" styleClass="label" style="-fx-text-fill: #FF9800; -fx-font-weight: bold;"/>
+                </VBox>
+
+                <VBox GridPane.columnIndex="3" GridPane.rowIndex="0" spacing="3">
+                    <Label text="Total Slots" styleClass="label-caption"/>
+                    <Label fx:id="slotsLabel" text="0" styleClass="label" style="-fx-font-weight: bold;"/>
+                </VBox>
+            </GridPane>
+
+            <!-- Day Type Breakdown -->
+            <VBox spacing="10" styleClass="card" style="-fx-padding: 15;">
+                <Label text="Day Type Breakdown" styleClass="label-subtitle"/>
+
+                <GridPane hgap="15" vgap="10">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="50"/>
+                        <ColumnConstraints percentWidth="50"/>
+                    </columnConstraints>
+
+                    <!-- ODD Days -->
+                    <VBox GridPane.columnIndex="0" GridPane.rowIndex="0" spacing="5" styleClass="card" style="-fx-padding: 10; -fx-background-color: #1a1a3a;">
+                        <HBox alignment="CENTER_LEFT" spacing="5">
+                            <Label text="🔵" style="-fx-font-size: 16;"/>
+                            <Label text="ODD Days (Mon/Wed/Fri)" styleClass="label-subtitle" style="-fx-text-fill: #00aaff;"/>
+                        </HBox>
+                        <Label fx:id="oddDaySlotsLabel" text="0 slots" styleClass="label"/>
+                        <Label fx:id="oddDayCoursesLabel" text="0 courses" styleClass="label-caption"/>
+                    </VBox>
+
+                    <!-- EVEN Days -->
+                    <VBox GridPane.columnIndex="1" GridPane.rowIndex="0" spacing="5" styleClass="card" style="-fx-padding: 10; -fx-background-color: #3a2a1a;">
+                        <HBox alignment="CENTER_LEFT" spacing="5">
+                            <Label text="🟠" style="-fx-font-size: 16;"/>
+                            <Label text="EVEN Days (Tue/Thu)" styleClass="label-subtitle" style="-fx-text-fill: #ff8800;"/>
+                        </HBox>
+                        <Label fx:id="evenDaySlotsLabel" text="0 slots" styleClass="label"/>
+                        <Label fx:id="evenDayCoursesLabel" text="0 courses" styleClass="label-caption"/>
+                    </VBox>
+                </GridPane>
+            </VBox>
+
+            <!-- Course List -->
+            <VBox spacing="5" styleClass="card" style="-fx-padding: 15;" VBox.vgrow="ALWAYS">
+                <Label text="Courses in Block Schedule" styleClass="label-subtitle"/>
+                <TableView fx:id="coursesTable" VBox.vgrow="ALWAYS" style="-fx-pref-height: 200;">
+                    <columns>
+                        <TableColumn fx:id="courseCodeColumn" text="Code" prefWidth="100"/>
+                        <TableColumn fx:id="courseNameColumn" text="Course Name" prefWidth="250"/>
+                        <TableColumn fx:id="dayTypeColumn" text="Day Type" prefWidth="100"/>
+                        <TableColumn fx:id="teacherColumn" text="Teacher" prefWidth="150"/>
+                        <TableColumn fx:id="studentsColumn" text="Students" prefWidth="80"/>
+                    </columns>
+                </TableView>
+            </VBox>
+
+            <!-- Info Panel -->
+            <VBox spacing="5" styleClass="card" style="-fx-padding: 10; -fx-background-color: #2a2a4a;">
+                <Label text="ℹ️ Block Schedule Information" styleClass="label-subtitle" style="-fx-text-fill: #00aaff;"/>
+                <Label text="• Block schedules use extended 90-minute periods" styleClass="label-caption" wrapText="true"/>
+                <Label text="• Courses rotate between ODD days (Mon/Wed/Fri) and EVEN days (Tue/Thu)" styleClass="label-caption" wrapText="true"/>
+                <Label text="• This allows students to focus on fewer subjects per day with deeper learning time" styleClass="label-caption" wrapText="true"/>
+            </VBox>
+        </VBox>
+    </content>
+
+    <buttonTypes>
+        <ButtonType fx:constant="CLOSE"/>
+    </buttonTypes>
+</DialogPane>

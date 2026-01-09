@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<!--
+Block Schedule Generator Dialog
+Location: src/main/resources/fxml/dialogs/BlockScheduleGeneratorDialog.fxml
+Controller: com.eduscheduler.ui.controller.dialogs.BlockScheduleGeneratorDialogController
+Purpose: Create new block schedules with ODD/EVEN day rotation
+-->
+
+<DialogPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.eduscheduler.ui.controller.dialogs.BlockScheduleGeneratorDialogController"
+            styleClass="dialog-pane">
+
+    <content>
+        <VBox spacing="15" style="-fx-padding: 20;">
+            <!-- Header -->
+            <HBox alignment="CENTER_LEFT" spacing="10" styleClass="card">
+                <Label text="🗓️" styleClass="label-title" style="-fx-font-size: 24;"/>
+                <Label text="Block Schedule Generator" styleClass="label-title" style="-fx-font-size: 18;"/>
+            </HBox>
+
+            <!-- Schedule Name -->
+            <VBox spacing="5">
+                <Label text="Schedule Name:" styleClass="label-subtitle"/>
+                <TextField fx:id="scheduleNameField" promptText="Block Schedule 2025-2026" styleClass="text-field">
+                    <tooltip>
+                        <Tooltip text="Enter a name for this block schedule"/>
+                    </tooltip>
+                </TextField>
+            </VBox>
+
+            <!-- Academic Year Dates -->
+            <HBox spacing="15">
+                <VBox spacing="5" HBox.hgrow="ALWAYS">
+                    <Label text="Start Date:" styleClass="label-subtitle"/>
+                    <DatePicker fx:id="startDatePicker" editable="false" styleClass="date-picker">
+                        <tooltip>
+                            <Tooltip text="Academic year start date (typically August 1)"/>
+                        </tooltip>
+                    </DatePicker>
+                </VBox>
+                <VBox spacing="5" HBox.hgrow="ALWAYS">
+                    <Label text="End Date:" styleClass="label-subtitle"/>
+                    <DatePicker fx:id="endDatePicker" editable="false" styleClass="date-picker">
+                        <tooltip>
+                            <Tooltip text="Academic year end date (typically June 30)"/>
+                        </tooltip>
+                    </DatePicker>
+                </VBox>
+            </HBox>
+
+            <!-- Selection Grid -->
+            <GridPane hgap="15" vgap="10">
+                <columnConstraints>
+                    <ColumnConstraints percentWidth="50"/>
+                    <ColumnConstraints percentWidth="50"/>
+                </columnConstraints>
+
+                <!-- Students Selection -->
+                <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                    <HBox alignment="CENTER_LEFT" spacing="10">
+                        <Label text="Students:" styleClass="label-subtitle"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="studentCountLabel" text="0 selected" styleClass="label-caption"/>
+                    </HBox>
+                    <ListView fx:id="studentListView" prefHeight="200" styleClass="list-view">
+                        <tooltip>
+                            <Tooltip text="Select students to include in this block schedule&#10;Use Ctrl+Click for multiple selections"/>
+                        </tooltip>
+                    </ListView>
+                    <HBox spacing="5">
+                        <Button text="Select All" onAction="#handleSelectAllStudents" styleClass="button" style="-fx-font-size: 10;"/>
+                        <Button text="Clear" onAction="#handleClearStudents" styleClass="button" style="-fx-font-size: 10;"/>
+                    </HBox>
+                </VBox>
+
+                <!-- Courses Selection -->
+                <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                    <HBox alignment="CENTER_LEFT" spacing="10">
+                        <Label text="Courses:" styleClass="label-subtitle"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="courseCountLabel" text="0 selected" styleClass="label-caption"/>
+                    </HBox>
+                    <ListView fx:id="courseListView" prefHeight="200" styleClass="list-view">
+                        <tooltip>
+                            <Tooltip text="Select courses to include in this block schedule&#10;Use Ctrl+Click for multiple selections"/>
+                        </tooltip>
+                    </ListView>
+                    <HBox spacing="5">
+                        <Button text="Select All" onAction="#handleSelectAllCourses" styleClass="button" style="-fx-font-size: 10;"/>
+                        <Button text="Clear" onAction="#handleClearCourses" styleClass="button" style="-fx-font-size: 10;"/>
+                    </HBox>
+                </VBox>
+            </GridPane>
+
+            <!-- Block Schedule Settings -->
+            <VBox spacing="10" styleClass="card" style="-fx-padding: 15;">
+                <Label text="Block Schedule Settings" styleClass="label-subtitle"/>
+
+                <HBox spacing="15" alignment="CENTER_LEFT">
+                    <VBox spacing="5">
+                        <Label text="Period Duration:" styleClass="label"/>
+                        <HBox spacing="5" alignment="CENTER_LEFT">
+                            <Spinner fx:id="periodDurationSpinner" editable="true" prefWidth="80"
+                                     initialValue="90" min="45" max="180" amountToStepBy="15"/>
+                            <Label text="minutes" styleClass="label-caption"/>
+                        </HBox>
+                    </VBox>
+
+                    <VBox spacing="5">
+                        <Label text="Periods per Week:" styleClass="label"/>
+                        <HBox spacing="5" alignment="CENTER_LEFT">
+                            <Spinner fx:id="periodsPerWeekSpinner" editable="true" prefWidth="80"
+                                     initialValue="3" min="2" max="5" amountToStepBy="1"/>
+                            <Label text="meetings" styleClass="label-caption"/>
+                        </HBox>
+                    </VBox>
+                </HBox>
+
+                <Label text="💡 Tip: Block schedules typically use 90-minute periods meeting 3 times per week"
+                       styleClass="label-caption" style="-fx-text-fill: #888;" wrapText="true"/>
+            </VBox>
+
+            <!-- Info Panel -->
+            <VBox spacing="5" styleClass="card" style="-fx-padding: 10; -fx-background-color: #2a2a4a;">
+                <Label text="ℹ️ Block Schedule Information" styleClass="label-subtitle" style="-fx-text-fill: #00aaff;"/>
+                <Label text="• Courses alternate between ODD days (Mon/Wed/Fri) and EVEN days (Tue/Thu)"
+                       styleClass="label-caption" wrapText="true"/>
+                <Label text="• Extended periods allow for deeper learning and hands-on activities"
+                       styleClass="label-caption" wrapText="true"/>
+                <Label text="• Students can adjust their focus between ODD and EVEN day courses"
+                       styleClass="label-caption" wrapText="true"/>
+            </VBox>
+
+            <!-- Progress Indicator (hidden by default) -->
+            <ProgressIndicator fx:id="progressIndicator" visible="false" prefWidth="50" prefHeight="50"/>
+
+            <!-- Status Label -->
+            <Label fx:id="statusLabel" styleClass="label-caption" style="-fx-text-fill: #888;" wrapText="true"/>
+        </VBox>
+    </content>
+
+    <buttonTypes>
+        <ButtonType fx:constant="CANCEL"/>
+        <ButtonType fx:id="generateButtonType" text="Generate Schedule" buttonData="OK_DONE"/>
+    </buttonTypes>
+</DialogPane>

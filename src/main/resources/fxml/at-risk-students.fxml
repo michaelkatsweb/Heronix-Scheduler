@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import java.lang.String?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.eduscheduler.ui.controller.AtRiskStudentsController"
+      spacing="16"
+      styleClass="at-risk-container">
+
+    <!-- Stylesheets -->
+    <stylesheets>
+        <String fx:value="@../css/glassmorphic-theme.css"/>
+    </stylesheets>
+
+    <!-- Header Section -->
+    <HBox alignment="CENTER_LEFT" spacing="12" styleClass="glass-header">
+        <Label text="⚠️ At-Risk Students Report" styleClass="header-title"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="🔄 Refresh" onAction="#handleRefresh" styleClass="glass-button, btn-success"/>
+        <Button text="📄 Export PDF" onAction="#handleExportPDF" styleClass="glass-button, btn-primary"/>
+        <Button text="📊 Export Excel" onAction="#handleExportExcel" styleClass="glass-button, btn-success"/>
+    </HBox>
+
+    <!-- Summary Statistics Cards -->
+    <HBox spacing="16" style="-fx-padding: 4;">
+        <!-- Total Students Card -->
+        <VBox alignment="CENTER" spacing="8" styleClass="stat-card" HBox.hgrow="ALWAYS">
+            <Label text="Total Students" styleClass="stat-label"/>
+            <Label fx:id="totalStudentsLabel" text="0" styleClass="stat-value, text-white"/>
+            <Label text="All enrolled students" styleClass="stat-description"/>
+        </VBox>
+
+        <!-- At Risk Card -->
+        <VBox alignment="CENTER" spacing="8" styleClass="stat-card, stat-warning" HBox.hgrow="ALWAYS">
+            <Label text="⚠️ At Risk" styleClass="stat-label"/>
+            <Label fx:id="atRiskCountLabel" text="0" styleClass="stat-value, text-warning"/>
+            <Label text="1-2 credits behind OR GPA 1.5-1.99"
+                   styleClass="stat-description"
+                   wrapText="true"
+                   textAlignment="CENTER"
+                   maxWidth="200"/>
+        </VBox>
+
+        <!-- Retention Risk Card -->
+        <VBox alignment="CENTER" spacing="8" styleClass="stat-card, stat-danger" HBox.hgrow="ALWAYS">
+            <Label text="❌ Retention Risk" styleClass="stat-label"/>
+            <Label fx:id="retentionRiskCountLabel" text="0" styleClass="stat-value, text-danger"/>
+            <Label text="3+ credits behind OR GPA &lt; 1.5"
+                   styleClass="stat-description"
+                   wrapText="true"
+                   textAlignment="CENTER"
+                   maxWidth="200"/>
+        </VBox>
+
+        <!-- Seniors At Risk Card -->
+        <VBox alignment="CENTER" spacing="8" styleClass="stat-card, stat-danger" HBox.hgrow="ALWAYS">
+            <Label text="🎓 Seniors At Risk" styleClass="stat-label"/>
+            <Label fx:id="seniorsAtRiskLabel" text="0" styleClass="stat-value, text-danger"/>
+            <Label text="May not graduate on time"
+                   styleClass="stat-description"
+                   wrapText="true"
+                   textAlignment="CENTER"
+                   maxWidth="200"/>
+        </VBox>
+    </HBox>
+
+    <!-- Filters Section -->
+    <HBox spacing="12" alignment="CENTER_LEFT" styleClass="glass-filters">
+        <Label text="Filters:" styleClass="filter-label"/>
+
+        <Label text="Risk Level:" styleClass="text-secondary"/>
+        <ComboBox fx:id="riskLevelFilter" prefWidth="200" styleClass="combo-box"/>
+
+        <Label text="Grade:" styleClass="text-secondary"/>
+        <ComboBox fx:id="gradeFilter" prefWidth="130" styleClass="combo-box"/>
+    </HBox>
+
+    <!-- Table Section -->
+    <TableView fx:id="atRiskTable" VBox.vgrow="ALWAYS" styleClass="table-view">
+        <columns>
+            <TableColumn fx:id="statusColumn" text="Status" prefWidth="150"/>
+            <TableColumn fx:id="studentIdColumn" text="Student ID" prefWidth="120"/>
+            <TableColumn fx:id="nameColumn" text="Name" prefWidth="180"/>
+            <TableColumn fx:id="gradeColumn" text="Grade" prefWidth="70"/>
+            <TableColumn fx:id="gpaColumn" text="GPA" prefWidth="80"/>
+            <TableColumn fx:id="creditsEarnedColumn" text="Credits Earned" prefWidth="110"/>
+            <TableColumn fx:id="creditsRequiredColumn" text="Required" prefWidth="100"/>
+            <TableColumn fx:id="creditsBehindColumn" text="Behind" prefWidth="90"/>
+            <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="160"/>
+        </columns>
+    </TableView>
+
+    <!-- Footer with help text -->
+    <HBox alignment="CENTER_LEFT" spacing="8" styleClass="glass-footer">
+        <Label text="ℹ️" styleClass="footer-icon"/>
+        <Label text="Hover over rows for detailed information. Click 'View' to see full student report. Click 'Add Note' to document interventions."
+               styleClass="footer-text"
+               wrapText="true"
+               maxWidth="Infinity"/>
+    </HBox>
+
+</VBox>

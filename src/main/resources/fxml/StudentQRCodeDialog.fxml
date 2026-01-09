@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+
+<!--
+  Student QR Code Print Dialog
+  Displays student's unique QR code for printing
+  Used for attendance scanning and authentication
+-->
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.eduscheduler.ui.controller.StudentQRCodeDialogController"
+      spacing="15"
+      styleClass="dialog-content"
+      prefWidth="500"
+      prefHeight="650">
+
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <!-- Define ToggleGroup for size selection -->
+    <fx:define>
+        <ToggleGroup fx:id="sizeToggleGroup"/>
+    </fx:define>
+
+    <!-- Header Section -->
+    <VBox spacing="5">
+        <Label text="Student QR Code" styleClass="dialog-title"/>
+        <Label fx:id="studentNameLabel" text="Student Name" styleClass="dialog-subtitle"/>
+        <Label fx:id="studentIdLabel" text="Student ID: S12345" styleClass="text-muted"/>
+    </VBox>
+
+    <Separator/>
+
+    <!-- QR Code Display Section -->
+    <VBox spacing="10" alignment="CENTER" VBox.vgrow="ALWAYS">
+        <Label text="Scan this QR code for:" styleClass="section-label"/>
+
+        <VBox spacing="5" alignment="CENTER_LEFT" style="-fx-padding: 10;">
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="✓" styleClass="success-icon"/>
+                <Label text="Student authentication" styleClass="text-primary"/>
+            </HBox>
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="✓" styleClass="success-icon"/>
+                <Label text="Attendance tracking" styleClass="text-primary"/>
+            </HBox>
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="✓" styleClass="success-icon"/>
+                <Label text="Facial recognition verification" styleClass="text-primary"/>
+            </HBox>
+        </VBox>
+
+        <!-- QR Code Image Container -->
+        <StackPane styleClass="qr-code-container" prefWidth="350" prefHeight="350">
+            <ImageView fx:id="qrCodeImageView"
+                      fitWidth="300"
+                      fitHeight="300"
+                      preserveRatio="true"
+                      smooth="true"/>
+
+            <!-- Loading Indicator -->
+            <ProgressIndicator fx:id="loadingIndicator"
+                             visible="true"
+                             maxWidth="50"
+                             maxHeight="50"/>
+        </StackPane>
+
+        <!-- QR Code Info -->
+        <VBox spacing="5" alignment="CENTER">
+            <Label text="QR Code ID:" styleClass="label-secondary"/>
+            <Label fx:id="qrCodeIdLabel" text="QR-S12345-XXXXXXXX" styleClass="qr-code-id-label"/>
+            <Label fx:id="generatedDateLabel" text="Generated: Dec 12, 2025" styleClass="text-muted"/>
+        </VBox>
+    </VBox>
+
+    <Separator/>
+
+    <!-- Display Size Selection -->
+    <VBox spacing="10">
+        <Label text="Display Size:" styleClass="label-secondary" style="-fx-font-weight: bold;"/>
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <RadioButton text="Small (200px)" toggleGroup="$sizeToggleGroup" fx:id="sizeSmallRadio"/>
+            <RadioButton text="Medium (300px)" toggleGroup="$sizeToggleGroup" fx:id="sizeMediumRadio" selected="true"/>
+            <RadioButton text="Large (400px)" toggleGroup="$sizeToggleGroup" fx:id="sizeLargeRadio"/>
+        </HBox>
+    </VBox>
+
+    <Separator/>
+
+    <!-- Print Layout Selection -->
+    <VBox spacing="10">
+        <Label text="Print Layout:" styleClass="label-secondary" style="-fx-font-weight: bold;"/>
+        <ComboBox fx:id="printLayoutCombo" prefWidth="250"/>
+
+        <!-- Custom size input (visible when "Custom" is selected) -->
+        <HBox spacing="10" alignment="CENTER_LEFT" fx:id="customSizeBox" visible="false" managed="false">
+            <Label text="QR Code Size (mm):"/>
+            <TextField fx:id="customSizeField" prefWidth="80" promptText="25"/>
+            <Label text="mm"/>
+        </HBox>
+    </VBox>
+
+    <Separator/>
+
+    <!-- Action Buttons -->
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Button text="Regenerate QR Code"
+                fx:id="regenerateButton"
+                onAction="#handleRegenerate"
+                styleClass="secondary-button"/>
+
+        <Button text="Save Image"
+                fx:id="saveButton"
+                onAction="#handleSave"
+                styleClass="secondary-button"/>
+
+        <Button text="Print"
+                fx:id="printButton"
+                onAction="#handlePrint"
+                styleClass="primary-button"/>
+
+        <Region HBox.hgrow="ALWAYS"/>
+
+        <Button text="Close"
+                fx:id="closeButton"
+                onAction="#handleClose"
+                styleClass="cancel-button"/>
+    </HBox>
+
+    <!-- Status Label -->
+    <Label fx:id="statusLabel"
+           text=""
+           styleClass="status-label"
+           visible="false"
+           managed="false"/>
+
+</VBox>

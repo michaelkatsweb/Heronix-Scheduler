@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.eduscheduler.controller.ScheduleOverrideController"
+      spacing="15" prefWidth="550" prefHeight="500"
+      style="-fx-background-color: #f5f5f5; -fx-padding: 20;">
+
+    <!-- Header -->
+    <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-background-color: #2196F3; -fx-padding: 15;">
+        <Label text="Manual Schedule Override" style="-fx-text-fill: white; -fx-font-size: 18; -fx-font-weight: bold;"/>
+    </HBox>
+
+    <!-- Current Slot Info -->
+    <VBox spacing="5" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 5;">
+        <Label text="Current Assignment" style="-fx-font-size: 14; -fx-font-weight: bold;"/>
+        <Separator/>
+        <Label fx:id="slotInfoLabel" text="Period X - Course Name - Day Type"
+               style="-fx-font-size: 12; -fx-text-fill: #555;"/>
+    </VBox>
+
+    <!-- Override Options -->
+    <VBox spacing="10" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 5;">
+        <Label text="New Assignment" style="-fx-font-size: 14; -fx-font-weight: bold;"/>
+        <Separator/>
+
+        <!-- Teacher Selection -->
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="Teacher:" prefWidth="100" style="-fx-font-weight: bold;"/>
+            <ComboBox fx:id="teacherComboBox" prefWidth="350" promptText="Select teacher..."/>
+        </HBox>
+
+        <!-- Room Selection -->
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="Room:" prefWidth="100" style="-fx-font-weight: bold;"/>
+            <ComboBox fx:id="roomComboBox" prefWidth="350" promptText="Select room..."/>
+        </HBox>
+
+        <!-- Reason -->
+        <HBox spacing="10" alignment="TOP_LEFT">
+            <Label text="Reason:" prefWidth="100" style="-fx-font-weight: bold;"/>
+            <TextField fx:id="reasonField" prefWidth="350" promptText="Enter reason for override..."/>
+        </HBox>
+
+        <!-- Pin Assignment -->
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="Lock Assignment:" prefWidth="100" style="-fx-font-weight: bold;"/>
+            <CheckBox fx:id="pinAssignmentCheckBox" text="Pin this assignment (prevent auto-changes)"/>
+        </HBox>
+    </VBox>
+
+    <!-- Conflict Detection Area -->
+    <VBox spacing="5" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 5;">
+        <Label text="Conflict Check" style="-fx-font-size: 14; -fx-font-weight: bold;"/>
+        <Separator/>
+        <TextArea fx:id="conflictArea" prefHeight="100" editable="false" wrapText="true"
+                  text="No conflicts detected."
+                  style="-fx-control-inner-background: #f9f9f9; -fx-text-fill: green;"/>
+    </VBox>
+
+    <!-- Action Buttons -->
+    <HBox spacing="10" alignment="CENTER_RIGHT" style="-fx-padding: 10 0 0 0;">
+        <Button fx:id="cancelButton" text="Cancel" onAction="#handleCancel"
+                prefWidth="100" style="-fx-background-color: #757575; -fx-text-fill: white;"/>
+        <Button fx:id="applyButton" text="Apply Override" onAction="#handleApply"
+                prefWidth="130" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;"/>
+    </HBox>
+
+    <!-- Help Text -->
+    <Label text="Note: Manual overrides will be recorded in the audit log with your username and timestamp."
+           style="-fx-font-size: 10; -fx-text-fill: #888; -fx-wrap-text: true;"/>
+
+</VBox>

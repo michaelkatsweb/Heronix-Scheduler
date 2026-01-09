@@ -1,0 +1,417 @@
+/* ============================================================================
+   EduScheduler Pro - Neumorphism Theme
+   Location: src/main/resources/css/modern-theme.css
+   Modern soft UI with excellent visibility
+   ============================================================================ */
+
+/* ============================================================================
+   ROOT VARIABLES - Color Palette
+   ============================================================================ */
+
+.root {
+    /* Primary Colors */
+    -fx-primary: #2196F3;
+    -fx-primary-dark: #1976D2;
+    -fx-primary-light: #64B5F6;
+    
+    /* Secondary Colors */
+    -fx-secondary: #4CAF50;
+    -fx-secondary-dark: #388E3C;
+    -fx-secondary-light: #81C784;
+    
+    /* Accent Colors */
+    -fx-accent: #FF9800;
+    -fx-accent-dark: #F57C00;
+    -fx-danger: #F44336;
+    -fx-warning: #FFC107;
+    -fx-info: #00BCD4;
+    -fx-purple: #9C27B0;
+    
+    /* Neutral Colors */
+    -fx-background: #E0E5EC;
+    -fx-surface: #E0E5EC;
+    -fx-text-primary: #586e85;
+    -fx-text-secondary: #607D8B;
+    -fx-text-disabled: #B0BEC5;
+    -fx-border: #CBD5E0;
+    
+    /* Neumorphic Shadows */
+    -fx-shadow-light: #FFFFFF;
+    -fx-shadow-dark: #A3B1C6;
+    
+    /* Effects */
+    -fx-card-radius: 15px;
+    -fx-button-radius: 10px;
+}
+
+/* ============================================================================
+   NEUMORPHIC EFFECTS - Soft UI Base
+   ============================================================================ */
+
+/* Neumorphic Raised Effect */
+.neuro-raised {
+    -fx-background-color: #E0E5EC;
+    -fx-effect: dropshadow(gaussian, rgba(163, 177, 198, 0.6), 12, 0, 4, 4),
+                dropshadow(gaussian, rgba(255, 255, 255, 0.9), 12, 0, -4, -4);
+}
+
+/* Neumorphic Pressed Effect */
+.neuro-pressed {
+    -fx-background-color: #E0E5EC;
+    -fx-effect: innershadow(gaussian, rgba(163, 177, 198, 0.5), 8, 0, 2, 2),
+                innershadow(gaussian, rgba(255, 255, 255, 0.8), 8, 0, -2, -2);
+}
+
+/* ============================================================================
+   BUTTONS - Highly Visible Neumorphic Style
+   ============================================================================ */
+
+.button {
+    -fx-background-color: linear-gradient(to bottom, #E8EDF5, #E0E5EC);
+    -fx-text-fill: #556b81;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 12 24 12 24;
+    -fx-background-radius: 10px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(163, 177, 198, 0.5), 10, 0, 4, 4),
+                dropshadow(gaussian, rgba(255, 255, 255, 0.9), 10, 0, -4, -4);
+    -fx-border-width: 0;
+}
+
+.button:hover {
+    -fx-background-color: linear-gradient(to bottom, #EDF2F9, #E8EDF5);
+    -fx-effect: dropshadow(gaussian, rgba(163, 177, 198, 0.6), 12, 0, 5, 5),
+                dropshadow(gaussian, rgba(255, 255, 255, 1.0), 12, 0, -5, -5);
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+}
+
+.button:pressed {
+    -fx-background-color: #E0E5EC;
+    -fx-effect: innershadow(gaussian, rgba(163, 177, 198, 0.5), 8, 0, 2, 2),
+                innershadow(gaussian, rgba(255, 255, 255, 0.8), 8, 0, -2, -2);
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+}
+
+/* Primary Button (Blue) */
+.button.primary-button {
+    -fx-background-color: linear-gradient(to bottom, #42A5F5, #2196F3);
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(gaussian, rgba(33, 150, 243, 0.4), 10, 0, 0, 4);
+}
+
+.button.primary-button:hover {
+    -fx-background-color: linear-gradient(to bottom, #64B5F6, #42A5F5);
+    -fx-effect: dropshadow(gaussian, rgba(33, 150, 243, 0.6), 12, 0, 0, 6);
+}
+
+/* Success Button (Green) */
+.button.success-button {
+    -fx-background-color: linear-gradient(to bottom, #66BB6A, #4CAF50);
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(gaussian, rgba(76, 175, 80, 0.4), 10, 0, 0, 4);
+}
+
+.button.success-button:hover {
+    -fx-background-color: linear-gradient(to bottom, #81C784, #66BB6A);
+    -fx-effect: dropshadow(gaussian, rgba(76, 175, 80, 0.6), 12, 0, 0, 6);
+}
+
+/* Warning Button (Orange) */
+.button.warning-button {
+    -fx-background-color: linear-gradient(to bottom, #FFA726, #FF9800);
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(gaussian, rgba(255, 152, 0, 0.4), 10, 0, 0, 4);
+}
+
+.button.warning-button:hover {
+    -fx-background-color: linear-gradient(to bottom, #FFB74D, #FFA726);
+    -fx-effect: dropshadow(gaussian, rgba(255, 152, 0, 0.6), 12, 0, 0, 6);
+}
+
+/* Danger Button (Red) */
+.button.danger-button {
+    -fx-background-color: linear-gradient(to bottom, #EF5350, #F44336);
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(gaussian, rgba(244, 67, 54, 0.4), 10, 0, 0, 4);
+}
+
+.button.danger-button:hover {
+    -fx-background-color: linear-gradient(to bottom, #E57373, #EF5350);
+    -fx-effect: dropshadow(gaussian, rgba(244, 67, 54, 0.6), 12, 0, 0, 6);
+}
+
+/* Info Button (Cyan) */
+.button.info-button {
+    -fx-background-color: linear-gradient(to bottom, #26C6DA, #00BCD4);
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(gaussian, rgba(0, 188, 212, 0.4), 10, 0, 0, 4);
+}
+
+/* Purple Button */
+.button.purple-button {
+    -fx-background-color: linear-gradient(to bottom, #AB47BC, #9C27B0);
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(gaussian, rgba(156, 39, 176, 0.4), 10, 0, 0, 4);
+}
+
+/* ============================================================================
+   CARDS & CONTAINERS - Neumorphic Style
+   ============================================================================ */
+
+.card {
+    -fx-background-color: #E0E5EC;
+    -fx-background-radius: 15px;
+    -fx-padding: 20;
+    -fx-effect: dropshadow(gaussian, rgba(163, 177, 198, 0.5), 10, 0, 4, 4),
+                dropshadow(gaussian, rgba(255, 255, 255, 0.9), 10, 0, -4, -4);
+}
+
+.stat-card {
+    -fx-background-color: #E0E5EC;
+    -fx-background-radius: 15px;
+    -fx-padding: 20;
+    -fx-effect: dropshadow(gaussian, rgba(163, 177, 198, 0.4), 8, 0, 3, 3),
+                dropshadow(gaussian, rgba(255, 255, 255, 0.9), 8, 0, -3, -3);
+}
+
+.stat-card:hover {
+    -fx-effect: dropshadow(gaussian, rgba(163, 177, 198, 0.6), 12, 0, 5, 5),
+                dropshadow(gaussian, rgba(255, 255, 255, 1.0), 12, 0, -5, -5);
+}
+
+/* ============================================================================
+   TABLE VIEW - Modern Neumorphic
+   ============================================================================ */
+
+.table-view {
+    -fx-background-color: #E0E5EC;
+    -fx-background-radius: 15px;
+    -fx-effect: dropshadow(gaussian, rgba(163, 177, 198, 0.4), 8, 0, 3, 3),
+                dropshadow(gaussian, rgba(255, 255, 255, 0.9), 8, 0, -3, -3);
+}
+
+.table-view .column-header {
+    -fx-background-color: linear-gradient(to bottom, #EDF2F9, #E8EDF5);
+    -fx-text-fill: #5e748a;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-padding: 12 8 12 8;
+}
+
+.table-view .table-cell {
+    -fx-text-fill: #5f7386;
+    -fx-padding: 10 8 10 8;
+    -fx-font-size: 13px;
+}
+
+.table-view .table-row-cell:hover {
+    -fx-background-color: #EDF2F9;
+}
+
+.table-view .table-row-cell:selected {
+    -fx-background-color: linear-gradient(to right, #E3F2FD, #BBDEFB);
+    -fx-text-fill: #1976D2;
+}
+
+/* ============================================================================
+   TEXT FIELDS & INPUTS - Neumorphic
+   ============================================================================ */
+
+.text-field, .text-area {
+    -fx-background-color: #E0E5EC;
+    -fx-background-radius: 10px;
+    -fx-text-fill: #54677a;
+    -fx-font-size: 14px;
+    -fx-padding: 12 16 12 16;
+    -fx-effect: innershadow(gaussian, rgba(163, 177, 198, 0.4), 6, 0, 2, 2),
+                innershadow(gaussian, rgba(255, 255, 255, 0.8), 6, 0, -2, -2);
+    -fx-border-width: 0;
+}
+
+.text-field:focused, .text-area:focused {
+    -fx-effect: innershadow(gaussian, rgba(33, 150, 243, 0.3), 8, 0, 0, 0),
+                innershadow(gaussian, rgba(163, 177, 198, 0.4), 6, 0, 2, 2);
+}
+
+.text-field .text, .text-area .text {
+    -fx-fill: #2c3e50;
+}
+
+/* ============================================================================
+   COMBO BOX - Neumorphic
+   ============================================================================ */
+
+.combo-box {
+    -fx-background-color: #E0E5EC;
+    -fx-background-radius: 10px;
+    -fx-effect: dropshadow(gaussian, rgba(163, 177, 198, 0.4), 8, 0, 3, 3),
+                dropshadow(gaussian, rgba(255, 255, 255, 0.9), 8, 0, -3, -3);
+}
+
+.combo-box .list-cell {
+    -fx-text-fill: #2c3e50;
+    -fx-background-color: transparent;
+}
+
+.combo-box-popup .list-view {
+    -fx-background-color: #E0E5EC;
+    -fx-background-radius: 10px;
+    -fx-effect: dropshadow(gaussian, rgba(163, 177, 198, 0.5), 10, 0, 0, 4);
+}
+
+/* ============================================================================
+   LABELS & TEXT - High Contrast
+   ============================================================================ */
+
+.label {
+    -fx-text-fill: #2c3e50;
+    -fx-font-size: 14px;
+}
+
+.label.header-large {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1a252f;
+}
+
+.label.header-medium {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #8eacca;
+}
+
+.label.stat-value {
+    -fx-font-size: 36px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2196F3;
+}
+
+.label.stat-label {
+    -fx-font-size: 13px;
+    -fx-text-fill: #607D8B;
+}
+
+/* ============================================================================
+   PROGRESS INDICATORS
+   ============================================================================ */
+
+.progress-bar {
+    -fx-background-radius: 10px;
+    -fx-background-color: #E0E5EC;
+    -fx-effect: innershadow(gaussian, rgba(163, 177, 198, 0.4), 6, 0, 2, 2);
+}
+
+.progress-bar .bar {
+    -fx-background-color: linear-gradient(to right, #42A5F5, #2196F3);
+    -fx-background-radius: 10px;
+    -fx-background-insets: 2;
+}
+
+/* ============================================================================
+   SCROLL BAR - Neumorphic
+   ============================================================================ */
+
+.scroll-bar {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: #C4CDD5;
+    -fx-background-radius: 10px;
+}
+
+.scroll-bar .thumb:hover {
+    -fx-background-color: #A3B1C6;
+}
+
+/* ============================================================================
+   MENU BAR - Neumorphic
+   ============================================================================ */
+
+.menu-bar {
+    -fx-background-color: #E0E5EC;
+    -fx-effect: dropshadow(gaussian, rgba(163, 177, 198, 0.3), 6, 0, 0, 3);
+}
+
+.menu-bar .label {
+    -fx-text-fill: #2c3e50;
+    -fx-font-weight: bold;
+}
+
+.context-menu {
+    -fx-background-color: #E0E5EC;
+    -fx-background-radius: 10px;
+    -fx-effect: dropshadow(gaussian, rgba(163, 177, 198, 0.5), 10, 0, 0, 4);
+}
+
+/* ============================================================================
+   SPLIT PANE
+   ============================================================================ */
+
+.split-pane {
+    -fx-background-color: #E0E5EC;
+}
+
+.split-pane-divider {
+    -fx-background-color: #C4CDD5;
+    -fx-padding: 0 1 0 1;
+}
+
+/* ============================================================================
+   TAB PANE - Neumorphic
+   ============================================================================ */
+
+.tab-pane {
+    -fx-background-color: #E0E5EC;
+}
+
+.tab {
+    -fx-background-color: #E0E5EC;
+    -fx-background-radius: 10 10 0 0;
+    -fx-effect: dropshadow(gaussian, rgba(163, 177, 198, 0.3), 6, 0, 2, 2);
+}
+
+.tab:selected {
+    -fx-background-color: linear-gradient(to bottom, #EDF2F9, #E8EDF5);
+    -fx-effect: dropshadow(gaussian, rgba(163, 177, 198, 0.5), 8, 0, 0, -2);
+}
+
+.tab .tab-label {
+    -fx-text-fill: #2c3e50;
+    -fx-font-weight: bold;
+}
+
+/* ============================================================================
+   TOOLTIPS
+   ============================================================================ */
+
+.tooltip {
+    -fx-background-color: #637588;
+    -fx-text-fill: white;
+    -fx-background-radius: 8px;
+    -fx-padding: 8 12 8 12;
+    -fx-font-size: 12px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 8, 0, 0, 2);
+}
+
+/* ============================================================================
+   ALERTS & DIALOGS
+   ============================================================================ */
+
+.dialog-pane {
+    -fx-background-color: #E0E5EC;
+    -fx-background-radius: 15px;
+}
+
+.dialog-pane .header-panel {
+    -fx-background-color: linear-gradient(to bottom, #EDF2F9, #E8EDF5);
+    -fx-background-radius: 15 15 0 0;
+}
+
+.dialog-pane .content {
+    -fx-background-color: #E0E5EC;
+    -fx-padding: 20;
+}

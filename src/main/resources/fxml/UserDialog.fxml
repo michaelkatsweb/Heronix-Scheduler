@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.eduscheduler.ui.controller.UserDialogController"
+      prefWidth="550" prefHeight="650"
+      spacing="15"
+      styleClass="dialog-root">
+
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <!-- Header -->
+    <VBox spacing="5">
+        <Label fx:id="titleLabel" text="Create User" styleClass="dialog-title">
+            <font>
+                <Font name="System Bold" size="18"/>
+            </font>
+        </Label>
+        <Label text="Enter user information below" styleClass="dialog-subtitle">
+            <font>
+                <Font size="12"/>
+            </font>
+        </Label>
+    </VBox>
+
+    <Separator/>
+
+    <!-- Form -->
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" style="-fx-background-color: transparent;">
+        <VBox spacing="15">
+            <!-- Username -->
+            <VBox spacing="5">
+                <Label text="Username *" style="-fx-font-weight: bold;"/>
+                <TextField fx:id="usernameField"
+                          promptText="Enter username (lowercase, no spaces)"
+                          prefWidth="500"
+                          style="-fx-font-size: 13; -fx-padding: 8;"/>
+                <Label fx:id="usernameErrorLabel" text="" textFill="red"
+                       style="-fx-font-size: 11;" visible="false" managed="false"/>
+            </VBox>
+
+            <!-- Full Name -->
+            <VBox spacing="5">
+                <Label text="Full Name *" style="-fx-font-weight: bold;"/>
+                <TextField fx:id="fullNameField"
+                          promptText="Enter full name"
+                          prefWidth="500"
+                          style="-fx-font-size: 13; -fx-padding: 8;"/>
+            </VBox>
+
+            <!-- Email -->
+            <VBox spacing="5">
+                <Label text="Email *" style="-fx-font-weight: bold;"/>
+                <TextField fx:id="emailField"
+                          promptText="Enter email address"
+                          prefWidth="500"
+                          style="-fx-font-size: 13; -fx-padding: 8;"/>
+                <Label fx:id="emailErrorLabel" text="" textFill="red"
+                       style="-fx-font-size: 11;" visible="false" managed="false"/>
+            </VBox>
+
+            <!-- Phone Number -->
+            <VBox spacing="5">
+                <Label text="Phone Number" style="-fx-font-weight: bold;"/>
+                <TextField fx:id="phoneField"
+                          promptText="Enter phone number (optional)"
+                          prefWidth="500"
+                          style="-fx-font-size: 13; -fx-padding: 8;"/>
+            </VBox>
+
+            <!-- Role -->
+            <VBox spacing="5">
+                <Label text="Role *" style="-fx-font-weight: bold;"/>
+                <ComboBox fx:id="roleCombo" prefWidth="500"/>
+                <Label fx:id="roleDescriptionLabel" text=""
+                       style="-fx-font-size: 11; -fx-text-fill: #666;"
+                       wrapText="true" prefWidth="500"/>
+            </VBox>
+
+            <!-- Password Section -->
+            <VBox spacing="10" style="-fx-background-color: #f5f5f5; -fx-padding: 15; -fx-background-radius: 5;">
+                <Label text="Password" style="-fx-font-weight: bold; -fx-font-size: 14;"/>
+
+                <!-- Password -->
+                <VBox spacing="5">
+                    <Label text="Password *" style="-fx-font-weight: bold;"/>
+                    <PasswordField fx:id="passwordField"
+                                  promptText="Enter password"
+                                  prefWidth="470"
+                                  style="-fx-font-size: 13; -fx-padding: 8;"/>
+                </VBox>
+
+                <!-- Confirm Password -->
+                <VBox spacing="5">
+                    <Label text="Confirm Password *" style="-fx-font-weight: bold;"/>
+                    <PasswordField fx:id="confirmPasswordField"
+                                  promptText="Re-enter password"
+                                  prefWidth="470"
+                                  style="-fx-font-size: 13; -fx-padding: 8;"/>
+                    <Label fx:id="passwordErrorLabel" text="" textFill="red"
+                           style="-fx-font-size: 11;" visible="false" managed="false"/>
+                </VBox>
+
+                <!-- Password Requirements -->
+                <VBox spacing="3" style="-fx-padding: 10; -fx-background-color: white; -fx-background-radius: 3;">
+                    <Label text="Password Requirements:" style="-fx-font-weight: bold; -fx-font-size: 11;"/>
+                    <Label fx:id="req1Label" text="✗ At least 8 characters" style="-fx-font-size: 11; -fx-text-fill: #999;"/>
+                    <Label fx:id="req2Label" text="✗ At least one uppercase letter" style="-fx-font-size: 11; -fx-text-fill: #999;"/>
+                    <Label fx:id="req3Label" text="✗ At least one lowercase letter" style="-fx-font-size: 11; -fx-text-fill: #999;"/>
+                    <Label fx:id="req4Label" text="✗ At least one digit" style="-fx-font-size: 11; -fx-text-fill: #999;"/>
+                    <Label fx:id="req5Label" text="✗ At least one special character (!@#$%^&amp;*...)" style="-fx-font-size: 11; -fx-text-fill: #999;"/>
+                </VBox>
+            </VBox>
+
+            <!-- Account Settings -->
+            <VBox spacing="10" style="-fx-background-color: #e3f2fd; -fx-padding: 15; -fx-background-radius: 5;">
+                <Label text="Account Settings" style="-fx-font-weight: bold; -fx-font-size: 14;"/>
+                <CheckBox fx:id="enabledCheckBox" text="Account Enabled" selected="true"/>
+                <CheckBox fx:id="accountNonExpiredCheckBox" text="Account Non-Expired" selected="true"/>
+                <CheckBox fx:id="accountNonLockedCheckBox" text="Account Non-Locked" selected="true"/>
+                <CheckBox fx:id="credentialsNonExpiredCheckBox" text="Credentials Non-Expired" selected="true"/>
+            </VBox>
+
+        </VBox>
+    </ScrollPane>
+
+    <!-- Error Message -->
+    <Label fx:id="errorMessageLabel" text="" textFill="red"
+           wrapText="true" visible="false" managed="false"
+           style="-fx-font-size: 12; -fx-padding: 10; -fx-background-color: #ffebee; -fx-background-radius: 5;"/>
+
+    <!-- Buttons -->
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Button fx:id="cancelButton" text="Cancel" onAction="#handleCancel" prefWidth="100"/>
+        <Button fx:id="saveButton" text="Save" onAction="#handleSave" prefWidth="100"
+                style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;"
+                defaultButton="true"/>
+    </HBox>
+
+    <!-- Notes -->
+    <VBox spacing="3" style="-fx-background-color: #fff3cd; -fx-padding: 10; -fx-background-radius: 5;">
+        <Label text="Notes:" style="-fx-font-weight: bold; -fx-font-size: 11;"/>
+        <Label text="• Fields marked with * are required" style="-fx-font-size: 10;"/>
+        <Label text="• Username must be unique and cannot be changed later" style="-fx-font-size: 10;"/>
+        <Label text="• Use strong passwords for all accounts" style="-fx-font-size: 10;"/>
+        <Label text="• SUPER_ADMIN role has full system access" style="-fx-font-size: 10;"/>
+    </VBox>
+
+</VBox>

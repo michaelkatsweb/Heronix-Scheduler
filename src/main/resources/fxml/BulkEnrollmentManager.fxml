@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import java.lang.String?>
+
+<!--
+    Bulk Enrollment Manager View
+    Location: src/main/resources/fxml/BulkEnrollmentManager.fxml
+
+    Smart search and bulk enrollment tool for assigning courses to multiple students.
+-->
+<VBox xmlns="http://javafx.com/javafx/21"
+    xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="com.eduscheduler.ui.controller.BulkEnrollmentController"
+    spacing="20"
+    style="-fx-background-color: #E4EBF5;"
+    styleClass="root">
+
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20" />
+    </padding>
+
+    <!-- Header -->
+    <HBox alignment="CENTER_LEFT" spacing="15"
+        style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 10;">
+        <Label text="🔍 Bulk Enrollment Manager"
+            style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #2196F3;" />
+        <Region HBox.hgrow="ALWAYS" />
+        <Button text="🔄 Clear Filters" onAction="#handleClearFilters"
+            style="-fx-background-color: #607D8B; -fx-text-fill: white; -fx-padding: 10 20; -fx-cursor: hand; -fx-background-radius: 6;" />
+    </HBox>
+
+    <!-- Search Filters Card -->
+    <VBox spacing="15" style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);">
+        <Label text="Search Filters" style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #333;" />
+        <Separator />
+
+        <GridPane hgap="20" vgap="15">
+            <columnConstraints>
+                <ColumnConstraints percentWidth="25" />
+                <ColumnConstraints percentWidth="25" />
+                <ColumnConstraints percentWidth="25" />
+                <ColumnConstraints percentWidth="25" />
+            </columnConstraints>
+
+            <!-- Row 1: Basic Filters -->
+            <VBox GridPane.columnIndex="0" GridPane.rowIndex="0" spacing="5">
+                <Label text="Grade Level:" style="-fx-font-weight: bold;" />
+                <ComboBox fx:id="gradeLevelComboBox" promptText="All Grades" prefWidth="150"/>
+                <!-- Note: Items are populated in controller initialize() method -->
+            </VBox>
+
+            <VBox GridPane.columnIndex="1" GridPane.rowIndex="0" spacing="5">
+                <Label text="IEP Status:" style="-fx-font-weight: bold;" />
+                <ComboBox fx:id="iepComboBox" promptText="Any" prefWidth="150">
+                    <items>
+                        <javafx.collections.FXCollections fx:factory="observableArrayList">
+                            <String fx:value="Any" />
+                            <String fx:value="Has IEP" />
+                            <String fx:value="No IEP" />
+                        </javafx.collections.FXCollections>
+                    </items>
+                </ComboBox>
+            </VBox>
+
+            <VBox GridPane.columnIndex="2" GridPane.rowIndex="0" spacing="5">
+                <Label text="504 Plan:" style="-fx-font-weight: bold;" />
+                <ComboBox fx:id="plan504ComboBox" promptText="Any" prefWidth="150">
+                    <items>
+                        <javafx.collections.FXCollections fx:factory="observableArrayList">
+                            <String fx:value="Any" />
+                            <String fx:value="Has 504" />
+                            <String fx:value="No 504" />
+                        </javafx.collections.FXCollections>
+                    </items>
+                </ComboBox>
+            </VBox>
+
+            <VBox GridPane.columnIndex="3" GridPane.rowIndex="0" spacing="5">
+                <Label text="Graduated:" style="-fx-font-weight: bold;" />
+                <ComboBox fx:id="graduatedComboBox" promptText="Active Only" prefWidth="150">
+                    <items>
+                        <javafx.collections.FXCollections fx:factory="observableArrayList">
+                            <String fx:value="Active Only" />
+                            <String fx:value="Graduated" />
+                            <String fx:value="All" />
+                        </javafx.collections.FXCollections>
+                    </items>
+                </ComboBox>
+            </VBox>
+
+            <!-- Row 2: Advanced Filters -->
+            <VBox GridPane.columnIndex="0" GridPane.rowIndex="1" spacing="5">
+                <Label text="Min Courses:" style="-fx-font-weight: bold;" />
+                <TextField fx:id="minCoursesField" promptText="0" prefWidth="150" />
+            </VBox>
+
+            <VBox GridPane.columnIndex="1" GridPane.rowIndex="1" spacing="5">
+                <Label text="Max Courses:" style="-fx-font-weight: bold;" />
+                <TextField fx:id="maxCoursesField" promptText="10" prefWidth="150" />
+            </VBox>
+
+            <VBox GridPane.columnIndex="2" GridPane.rowIndex="1" spacing="5">
+                <Label text="Name Search:" style="-fx-font-weight: bold;" />
+                <TextField fx:id="nameSearchField" promptText="Search by name..." prefWidth="150" />
+            </VBox>
+
+            <VBox GridPane.columnIndex="3" GridPane.rowIndex="1" spacing="5">
+                <Label text="Student ID:" style="-fx-font-weight: bold;" />
+                <TextField fx:id="studentIdField" promptText="Search by ID..." prefWidth="150" />
+            </VBox>
+        </GridPane>
+
+        <!-- Search Button -->
+        <HBox spacing="15" alignment="CENTER_RIGHT">
+            <Button text="🔍 Search Students" onAction="#handleSearchStudents"
+                style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14; -fx-padding: 12 30; -fx-cursor: hand; -fx-background-radius: 6;">
+                <font>
+                    <Font name="System Bold" size="14" />
+                </font>
+            </Button>
+        </HBox>
+    </VBox>
+
+    <!-- Results Card -->
+    <VBox spacing="15" style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);" VBox.vgrow="ALWAYS">
+        <HBox alignment="CENTER_LEFT" spacing="15">
+            <Label text="Search Results" style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #333;" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Label fx:id="resultsCountLabel" text="0 students found" style="-fx-font-size: 14; -fx-text-fill: #666;" />
+            <Button text="✓ Select All" onAction="#handleSelectAll"
+                style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-padding: 8 16; -fx-cursor: hand; -fx-background-radius: 6;" />
+            <Button text="✗ Deselect All" onAction="#handleDeselectAll"
+                style="-fx-background-color: #F44336; -fx-text-fill: white; -fx-padding: 8 16; -fx-cursor: hand; -fx-background-radius: 6;" />
+        </HBox>
+        <Separator />
+
+        <!-- Students Table -->
+        <TableView fx:id="studentsTable" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="selectColumn" text="Select" prefWidth="60" />
+                <TableColumn fx:id="studentIdColumn" text="Student ID" prefWidth="120" />
+                <TableColumn fx:id="nameColumn" text="Name" prefWidth="200" />
+                <TableColumn fx:id="gradeColumn" text="Grade" prefWidth="80" />
+                <TableColumn fx:id="coursesColumn" text="Courses" prefWidth="80" />
+                <TableColumn fx:id="iepColumn" text="IEP" prefWidth="60" />
+                <TableColumn fx:id="plan504Column" text="504" prefWidth="60" />
+                <TableColumn fx:id="graduatedStatusColumn" text="Status" prefWidth="100" />
+            </columns>
+        </TableView>
+    </VBox>
+
+    <!-- Actions Card -->
+    <VBox spacing="15" style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);">
+        <Label text="Bulk Actions" style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #333;" />
+        <Separator />
+
+        <HBox spacing="15" alignment="CENTER_LEFT">
+            <VBox spacing="5" HBox.hgrow="ALWAYS">
+                <Label text="Select Course:" style="-fx-font-weight: bold;" />
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <ComboBox fx:id="courseComboBox" promptText="Choose a course..." prefWidth="300" />
+                    <Label fx:id="courseInfoLabel" text="" style="-fx-text-fill: #666; -fx-font-size: 12;" />
+                </HBox>
+            </VBox>
+
+            <VBox spacing="5" alignment="BOTTOM_LEFT">
+                <Label text=" " />
+                <HBox spacing="10">
+                    <Button text="➕ Enroll Selected" onAction="#handleEnrollSelected"
+                        style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 25; -fx-cursor: hand; -fx-background-radius: 6;" />
+                    <Button text="➖ Unenroll Selected" onAction="#handleUnenrollSelected"
+                        style="-fx-background-color: #F44336; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 25; -fx-cursor: hand; -fx-background-radius: 6;" />
+                </HBox>
+            </VBox>
+        </HBox>
+
+        <!-- Auto-Enroll Section -->
+        <Separator />
+        <Label text="Smart Auto-Enrollment" style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #FF9800;" />
+        <HBox spacing="15" alignment="CENTER_LEFT">
+            <CheckBox fx:id="applyRequiredCheckbox" text="Apply Required Courses" selected="true" />
+            <CheckBox fx:id="applyRecommendedCheckbox" text="Apply Recommended Courses" selected="false" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Button text="✨ Auto-Enroll Selected Students" onAction="#handleAutoEnroll"
+                style="-fx-background-color: #FF9800; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 13; -fx-padding: 10 25; -fx-cursor: hand; -fx-background-radius: 6;" />
+        </HBox>
+
+        <!-- Info Label -->
+        <Label text="💡 Tip: Auto-enrollment uses intelligent course suggestions based on grade level, prerequisites, and course progression."
+            wrapText="true"
+            style="-fx-text-fill: #666; -fx-font-size: 12; -fx-padding: 10; -fx-background-color: #F5F5F5; -fx-background-radius: 6;" />
+    </VBox>
+
+</VBox>

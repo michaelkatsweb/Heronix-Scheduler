@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.eduscheduler.ui.controller.ScheduleSlotEditDialogController"
+            prefWidth="700" prefHeight="750"
+            styleClass="dialog-pane">
+
+    <!-- Header -->
+    <top>
+        <VBox styleClass="dialog-header" spacing="5">
+            <padding>
+                <Insets top="15" right="20" bottom="15" left="20"/>
+            </padding>
+            <Label fx:id="dialogTitle" text="Edit Schedule Slot" styleClass="dialog-title"/>
+            <Label text="Modify course, teacher, room, time, or add special configurations" styleClass="dialog-subtitle"/>
+        </VBox>
+    </top>
+
+    <!-- Content -->
+    <center>
+        <ScrollPane fitToWidth="true" fitToHeight="true" styleClass="form-scroll">
+            <VBox spacing="20" styleClass="form-content">
+                <padding>
+                    <Insets top="20" right="20" bottom="20" left="20"/>
+                </padding>
+
+                <!-- Course Information Section -->
+                <VBox spacing="10" styleClass="form-section">
+                    <Label text="Course Information" styleClass="section-title"/>
+                    <Separator/>
+
+                    <!-- Course Name (Read-only) -->
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Course:" minWidth="150" styleClass="form-label"/>
+                        <Label fx:id="courseNameLabel" text="AP Calculus AB" styleClass="info-value"/>
+                    </HBox>
+
+                    <!-- Course Type Selector -->
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Course Type:" minWidth="150" styleClass="form-label"/>
+                        <ComboBox fx:id="courseTypeCombo" prefWidth="200" promptText="Select type">
+                            <tooltip>
+                                <Tooltip text="Change course level (AP, Honors, Regular, etc.)"/>
+                            </tooltip>
+                        </ComboBox>
+                        <Label text="Change course level/type" styleClass="help-text"/>
+                    </HBox>
+                </VBox>
+
+                <!-- Teacher Assignment Section -->
+                <VBox spacing="10" styleClass="form-section">
+                    <Label text="Teacher Assignment" styleClass="section-title"/>
+                    <Separator/>
+
+                    <!-- Primary Teacher -->
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Primary Teacher:" minWidth="150" styleClass="form-label"/>
+                        <ComboBox fx:id="primaryTeacherCombo" prefWidth="300" onAction="#handleTeacherChange"/>
+                        <Label text="*" styleClass="required-indicator"/>
+                    </HBox>
+
+                    <!-- Co-Teacher Support -->
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Co-Teacher:" minWidth="150" styleClass="form-label"/>
+                        <ComboBox fx:id="coTeacherCombo" prefWidth="300" onAction="#handleCoTeacherChange"/>
+                        <CheckBox fx:id="enableCoTeacherCheckbox" text="Enable Co-Teaching" onAction="#handleCoTeacherToggle"/>
+                    </HBox>
+
+                    <!-- Teacher Conflict Warning -->
+                    <VBox fx:id="teacherConflictBox" spacing="5" managed="false" visible="false" styleClass="warning-box">
+                        <Label text="⚠ Teacher Conflict Detected:" styleClass="warning-title"/>
+                        <Label fx:id="teacherConflictLabel" wrapText="true" styleClass="warning-text"/>
+                    </VBox>
+                </VBox>
+
+                <!-- Room Assignment Section -->
+                <VBox spacing="10" styleClass="form-section">
+                    <Label text="Room Assignment" styleClass="section-title"/>
+                    <Separator/>
+
+                    <!-- Room Selector -->
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Room:" minWidth="150" styleClass="form-label"/>
+                        <ComboBox fx:id="roomCombo" prefWidth="300" onAction="#handleRoomChange"/>
+                        <Label text="*" styleClass="required-indicator"/>
+                    </HBox>
+
+                    <!-- Room Info -->
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Room Capacity:" minWidth="150" styleClass="form-label"/>
+                        <Label fx:id="roomCapacityLabel" text="30" styleClass="info-value"/>
+                        <Label fx:id="capacityWarningLabel" text="" styleClass="warning-text"/>
+                    </HBox>
+
+                    <!-- Room Conflict Warning -->
+                    <VBox fx:id="roomConflictBox" spacing="5" managed="false" visible="false" styleClass="warning-box">
+                        <Label text="⚠ Room Conflict Detected:" styleClass="warning-title"/>
+                        <Label fx:id="roomConflictLabel" wrapText="true" styleClass="warning-text"/>
+                    </VBox>
+                </VBox>
+
+                <!-- Time Slot Section -->
+                <VBox spacing="10" styleClass="form-section">
+                    <Label text="Time Slot" styleClass="section-title"/>
+                    <Separator/>
+
+                    <!-- Day of Week -->
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Day:" minWidth="150" styleClass="form-label"/>
+                        <ComboBox fx:id="dayOfWeekCombo" prefWidth="200" onAction="#handleTimeChange"/>
+                        <Label text="*" styleClass="required-indicator"/>
+                    </HBox>
+
+                    <!-- Period/Time -->
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Period:" minWidth="150" styleClass="form-label"/>
+                        <ComboBox fx:id="periodCombo" prefWidth="200" onAction="#handleTimeChange"/>
+                        <Label text="*" styleClass="required-indicator"/>
+                    </HBox>
+
+                    <!-- Custom Time (Optional) -->
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <CheckBox fx:id="customTimeCheckbox" text="Use Custom Time" onAction="#handleCustomTimeToggle"/>
+                    </HBox>
+
+                    <HBox fx:id="customTimeBox" spacing="10" alignment="CENTER_LEFT" managed="false" visible="false">
+                        <Label text="Time Range:" minWidth="150" styleClass="form-label"/>
+                        <ComboBox fx:id="startTimeCombo" prefWidth="120" promptText="Start Time"/>
+                        <Label text="to"/>
+                        <ComboBox fx:id="endTimeCombo" prefWidth="120" promptText="End Time"/>
+                    </HBox>
+                </VBox>
+
+                <!-- Special Configurations Section -->
+                <VBox spacing="10" styleClass="form-section">
+                    <Label text="Special Configurations" styleClass="section-title"/>
+                    <Separator/>
+
+                    <!-- Special Event Toggle -->
+                    <CheckBox fx:id="specialEventCheckbox" text="Mark as Special Event (Assembly, Testing, Field Trip, etc.)"
+                             onAction="#handleSpecialEventToggle"/>
+
+                    <!-- Event Details (shown when special event is checked) -->
+                    <VBox fx:id="eventDetailsBox" spacing="10" managed="false" visible="false">
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <Label text="Event Type:" minWidth="150" styleClass="form-label"/>
+                            <ComboBox fx:id="eventTypeCombo" prefWidth="250"/>
+                        </HBox>
+
+                        <VBox spacing="5">
+                            <Label text="Event Description:" styleClass="form-label"/>
+                            <TextArea fx:id="eventDescriptionArea" prefHeight="60" wrapText="true"
+                                     promptText="Enter event details..."/>
+                        </VBox>
+
+                        <CheckBox fx:id="blockMultiplePeriodsCheckbox" text="Block multiple consecutive periods"/>
+                    </VBox>
+
+                    <!-- Additional Options -->
+                    <VBox spacing="5">
+                        <Label text="Notes (Optional):" styleClass="form-label"/>
+                        <TextArea fx:id="notesArea" prefHeight="60" wrapText="true"
+                                 promptText="Add any special notes or instructions..."/>
+                    </VBox>
+                </VBox>
+
+                <!-- Conflict Summary -->
+                <VBox spacing="10" styleClass="form-section summary-section">
+                    <Label text="Conflict Summary" styleClass="section-title"/>
+                    <Separator/>
+                    <TextArea fx:id="conflictSummaryArea" prefHeight="80" editable="false"
+                             styleClass="summary-area" wrapText="true"/>
+                </VBox>
+
+            </VBox>
+        </ScrollPane>
+    </center>
+
+    <!-- Button Bar -->
+    <bottom>
+        <HBox spacing="10" alignment="CENTER_RIGHT" styleClass="button-bar">
+            <padding>
+                <Insets top="15" right="20" bottom="15" left="20"/>
+            </padding>
+            <CheckBox fx:id="ignoreConflictsCheckbox" text="Ignore Conflicts (Admin Override)"/>
+            <Button text="Check Conflicts" onAction="#handleCheckConflicts" styleClass="secondary-button"/>
+            <Button text="Save Changes" onAction="#handleSave" styleClass="primary-button" defaultButton="true"/>
+            <Button text="Cancel" onAction="#handleCancel" styleClass="secondary-button" cancelButton="true"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

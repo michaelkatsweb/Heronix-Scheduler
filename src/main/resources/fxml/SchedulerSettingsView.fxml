@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.eduscheduler.controller.SchedulerSettingsController"
+            prefWidth="900" prefHeight="700">
+
+    <!-- Header -->
+    <top>
+        <VBox style="-fx-background-color: #1976D2; -fx-padding: 20;">
+            <Label text="AI Scheduler Configuration" style="-fx-text-fill: white; -fx-font-size: 24; -fx-font-weight: bold;"/>
+            <Label text="Configure constraints, weights, and special conditions for optimal scheduling"
+                   style="-fx-text-fill: #E3F2FD; -fx-font-size: 12;"/>
+        </VBox>
+    </top>
+
+    <!-- Main Content -->
+    <center>
+        <ScrollPane fitToWidth="true" style="-fx-background-color: #f5f5f5;">
+            <VBox spacing="15" style="-fx-padding: 20;">
+
+                <!-- Configuration Selector -->
+                <HBox spacing="15" alignment="CENTER_LEFT" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 5;">
+                    <Label text="Active Configuration:" style="-fx-font-weight: bold; -fx-font-size: 14;"/>
+                    <ComboBox fx:id="configComboBox" prefWidth="250" promptText="Select configuration..."/>
+                    <Button text="New" onAction="#handleNewConfig" style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
+                    <Button text="Save" onAction="#handleSaveConfig" style="-fx-background-color: #2196F3; -fx-text-fill: white;"/>
+                    <Button text="Delete" onAction="#handleDeleteConfig" style="-fx-background-color: #F44336; -fx-text-fill: white;"/>
+                </HBox>
+
+                <!-- Tabs for Different Settings -->
+                <TabPane fx:id="settingsTabPane" tabClosingPolicy="UNAVAILABLE">
+
+                    <!-- Solver Settings Tab -->
+                    <Tab text="Solver Settings">
+                        <ScrollPane fitToWidth="true">
+                            <VBox spacing="10" style="-fx-padding: 15;">
+                                <Label text="Solver Performance" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+                                <Separator/>
+
+                                <HBox spacing="10" alignment="CENTER_LEFT">
+                                    <Label text="Max Solver Time (minutes):" prefWidth="200"/>
+                                    <Spinner fx:id="maxSolverMinutesSpinner" min="1" max="60" initialValue="5" prefWidth="100"/>
+                                </HBox>
+
+                                <HBox spacing="10" alignment="CENTER_LEFT">
+                                    <Label text="Unimproved Termination (sec):" prefWidth="200"/>
+                                    <Spinner fx:id="unimprovedSecondsSpinner" min="10" max="300" initialValue="30" prefWidth="100"/>
+                                </HBox>
+
+                                <CheckBox fx:id="enableMultithreadingCheck" text="Enable Multithreading" selected="true"/>
+                            </VBox>
+                        </ScrollPane>
+                    </Tab>
+
+                    <!-- Teacher Constraints Tab -->
+                    <Tab text="Teacher Constraints">
+                        <ScrollPane fitToWidth="true">
+                            <VBox spacing="10" style="-fx-padding: 15;">
+                                <Label text="Workload Limits" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+                                <Separator/>
+
+                                <HBox spacing="10" alignment="CENTER_LEFT">
+                                    <Label text="Min Periods per Day:" prefWidth="200"/>
+                                    <Spinner fx:id="minPeriodsTeacherSpinner" min="1" max="8" initialValue="4" prefWidth="100"/>
+                                </HBox>
+
+                                <HBox spacing="10" alignment="CENTER_LEFT">
+                                    <Label text="Max Periods per Day:" prefWidth="200"/>
+                                    <Spinner fx:id="maxPeriodsTeacherSpinner" min="1" max="8" initialValue="7" prefWidth="100"/>
+                                </HBox>
+
+                                <HBox spacing="10" alignment="CENTER_LEFT">
+                                    <Label text="Max Consecutive Periods:" prefWidth="200"/>
+                                    <Spinner fx:id="maxConsecutiveSpinner" min="1" max="5" initialValue="3" prefWidth="100"/>
+                                </HBox>
+
+                                <HBox spacing="10" alignment="CENTER_LEFT">
+                                    <Label text="Min Planning Periods:" prefWidth="200"/>
+                                    <Spinner fx:id="minPlanningSpinner" min="0" max="3" initialValue="1" prefWidth="100"/>
+                                </HBox>
+
+                                <HBox spacing="10" alignment="CENTER_LEFT">
+                                    <Label text="Max Preps per Teacher:" prefWidth="200"/>
+                                    <Spinner fx:id="maxPrepsSpinner" min="1" max="5" initialValue="3" prefWidth="100"/>
+                                </HBox>
+
+                                <CheckBox fx:id="allowBackToBackCheck" text="Allow Back-to-Back Classes" selected="true"/>
+                                <CheckBox fx:id="minimizeTeacherMovesCheck" text="Minimize Teacher Room Changes" selected="true"/>
+                                <CheckBox fx:id="respectAvailabilityCheck" text="Respect Teacher Availability" selected="true"/>
+                                <CheckBox fx:id="respectPreferencesCheck" text="Respect Teacher Preferences" selected="true"/>
+                            </VBox>
+                        </ScrollPane>
+                    </Tab>
+
+                    <!-- Student Constraints Tab -->
+                    <Tab text="Student Constraints">
+                        <ScrollPane fitToWidth="true">
+                            <VBox spacing="10" style="-fx-padding: 15;">
+                                <Label text="Class Size &amp; Enrollment" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+                                <Separator/>
+
+                                <HBox spacing="10" alignment="CENTER_LEFT">
+                                    <Label text="Max Students per Class:" prefWidth="200"/>
+                                    <Spinner fx:id="maxStudentsSpinner" min="10" max="50" initialValue="30" prefWidth="100"/>
+                                </HBox>
+
+                                <HBox spacing="10" alignment="CENTER_LEFT">
+                                    <Label text="Min Students per Class:" prefWidth="200"/>
+                                    <Spinner fx:id="minStudentsSpinner" min="5" max="30" initialValue="10" prefWidth="100"/>
+                                </HBox>
+
+                                <HBox spacing="10" alignment="CENTER_LEFT">
+                                    <Label text="Max Building Transitions:" prefWidth="200"/>
+                                    <Spinner fx:id="maxBuildingTransitionsSpinner" min="1" max="5" initialValue="2" prefWidth="100"/>
+                                </HBox>
+
+                                <CheckBox fx:id="balanceClassSizesCheck" text="Balance Class Sizes Across Sections" selected="true"/>
+                                <CheckBox fx:id="honorStudentRequestsCheck" text="Honor Student Course Requests" selected="true"/>
+                                <CheckBox fx:id="enforcePrerequisitesCheck" text="Enforce Prerequisite Order" selected="true"/>
+                                <CheckBox fx:id="minimizeStudentMovesCheck" text="Minimize Student Room Changes"/>
+                            </VBox>
+                        </ScrollPane>
+                    </Tab>
+
+                    <!-- Special Accommodations Tab -->
+                    <Tab text="Special Accommodations">
+                        <ScrollPane fitToWidth="true">
+                            <VBox spacing="10" style="-fx-padding: 15;">
+                                <Label text="IEP &amp; 504 Support" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+                                <Separator/>
+
+                                <CheckBox fx:id="honorIepCheck" text="Honor IEP Accommodations" selected="true"/>
+                                <CheckBox fx:id="honor504Check" text="Honor 504 Accommodations" selected="true"/>
+                                <CheckBox fx:id="smallClassSpecialNeedsCheck" text="Small Class Size for Special Needs" selected="true"/>
+                                <CheckBox fx:id="resourceRoomProximityCheck" text="Resource Room Proximity" selected="true"/>
+                            </VBox>
+                        </ScrollPane>
+                    </Tab>
+
+                    <!-- Time Preferences Tab -->
+                    <Tab text="Time Preferences">
+                        <ScrollPane fitToWidth="true">
+                            <VBox spacing="10" style="-fx-padding: 15;">
+                                <Label text="Schedule Timing" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+                                <Separator/>
+
+                                <CheckBox fx:id="preferMorningCoreCheck" text="Prefer Morning for Core Subjects" selected="true"/>
+                                <CheckBox fx:id="preferAfternoonElectivesCheck" text="Prefer Afternoon for Electives"/>
+
+                                <HBox spacing="10" alignment="CENTER_LEFT">
+                                    <Label text="Min Passing Time (minutes):" prefWidth="200"/>
+                                    <Spinner fx:id="passingTimeSpinner" min="3" max="10" initialValue="5" prefWidth="100"/>
+                                </HBox>
+                            </VBox>
+                        </ScrollPane>
+                    </Tab>
+
+                    <!-- Constraint Weights Tab -->
+                    <Tab text="Constraint Weights">
+                        <ScrollPane fitToWidth="true">
+                            <VBox spacing="10" style="-fx-padding: 15;">
+                                <Label text="Optimization Weights" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+                                <Label text="Higher values = stronger constraint" style="-fx-font-size: 11; -fx-text-fill: #666;"/>
+                                <Separator/>
+
+                                <GridPane hgap="15" vgap="10">
+                                    <Label text="Teacher Conflict:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                                    <Slider fx:id="weightTeacherConflictSlider" min="100" max="2000" value="1000" showTickLabels="true"
+                                            GridPane.rowIndex="0" GridPane.columnIndex="1" prefWidth="250"/>
+                                    <Label fx:id="weightTeacherConflictLabel" text="1000" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
+
+                                    <Label text="Room Conflict:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                                    <Slider fx:id="weightRoomConflictSlider" min="100" max="2000" value="1000" showTickLabels="true"
+                                            GridPane.rowIndex="1" GridPane.columnIndex="1" prefWidth="250"/>
+                                    <Label fx:id="weightRoomConflictLabel" text="1000" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
+
+                                    <Label text="Capacity Limit:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                                    <Slider fx:id="weightCapacitySlider" min="100" max="2000" value="800" showTickLabels="true"
+                                            GridPane.rowIndex="2" GridPane.columnIndex="1" prefWidth="250"/>
+                                    <Label fx:id="weightCapacityLabel" text="800" GridPane.rowIndex="2" GridPane.columnIndex="2"/>
+
+                                    <Label text="Workload Balance:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                                    <Slider fx:id="weightWorkloadSlider" min="10" max="200" value="50" showTickLabels="true"
+                                            GridPane.rowIndex="3" GridPane.columnIndex="1" prefWidth="250"/>
+                                    <Label fx:id="weightWorkloadLabel" text="50" GridPane.rowIndex="3" GridPane.columnIndex="2"/>
+
+                                    <Label text="Teacher Qualification:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                                    <Slider fx:id="weightQualificationSlider" min="10" max="200" value="100" showTickLabels="true"
+                                            GridPane.rowIndex="4" GridPane.columnIndex="1" prefWidth="250"/>
+                                    <Label fx:id="weightQualificationLabel" text="100" GridPane.rowIndex="4" GridPane.columnIndex="2"/>
+
+                                    <Label text="Student Preference:" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+                                    <Slider fx:id="weightStudentPrefSlider" min="10" max="200" value="75" showTickLabels="true"
+                                            GridPane.rowIndex="5" GridPane.columnIndex="1" prefWidth="250"/>
+                                    <Label fx:id="weightStudentPrefLabel" text="75" GridPane.rowIndex="5" GridPane.columnIndex="2"/>
+                                </GridPane>
+                            </VBox>
+                        </ScrollPane>
+                    </Tab>
+
+                    <!-- Special Conditions Tab -->
+                    <Tab text="Special Conditions">
+                        <VBox spacing="10" style="-fx-padding: 15;">
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <Label text="Custom Rules &amp; Conditions" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+                                <Button text="Add New Condition" onAction="#handleAddCondition"
+                                        style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
+                            </HBox>
+                            <Separator/>
+
+                            <TableView fx:id="conditionsTable" prefHeight="400">
+                                <columns>
+                                    <TableColumn fx:id="conditionNameCol" text="Name" prefWidth="150"/>
+                                    <TableColumn fx:id="conditionTypeCol" text="Type" prefWidth="150"/>
+                                    <TableColumn fx:id="conditionTargetCol" text="Target" prefWidth="120"/>
+                                    <TableColumn fx:id="conditionSeverityCol" text="Severity" prefWidth="80"/>
+                                    <TableColumn fx:id="conditionDescCol" text="Description" prefWidth="250"/>
+                                    <TableColumn fx:id="conditionActionsCol" text="Actions" prefWidth="100"/>
+                                </columns>
+                            </TableView>
+                        </VBox>
+                    </Tab>
+
+                </TabPane>
+
+            </VBox>
+        </ScrollPane>
+    </center>
+
+    <!-- Bottom Buttons -->
+    <bottom>
+        <HBox spacing="10" alignment="CENTER_RIGHT" style="-fx-background-color: #f5f5f5; -fx-padding: 15;">
+            <Button text="Reset to Defaults" onAction="#handleResetDefaults" prefWidth="130"/>
+            <Button text="Apply Changes" onAction="#handleApplyChanges" prefWidth="120"
+                    style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-font-weight: bold;"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

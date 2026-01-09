@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+
+<!--
+  Multi-Room Assignment Dialog
+  Phase 6E-4: Multi-Room Courses UI
+
+  Allows administrators to assign multiple rooms to a single course:
+  - Primary, secondary, overflow, breakout, rotating rooms
+  - Usage patterns (always, alternating days, odd/even, time-based)
+  - Priority ordering
+  - Maximum room distance preferences
+
+  Supports use cases:
+  - Team teaching (2 teachers, 2 rooms simultaneously)
+  - Lab/lecture splits (alternating days)
+  - Overflow rooms (additional capacity with video feed)
+  - Co-teaching models (breakout rooms for small groups)
+
+  Date: December 3, 2025
+-->
+
+<DialogPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            prefWidth="800" prefHeight="700">
+
+    <headerText>
+        Multi-Room Course Assignment
+    </headerText>
+
+    <content>
+        <VBox spacing="15" styleClass="dialog-content">
+            <padding>
+                <Insets top="10" right="20" bottom="10" left="20"/>
+            </padding>
+
+            <!-- Course Name Display -->
+            <HBox alignment="CENTER_LEFT" spacing="10" styleClass="info-section">
+                <Label text="Course:" styleClass="label-bold"/>
+                <Label fx:id="courseNameLabel" text="[Course Name]" styleClass="course-name"/>
+            </HBox>
+
+            <Separator/>
+
+            <!-- Multi-Room Enable Section -->
+            <VBox spacing="8" styleClass="enable-section">
+                <CheckBox fx:id="usesMultipleRoomsCheckBox"
+                         text="Enable Multi-Room Assignment"
+                         styleClass="enable-checkbox"/>
+
+                <Text text="💡 Enable this when the course needs multiple rooms simultaneously (team teaching, lab/lecture splits, overflow capacity)"
+                      wrappingWidth="750"
+                      styleClass="info-text"/>
+            </VBox>
+
+            <Separator/>
+
+            <!-- Room Distance Preference -->
+            <HBox spacing="15" alignment="CENTER_LEFT" styleClass="distance-section"
+                  fx:id="distancePreferenceBox">
+                <Label text="Max Room Distance (minutes):" styleClass="section-label"/>
+                <Spinner fx:id="maxDistanceSpinner" prefWidth="100"
+                        editable="true" min="1" max="15" initialValue="5"/>
+                <Label text="Maximum walking time between rooms"
+                      styleClass="info-label"/>
+            </HBox>
+
+            <Separator/>
+
+            <!-- Room Assignments Table -->
+            <VBox spacing="8" styleClass="table-section" VBox.vgrow="ALWAYS"
+                  fx:id="assignmentsSection">
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label text="Room Assignments:" styleClass="section-label"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="addRoomButton" text="+ Add Room"
+                           styleClass="add-button"/>
+                </HBox>
+
+                <TableView fx:id="roomAssignmentsTable" VBox.vgrow="ALWAYS"
+                          styleClass="room-assignments-table">
+                    <columns>
+                        <!-- Room Selection Column -->
+                        <TableColumn text="Room" prefWidth="150" fx:id="roomColumn">
+                            <cellValueFactory>
+                                <javafx.scene.control.cell.PropertyValueFactory property="room"/>
+                            </cellValueFactory>
+                        </TableColumn>
+
+                        <!-- Assignment Type Column -->
+                        <TableColumn text="Type" prefWidth="130" fx:id="typeColumn">
+                            <cellValueFactory>
+                                <javafx.scene.control.cell.PropertyValueFactory property="assignmentType"/>
+                            </cellValueFactory>
+                        </TableColumn>
+
+                        <!-- Usage Pattern Column -->
+                        <TableColumn text="Usage Pattern" prefWidth="150" fx:id="patternColumn">
+                            <cellValueFactory>
+                                <javafx.scene.control.cell.PropertyValueFactory property="usagePattern"/>
+                            </cellValueFactory>
+                        </TableColumn>
+
+                        <!-- Priority Column -->
+                        <TableColumn text="Priority" prefWidth="80" fx:id="priorityColumn">
+                            <cellValueFactory>
+                                <javafx.scene.control.cell.PropertyValueFactory property="priority"/>
+                            </cellValueFactory>
+                        </TableColumn>
+
+                        <!-- Active Column -->
+                        <TableColumn text="Active" prefWidth="70" fx:id="activeColumn">
+                            <cellValueFactory>
+                                <javafx.scene.control.cell.PropertyValueFactory property="active"/>
+                            </cellValueFactory>
+                        </TableColumn>
+
+                        <!-- Notes Column -->
+                        <TableColumn text="Notes" prefWidth="150" fx:id="notesColumn">
+                            <cellValueFactory>
+                                <javafx.scene.control.cell.PropertyValueFactory property="notes"/>
+                            </cellValueFactory>
+                        </TableColumn>
+
+                        <!-- Actions Column -->
+                        <TableColumn text="Actions" prefWidth="100" fx:id="actionsColumn"/>
+                    </columns>
+
+                    <placeholder>
+                        <VBox alignment="CENTER" spacing="10" style="-fx-padding: 20;">
+                            <Label text="No rooms assigned yet" styleClass="placeholder-text"/>
+                            <Label text="Click '+ Add Room' to assign rooms to this course"
+                                  styleClass="placeholder-hint"/>
+                        </VBox>
+                    </placeholder>
+                </TableView>
+
+                <!-- Room Assignment Help Text -->
+                <VBox spacing="5" styleClass="help-section">
+                    <Label text="Room Assignment Types:" styleClass="help-title"/>
+                    <Text text="• PRIMARY: Main instructional space (required - at least one)"
+                          wrappingWidth="750" styleClass="help-text"/>
+                    <Text text="• SECONDARY: Supplementary space for lab work or breakouts"
+                          wrappingWidth="750" styleClass="help-text"/>
+                    <Text text="• OVERFLOW: Additional capacity with video/audio feed from primary"
+                          wrappingWidth="750" styleClass="help-text"/>
+                    <Text text="• BREAKOUT: Small group instruction or differentiated learning"
+                          wrappingWidth="750" styleClass="help-text"/>
+                    <Text text="• ROTATING: Alternating between rooms on schedule"
+                          wrappingWidth="750" styleClass="help-text"/>
+                </VBox>
+
+                <VBox spacing="5" styleClass="help-section">
+                    <Label text="Usage Patterns:" styleClass="help-title"/>
+                    <Text text="• ALWAYS: Room used for every class session"
+                          wrappingWidth="750" styleClass="help-text"/>
+                    <Text text="• ALTERNATING_DAYS: Switch between rooms each day"
+                          wrappingWidth="750" styleClass="help-text"/>
+                    <Text text="• ODD_DAYS / EVEN_DAYS: Room used on odd or even-numbered days"
+                          wrappingWidth="750" styleClass="help-text"/>
+                    <Text text="• FIRST_HALF / SECOND_HALF: Time-based splits within a period"
+                          wrappingWidth="750" styleClass="help-text"/>
+                </VBox>
+            </VBox>
+
+            <!-- Validation Messages -->
+            <VBox fx:id="validationMessageBox" spacing="5" styleClass="validation-section"
+                  managed="false" visible="false">
+                <Label fx:id="validationMessageLabel" styleClass="validation-message"
+                      wrapText="true" prefWidth="750"/>
+            </VBox>
+        </VBox>
+    </content>
+
+    <buttonTypes>
+        <ButtonType fx:constant="OK" text="Save"/>
+        <ButtonType fx:constant="CANCEL" text="Cancel"/>
+    </buttonTypes>
+</DialogPane>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<!--
+Lunch Period Management Dialog
+Location: src/main/resources/fxml/LunchPeriodDialog.fxml
+-->
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.eduscheduler.ui.controller.LunchPeriodController"
+            styleClass="dialog-container">
+    
+    <top>
+        <VBox spacing="10" BorderPane.alignment="CENTER">
+            <padding>
+                <Insets top="20" right="20" bottom="10" left="20"/>
+            </padding>
+            <Label text="Lunch Period Management" styleClass="dialog-title"/>
+            <Separator/>
+        </VBox>
+    </top>
+    
+    <center>
+        <SplitPane dividerPositions="0.6" BorderPane.alignment="CENTER">
+            <padding>
+                <Insets top="10" right="20" bottom="10" left="20"/>
+            </padding>
+            
+            <!-- Left: Table View -->
+            <VBox spacing="10">
+                <Label text="Existing Lunch Periods:" styleClass="section-label"/>
+                <TableView fx:id="lunchPeriodsTable" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="groupColumn" text="Group" prefWidth="60"/>
+                        <TableColumn fx:id="startTimeColumn" text="Start" prefWidth="80"/>
+                        <TableColumn fx:id="endTimeColumn" text="End" prefWidth="80"/>
+                        <TableColumn fx:id="durationColumn" text="Duration (min)" prefWidth="100"/>
+                        <TableColumn fx:id="gradesColumn" text="Grades" prefWidth="120"/>
+                        <TableColumn fx:id="activeColumn" text="Active" prefWidth="60"/>
+                    </columns>
+                </TableView>
+            </VBox>
+            
+            <!-- Right: Form -->
+            <VBox spacing="15">
+                <Label text="Lunch Period Details:" styleClass="section-label"/>
+                
+                <GridPane hgap="10" vgap="10">
+                    <Label text="Lunch Group:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                    <ComboBox fx:id="lunchGroupCombo" promptText="Select group" 
+                              GridPane.columnIndex="1" GridPane.rowIndex="0" prefWidth="150"/>
+                    
+                    <Label text="Start Time:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                    <TextField fx:id="startTimeField" promptText="HH:MM" 
+                               GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                    
+                    <Label text="End Time:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                    <TextField fx:id="endTimeField" promptText="HH:MM" 
+                               GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                    
+                    <Label text="Grade Restrictions:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                    <TextField fx:id="gradeRestrictionsField" 
+                               promptText="e.g., 9,10,11,12" 
+                               GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                    
+                    <CheckBox fx:id="activeCheckBox" text="Active" selected="true"
+                              GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+                </GridPane>
+                
+                <Separator/>
+                
+                <VBox spacing="8">
+                    <Button fx:id="addButton" text="Add New" 
+                            onAction="#handleAdd" maxWidth="Infinity" 
+                            styleClass="primary-button"/>
+                    <Button fx:id="updateButton" text="Update Selected" 
+                            onAction="#handleUpdate" maxWidth="Infinity" 
+                            styleClass="secondary-button"/>
+                    <Button fx:id="deleteButton" text="Delete Selected" 
+                            onAction="#handleDelete" maxWidth="Infinity" 
+                            styleClass="danger-button"/>
+                </VBox>
+            </VBox>
+        </SplitPane>
+    </center>
+    
+    <bottom>
+        <HBox spacing="10" alignment="CENTER_RIGHT" BorderPane.alignment="CENTER">
+            <padding>
+                <Insets top="10" right="20" bottom="20" left="20"/>
+            </padding>
+            <Button text="Close" onAction="#handleClose" styleClass="secondary-button"/>
+        </HBox>
+    </bottom>
+    
+</BorderPane>

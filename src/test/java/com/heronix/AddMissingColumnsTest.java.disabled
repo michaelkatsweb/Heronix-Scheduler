@@ -1,0 +1,79 @@
+package com.eduscheduler;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.context.TestPropertySource;
+
+/**
+ * Test to add missing columns that Hibernate didn't create
+ */
+@SpringBootTest
+@TestPropertySource(properties = {
+    "spring.jpa.hibernate.ddl-auto=update"
+})
+public class AddMissingColumnsTest {
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
+    @Test
+    public void addMissingColumns() {
+        System.out.println("\n========== ADDING MISSING COLUMNS ==========\n");
+
+        // Add period_excluded and exclusion_reason to schedule_slots
+        addColumnIfNotExists("SCHEDULE_SLOTS", "PERIOD_EXCLUDED", "BOOLEAN DEFAULT FALSE");
+        addColumnIfNotExists("SCHEDULE_SLOTS", "EXCLUSION_REASON", "VARCHAR(255)");
+
+        // Add planning periods columns to teachers
+        addColumnIfNotExists("TEACHERS", "PLANNING_PERIODS_PER_WEEK", "INTEGER DEFAULT 5");
+        addColumnIfNotExists("TEACHERS", "COMMON_PLANNING_PERIOD", "INTEGER");
+
+        System.out.println("\n========== VERIFYING ADDED COLUMNS ==========\n");
+
+        verifyColumn("SCHEDULE_SLOTS", "PERIOD_EXCLUDED");
+        verifyColumn("SCHEDULE_SLOTS", "EXCLUSION_REASON");
+        verifyColumn("TEACHERS", "PLANNING_PERIODS_PER_WEEK");
+        verifyColumn("TEACHERS", "COMMON_PLANNING_PERIOD");
+
+        System.out.println("\n========== COLUMN ADDITION COMPLETE ==========\n");
+    }
+
+    private void addColumnIfNotExists(String tableName, String columnName, String columnDef) {
+        try {
+            // Check if column exists
+            String checkSql = "SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS " +
+                            "WHERE table_name = ? AND column_name = ?";
+            Integer count = jdbcTemplate.queryForObject(checkSql, Integer.class, tableName, columnName);
+
+            if (count == 0) {
+                // Column doesn't exist, add it
+                String alterSql = "ALTER TABLE " + tableName + " ADD COLUMN " + columnName + " " + columnDef;
+                jdbcTemplate.execute(alterSql);
+                System.out.println("✅ Added column " + tableName + "." + columnName);
+            } else {
+                System.out.println("ℹ️  Column " + tableName + "." + columnName + " already exists");
+            }
+        } catch (Exception e) {
+            System.out.println("❌ Error adding column " + tableName + "." + columnName + ": " + e.getMessage());
+        }
+    }
+
+    private void verifyColumn(String tableName, String columnName) {
+        try {
+            String sql = "SELECT data_type FROM INFORMATION_SCHEMA.COLUMNS " +
+                        "WHERE table_name = ? AND column_name = ?";
+            var result = jdbcTemplate.queryForList(sql, tableName, columnName);
+
+            if (result.isEmpty()) {
+                System.out.println("❌ Column " + tableName + "." + columnName + " NOT FOUND!");
+            } else {
+                String dataType = (String) result.get(0).get("DATA_TYPE");
+                System.out.println("✅ Column " + tableName + "." + columnName + " exists (" + dataType + ")");
+            }
+        } catch (Exception e) {
+            System.out.println("❌ Error checking column " + tableName + "." + columnName + ": " + e.getMessage());
+        }
+    }
+}

@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.eduscheduler.ui.controller.SPEDDashboardController"
+            styleClass="main-container"
+            prefWidth="1400" prefHeight="900">
+
+    <!-- Top: Header -->
+    <top>
+        <VBox styleClass="header-section" spacing="10">
+            <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+
+            <HBox alignment="CENTER_LEFT" spacing="15">
+                <Label text="Special Education (SPED) Dashboard" styleClass="page-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="Refresh" onAction="#handleRefresh" styleClass="btn-primary"/>
+                <Button text="Generate Report" onAction="#handleGenerateReport" styleClass="btn-secondary"/>
+            </HBox>
+
+            <Separator/>
+        </VBox>
+    </top>
+
+    <!-- Center: Main Content -->
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="content-scroll">
+            <VBox spacing="20">
+                <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+
+                <!-- Metrics Cards Row -->
+                <HBox spacing="15" alignment="CENTER">
+                    <!-- Active IEPs Card -->
+                    <VBox styleClass="metric-card" spacing="10" HBox.hgrow="ALWAYS">
+                        <padding><Insets top="15" right="15" bottom="15" left="15"/></padding>
+                        <Label text="Active IEPs" styleClass="metric-label"/>
+                        <Label fx:id="activeIEPsLabel" text="0" styleClass="metric-value"/>
+                        <Button text="View All" onAction="#handleViewIEPs" styleClass="btn-link"/>
+                    </VBox>
+
+                    <!-- Active 504 Plans Card -->
+                    <VBox styleClass="metric-card" spacing="10" HBox.hgrow="ALWAYS">
+                        <padding><Insets top="15" right="15" bottom="15" left="15"/></padding>
+                        <Label text="Active 504 Plans" styleClass="metric-label"/>
+                        <Label fx:id="active504Label" text="0" styleClass="metric-value"/>
+                        <Button text="View All" onAction="#handleView504Plans" styleClass="btn-link"/>
+                    </VBox>
+
+                    <!-- Services Needing Scheduling Card -->
+                    <VBox styleClass="metric-card metric-warning" spacing="10" HBox.hgrow="ALWAYS">
+                        <padding><Insets top="15" right="15" bottom="15" left="15"/></padding>
+                        <Label text="Services Needing Scheduling" styleClass="metric-label"/>
+                        <Label fx:id="needsSchedulingLabel" text="0" styleClass="metric-value"/>
+                        <Button text="Schedule Now" onAction="#handleScheduleServices" styleClass="btn-link"/>
+                    </VBox>
+
+                    <!-- Compliance Rate Card -->
+                    <VBox styleClass="metric-card metric-success" spacing="10" HBox.hgrow="ALWAYS">
+                        <padding><Insets top="15" right="15" bottom="15" left="15"/></padding>
+                        <Label text="Overall Compliance Rate" styleClass="metric-label"/>
+                        <Label fx:id="complianceRateLabel" text="0%" styleClass="metric-value"/>
+                        <ProgressBar fx:id="complianceProgress" progress="0" prefWidth="150"/>
+                    </VBox>
+                </HBox>
+
+                <!-- Action Items Section -->
+                <VBox spacing="10" styleClass="section-container">
+                    <padding><Insets top="15" right="15" bottom="15" left="15"/></padding>
+
+                    <HBox alignment="CENTER_LEFT" spacing="10">
+                        <Label text="Items Requiring Attention" styleClass="section-title"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="actionItemsCountLabel" text="0 items" styleClass="count-badge"/>
+                    </HBox>
+
+                    <TabPane fx:id="actionItemsTabs" tabClosingPolicy="UNAVAILABLE">
+                        <!-- Expiring IEPs Tab -->
+                        <Tab text="Expiring IEPs">
+                            <VBox spacing="10">
+                                <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
+                                <TableView fx:id="expiringIEPsTable" VBox.vgrow="ALWAYS">
+                                    <columns>
+                                        <TableColumn text="Student" prefWidth="200" fx:id="iepStudentColumn"/>
+                                        <TableColumn text="IEP Number" prefWidth="150" fx:id="iepNumberColumn"/>
+                                        <TableColumn text="End Date" prefWidth="120" fx:id="iepEndDateColumn"/>
+                                        <TableColumn text="Days Remaining" prefWidth="120" fx:id="iepDaysRemainingColumn"/>
+                                        <TableColumn text="Case Manager" prefWidth="150" fx:id="iepCaseManagerColumn"/>
+                                        <TableColumn text="Actions" prefWidth="100" fx:id="iepActionsColumn"/>
+                                    </columns>
+                                </TableView>
+                            </VBox>
+                        </Tab>
+
+                        <!-- Expiring 504 Plans Tab -->
+                        <Tab text="Expiring 504 Plans">
+                            <VBox spacing="10">
+                                <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
+                                <TableView fx:id="expiring504Table" VBox.vgrow="ALWAYS">
+                                    <columns>
+                                        <TableColumn text="Student" prefWidth="200" fx:id="plan504StudentColumn"/>
+                                        <TableColumn text="Plan Number" prefWidth="150" fx:id="plan504NumberColumn"/>
+                                        <TableColumn text="End Date" prefWidth="120" fx:id="plan504EndDateColumn"/>
+                                        <TableColumn text="Days Remaining" prefWidth="120" fx:id="plan504DaysRemainingColumn"/>
+                                        <TableColumn text="Coordinator" prefWidth="150" fx:id="plan504CoordinatorColumn"/>
+                                        <TableColumn text="Actions" prefWidth="100" fx:id="plan504ActionsColumn"/>
+                                    </columns>
+                                </TableView>
+                            </VBox>
+                        </Tab>
+
+                        <!-- Services Not Meeting Minutes Tab -->
+                        <Tab text="Services Below Minutes">
+                            <VBox spacing="10">
+                                <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
+                                <TableView fx:id="belowMinutesTable" VBox.vgrow="ALWAYS">
+                                    <columns>
+                                        <TableColumn text="Student" prefWidth="200" fx:id="serviceStudentColumn"/>
+                                        <TableColumn text="Service Type" prefWidth="150" fx:id="serviceTypeColumn"/>
+                                        <TableColumn text="Required Min/Week" prefWidth="120" fx:id="requiredMinutesColumn"/>
+                                        <TableColumn text="Scheduled Min/Week" prefWidth="120" fx:id="scheduledMinutesColumn"/>
+                                        <TableColumn text="Compliance %" prefWidth="100" fx:id="compliancePercentColumn"/>
+                                        <TableColumn text="Actions" prefWidth="100" fx:id="serviceActionsColumn"/>
+                                    </columns>
+                                </TableView>
+                            </VBox>
+                        </Tab>
+                    </TabPane>
+                </VBox>
+
+                <!-- Quick Actions Section -->
+                <HBox spacing="15" alignment="CENTER">
+                    <Button text="Create New IEP" onAction="#handleCreateIEP" styleClass="btn-primary" prefWidth="200"/>
+                    <Button text="Create New 504 Plan" onAction="#handleCreate504Plan" styleClass="btn-primary" prefWidth="200"/>
+                    <Button text="Schedule Pull-Out Services" onAction="#handleSchedulePullOut" styleClass="btn-secondary" prefWidth="200"/>
+                    <Button text="View All Schedules" onAction="#handleViewSchedules" styleClass="btn-secondary" prefWidth="200"/>
+                </HBox>
+
+                <!-- Statistics Section -->
+                <HBox spacing="15">
+                    <!-- IEP Statistics -->
+                    <VBox spacing="10" styleClass="section-container" HBox.hgrow="ALWAYS">
+                        <padding><Insets top="15" right="15" bottom="15" left="15"/></padding>
+                        <Label text="IEP Statistics" styleClass="section-title"/>
+                        <Separator/>
+                        <VBox fx:id="iepStatsContainer" spacing="5"/>
+                    </VBox>
+
+                    <!-- Service Statistics -->
+                    <VBox spacing="10" styleClass="section-container" HBox.hgrow="ALWAYS">
+                        <padding><Insets top="15" right="15" bottom="15" left="15"/></padding>
+                        <Label text="Service Status" styleClass="section-title"/>
+                        <Separator/>
+                        <VBox fx:id="serviceStatsContainer" spacing="5"/>
+                    </VBox>
+                </HBox>
+
+            </VBox>
+        </ScrollPane>
+    </center>
+
+</BorderPane>

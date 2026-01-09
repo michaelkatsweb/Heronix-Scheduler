@@ -1,0 +1,715 @@
+📁 eduscheduler-pro/
+├─ 📁 .claude/
+│  └─ 📄 settings.local.json
+├─ 📁 backup/
+│  ├─ 📁 structure-fix-20251030/
+│  │  ├─ 📄 ConflictDetectionService.java.duplicate.bak
+│  │  ├─ 📄 DataManagementController.java.bak
+│  │  └─ 📄 EnhancedScheduleViewController.java.bak
+│  ├─ 📄 ScheduleSlot.java.bak
+│  ├─ 📄 SchedulingConstraintProvider.java.bak
+│  └─ 📄 solverConfig.xml.bak
+├─ 📁 config/
+│  └─ 📄 app-settings.properties
+├─ 📁 data/
+│  ├─ 📄 eduscheduler.mv.db
+│  └─ 📄 eduscheduler.trace.db
+├─ 📁 docs/
+├─ 📁 import data samples/
+│  ├─ 📄 1400 students list.xlsx
+│  ├─ 📄 80-teachers.xlsx
+│  ├─ 📄 attendance_records_export.csv
+│  ├─ 📄 courses(1).csv
+│  ├─ 📄 Courses-1.xlsx
+│  ├─ 📄 courses.csv
+│  ├─ 📄 courses.csv - Course Import Data.pdf
+│  ├─ 📄 events.csv
+│  ├─ 📄 FL-Courses.csv
+│  ├─ 📄 FL-Courses.pdf
+│  ├─ 📄 FL-Courses.xlsx
+│  ├─ 📄 guardian_contacts_export.csv
+│  ├─ 📄 Rooms-85.xlsx
+│  ├─ 📄 Rooms.csv
+│  ├─ 📄 staff_list_export.csv
+│  ├─ 📄 student_course_enrollment_export.csv
+│  ├─ 📄 student_demographics_export.csv
+│  ├─ 📄 student_roster_1400_full.csv
+│  ├─ 📄 student_roster_1400_skyward_style.csv
+│  ├─ 📄 students(1).csv
+│  ├─ 📄 students(2).csv
+│  ├─ 📄 students.csv
+│  ├─ 📄 students_1400.csv
+│  ├─ 📄 teacher_roster_85_skyward_style.csv
+│  ├─ 📄 teachers(1).csv
+│  ├─ 📄 teachers.csv
+│  ├─ 📄 teachers_csv.txt
+│  ├─ 📄 weeki_wachee_courses.csv
+│  └─ 📄 weeki_wachee_rooms.csv
+├─ 📁 logs/
+│  ├─ 📄 eduscheduler-dev.log
+│  ├─ 📄 eduscheduler-dev.log.2025-10-18.0.gz
+│  ├─ 📄 eduscheduler-dev.log.2025-10-18.1.gz
+│  ├─ 📄 eduscheduler-dev.log.2025-10-18.2.gz
+│  ├─ 📄 eduscheduler-dev.log.2025-10-18.3.gz
+│  ├─ 📄 eduscheduler-dev.log.2025-10-19.0.gz
+│  ├─ 📄 eduscheduler-dev.log.2025-10-21.0.gz
+│  ├─ 📄 eduscheduler-dev.log.2025-10-21.1.gz
+│  ├─ 📄 eduscheduler-dev.log.2025-10-21.2.gz
+│  ├─ 📄 eduscheduler-dev.log.2025-10-21.3.gz
+│  ├─ 📄 eduscheduler.log
+│  ├─ 📄 eduscheduler.log.2025-10-25.0.gz
+│  ├─ 📄 eduscheduler.log.2025-10-26.0.gz
+│  ├─ 📄 eduscheduler.log.2025-10-27.0.gz
+│  ├─ 📄 eduscheduler.log.2025-10-28.0.gz
+│  ├─ 📄 eduscheduler.log.2025-10-29.0.gz
+│  ├─ 📄 eduscheduler.log.2025-10-30.0.gz
+│  ├─ 📄 eduscheduler.log.2025-11-01.0.gz
+│  ├─ 📄 eduscheduler.log.2025-11-02.0.gz
+│  └─ 📄 eduscheduler.log.2025-11-03.0.gz
+├─ 📁 src/
+│  ├─ 📁 main/
+│  │  ├─ 📁 java/
+│  │  │  └─ 📁 com/
+│  │  │     └─ 📁 eduscheduler/
+│  │  │        ├─ 📁 ai/
+│  │  │        │  ├─ 📁 algorithms/
+│  │  │        │  │  └─ 📄 AdvancedAlgorithms.java
+│  │  │        │  └─ 📁 solver/
+│  │  │        ├─ 📁 config/
+│  │  │        │  ├─ 📄 ApplicationProperties.java
+│  │  │        │  ├─ 📄 ApplicationProperties.java.tmp.7116.1762127837425
+│  │  │        │  ├─ 📄 DatabaseConfig.java
+│  │  │        │  ├─ 📄 JavaFXConfig.java
+│  │  │        │  ├─ 📄 OptaPlannerConfig.java
+│  │  │        │  └─ 📄 SecurityConfig.java
+│  │  │        ├─ 📁 controller/
+│  │  │        │  ├─ 📄 AdminController.java
+│  │  │        │  ├─ 📄 CourseController.java
+│  │  │        │  ├─ 📄 EventController.java
+│  │  │        │  ├─ 📄 HomeController.java
+│  │  │        │  ├─ 📄 RoomController.java
+│  │  │        │  ├─ 📄 StudentController.java
+│  │  │        │  └─ 📄 TeacherController.java
+│  │  │        ├─ 📁 exception/
+│  │  │        │  ├─ 📄 ConflictException.java
+│  │  │        │  ├─ 📄 ImportException.java
+│  │  │        │  ├─ 📄 OptimizationException.java
+│  │  │        │  ├─ 📄 ScheduleConflictException.java
+│  │  │        │  └─ 📄 ScheduleException.java
+│  │  │        ├─ 📁 model/
+│  │  │        │  ├─ 📁 domain/
+│  │  │        │  │  ├─ 📄 Course.java
+│  │  │        │  │  ├─ 📄 DutyAssignment.java
+│  │  │        │  │  ├─ 📄 Event.java
+│  │  │        │  │  ├─ 📄 ImportTemplate.java
+│  │  │        │  │  ├─ 📄 LunchPeriod.java
+│  │  │        │  │  ├─ 📄 Room.java
+│  │  │        │  │  ├─ 📄 Schedule.java
+│  │  │        │  │  ├─ 📄 ScheduleSlot.java
+│  │  │        │  │  ├─ 📄 SpecialEventBlock.java
+│  │  │        │  │  ├─ 📄 Student.java
+│  │  │        │  │  ├─ 📄 StudentEnrollment.java
+│  │  │        │  │  ├─ 📄 Teacher.java
+│  │  │        │  │  ├─ 📄 TimeSlot.java
+│  │  │        │  │  └─ 📄 User.java
+│  │  │        │  ├─ 📁 dto/
+│  │  │        │  │  ├─ 📄 CleanupResult.java
+│  │  │        │  │  ├─ 📄 Conflict.java
+│  │  │        │  │  ├─ 📄 DashboardMetrics.java
+│  │  │        │  │  ├─ 📄 DatabaseStats.java
+│  │  │        │  │  ├─ 📄 DataIssue.java
+│  │  │        │  │  ├─ 📄 EnrollmentResult.java
+│  │  │        │  │  ├─ 📄 EnrollmentStatistics.java
+│  │  │        │  │  ├─ 📄 ImportResult.java
+│  │  │        │  │  ├─ 📄 ImportValidationResult.java
+│  │  │        │  │  ├─ 📄 Recommendation.java
+│  │  │        │  │  ├─ 📄 ScheduleGenerationRequest.java
+│  │  │        │  │  ├─ 📄 ScheduleParameters.java
+│  │  │        │  │  ├─ 📄 ScheduleRequest.java
+│  │  │        │  │  ├─ 📄 UserFeedback.java
+│  │  │        │  │  └─ 📄 ValidationIssue.java
+│  │  │        │  ├─ 📁 enums/
+│  │  │        │  │  ├─ 📄 DayOfWeek.java
+│  │  │        │  │  ├─ 📄 EducationLevel.java
+│  │  │        │  │  ├─ 📄 EnrollmentStatus.java
+│  │  │        │  │  ├─ 📄 EventType.java
+│  │  │        │  │  ├─ 📄 ExportFormat.java
+│  │  │        │  │  ├─ 📄 MeetingPriority.java
+│  │  │        │  │  ├─ 📄 PriorityLevel.java
+│  │  │        │  │  ├─ 📄 RoomType.java
+│  │  │        │  │  ├─ 📄 SchedulePeriod.java
+│  │  │        │  │  ├─ 📄 ScheduleStatus.java
+│  │  │        │  │  ├─ 📄 ScheduleType.java
+│  │  │        │  │  └─ 📄 SlotStatus.java
+│  │  │        │  └─ 📁 planning/
+│  │  │        │     └─ 📄 SchedulingSolution.java
+│  │  │        ├─ 📁 prototypes/
+│  │  │        │  ├─ 📄 AdaptiveScheduler.java
+│  │  │        │  └─ 📄 README.md
+│  │  │        ├─ 📁 repository/
+│  │  │        │  ├─ 📄 CourseRepository.java
+│  │  │        │  ├─ 📄 DutyAssignmentRepository.java
+│  │  │        │  ├─ 📄 EventRepository.java
+│  │  │        │  ├─ 📄 ImportTemplateRepository.java
+│  │  │        │  ├─ 📄 LunchPeriodRepository.java
+│  │  │        │  ├─ 📄 RoomRepository.java
+│  │  │        │  ├─ 📄 ScheduleRepository.java
+│  │  │        │  ├─ 📄 ScheduleSlotRepository.java
+│  │  │        │  ├─ 📄 SpecialEventBlockRepository.java
+│  │  │        │  ├─ 📄 StudentEnrollmentRepository.java
+│  │  │        │  ├─ 📄 StudentRepository.java
+│  │  │        │  ├─ 📄 TeacherRepository.java
+│  │  │        │  └─ 📄 UserRepository.java
+│  │  │        ├─ 📁 service/
+│  │  │        │  ├─ 📁 analysis/
+│  │  │        │  │  └─ 📄 ResourceCapacityAnalyzer.java
+│  │  │        │  ├─ 📁 data/
+│  │  │        │  │  ├─ 📄 DataCleaningService.java
+│  │  │        │  │  ├─ 📄 ImportTemplateService.java
+│  │  │        │  │  └─ 📄 SmartFieldMapperService.java
+│  │  │        │  ├─ 📁 impl/
+│  │  │        │  │  ├─ 📄 AnalyticsServiceImpl.java
+│  │  │        │  │  ├─ 📄 AuthenticationServiceImpl.java
+│  │  │        │  │  ├─ 📄 ConflictDetectionServiceImpl.java
+│  │  │        │  │  ├─ 📄 CourseServiceImpl.java
+│  │  │        │  │  ├─ 📄 DatabaseCleanupServiceImpl.java
+│  │  │        │  │  ├─ 📄 DataManagementServiceImpl.java
+│  │  │        │  │  ├─ 📄 DutyRosterServiceImpl.java
+│  │  │        │  │  ├─ 📄 ExportServiceImpl.java
+│  │  │        │  │  ├─ 📄 FileImportServiceImpl.java
+│  │  │        │  │  ├─ 📄 LenientImportServiceImpl.java
+│  │  │        │  │  ├─ 📄 LunchPeriodServiceImpl.java
+│  │  │        │  │  ├─ 📄 RoomServiceImpl.java
+│  │  │        │  │  ├─ 📄 ScheduleExportServiceImpl.java
+│  │  │        │  │  ├─ 📄 ScheduleParametersServiceImpl.java
+│  │  │        │  │  ├─ 📄 SchedulePrintServiceImpl.java
+│  │  │        │  │  ├─ 📄 ScheduleServiceImpl.java
+│  │  │        │  │  ├─ 📄 SpecialEventBlockServiceImpl.java
+│  │  │        │  │  ├─ 📄 SubstituteServiceImpl.java
+│  │  │        │  │  ├─ 📄 TeacherServiceImpl.java
+│  │  │        │  │  ├─ 📄 TimeSlotServiceImpl.java
+│  │  │        │  │  ├─ 📄 UniversalAutoImporter.java
+│  │  │        │  │  ├─ 📄 UserDetailsServiceImpl.java
+│  │  │        │  │  └─ 📄 UserServiceImpl.java
+│  │  │        │  ├─ 📁 validation/
+│  │  │        │  │  ├─ 📄 GradeLevelValidator.java
+│  │  │        │  │  └─ 📄 ImportValidationService.java
+│  │  │        │  ├─ 📄 AnalyticsService.java
+│  │  │        │  ├─ 📄 AuthenticationService.java
+│  │  │        │  ├─ 📄 ConflictDetectionService.java
+│  │  │        │  ├─ 📄 CourseService.java
+│  │  │        │  ├─ 📄 DatabaseCleanupService.java
+│  │  │        │  ├─ 📄 DataManagementService.java
+│  │  │        │  ├─ 📄 DutyRosterService.java
+│  │  │        │  ├─ 📄 ExportService.java
+│  │  │        │  ├─ 📄 FileImportService.java
+│  │  │        │  ├─ 📄 FileParserService.java
+│  │  │        │  ├─ 📄 LenientImportService.java
+│  │  │        │  ├─ 📄 LunchPeriodService.java
+│  │  │        │  ├─ 📄 RoomService.java
+│  │  │        │  ├─ 📄 ScheduleExportService.java
+│  │  │        │  ├─ 📄 ScheduleGenerationService.java
+│  │  │        │  ├─ 📄 ScheduleOptimizationService.java
+│  │  │        │  ├─ 📄 ScheduleParametersService.java
+│  │  │        │  ├─ 📄 SchedulePrintService.java
+│  │  │        │  ├─ 📄 ScheduleService.java
+│  │  │        │  ├─ 📄 ScheduleSlotService.java
+│  │  │        │  ├─ 📄 SmartCSVImporter.java
+│  │  │        │  ├─ 📄 SpecialEventBlockService.java
+│  │  │        │  ├─ 📄 StudentCourseAssignmentService.java
+│  │  │        │  ├─ 📄 SubstituteService.java
+│  │  │        │  ├─ 📄 TeacherService.java
+│  │  │        │  ├─ 📄 TimeSlotService.java
+│  │  │        │  └─ 📄 UserService.java
+│  │  │        ├─ 📁 solver/
+│  │  │        │  ├─ 📁 exception/
+│  │  │        │  │  ├─ 📄 InvalidScheduleProblemException.java
+│  │  │        │  │  ├─ 📄 ScheduleNotFoundException.java
+│  │  │        │  │  ├─ 📄 SchedulingSolverException.java
+│  │  │        │  │  └─ 📄 SolverExecutionException.java
+│  │  │        │  ├─ 📄 HybridSchedulingSolver.java
+│  │  │        │  ├─ 📄 ScheduleSolution.java
+│  │  │        │  └─ 📄 SchedulingConstraintProvider.java
+│  │  │        ├─ 📁 ui/
+│  │  │        │  ├─ 📁 component/
+│  │  │        │  │  ├─ 📄 ColorLegend.java
+│  │  │        │  │  ├─ 📄 ModernCalendarGrid.java
+│  │  │        │  │  └─ 📄 ModernScheduleGrid.java
+│  │  │        │  ├─ 📁 controller/
+│  │  │        │  │  ├─ 📄 CourseManagementController.java
+│  │  │        │  │  ├─ 📄 CoursesController.java
+│  │  │        │  │  ├─ 📄 DashboardController.java
+│  │  │        │  │  ├─ 📄 DatabaseCleanupController.java
+│  │  │        │  │  ├─ 📄 DataManagementController.java
+│  │  │        │  │  ├─ 📄 DataReviewController.java
+│  │  │        │  │  ├─ 📄 DutyRosterController.java
+│  │  │        │  │  ├─ 📄 EnhancedHybridScheduler.java
+│  │  │        │  │  ├─ 📄 EnhancedHybridScheduler.java.backup
+│  │  │        │  │  ├─ 📄 EnhancedScheduleViewController.java
+│  │  │        │  │  ├─ 📄 EventsController.java
+│  │  │        │  │  ├─ 📄 ImportWizardController.java
+│  │  │        │  │  ├─ 📄 LunchPeriodController.java
+│  │  │        │  │  ├─ 📄 MainController.java
+│  │  │        │  │  ├─ 📄 MainViewController.java
+│  │  │        │  │  ├─ 📄 ReportsAnalyticsController.java
+│  │  │        │  │  ├─ 📄 RoomManagementController.java
+│  │  │        │  │  ├─ 📄 RoomsController.java
+│  │  │        │  │  ├─ 📄 ScheduleEditorController.java
+│  │  │        │  │  ├─ 📄 ScheduleEditorController.java.tmp.12340.1762288026240
+│  │  │        │  │  ├─ 📄 ScheduleGenerationDialogController.java
+│  │  │        │  │  ├─ 📄 ScheduleGeneratorController.java
+│  │  │        │  │  ├─ 📄 SchedulesController.java
+│  │  │        │  │  ├─ 📄 ScheduleViewController.java
+│  │  │        │  │  ├─ 📄 ScheduleViewerController.java
+│  │  │        │  │  ├─ 📄 ScheduleViewerController.java.backup
+│  │  │        │  │  ├─ 📄 SettingsController.java
+│  │  │        │  │  ├─ 📄 SpecialEventBlockController.java
+│  │  │        │  │  ├─ 📄 StudentsController.java
+│  │  │        │  │  ├─ 📄 TeacherDialogController.java
+│  │  │        │  │  └─ 📄 TeacherManagementController.java
+│  │  │        │  ├─ 📁 dialog/
+│  │  │        │  │  └─ 📄 LoginDialog.java
+│  │  │        │  └─ 📁 helper/
+│  │  │        │     └─ 📄 ScheduleViewHelper.java
+│  │  │        ├─ 📁 util/
+│  │  │        │  ├─ 📄 AuthenticationContext.java
+│  │  │        │  ├─ 📄 BulkDataGenerator.java
+│  │  │        │  ├─ 📄 DateTimeUtil.java
+│  │  │        │  ├─ 📄 DiagnosticChecker.java
+│  │  │        │  ├─ 📄 EisenhowerMatrixUtil.java
+│  │  │        │  ├─ 📄 FileUtil.java
+│  │  │        │  ├─ 📄 KanbanUtil.java
+│  │  │        │  ├─ 📄 LeanSixSigmaUtil.java
+│  │  │        │  └─ 📄 ValidationUtil.java
+│  │  │        └─ 📄 EduSchedulerApplication.java
+│  │  └─ 📁 resources/
+│  │     ├─ 📁 css/
+│  │     │  ├─ 📄 main-style.css
+│  │     │  ├─ 📄 modern-theme.css
+│  │     │  └─ 📄 schedule-view.css
+│  │     ├─ 📁 db/
+│  │     │  └─ 📁 migration/
+│  │     │     ├─ 📄 V2__create_lunch_periods.sql
+│  │     │     ├─ 📄 V3__add_planning_lunch_courses.sql
+│  │     │     ├─ 📄 V4__create_duty_assignments.sql
+│  │     │     └─ 📄 V5__fix_pinned_null_values.sql
+│  │     ├─ 📁 fxml/
+│  │     │  ├─ 📄 nul
+│  │     │  ├─ 📄 CourseManagement.fxml
+│  │     │  ├─ 📄 Courses.fxml
+│  │     │  ├─ 📄 dashboard-view.fxml
+│  │     │  ├─ 📄 Dashboard.fxml
+│  │     │  ├─ 📄 DatabaseCleanupDialog.fxml
+│  │     │  ├─ 📄 Events.fxml
+│  │     │  ├─ 📄 ImportConfigDialog.fxml
+│  │     │  ├─ 📄 ImportWizard.fxml
+│  │     │  ├─ 📄 LunchPeriodDialog.fxml
+│  │     │  ├─ 📄 MainView.fxml
+│  │     │  ├─ 📄 MainWindow.fxml
+│  │     │  ├─ 📄 ReportsAnalytics.fxml
+│  │     │  ├─ 📄 RoomManagement.fxml
+│  │     │  ├─ 📄 Rooms.fxml
+│  │     │  ├─ 📄 schedule-view.fxml
+│  │     │  ├─ 📄 ScheduleConfiguration.fxml
+│  │     │  ├─ 📄 ScheduleEditorDialog.fxml
+│  │     │  ├─ 📄 ScheduleGenerationDialog.fxml
+│  │     │  ├─ 📄 ScheduleGenerator.fxml
+│  │     │  ├─ 📄 Schedules.fxml
+│  │     │  ├─ 📄 ScheduleView.fxml
+│  │     │  ├─ 📄 ScheduleViewer.fxml
+│  │     │  ├─ 📄 Settings.fxml
+│  │     │  ├─ 📄 SpecialEventBlockDialog.fxml
+│  │     │  ├─ 📄 Students.fxml
+│  │     │  ├─ 📄 TeacherDialog.fxml
+│  │     │  ├─ 📄 TeacherManagement.fxml
+│  │     │  └─ 📄 Teachers.fxml
+│  │     ├─ 📁 images/
+│  │     │  ├─ 📁 icons/
+│  │     │  │  └─ 📄 EduS-icon.png
+│  │     │  ├─ 📄 EduScheduler Pro.png
+│  │     │  └─ 📄 EduSchedulerPro.png
+│  │     ├─ 📄 application-dev.properties
+│  │     ├─ 📄 application-prod.properties
+│  │     ├─ 📄 application-test.properties
+│  │     ├─ 📄 application.properties
+│  │     ├─ 📄 application.yml
+│  │     └─ 📄 solverConfig.xml
+│  └─ 📁 test/
+│     └─ 📁 java/
+│        └─ 📁 com/
+│           └─ 📁 eduscheduler/
+├─ 📁 target/
+│  ├─ 📁 classes/
+│  │  ├─ 📁 com/
+│  │  │  └─ 📁 eduscheduler/
+│  │  │     ├─ 📁 ai/
+│  │  │     │  └─ 📁 algorithms/
+│  │  │     │     ├─ 📄 Arc.class
+│  │  │     │     ├─ 📄 ChaosOptimizer.class
+│  │  │     │     ├─ 📄 ConflictGraph.class
+│  │  │     │     ├─ 📄 Constraint.class
+│  │  │     │     ├─ 📄 ConstraintNetwork.class
+│  │  │     │     ├─ 📄 Domain.class
+│  │  │     │     ├─ 📄 GraphColoringScheduler.class
+│  │  │     │     ├─ 📄 HarmonySearch.class
+│  │  │     │     ├─ 📄 QLearningAgent.class
+│  │  │     │     ├─ 📄 RoomCapacityConstraint.class
+│  │  │     │     ├─ 📄 ScheduleAction$ActionType.class
+│  │  │     │     ├─ 📄 ScheduleAction.class
+│  │  │     │     ├─ 📄 ScheduleState.class
+│  │  │     │     ├─ 📄 StateActionPair.class
+│  │  │     │     ├─ 📄 TeacherAvailabilityConstraint.class
+│  │  │     │     └─ 📄 Variable.class
+│  │  │     ├─ 📁 config/
+│  │  │     │  ├─ 📄 ApplicationProperties$Conflict.class
+│  │  │     │  ├─ 📄 ApplicationProperties$Duty$TimeWindow.class
+│  │  │     │  ├─ 📄 ApplicationProperties$Duty.class
+│  │  │     │  ├─ 📄 ApplicationProperties$Export.class
+│  │  │     │  ├─ 📄 ApplicationProperties$Import.class
+│  │  │     │  ├─ 📄 ApplicationProperties$Print$DefaultSettings.class
+│  │  │     │  ├─ 📄 ApplicationProperties$Print.class
+│  │  │     │  ├─ 📄 ApplicationProperties$Schedule.class
+│  │  │     │  ├─ 📄 ApplicationProperties.class
+│  │  │     │  ├─ 📄 DatabaseConfig.class
+│  │  │     │  ├─ 📄 JavaFXConfig.class
+│  │  │     │  ├─ 📄 OptaPlannerConfig.class
+│  │  │     │  └─ 📄 SecurityConfig.class
+│  │  │     ├─ 📁 controller/
+│  │  │     │  ├─ 📄 AdminController.class
+│  │  │     │  ├─ 📄 CourseController.class
+│  │  │     │  ├─ 📄 EventController.class
+│  │  │     │  ├─ 📄 HomeController.class
+│  │  │     │  ├─ 📄 RoomController.class
+│  │  │     │  ├─ 📄 StudentController.class
+│  │  │     │  └─ 📄 TeacherController.class
+│  │  │     ├─ 📁 exception/
+│  │  │     │  ├─ 📄 ConflictException.class
+│  │  │     │  ├─ 📄 ImportException.class
+│  │  │     │  ├─ 📄 OptimizationException.class
+│  │  │     │  ├─ 📄 ScheduleConflictException.class
+│  │  │     │  └─ 📄 ScheduleException.class
+│  │  │     ├─ 📁 model/
+│  │  │     │  ├─ 📁 domain/
+│  │  │     │  │  ├─ 📄 Course.class
+│  │  │     │  │  ├─ 📄 DutyAssignment.class
+│  │  │     │  │  ├─ 📄 Event.class
+│  │  │     │  │  ├─ 📄 ImportTemplate.class
+│  │  │     │  │  ├─ 📄 LunchPeriod.class
+│  │  │     │  │  ├─ 📄 Room.class
+│  │  │     │  │  ├─ 📄 Schedule.class
+│  │  │     │  │  ├─ 📄 ScheduleSlot.class
+│  │  │     │  │  ├─ 📄 SpecialEventBlock$EventBlockType.class
+│  │  │     │  │  ├─ 📄 SpecialEventBlock.class
+│  │  │     │  │  ├─ 📄 Student.class
+│  │  │     │  │  ├─ 📄 StudentEnrollment.class
+│  │  │     │  │  ├─ 📄 Teacher.class
+│  │  │     │  │  ├─ 📄 TimeSlot.class
+│  │  │     │  │  ├─ 📄 User$UserBuilder.class
+│  │  │     │  │  └─ 📄 User.class
+│  │  │     │  ├─ 📁 dto/
+│  │  │     │  │  ├─ 📄 CleanupResult.class
+│  │  │     │  │  ├─ 📄 Conflict.class
+│  │  │     │  │  ├─ 📄 DashboardMetrics.class
+│  │  │     │  │  ├─ 📄 DatabaseStats.class
+│  │  │     │  │  ├─ 📄 DataIssue$IssueSeverity.class
+│  │  │     │  │  ├─ 📄 DataIssue.class
+│  │  │     │  │  ├─ 📄 EnrollmentResult$EnrollmentResultBuilder.class
+│  │  │     │  │  ├─ 📄 EnrollmentResult.class
+│  │  │     │  │  ├─ 📄 EnrollmentStatistics.class
+│  │  │     │  │  ├─ 📄 ImportResult.class
+│  │  │     │  │  ├─ 📄 ImportValidationResult.class
+│  │  │     │  │  ├─ 📄 Recommendation.class
+│  │  │     │  │  ├─ 📄 ScheduleGenerationRequest$ScheduleGenerationRequestBuilder.class
+│  │  │     │  │  ├─ 📄 ScheduleGenerationRequest.class
+│  │  │     │  │  ├─ 📄 ScheduleParameters.class
+│  │  │     │  │  ├─ 📄 ScheduleRequest.class
+│  │  │     │  │  ├─ 📄 UserFeedback$UserFeedbackBuilder.class
+│  │  │     │  │  ├─ 📄 UserFeedback.class
+│  │  │     │  │  └─ 📄 ValidationIssue.class
+│  │  │     │  ├─ 📁 enums/
+│  │  │     │  │  ├─ 📄 DayOfWeek.class
+│  │  │     │  │  ├─ 📄 EducationLevel.class
+│  │  │     │  │  ├─ 📄 EnrollmentStatus.class
+│  │  │     │  │  ├─ 📄 EventType$1.class
+│  │  │     │  │  ├─ 📄 EventType.class
+│  │  │     │  │  ├─ 📄 ExportFormat.class
+│  │  │     │  │  ├─ 📄 MeetingPriority.class
+│  │  │     │  │  ├─ 📄 PriorityLevel$1.class
+│  │  │     │  │  ├─ 📄 PriorityLevel.class
+│  │  │     │  │  ├─ 📄 RoomType.class
+│  │  │     │  │  ├─ 📄 SchedulePeriod.class
+│  │  │     │  │  ├─ 📄 ScheduleStatus.class
+│  │  │     │  │  ├─ 📄 ScheduleType.class
+│  │  │     │  │  └─ 📄 SlotStatus.class
+│  │  │     │  └─ 📁 planning/
+│  │  │     │     └─ 📄 SchedulingSolution.class
+│  │  │     ├─ 📁 prototypes/
+│  │  │     │  ├─ 📄 AdaptiveScheduler$Cluster.class
+│  │  │     │  ├─ 📄 AdaptiveScheduler$ConstraintSolver.class
+│  │  │     │  ├─ 📄 AdaptiveScheduler$Entity.class
+│  │  │     │  ├─ 📄 AdaptiveScheduler$NCSClient$NCSResult.class
+│  │  │     │  ├─ 📄 AdaptiveScheduler$NCSClient.class
+│  │  │     │  ├─ 📄 AdaptiveScheduler$ReasoningAgent.class
+│  │  │     │  └─ 📄 AdaptiveScheduler.class
+│  │  │     ├─ 📁 repository/
+│  │  │     │  ├─ 📄 CourseRepository.class
+│  │  │     │  ├─ 📄 DutyAssignmentRepository.class
+│  │  │     │  ├─ 📄 EventRepository.class
+│  │  │     │  ├─ 📄 ImportTemplateRepository.class
+│  │  │     │  ├─ 📄 LunchPeriodRepository.class
+│  │  │     │  ├─ 📄 RoomRepository.class
+│  │  │     │  ├─ 📄 ScheduleRepository.class
+│  │  │     │  ├─ 📄 ScheduleSlotRepository.class
+│  │  │     │  ├─ 📄 SpecialEventBlockRepository.class
+│  │  │     │  ├─ 📄 StudentEnrollmentRepository.class
+│  │  │     │  ├─ 📄 StudentRepository.class
+│  │  │     │  ├─ 📄 TeacherRepository.class
+│  │  │     │  └─ 📄 UserRepository.class
+│  │  │     ├─ 📁 service/
+│  │  │     │  ├─ 📁 analysis/
+│  │  │     │  │  ├─ 📄 ResourceCapacityAnalyzer$CapacityAnalysisResult.class
+│  │  │     │  │  └─ 📄 ResourceCapacityAnalyzer.class
+│  │  │     │  ├─ 📁 data/
+│  │  │     │  │  ├─ 📄 DataCleaningService.class
+│  │  │     │  │  ├─ 📄 ImportTemplateService.class
+│  │  │     │  │  └─ 📄 SmartFieldMapperService.class
+│  │  │     │  ├─ 📁 impl/
+│  │  │     │  │  ├─ 📄 AnalyticsServiceImpl.class
+│  │  │     │  │  ├─ 📄 AuthenticationServiceImpl.class
+│  │  │     │  │  ├─ 📄 ConflictDetectionServiceImpl$1.class
+│  │  │     │  │  ├─ 📄 ConflictDetectionServiceImpl.class
+│  │  │     │  │  ├─ 📄 CourseServiceImpl.class
+│  │  │     │  │  ├─ 📄 DatabaseCleanupServiceImpl.class
+│  │  │     │  │  ├─ 📄 DataManagementServiceImpl.class
+│  │  │     │  │  ├─ 📄 DutyRosterServiceImpl.class
+│  │  │     │  │  ├─ 📄 ExportServiceImpl$1.class
+│  │  │     │  │  ├─ 📄 ExportServiceImpl.class
+│  │  │     │  │  ├─ 📄 FileImportServiceImpl$1.class
+│  │  │     │  │  ├─ 📄 FileImportServiceImpl.class
+│  │  │     │  │  ├─ 📄 LenientImportServiceImpl$1.class
+│  │  │     │  │  ├─ 📄 LenientImportServiceImpl$CourseImportResult.class
+│  │  │     │  │  ├─ 📄 LenientImportServiceImpl$CourseSaveResult.class
+│  │  │     │  │  ├─ 📄 LenientImportServiceImpl$RoomImportResult.class
+│  │  │     │  │  ├─ 📄 LenientImportServiceImpl$RoomSaveResult.class
+│  │  │     │  │  ├─ 📄 LenientImportServiceImpl$StudentImportResult.class
+│  │  │     │  │  ├─ 📄 LenientImportServiceImpl$StudentSaveResult.class
+│  │  │     │  │  ├─ 📄 LenientImportServiceImpl$TeacherImportResult.class
+│  │  │     │  │  ├─ 📄 LenientImportServiceImpl$TeacherSaveResult.class
+│  │  │     │  │  ├─ 📄 LenientImportServiceImpl.class
+│  │  │     │  │  ├─ 📄 LunchPeriodServiceImpl.class
+│  │  │     │  │  ├─ 📄 RoomServiceImpl.class
+│  │  │     │  │  ├─ 📄 ScheduleExportServiceImpl.class
+│  │  │     │  │  ├─ 📄 ScheduleParametersServiceImpl.class
+│  │  │     │  │  ├─ 📄 SchedulePrintServiceImpl.class
+│  │  │     │  │  ├─ 📄 ScheduleServiceImpl.class
+│  │  │     │  │  ├─ 📄 SpecialEventBlockServiceImpl.class
+│  │  │     │  │  ├─ 📄 SubstituteServiceImpl.class
+│  │  │     │  │  ├─ 📄 TeacherServiceImpl.class
+│  │  │     │  │  ├─ 📄 TimeSlotServiceImpl$1.class
+│  │  │     │  │  ├─ 📄 TimeSlotServiceImpl.class
+│  │  │     │  │  ├─ 📄 UserDetailsServiceImpl.class
+│  │  │     │  │  └─ 📄 UserServiceImpl.class
+│  │  │     │  ├─ 📁 validation/
+│  │  │     │  │  ├─ 📄 GradeLevelValidator$1.class
+│  │  │     │  │  ├─ 📄 GradeLevelValidator.class
+│  │  │     │  │  └─ 📄 ImportValidationService.class
+│  │  │     │  ├─ 📄 AnalyticsService.class
+│  │  │     │  ├─ 📄 AuthenticationService.class
+│  │  │     │  ├─ 📄 ConflictDetectionService.class
+│  │  │     │  ├─ 📄 CourseService.class
+│  │  │     │  ├─ 📄 DatabaseCleanupService.class
+│  │  │     │  ├─ 📄 DataManagementService.class
+│  │  │     │  ├─ 📄 DutyRosterService.class
+│  │  │     │  ├─ 📄 ExportService.class
+│  │  │     │  ├─ 📄 FileImportService.class
+│  │  │     │  ├─ 📄 FileParserService$1.class
+│  │  │     │  ├─ 📄 FileParserService.class
+│  │  │     │  ├─ 📄 LenientImportService.class
+│  │  │     │  ├─ 📄 LunchPeriodService.class
+│  │  │     │  ├─ 📄 RoomService.class
+│  │  │     │  ├─ 📄 ScheduleExportService.class
+│  │  │     │  ├─ 📄 ScheduleGenerationService.class
+│  │  │     │  ├─ 📄 ScheduleOptimizationService.class
+│  │  │     │  ├─ 📄 ScheduleParametersService.class
+│  │  │     │  ├─ 📄 SchedulePrintService.class
+│  │  │     │  ├─ 📄 ScheduleService.class
+│  │  │     │  ├─ 📄 ScheduleSlotService.class
+│  │  │     │  ├─ 📄 SmartCSVImporter$ColumnMappings.class
+│  │  │     │  ├─ 📄 SmartCSVImporter.class
+│  │  │     │  ├─ 📄 SpecialEventBlockService.class
+│  │  │     │  ├─ 📄 StudentCourseAssignmentService.class
+│  │  │     │  ├─ 📄 SubstituteService.class
+│  │  │     │  ├─ 📄 TeacherService.class
+│  │  │     │  ├─ 📄 TimeSlotService.class
+│  │  │     │  └─ 📄 UserService.class
+│  │  │     ├─ 📁 solver/
+│  │  │     │  ├─ 📁 exception/
+│  │  │     │  │  ├─ 📄 InvalidScheduleProblemException.class
+│  │  │     │  │  ├─ 📄 ScheduleNotFoundException.class
+│  │  │     │  │  ├─ 📄 SchedulingSolverException.class
+│  │  │     │  │  └─ 📄 SolverExecutionException.class
+│  │  │     │  ├─ 📄 HybridSchedulingSolver$SolverStats.class
+│  │  │     │  ├─ 📄 HybridSchedulingSolver.class
+│  │  │     │  ├─ 📄 ScheduleSolution.class
+│  │  │     │  └─ 📄 SchedulingConstraintProvider.class
+│  │  │     ├─ 📁 ui/
+│  │  │     │  ├─ 📁 component/
+│  │  │     │  │  ├─ 📄 ColorLegend.class
+│  │  │     │  │  ├─ 📄 ModernCalendarGrid$ColorScheme.class
+│  │  │     │  │  ├─ 📄 ModernCalendarGrid.class
+│  │  │     │  │  └─ 📄 ModernScheduleGrid.class
+│  │  │     │  ├─ 📁 controller/
+│  │  │     │  │  ├─ 📄 CourseManagementController.class
+│  │  │     │  │  ├─ 📄 CoursesController$1.class
+│  │  │     │  │  ├─ 📄 CoursesController.class
+│  │  │     │  │  ├─ 📄 DashboardController.class
+│  │  │     │  │  ├─ 📄 DatabaseCleanupController.class
+│  │  │     │  │  ├─ 📄 DataManagementController.class
+│  │  │     │  │  ├─ 📄 DataReviewController.class
+│  │  │     │  │  ├─ 📄 DutyRosterController.class
+│  │  │     │  │  ├─ 📄 EnhancedHybridScheduler$1.class
+│  │  │     │  │  ├─ 📄 EnhancedHybridScheduler$Chromosome.class
+│  │  │     │  │  ├─ 📄 EnhancedHybridScheduler$CourseCluster.class
+│  │  │     │  │  ├─ 📄 EnhancedHybridScheduler$Gene.class
+│  │  │     │  │  ├─ 📄 EnhancedHybridScheduler$ScenarioType.class
+│  │  │     │  │  ├─ 📄 EnhancedHybridScheduler$ScheduleMetrics.class
+│  │  │     │  │  ├─ 📄 EnhancedHybridScheduler$SchedulePattern.class
+│  │  │     │  │  ├─ 📄 EnhancedHybridScheduler.class
+│  │  │     │  │  ├─ 📄 EnhancedScheduleViewController$1.class
+│  │  │     │  │  ├─ 📄 EnhancedScheduleViewController$Resolution.class
+│  │  │     │  │  ├─ 📄 EnhancedScheduleViewController$ScheduleBlock.class
+│  │  │     │  │  ├─ 📄 EnhancedScheduleViewController.class
+│  │  │     │  │  ├─ 📄 EventsController$1.class
+│  │  │     │  │  ├─ 📄 EventsController$2.class
+│  │  │     │  │  ├─ 📄 EventsController.class
+│  │  │     │  │  ├─ 📄 ImportWizardController$1.class
+│  │  │     │  │  ├─ 📄 ImportWizardController$MockMultipartFile.class
+│  │  │     │  │  ├─ 📄 ImportWizardController.class
+│  │  │     │  │  ├─ 📄 LunchPeriodController.class
+│  │  │     │  │  ├─ 📄 MainController$1.class
+│  │  │     │  │  ├─ 📄 MainController$2.class
+│  │  │     │  │  ├─ 📄 MainController$3.class
+│  │  │     │  │  ├─ 📄 MainController$4.class
+│  │  │     │  │  ├─ 📄 MainController.class
+│  │  │     │  │  ├─ 📄 MainViewController.class
+│  │  │     │  │  ├─ 📄 ReportsAnalyticsController$1.class
+│  │  │     │  │  ├─ 📄 ReportsAnalyticsController$RoomUtilizationRow.class
+│  │  │     │  │  ├─ 📄 ReportsAnalyticsController$TeacherWorkloadRow.class
+│  │  │     │  │  ├─ 📄 ReportsAnalyticsController.class
+│  │  │     │  │  ├─ 📄 RoomManagementController$1.class
+│  │  │     │  │  ├─ 📄 RoomManagementController.class
+│  │  │     │  │  ├─ 📄 RoomsController$1.class
+│  │  │     │  │  ├─ 📄 RoomsController.class
+│  │  │     │  │  ├─ 📄 ScheduleEditorController$1.class
+│  │  │     │  │  ├─ 📄 ScheduleEditorController$2.class
+│  │  │     │  │  ├─ 📄 ScheduleEditorController$3.class
+│  │  │     │  │  ├─ 📄 ScheduleEditorController.class
+│  │  │     │  │  ├─ 📄 ScheduleGenerationDialogController.class
+│  │  │     │  │  ├─ 📄 ScheduleGeneratorController$1.class
+│  │  │     │  │  ├─ 📄 ScheduleGeneratorController$2.class
+│  │  │     │  │  ├─ 📄 ScheduleGeneratorController.class
+│  │  │     │  │  ├─ 📄 SchedulesController$1.class
+│  │  │     │  │  ├─ 📄 SchedulesController$2.class
+│  │  │     │  │  ├─ 📄 SchedulesController$3.class
+│  │  │     │  │  ├─ 📄 SchedulesController$4.class
+│  │  │     │  │  ├─ 📄 SchedulesController.class
+│  │  │     │  │  ├─ 📄 ScheduleViewController$1.class
+│  │  │     │  │  ├─ 📄 ScheduleViewController$ScheduleAction.class
+│  │  │     │  │  ├─ 📄 ScheduleViewController.class
+│  │  │     │  │  ├─ 📄 ScheduleViewerController$1.class
+│  │  │     │  │  ├─ 📄 ScheduleViewerController.class
+│  │  │     │  │  ├─ 📄 SettingsController.class
+│  │  │     │  │  ├─ 📄 SpecialEventBlockController$1.class
+│  │  │     │  │  ├─ 📄 SpecialEventBlockController$2.class
+│  │  │     │  │  ├─ 📄 SpecialEventBlockController$3.class
+│  │  │     │  │  ├─ 📄 SpecialEventBlockController$4.class
+│  │  │     │  │  ├─ 📄 SpecialEventBlockController.class
+│  │  │     │  │  ├─ 📄 StudentsController.class
+│  │  │     │  │  ├─ 📄 TeacherDialogController.class
+│  │  │     │  │  ├─ 📄 TeacherManagementController$1.class
+│  │  │     │  │  └─ 📄 TeacherManagementController.class
+│  │  │     │  ├─ 📁 dialog/
+│  │  │     │  │  └─ 📄 LoginDialog.class
+│  │  │     │  └─ 📁 helper/
+│  │  │     │     └─ 📄 ScheduleViewHelper.class
+│  │  │     ├─ 📁 util/
+│  │  │     │  ├─ 📄 AuthenticationContext.class
+│  │  │     │  ├─ 📄 BulkDataGenerator.class
+│  │  │     │  ├─ 📄 DateTimeUtil.class
+│  │  │     │  ├─ 📄 DiagnosticChecker.class
+│  │  │     │  ├─ 📄 EisenhowerMatrixUtil$1.class
+│  │  │     │  ├─ 📄 EisenhowerMatrixUtil.class
+│  │  │     │  ├─ 📄 FileUtil.class
+│  │  │     │  ├─ 📄 KanbanUtil$1.class
+│  │  │     │  ├─ 📄 KanbanUtil.class
+│  │  │     │  ├─ 📄 LeanSixSigmaUtil.class
+│  │  │     │  └─ 📄 ValidationUtil.class
+│  │  │     └─ 📄 EduSchedulerApplication.class
+│  │  ├─ 📁 css/
+│  │  │  ├─ 📄 main-style.css
+│  │  │  ├─ 📄 modern-theme.css
+│  │  │  └─ 📄 schedule-view.css
+│  │  ├─ 📁 db/
+│  │  │  └─ 📁 migration/
+│  │  │     ├─ 📄 V2__create_lunch_periods.sql
+│  │  │     ├─ 📄 V3__add_planning_lunch_courses.sql
+│  │  │     ├─ 📄 V4__create_duty_assignments.sql
+│  │  │     └─ 📄 V5__fix_pinned_null_values.sql
+│  │  ├─ 📁 fxml/
+│  │  │  ├─ 📄 CourseManagement.fxml
+│  │  │  ├─ 📄 Courses.fxml
+│  │  │  ├─ 📄 dashboard-view.fxml
+│  │  │  ├─ 📄 Dashboard.fxml
+│  │  │  ├─ 📄 DatabaseCleanupDialog.fxml
+│  │  │  ├─ 📄 Events.fxml
+│  │  │  ├─ 📄 ImportConfigDialog.fxml
+│  │  │  ├─ 📄 ImportWizard.fxml
+│  │  │  ├─ 📄 LunchPeriodDialog.fxml
+│  │  │  ├─ 📄 MainView.fxml
+│  │  │  ├─ 📄 MainWindow.fxml
+│  │  │  ├─ 📄 ReportsAnalytics.fxml
+│  │  │  ├─ 📄 RoomManagement.fxml
+│  │  │  ├─ 📄 Rooms.fxml
+│  │  │  ├─ 📄 schedule-view.fxml
+│  │  │  ├─ 📄 ScheduleConfiguration.fxml
+│  │  │  ├─ 📄 ScheduleEditorDialog.fxml
+│  │  │  ├─ 📄 ScheduleGenerationDialog.fxml
+│  │  │  ├─ 📄 ScheduleGenerator.fxml
+│  │  │  ├─ 📄 Schedules.fxml
+│  │  │  ├─ 📄 ScheduleView.fxml
+│  │  │  ├─ 📄 ScheduleViewer.fxml
+│  │  │  ├─ 📄 Settings.fxml
+│  │  │  ├─ 📄 SpecialEventBlockDialog.fxml
+│  │  │  ├─ 📄 Students.fxml
+│  │  │  ├─ 📄 TeacherDialog.fxml
+│  │  │  ├─ 📄 TeacherManagement.fxml
+│  │  │  └─ 📄 Teachers.fxml
+│  │  ├─ 📁 images/
+│  │  │  ├─ 📁 icons/
+│  │  │  │  └─ 📄 EduS-icon.png
+│  │  │  ├─ 📄 EduScheduler Pro.png
+│  │  │  └─ 📄 EduSchedulerPro.png
+│  │  ├─ 📄 application-dev.properties
+│  │  ├─ 📄 application-prod.properties
+│  │  ├─ 📄 application-test.properties
+│  │  ├─ 📄 application.properties
+│  │  ├─ 📄 application.yml
+│  │  └─ 📄 solverConfig.xml
+│  ├─ 📁 generated-sources/
+│  │  └─ 📁 annotations/
+│  └─ 📁 maven-status/
+│     └─ 📁 maven-compiler-plugin/
+│        └─ 📁 compile/
+│           └─ 📁 default-compile/
+│              ├─ 📄 createdFiles.lst
+│              └─ 📄 inputFiles.lst
+├─ 📄 .gitignore
+├─ 📄 .tmp
+├─ 📄 app-run.log
+├─ 📄 fix_pom.bat
+├─ 📄 Folder-file-tree.txt
+├─ 📄 pom.xml
+├─ 📄 pom.xml.backup
+├─ 📄 README.md
+├─ 📄 schedulingtask.py
+└─ 📄 student_export_fix.patch

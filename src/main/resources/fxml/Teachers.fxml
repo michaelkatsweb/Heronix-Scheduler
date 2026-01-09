@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<!--
+Teachers Management View - Dark Futuristic Theme
+Location: src/main/resources/fxml/Teachers.fxml
+-->
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.eduscheduler.ui.controller.TeacherManagementController"
+            styleClass="root">
+
+    <top>
+        <VBox spacing="15" style="-fx-padding: 20;">
+            <!-- Header Section -->
+            <HBox alignment="CENTER_LEFT" spacing="15" styleClass="card">
+                <Label text="👨‍🏫 Teacher Management" styleClass="label-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="🤖 Auto-Assign" onAction="#handleAutoAssign" styleClass="button-info">
+                    <tooltip>
+                        <Tooltip text="Automatically assign courses and rooms to teachers based on certifications and subject expertise"/>
+                    </tooltip>
+                </Button>
+                <Button text="➕ Add Teacher" onAction="#handleAddTeacher" styleClass="button-success"/>
+                <Button text="🔄 Refresh" onAction="#handleRefresh" styleClass="button-primary"/>
+            </HBox>
+
+            <!-- Search and Filter Bar -->
+            <HBox spacing="10" alignment="CENTER_LEFT" styleClass="card">
+                <Label text="🔍 Search:" styleClass="label"/>
+                <TextField fx:id="searchField" promptText="Name, ID, Email..."
+                           prefWidth="300" onKeyReleased="#handleSearch" HBox.hgrow="ALWAYS"/>
+
+                <Separator orientation="VERTICAL"/>
+
+                <Label text="Filter:" styleClass="label"/>
+                <ComboBox fx:id="departmentFilter" promptText="Department"
+                          prefWidth="150" onAction="#handleFilter"/>
+                <ComboBox fx:id="statusFilter" promptText="Status"
+                          prefWidth="120" onAction="#handleFilter"/>
+                <Button text="Clear" onAction="#handleFilter" styleClass="button"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <!-- Teachers Table Container -->
+        <VBox spacing="10" styleClass="card">
+            <padding>
+                <Insets top="15" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label text="All Teachers" styleClass="label-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="recordCountLabel" text="Total: 0" styleClass="label"/>
+            </HBox>
+        
+        <TableView fx:id="teacherTable" VBox.vgrow="ALWAYS">
+            <columns>
+                <!-- Workload Indicator Column -->
+                <TableColumn fx:id="workloadColumn" text="●" prefWidth="50" minWidth="50" maxWidth="50" sortable="true" style="-fx-alignment: CENTER;"/>
+
+                <TableColumn fx:id="idColumn" text="ID" prefWidth="50" minWidth="40"/>
+                <TableColumn fx:id="nameColumn" text="Name" prefWidth="150" minWidth="120"/>
+                <TableColumn fx:id="employeeIdColumn" text="Employee ID" prefWidth="100" minWidth="80"/>
+                <TableColumn fx:id="departmentColumn" text="Department" prefWidth="100" minWidth="80"/>
+                <TableColumn fx:id="emailColumn" text="Email" prefWidth="180" minWidth="140"/>
+                <TableColumn fx:id="phoneColumn" text="Phone" prefWidth="110" minWidth="90"/>
+
+                <!-- Course Count Column -->
+                <TableColumn fx:id="courseCountColumn" text="Courses" prefWidth="80" minWidth="70" style="-fx-alignment: CENTER;"/>
+
+                <TableColumn fx:id="certificationsColumn" text="Certifications" prefWidth="150" minWidth="120"/>
+                <TableColumn fx:id="assignedCoursesColumn" text="Qualified Courses" prefWidth="150" minWidth="120"/>
+                <TableColumn fx:id="maxHoursColumn" text="Max Hours" prefWidth="80" minWidth="70"/>
+                <TableColumn fx:id="activeColumn" text="Active" prefWidth="60" minWidth="50"/>
+                <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="150" minWidth="120"/>
+            </columns>
+            
+            <placeholder>
+                <VBox alignment="CENTER" spacing="10">
+                    <Label text="👥" styleClass="label-title"/>
+                    <Label text="No teachers found" styleClass="label-subtitle"/>
+                    <Label text="Click 'Add Teacher' to create your first teacher" styleClass="label-caption"/>
+                </VBox>
+            </placeholder>
+        </TableView>
+
+        <!-- Bottom Actions -->
+        <HBox spacing="10" alignment="CENTER_RIGHT">
+            <Button text="📤 Export" onAction="#handleExport" styleClass="button-warning"/>
+        </HBox>
+    </VBox>
+    </center>
+
+    <bottom>
+        <!-- Status Bar -->
+        <HBox alignment="CENTER_LEFT" spacing="10" styleClass="card" style="-fx-padding: 10;">
+            <Label text="●" styleClass="accent-success" style="-fx-font-size: 14;"/>
+            <Label text="Teachers module loaded successfully" styleClass="label"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label text="Heronix Scheduling System v1.0" styleClass="label-caption"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

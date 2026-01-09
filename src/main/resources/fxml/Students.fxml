@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<!--
+Students Management View - Dark Futuristic Theme
+Location: src/main/resources/fxml/Students.fxml
+-->
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.eduscheduler.ui.controller.StudentsController"
+            styleClass="root"
+            style="-fx-background-color: derive(-fx-base, 26.4%);">
+
+    <top>
+        <VBox spacing="15" style="-fx-padding: 20;">
+            <!-- Header Section -->
+            <HBox alignment="CENTER_LEFT" spacing="10" styleClass="card">
+                <Label text="👨‍🎓 Students Management" styleClass="label-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="➕ Add Student" onAction="#handleAddStudent" styleClass="button-success"/>
+                <Separator orientation="VERTICAL"/>
+                <Button text="📝 Add Grade" onAction="#handleAddGrade" styleClass="button-primary"/>
+                <Button text="📊 View Grades" onAction="#handleViewGrades" styleClass="button-primary"/>
+                <Button text="📥 Import Grades" onAction="#handleImportGrades" styleClass="button-primary"/>
+                <Button text="💡 Recommend Courses" onAction="#handleRecommendCourses" styleClass="button-primary"/>
+                <Separator orientation="VERTICAL"/>
+                <Button text="🏥 Medical Record" onAction="#handleOpenMedicalRecord" styleClass="button"/>
+                <Button text="📱 QR Code" onAction="#handlePrintQRCode" styleClass="button-info"/>
+                <Button text="📷 Upload Photo" onAction="#handleUploadPhoto" styleClass="button-info"/>
+                <Separator orientation="VERTICAL"/>
+                <Button text="🔄 Refresh" onAction="#handleRefresh" styleClass="button"/>
+                <Button text="📈 Statistics" onAction="#handleStatistics" styleClass="button"/>
+                <Button text="📥 Export" onAction="#handleExport" styleClass="button"/>
+            </HBox>
+
+            <!-- Search and Filter Bar -->
+            <HBox spacing="10" alignment="CENTER_LEFT" styleClass="card">
+                <Label text="🔍 Search:" styleClass="label"/>
+                <TextField fx:id="searchField" promptText="Student ID, Name, Email..."
+                           prefWidth="300" onKeyReleased="#handleSearch"/>
+
+                <Separator orientation="VERTICAL"/>
+
+                <Label text="Filter:" styleClass="label"/>
+                <ComboBox fx:id="gradeFilter" promptText="Grade Level"
+                          prefWidth="150" onAction="#handleFilter"/>
+                <ComboBox fx:id="statusFilter" promptText="Status"
+                          prefWidth="120" onAction="#handleFilter"/>
+                <ComboBox fx:id="medicalFilter" promptText="Medical Condition"
+                          prefWidth="180" onAction="#handleFilter"/>
+                <ComboBox fx:id="spedFilter" promptText="SPED Status"
+                          prefWidth="140" onAction="#handleFilter"/>
+                <Button text="Clear" onAction="#handleClearFilters" styleClass="button"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <!-- Students Table Container -->
+        <VBox spacing="10" styleClass="card">
+            <padding>
+                <Insets top="15" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label text="All Students" styleClass="label-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="recordCountLabel" text="Total: 0" styleClass="label"/>
+            </HBox>
+
+            <TableView fx:id="studentsTable" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="studentIdColumn" text="Student ID"
+                                 prefWidth="120" minWidth="100"/>
+                    <TableColumn fx:id="photoColumn" text="Photo"
+                                 prefWidth="60" minWidth="60" sortable="false"/>
+                    <TableColumn fx:id="qrCodeColumn" text="QR Code"
+                                 prefWidth="60" minWidth="60" sortable="false"/>
+                    <TableColumn fx:id="nameColumn" text="Name"
+                                 prefWidth="200" minWidth="180"/>
+                    <TableColumn fx:id="gradeColumn" text="Grade Level"
+                                 prefWidth="100" minWidth="80"/>
+                    <TableColumn fx:id="emailColumn" text="Email"
+                                 prefWidth="220" minWidth="180"/>
+                    <TableColumn fx:id="gpaColumn" text="GPA"
+                                 prefWidth="80" minWidth="60"/>
+                    <TableColumn fx:id="creditsColumn" text="Credits"
+                                 prefWidth="80" minWidth="60"/>
+                    <TableColumn fx:id="academicStandingColumn" text="Standing"
+                                 prefWidth="120" minWidth="100"/>
+                    <TableColumn fx:id="coursesColumn" text="Courses"
+                                 prefWidth="80" minWidth="60"/>
+                    <TableColumn fx:id="iepColumn" text="IEP"
+                                 prefWidth="60" minWidth="50"/>
+                    <TableColumn fx:id="plan504Column" text="504"
+                                 prefWidth="60" minWidth="50"/>
+                    <TableColumn fx:id="statusColumn" text="Status"
+                                 prefWidth="80" minWidth="70"/>
+                    <TableColumn fx:id="actionsColumn" text="Actions"
+                                 prefWidth="350" minWidth="330"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </center>
+
+</BorderPane>

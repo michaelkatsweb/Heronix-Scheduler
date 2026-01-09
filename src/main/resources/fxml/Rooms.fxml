@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<!--
+Rooms Management View - Dark Futuristic Theme
+Location: src/main/resources/fxml/Rooms.fxml
+-->
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.eduscheduler.ui.controller.RoomsController"
+            styleClass="root">
+
+    <top>
+        <VBox spacing="15" style="-fx-padding: 20;">
+            <!-- Header Section -->
+            <HBox alignment="CENTER_LEFT" spacing="15" styleClass="card">
+                <Label text="🏫 Room Management" styleClass="label-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="➕ Add Room" onAction="#handleAddRoom" styleClass="button-success"/>
+                <Button text="🔄 Refresh" onAction="#handleRefresh" styleClass="button-primary"/>
+            </HBox>
+
+            <!-- Search and Filter Bar -->
+            <HBox spacing="10" alignment="CENTER_LEFT" styleClass="card">
+                <Label text="🔍 Search:" styleClass="label"/>
+                <TextField fx:id="searchField" promptText="Search rooms..."
+                           prefWidth="300" onKeyReleased="#handleSearch" HBox.hgrow="ALWAYS"/>
+
+                <Separator orientation="VERTICAL"/>
+
+                <Label text="Filter:" styleClass="label"/>
+                <ComboBox fx:id="buildingFilter" promptText="Building"
+                          prefWidth="150" onAction="#handleFilter"/>
+                <ComboBox fx:id="typeFilter" promptText="Type"
+                          prefWidth="150" onAction="#handleFilter"/>
+                <ComboBox fx:id="availabilityFilter" promptText="Availability"
+                          prefWidth="130" onAction="#handleFilter"/>
+                <Button text="Clear" onAction="#handleClearFilters" styleClass="button"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <!-- Rooms Table Container -->
+        <VBox spacing="10" styleClass="card">
+            <padding>
+                <Insets top="15" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label text="All Rooms" styleClass="label-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="recordCountLabel" text="Total: 0" styleClass="label"/>
+            </HBox>
+
+            <TableView fx:id="roomsTable" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="numberColumn" text="Room #" prefWidth="100" minWidth="90"/>
+                    <TableColumn fx:id="buildingColumn" text="Building" prefWidth="150" minWidth="120"/>
+                    <TableColumn fx:id="typeColumn" text="Type" prefWidth="150" minWidth="130"/>
+                    <TableColumn fx:id="teacherColumn" text="Assigned Teacher" prefWidth="180" minWidth="150"/>
+                    <TableColumn fx:id="capacityColumn" text="Capacity" prefWidth="100" minWidth="90"/>
+                    <TableColumn fx:id="floorColumn" text="Floor" prefWidth="80" minWidth="70"/>
+                    <TableColumn fx:id="equipmentColumn" text="Equipment" prefWidth="250" minWidth="200"/>
+                    <TableColumn fx:id="accessibleColumn" text="Accessible" prefWidth="110" minWidth="100"/>
+                    <TableColumn fx:id="availableColumn" text="Available" prefWidth="110" minWidth="100"/>
+                    <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="250" minWidth="220"/>
+                </columns>
+
+                <placeholder>
+                    <VBox alignment="CENTER" spacing="10">
+                        <Label text="🏫" styleClass="label-title"/>
+                        <Label text="No rooms found" styleClass="label-subtitle"/>
+                        <Label text="Click 'Add Room' to create your first room" styleClass="label-caption"/>
+                    </VBox>
+                </placeholder>
+            </TableView>
+
+            <!-- Bottom Actions -->
+            <HBox spacing="10" alignment="CENTER_RIGHT">
+                <Label text="Quick Actions:" styleClass="label"/>
+                <Button text="📤 Export" onAction="#handleExport" styleClass="button-warning"/>
+                <Button text="📊 Utilization" onAction="#handleUtilization" styleClass="button-primary"/>
+            </HBox>
+        </VBox>
+    </center>
+
+    <bottom>
+        <!-- Status Bar -->
+        <HBox alignment="CENTER_LEFT" spacing="10" styleClass="card" style="-fx-padding: 10;">
+            <Label text="●" styleClass="accent-success" style="-fx-font-size: 14;"/>
+            <Label text="Rooms module loaded" styleClass="label"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label text="Heronix Scheduling System v1.0" styleClass="label-caption"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

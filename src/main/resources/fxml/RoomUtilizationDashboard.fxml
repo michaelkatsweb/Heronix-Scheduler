@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.chart.*?>
+
+<!--
+Room Utilization Dashboard
+Visualization of room usage, availability, and capacity metrics
+
+Location: src/main/resources/fxml/RoomUtilizationDashboard.fxml
+-->
+
+<BorderPane xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.eduscheduler.ui.controller.RoomUtilizationDashboardController"
+            styleClass="main-container">
+
+    <!-- HEADER -->
+    <top>
+        <VBox styleClass="header-section">
+            <HBox alignment="CENTER_LEFT" spacing="20" styleClass="page-header">
+                <Label text="🏫 Room Utilization Dashboard" styleClass="page-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <ComboBox fx:id="buildingFilterComboBox" promptText="All Buildings"
+                          onAction="#handleBuildingFilterChange" styleClass="filter-combo"/>
+                <ComboBox fx:id="roomTypeFilterComboBox" promptText="All Room Types"
+                          onAction="#handleRoomTypeFilterChange" styleClass="filter-combo"/>
+                <Button text="🔄 Refresh" onAction="#handleRefresh" styleClass="button-secondary"/>
+                <Button text="📊 Export Report" onAction="#handleExportReport" styleClass="button-primary"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- MAIN CONTENT -->
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="scroll-pane">
+            <VBox spacing="20" styleClass="content-container">
+                <padding>
+                    <Insets top="20" right="20" bottom="20" left="20"/>
+                </padding>
+
+                <!-- ========== SUMMARY METRICS ========== -->
+                <HBox spacing="15" styleClass="metrics-row">
+                    <!-- Total Rooms Card -->
+                    <VBox styleClass="card metric-card" HBox.hgrow="ALWAYS">
+                        <Label text="🏢 Total Rooms" styleClass="metric-label"/>
+                        <Label fx:id="totalRoomsLabel" text="--" styleClass="metric-value"/>
+                        <Label fx:id="totalRoomsDescLabel" text="available spaces" styleClass="metric-description"/>
+                    </VBox>
+
+                    <!-- Average Utilization Card -->
+                    <VBox styleClass="card metric-card" HBox.hgrow="ALWAYS">
+                        <Label text="📊 Avg Utilization" styleClass="metric-label"/>
+                        <Label fx:id="avgUtilizationLabel" text="--" styleClass="metric-value"/>
+                        <Label fx:id="avgUtilizationDescLabel" text="of available periods" styleClass="metric-description"/>
+                    </VBox>
+
+                    <!-- Underutilized Rooms Card -->
+                    <VBox styleClass="card metric-card" HBox.hgrow="ALWAYS">
+                        <Label text="📉 Underutilized" styleClass="metric-label"/>
+                        <Label fx:id="underutilizedRoomsLabel" text="--" styleClass="metric-value"/>
+                        <Label fx:id="underutilizedDescLabel" text="rooms below 60%" styleClass="metric-description"/>
+                    </VBox>
+
+                    <!-- Overutilized Rooms Card -->
+                    <VBox styleClass="card metric-card" HBox.hgrow="ALWAYS">
+                        <Label text="🔥 Overutilized" styleClass="metric-label"/>
+                        <Label fx:id="overutilizedRoomsLabel" text="--" styleClass="metric-value"/>
+                        <Label fx:id="overutilizedDescLabel" text="rooms above 90%" styleClass="metric-description"/>
+                    </VBox>
+                </HBox>
+
+                <!-- ========== UTILIZATION BY BUILDING ========== -->
+                <VBox spacing="15" styleClass="card">
+                    <Label text="🏗️ Utilization by Building" styleClass="section-title"/>
+
+                    <BarChart fx:id="buildingUtilizationChart"
+                              title="Room Utilization by Building"
+                              legendVisible="false"
+                              prefHeight="300">
+                        <xAxis>
+                            <CategoryAxis label="Building" fx:id="buildingXAxis"/>
+                        </xAxis>
+                        <yAxis>
+                            <NumberAxis label="Utilization %" fx:id="buildingYAxis" upperBound="100"/>
+                        </yAxis>
+                    </BarChart>
+                </VBox>
+
+                <!-- ========== ROOM UTILIZATION DETAILS ========== -->
+                <VBox spacing="15" styleClass="card">
+                    <HBox alignment="CENTER_LEFT" spacing="15">
+                        <Label text="📋 Room Utilization Details" styleClass="section-title"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <ComboBox fx:id="utilizationFilterComboBox" promptText="All Rooms"
+                                  onAction="#handleUtilizationFilterChange" styleClass="filter-combo"/>
+                    </HBox>
+
+                    <TableView fx:id="roomUtilizationTable" styleClass="data-table">
+                        <columns>
+                            <TableColumn fx:id="roomNumberColumn" text="Room" prefWidth="100"/>
+                            <TableColumn fx:id="buildingColumn" text="Building" prefWidth="120"/>
+                            <TableColumn fx:id="roomTypeColumn" text="Type" prefWidth="120"/>
+                            <TableColumn fx:id="capacityColumn" text="Capacity" prefWidth="100"/>
+                            <TableColumn fx:id="periodsUsedColumn" text="Periods Used" prefWidth="110"/>
+                            <TableColumn fx:id="periodsAvailableColumn" text="Periods Available" prefWidth="140"/>
+                            <TableColumn fx:id="utilizationPercentColumn" text="Utilization %" prefWidth="120"/>
+                            <TableColumn fx:id="statusColumn" text="Status" prefWidth="120"/>
+                            <TableColumn fx:id="viewDetailsColumn" text="Details" prefWidth="100"/>
+                        </columns>
+                        <placeholder>
+                            <Label text="No room utilization data available"/>
+                        </placeholder>
+                    </TableView>
+                </VBox>
+
+                <!-- ========== PERIOD-BY-PERIOD AVAILABILITY ========== -->
+                <VBox spacing="15" styleClass="card">
+                    <Label text="⏰ Period-by-Period Room Availability" styleClass="section-title"/>
+
+                    <GridPane hgap="20" vgap="15">
+                        <!-- Period 1 -->
+                        <VBox GridPane.columnIndex="0" GridPane.rowIndex="0">
+                            <Label text="Period 1" styleClass="stat-label"/>
+                            <Label fx:id="period1AvailableLabel" text="--" styleClass="stat-value"/>
+                            <Label fx:id="period1AvailDescLabel" text="rooms available" styleClass="stat-description"/>
+                        </VBox>
+
+                        <!-- Period 2 -->
+                        <VBox GridPane.columnIndex="1" GridPane.rowIndex="0">
+                            <Label text="Period 2" styleClass="stat-label"/>
+                            <Label fx:id="period2AvailableLabel" text="--" styleClass="stat-value"/>
+                            <Label fx:id="period2AvailDescLabel" text="rooms available" styleClass="stat-description"/>
+                        </VBox>
+
+                        <!-- Period 3 -->
+                        <VBox GridPane.columnIndex="2" GridPane.rowIndex="0">
+                            <Label text="Period 3" styleClass="stat-label"/>
+                            <Label fx:id="period3AvailableLabel" text="--" styleClass="stat-value"/>
+                            <Label fx:id="period3AvailDescLabel" text="rooms available" styleClass="stat-description"/>
+                        </VBox>
+
+                        <!-- Period 4 -->
+                        <VBox GridPane.columnIndex="3" GridPane.rowIndex="0">
+                            <Label text="Period 4" styleClass="stat-label"/>
+                            <Label fx:id="period4AvailableLabel" text="--" styleClass="stat-value"/>
+                            <Label fx:id="period4AvailDescLabel" text="rooms available" styleClass="stat-description"/>
+                        </VBox>
+
+                        <!-- Period 5 -->
+                        <VBox GridPane.columnIndex="0" GridPane.rowIndex="1">
+                            <Label text="Period 5" styleClass="stat-label"/>
+                            <Label fx:id="period5AvailableLabel" text="--" styleClass="stat-value"/>
+                            <Label fx:id="period5AvailDescLabel" text="rooms available" styleClass="stat-description"/>
+                        </VBox>
+
+                        <!-- Period 6 -->
+                        <VBox GridPane.columnIndex="1" GridPane.rowIndex="1">
+                            <Label text="Period 6" styleClass="stat-label"/>
+                            <Label fx:id="period6AvailableLabel" text="--" styleClass="stat-value"/>
+                            <Label fx:id="period6AvailDescLabel" text="rooms available" styleClass="stat-description"/>
+                        </VBox>
+
+                        <!-- Period 7 -->
+                        <VBox GridPane.columnIndex="2" GridPane.rowIndex="1">
+                            <Label text="Period 7" styleClass="stat-label"/>
+                            <Label fx:id="period7AvailableLabel" text="--" styleClass="stat-value"/>
+                            <Label fx:id="period7AvailDescLabel" text="rooms available" styleClass="stat-description"/>
+                        </VBox>
+
+                        <!-- Period 8 -->
+                        <VBox GridPane.columnIndex="3" GridPane.rowIndex="1">
+                            <Label text="Period 8" styleClass="stat-label"/>
+                            <Label fx:id="period8AvailableLabel" text="--" styleClass="stat-value"/>
+                            <Label fx:id="period8AvailDescLabel" text="rooms available" styleClass="stat-description"/>
+                        </VBox>
+                    </GridPane>
+                </VBox>
+
+                <!-- ========== ROOM TYPE BREAKDOWN ========== -->
+                <VBox spacing="15" styleClass="card">
+                    <Label text="🎯 Utilization by Room Type" styleClass="section-title"/>
+
+                    <GridPane hgap="20" vgap="15">
+                        <!-- Standard Classrooms -->
+                        <VBox GridPane.columnIndex="0" GridPane.rowIndex="0">
+                            <Label text="🏫 Standard Classroom" styleClass="stat-label"/>
+                            <Label fx:id="standardUtilizationLabel" text="--" styleClass="stat-value"/>
+                            <Label fx:id="standardDescLabel" text="avg utilization" styleClass="stat-description"/>
+                        </VBox>
+
+                        <!-- Lab Rooms -->
+                        <VBox GridPane.columnIndex="1" GridPane.rowIndex="0">
+                            <Label text="🔬 Lab" styleClass="stat-label"/>
+                            <Label fx:id="labUtilizationLabel" text="--" styleClass="stat-value"/>
+                            <Label fx:id="labDescLabel" text="avg utilization" styleClass="stat-description"/>
+                        </VBox>
+
+                        <!-- Computer Labs -->
+                        <VBox GridPane.columnIndex="2" GridPane.rowIndex="0">
+                            <Label text="💻 Computer Lab" styleClass="stat-label"/>
+                            <Label fx:id="computerLabUtilizationLabel" text="--" styleClass="stat-value"/>
+                            <Label fx:id="computerLabDescLabel" text="avg utilization" styleClass="stat-description"/>
+                        </VBox>
+
+                        <!-- Gymnasium -->
+                        <VBox GridPane.columnIndex="3" GridPane.rowIndex="0">
+                            <Label text="🏀 Gymnasium" styleClass="stat-label"/>
+                            <Label fx:id="gymUtilizationLabel" text="--" styleClass="stat-value"/>
+                            <Label fx:id="gymDescLabel" text="avg utilization" styleClass="stat-description"/>
+                        </VBox>
+
+                        <!-- Art Room -->
+                        <VBox GridPane.columnIndex="0" GridPane.rowIndex="1">
+                            <Label text="🎨 Art Room" styleClass="stat-label"/>
+                            <Label fx:id="artUtilizationLabel" text="--" styleClass="stat-value"/>
+                            <Label fx:id="artDescLabel" text="avg utilization" styleClass="stat-description"/>
+                        </VBox>
+
+                        <!-- Music Room -->
+                        <VBox GridPane.columnIndex="1" GridPane.rowIndex="1">
+                            <Label text="🎵 Music Room" styleClass="stat-label"/>
+                            <Label fx:id="musicUtilizationLabel" text="--" styleClass="stat-value"/>
+                            <Label fx:id="musicDescLabel" text="avg utilization" styleClass="stat-description"/>
+                        </VBox>
+
+                        <!-- Auditorium -->
+                        <VBox GridPane.columnIndex="2" GridPane.rowIndex="1">
+                            <Label text="🎭 Auditorium" styleClass="stat-label"/>
+                            <Label fx:id="auditoriumUtilizationLabel" text="--" styleClass="stat-value"/>
+                            <Label fx:id="auditoriumDescLabel" text="avg utilization" styleClass="stat-description"/>
+                        </VBox>
+
+                        <!-- Library -->
+                        <VBox GridPane.columnIndex="3" GridPane.rowIndex="1">
+                            <Label text="📚 Library" styleClass="stat-label"/>
+                            <Label fx:id="libraryUtilizationLabel" text="--" styleClass="stat-value"/>
+                            <Label fx:id="libraryDescLabel" text="avg utilization" styleClass="stat-description"/>
+                        </VBox>
+                    </GridPane>
+                </VBox>
+
+                <!-- ========== OPTIMIZATION RECOMMENDATIONS ========== -->
+                <VBox spacing="15" styleClass="card">
+                    <Label text="💡 Space Optimization Recommendations" styleClass="section-title"/>
+
+                    <VBox fx:id="recommendationsContainer" spacing="10">
+                        <Label text="Analyzing room utilization..." styleClass="stat-description"/>
+                    </VBox>
+                </VBox>
+
+            </VBox>
+        </ScrollPane>
+    </center>
+
+</BorderPane>

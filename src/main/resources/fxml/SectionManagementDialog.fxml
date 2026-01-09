@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+
+<VBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.eduscheduler.ui.controller.SectionManagementDialogController"
+      prefWidth="900"
+      prefHeight="700"
+      style="-fx-background-color: white; -fx-padding: 20;">
+
+    <!-- Header -->
+    <HBox alignment="CENTER_LEFT" spacing="15" style="-fx-padding: 0 0 20 0;">
+        <Label fx:id="titleLabel" text="Manage Course Sections"
+               style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Label fx:id="courseInfoLabel" text="Course: Loading..."
+               style="-fx-font-size: 14px; -fx-text-fill: #7f8c8d;"/>
+    </HBox>
+
+    <!-- Summary Bar -->
+    <HBox alignment="CENTER_LEFT" spacing="20" style="-fx-padding: 10; -fx-background-color: #ecf0f1; -fx-background-radius: 5;">
+        <VBox alignment="CENTER_LEFT" spacing="3">
+            <Label text="Total Sections:" style="-fx-font-size: 11px; -fx-text-fill: #7f8c8d;"/>
+            <Label fx:id="totalSectionsLabel" text="0" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+        </VBox>
+        <Separator orientation="VERTICAL"/>
+        <VBox alignment="CENTER_LEFT" spacing="3">
+            <Label text="Total Enrollment:" style="-fx-font-size: 11px; -fx-text-fill: #7f8c8d;"/>
+            <Label fx:id="totalEnrollmentLabel" text="0/0" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+        </VBox>
+        <Separator orientation="VERTICAL"/>
+        <VBox alignment="CENTER_LEFT" spacing="3">
+            <Label text="Available Seats:" style="-fx-font-size: 11px; -fx-text-fill: #7f8c8d;"/>
+            <Label fx:id="availableSeatsLabel" text="0" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #27ae60;"/>
+        </VBox>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button fx:id="addSectionButton" text="+ Add Section" onAction="#handleAddSection"
+                style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 20; -fx-background-radius: 5;"/>
+    </HBox>
+
+    <!-- Sections Table -->
+    <TableView fx:id="sectionsTable" VBox.vgrow="ALWAYS" style="-fx-border-color: #bdc3c7; -fx-border-radius: 5; -fx-background-radius: 5;">
+        <columns>
+            <TableColumn fx:id="sectionNumberColumn" text="Section #" prefWidth="80" minWidth="60"/>
+            <TableColumn fx:id="teacherColumn" text="Teacher" prefWidth="180" minWidth="150"/>
+            <TableColumn fx:id="roomColumn" text="Room" prefWidth="100" minWidth="80"/>
+            <TableColumn fx:id="periodColumn" text="Period" prefWidth="80" minWidth="60"/>
+            <TableColumn fx:id="enrollmentColumn" text="Enrollment" prefWidth="120" minWidth="100"/>
+            <TableColumn fx:id="capacityColumn" text="Capacity" prefWidth="100" minWidth="80"/>
+            <TableColumn fx:id="statusColumn" text="Status" prefWidth="120" minWidth="100"/>
+            <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="120" minWidth="100"/>
+        </columns>
+        <placeholder>
+            <VBox alignment="CENTER" spacing="10" style="-fx-padding: 40;">
+                <Label text="No sections created yet" style="-fx-font-size: 16px; -fx-text-fill: #95a5a6;"/>
+                <Label text="Click 'Add Section' to create the first section" style="-fx-font-size: 12px; -fx-text-fill: #bdc3c7;"/>
+            </VBox>
+        </placeholder>
+    </TableView>
+
+    <!-- Button Bar -->
+    <ButtonBar style="-fx-padding: 15 0 0 0;">
+        <buttons>
+            <Button text="Close" onAction="#handleClose"
+                    style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-padding: 8 25; -fx-background-radius: 5;"/>
+        </buttons>
+    </ButtonBar>
+
+</VBox>

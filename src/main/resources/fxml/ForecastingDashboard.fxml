@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.chart.*?>
+
+<!--
+Enrollment Forecasting Dashboard
+Provides visualization and analysis of enrollment predictions, capacity planning, and trends
+
+Location: src/main/resources/fxml/ForecastingDashboard.fxml
+-->
+
+<BorderPane xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.eduscheduler.ui.controller.ForecastingDashboardController"
+            styleClass="main-container">
+
+    <!-- HEADER -->
+    <top>
+        <VBox styleClass="header-section">
+            <HBox alignment="CENTER_LEFT" spacing="20" styleClass="page-header">
+                <Label text="📊 Enrollment Forecasting Dashboard" styleClass="page-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <ComboBox fx:id="targetYearComboBox" promptText="Target Year"
+                          onAction="#handleYearChange" styleClass="filter-combo"/>
+                <Button text="🔄 Refresh" onAction="#handleRefresh" styleClass="button-secondary"/>
+                <Button text="📈 Generate Report" onAction="#handleGenerateReport" styleClass="button-primary"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- MAIN CONTENT -->
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="scroll-pane">
+            <VBox spacing="20" styleClass="content-container">
+                <padding>
+                    <Insets top="20" right="20" bottom="20" left="20"/>
+                </padding>
+
+                <!-- ========== OVERVIEW METRICS ========== -->
+                <HBox spacing="15" styleClass="metrics-row">
+                    <!-- Total Enrollment Forecast -->
+                    <VBox styleClass="card metric-card" HBox.hgrow="ALWAYS">
+                        <Label text="👥 Forecasted Enrollment" styleClass="metric-label"/>
+                        <Label fx:id="totalEnrollmentLabel" text="--" styleClass="metric-value"/>
+                        <Label fx:id="enrollmentChangeLabel" text="--" styleClass="metric-description"/>
+                    </VBox>
+
+                    <!-- Growth Rate -->
+                    <VBox styleClass="card metric-card" HBox.hgrow="ALWAYS">
+                        <Label text="📈 Growth Rate" styleClass="metric-label"/>
+                        <Label fx:id="growthRateLabel" text="--" styleClass="metric-value"/>
+                        <Label fx:id="growthTrendLabel" text="--" styleClass="metric-description"/>
+                    </VBox>
+
+                    <!-- Capacity Status -->
+                    <VBox styleClass="card metric-card" HBox.hgrow="ALWAYS">
+                        <Label text="🏫 Capacity Status" styleClass="metric-label"/>
+                        <Label fx:id="capacityStatusLabel" text="--" styleClass="metric-value"/>
+                        <Label fx:id="capacityDetailsLabel" text="--" styleClass="metric-description"/>
+                    </VBox>
+
+                    <!-- Courses at Risk -->
+                    <VBox styleClass="card metric-card" HBox.hgrow="ALWAYS">
+                        <Label text="⚠️ Courses at Risk" styleClass="metric-label"/>
+                        <Label fx:id="coursesAtRiskLabel" text="--" styleClass="metric-value"/>
+                        <Label fx:id="riskDetailsLabel" text="--" styleClass="metric-description"/>
+                    </VBox>
+                </HBox>
+
+                <!-- ========== ENROLLMENT BY GRADE ========== -->
+                <VBox spacing="15" styleClass="card">
+                    <Label text="📚 Forecasted Enrollment by Grade Level" styleClass="section-title"/>
+
+                    <HBox spacing="20" alignment="CENTER">
+                        <BarChart fx:id="gradeEnrollmentChart"
+                                  title="Enrollment by Grade"
+                                  legendVisible="true"
+                                  HBox.hgrow="ALWAYS">
+                            <xAxis>
+                                <CategoryAxis label="Grade Level" fx:id="gradeXAxis"/>
+                            </xAxis>
+                            <yAxis>
+                                <NumberAxis label="Students" fx:id="gradeYAxis"/>
+                            </yAxis>
+                        </BarChart>
+
+                        <!-- Grade Details Table -->
+                        <VBox spacing="10" prefWidth="300">
+                            <Label text="Grade Level Details" styleClass="stat-label"/>
+                            <TableView fx:id="gradeDetailsTable" styleClass="data-table" prefHeight="250">
+                                <columns>
+                                    <TableColumn fx:id="gradeColumn" text="Grade" prefWidth="70"/>
+                                    <TableColumn fx:id="currentCountColumn" text="Current" prefWidth="80"/>
+                                    <TableColumn fx:id="forecastedCountColumn" text="Forecast" prefWidth="80"/>
+                                    <TableColumn fx:id="changeColumn" text="Change" prefWidth="70"/>
+                                </columns>
+                            </TableView>
+                        </VBox>
+                    </HBox>
+                </VBox>
+
+                <!-- ========== COURSE DEMAND TRENDS ========== -->
+                <VBox spacing="15" styleClass="card">
+                    <HBox alignment="CENTER_LEFT" spacing="15">
+                        <Label text="📊 Course Demand Trends" styleClass="section-title"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <ComboBox fx:id="trendFilterComboBox" promptText="All Courses"
+                                  onAction="#handleTrendFilterChange" styleClass="filter-combo"/>
+                        <CheckBox fx:id="showGrowingOnlyCheckbox" text="Show Growing Only"
+                                  onAction="#handleFilterChange" styleClass="checkbox"/>
+                    </HBox>
+
+                    <LineChart fx:id="courseDemandChart"
+                               title="Course Demand Over Time"
+                               legendVisible="true"
+                               prefHeight="300">
+                        <xAxis>
+                            <CategoryAxis label="Year" fx:id="demandXAxis"/>
+                        </xAxis>
+                        <yAxis>
+                            <NumberAxis label="Students" fx:id="demandYAxis"/>
+                        </yAxis>
+                    </LineChart>
+                </VBox>
+
+                <!-- ========== CAPACITY WARNINGS ========== -->
+                <VBox spacing="15" styleClass="card">
+                    <HBox alignment="CENTER_LEFT" spacing="15">
+                        <Label text="⚠️ Capacity Warnings" styleClass="section-title"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <ComboBox fx:id="warningFilterComboBox" promptText="All Warnings"
+                                  onAction="#handleWarningFilterChange" styleClass="filter-combo"/>
+                    </HBox>
+
+                    <TableView fx:id="capacityWarningsTable" styleClass="data-table">
+                        <columns>
+                            <TableColumn fx:id="courseNameColumn" text="Course Name" prefWidth="250"/>
+                            <TableColumn fx:id="courseCodeColumn" text="Code" prefWidth="100"/>
+                            <TableColumn fx:id="currentCapacityColumn" text="Current Capacity" prefWidth="130"/>
+                            <TableColumn fx:id="forecastedDemandColumn" text="Forecasted Demand" prefWidth="150"/>
+                            <TableColumn fx:id="gapColumn" text="Gap" prefWidth="80"/>
+                            <TableColumn fx:id="warningTypeColumn" text="Status" prefWidth="150"/>
+                            <TableColumn fx:id="recommendationColumn" text="Recommendation" prefWidth="200"/>
+                        </columns>
+                        <placeholder>
+                            <Label text="✓ No capacity warnings - all courses adequately planned"/>
+                        </placeholder>
+                    </TableView>
+                </VBox>
+
+                <!-- ========== SECTION RECOMMENDATIONS ========== -->
+                <VBox spacing="15" styleClass="card">
+                    <Label text="📋 Section Count Recommendations" styleClass="section-title"/>
+
+                    <TableView fx:id="sectionRecommendationsTable" styleClass="data-table">
+                        <columns>
+                            <TableColumn fx:id="recCourseNameColumn" text="Course Name" prefWidth="250"/>
+                            <TableColumn fx:id="recCourseCodeColumn" text="Code" prefWidth="100"/>
+                            <TableColumn fx:id="currentSectionsColumn" text="Current Sections" prefWidth="130"/>
+                            <TableColumn fx:id="recommendedSectionsColumn" text="Recommended" prefWidth="130"/>
+                            <TableColumn fx:id="sectionChangeColumn" text="Change" prefWidth="80"/>
+                            <TableColumn fx:id="trendColumn" text="Trend" prefWidth="150"/>
+                            <TableColumn fx:id="actionColumn" text="Action" prefWidth="120"/>
+                        </columns>
+                        <placeholder>
+                            <Label text="No recommendations available"/>
+                        </placeholder>
+                    </TableView>
+                </VBox>
+
+                <!-- ========== GROWING COURSES ========== -->
+                <VBox spacing="15" styleClass="card">
+                    <Label text="🚀 Fastest Growing Courses" styleClass="section-title"/>
+
+                    <HBox spacing="20">
+                        <!-- Top 5 Growing Courses -->
+                        <VBox spacing="10" HBox.hgrow="ALWAYS">
+                            <Label text="Top Growing Courses" styleClass="stat-label"/>
+                            <ListView fx:id="growingCoursesList" styleClass="data-list" prefHeight="200"/>
+                        </VBox>
+
+                        <!-- Top 5 Declining Courses -->
+                        <VBox spacing="10" HBox.hgrow="ALWAYS">
+                            <Label text="Declining Courses" styleClass="stat-label"/>
+                            <ListView fx:id="decliningCoursesList" styleClass="data-list" prefHeight="200"/>
+                        </VBox>
+                    </HBox>
+                </VBox>
+
+                <!-- ========== FORECASTING METHODS COMPARISON ========== -->
+                <VBox spacing="15" styleClass="card">
+                    <Label text="🔬 Forecasting Method Comparison" styleClass="section-title"/>
+
+                    <GridPane hgap="20" vgap="15">
+                        <!-- Linear Regression Results -->
+                        <VBox GridPane.columnIndex="0" GridPane.rowIndex="0">
+                            <Label text="📈 Linear Regression" styleClass="stat-label"/>
+                            <Label fx:id="linearRegressionAccuracyLabel" text="--" styleClass="stat-value"/>
+                            <Label text="Trend-based prediction" styleClass="stat-description"/>
+                        </VBox>
+
+                        <!-- Moving Average Results -->
+                        <VBox GridPane.columnIndex="1" GridPane.rowIndex="0">
+                            <Label text="📊 Moving Average (3-year)" styleClass="stat-label"/>
+                            <Label fx:id="movingAverageAccuracyLabel" text="--" styleClass="stat-value"/>
+                            <Label text="Smoothed estimate" styleClass="stat-description"/>
+                        </VBox>
+
+                        <!-- Recommended Method -->
+                        <VBox GridPane.columnIndex="2" GridPane.rowIndex="0">
+                            <Label text="✅ Recommended Method" styleClass="stat-label"/>
+                            <Label fx:id="recommendedMethodLabel" text="--" styleClass="stat-value"/>
+                            <Label fx:id="methodReasonLabel" text="--" styleClass="stat-description"/>
+                        </VBox>
+                    </GridPane>
+                </VBox>
+
+            </VBox>
+        </ScrollPane>
+    </center>
+
+</BorderPane>

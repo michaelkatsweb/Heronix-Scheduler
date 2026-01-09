@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.eduscheduler.ui.controller.StudentGradeDialogController"
+      style="-fx-background-color: white; -fx-border-color: #ccc; -fx-border-width: 1;"
+      prefWidth="600" prefHeight="700" spacing="15">
+
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <!-- Title -->
+    <Label text="Enter Student Grade" style="-fx-font-size: 18; -fx-font-weight: bold;"/>
+
+    <!-- Student Name -->
+    <Label fx:id="studentNameLabel" text="Student: " style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #2196F3;"/>
+
+    <Separator/>
+
+    <!-- Form Content in ScrollPane -->
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" style="-fx-background-color: transparent;">
+        <GridPane hgap="15" vgap="12">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+
+            <columnConstraints>
+                <ColumnConstraints minWidth="120" prefWidth="120"/>
+                <ColumnConstraints hgrow="ALWAYS"/>
+            </columnConstraints>
+
+            <!-- Row 0: Course -->
+            <Label text="Course *:" GridPane.columnIndex="0" GridPane.rowIndex="0" style="-fx-font-weight: bold;"/>
+            <ComboBox fx:id="courseComboBox" GridPane.columnIndex="1" GridPane.rowIndex="0"
+                      maxWidth="Infinity" promptText="Select course"/>
+
+            <!-- Row 1: Letter Grade -->
+            <Label text="Letter Grade *:" GridPane.columnIndex="0" GridPane.rowIndex="1" style="-fx-font-weight: bold;"/>
+            <HBox GridPane.columnIndex="1" GridPane.rowIndex="1" spacing="10" alignment="CENTER_LEFT">
+                <ComboBox fx:id="letterGradeComboBox" promptText="Select grade" prefWidth="120"/>
+                <Label fx:id="gpaPointsLabel" text="GPA Points: --"
+                       style="-fx-font-size: 12; -fx-text-fill: #666;"/>
+            </HBox>
+
+            <!-- Row 2: Numerical Grade -->
+            <Label text="Numerical Grade:" GridPane.columnIndex="0" GridPane.rowIndex="2" style="-fx-font-weight: bold;"/>
+            <HBox GridPane.columnIndex="1" GridPane.rowIndex="2" spacing="5" alignment="CENTER_LEFT">
+                <TextField fx:id="numericalGradeField" promptText="0-100" prefWidth="100"/>
+                <Label style="-fx-font-size: 12;">
+                    <text>%</text>
+                </Label>
+                <Label text="(Optional - will auto-fill letter grade)" style="-fx-font-size: 10; -fx-text-fill: #999;"/>
+            </HBox>
+
+            <!-- Row 3: Credits -->
+            <Label text="Credits *:" GridPane.columnIndex="0" GridPane.rowIndex="3" style="-fx-font-weight: bold;"/>
+            <HBox GridPane.columnIndex="1" GridPane.rowIndex="3" spacing="10" alignment="CENTER_LEFT">
+                <TextField fx:id="creditsField" promptText="1.0" prefWidth="80"/>
+                <Label text="(Usually 0.5 or 1.0)" style="-fx-font-size: 10; -fx-text-fill: #999;"/>
+            </HBox>
+
+            <!-- Row 4: Term -->
+            <Label text="Term *:" GridPane.columnIndex="0" GridPane.rowIndex="4" style="-fx-font-weight: bold;"/>
+            <ComboBox fx:id="termComboBox" GridPane.columnIndex="1" GridPane.rowIndex="4"
+                      prefWidth="200" promptText="Select term"/>
+
+            <!-- Row 5: Academic Year -->
+            <Label text="Academic Year *:" GridPane.columnIndex="0" GridPane.rowIndex="5" style="-fx-font-weight: bold;"/>
+            <TextField fx:id="academicYearField" GridPane.columnIndex="1" GridPane.rowIndex="5"
+                       promptText="2024" prefWidth="100"/>
+
+            <!-- Row 6: Grade Type -->
+            <Label text="Grade Type:" GridPane.columnIndex="0" GridPane.rowIndex="6" style="-fx-font-weight: bold;"/>
+            <ComboBox fx:id="gradeTypeComboBox" GridPane.columnIndex="1" GridPane.rowIndex="6"
+                      prefWidth="200" promptText="Select type"/>
+
+            <!-- Row 7: Checkboxes -->
+            <Label text="Options:" GridPane.columnIndex="0" GridPane.rowIndex="7" style="-fx-font-weight: bold;"/>
+            <VBox GridPane.columnIndex="1" GridPane.rowIndex="7" spacing="8">
+                <CheckBox fx:id="isWeightedCheckBox" text="Weighted Course (Honors/AP - adds 1.0 to GPA points)"/>
+                <CheckBox fx:id="isFinalCheckBox" text="Final Grade (counts toward GPA)" selected="true"/>
+            </VBox>
+
+            <!-- Row 8: Grade Date -->
+            <Label text="Grade Date *:" GridPane.columnIndex="0" GridPane.rowIndex="8" style="-fx-font-weight: bold;"/>
+            <DatePicker fx:id="gradeDatePicker" GridPane.columnIndex="1" GridPane.rowIndex="8" prefWidth="200"/>
+
+            <!-- Row 9: Teacher -->
+            <Label text="Teacher:" GridPane.columnIndex="0" GridPane.rowIndex="9" style="-fx-font-weight: bold;"/>
+            <ComboBox fx:id="teacherComboBox" GridPane.columnIndex="1" GridPane.rowIndex="9"
+                      maxWidth="Infinity" promptText="Select teacher"/>
+
+            <!-- Row 10: Attendance -->
+            <Label text="Attendance:" GridPane.columnIndex="0" GridPane.rowIndex="10" style="-fx-font-weight: bold;"/>
+            <HBox GridPane.columnIndex="1" GridPane.rowIndex="10" spacing="15">
+                <VBox spacing="3">
+                    <Label text="Absences:" style="-fx-font-size: 10;"/>
+                    <TextField fx:id="absencesField" promptText="0" prefWidth="60"/>
+                </VBox>
+                <VBox spacing="3">
+                    <Label text="Tardies:" style="-fx-font-size: 10;"/>
+                    <TextField fx:id="tardiesField" promptText="0" prefWidth="60"/>
+                </VBox>
+            </HBox>
+
+            <!-- Row 11: Comments -->
+            <Label text="Comments:" GridPane.columnIndex="0" GridPane.rowIndex="11" style="-fx-font-weight: bold;"
+                   GridPane.valignment="TOP">
+                <padding>
+                    <Insets top="5"/>
+                </padding>
+            </Label>
+            <TextArea fx:id="commentsArea" GridPane.columnIndex="1" GridPane.rowIndex="11"
+                      promptText="Teacher comments about this grade..." prefRowCount="3" wrapText="true"/>
+
+        </GridPane>
+    </ScrollPane>
+
+    <!-- Info Box -->
+    <HBox  spacing="10" style="-fx-background-color: #E3F2FD; -fx-padding: 10; -fx-background-radius: 5;">
+        <Label text="ℹ️" style="-fx-font-size: 16;"/>
+        <VBox VBox.hgrow="ALWAYS">
+            <Label text="GPA will be automatically recalculated when you save this grade."
+                   style="-fx-font-size: 11; -fx-text-fill: #1976D2;" wrapText="true"/>
+            <Label text="Fields marked with * are required."
+                   style="-fx-font-size: 10; -fx-text-fill: #666;" wrapText="true"/>
+        </VBox>
+    </HBox>
+
+    <!-- Buttons -->
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Button fx:id="cancelButton" text="Cancel" onAction="#handleCancel"
+                style="-fx-background-color: #757575; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5;" prefWidth="100"/>
+        <Button fx:id="saveButton" text="Save Grade" onAction="#handleSave"
+                style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5;" prefWidth="120" defaultButton="true"/>
+    </HBox>
+
+</VBox>

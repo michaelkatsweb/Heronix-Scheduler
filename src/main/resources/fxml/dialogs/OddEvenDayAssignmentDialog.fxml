@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<!--
+ODD/EVEN Day Assignment Dialog
+Location: src/main/resources/fxml/dialogs/OddEvenDayAssignmentDialog.fxml
+Controller: com.eduscheduler.ui.controller.dialogs.OddEvenDayAssignmentDialogController
+Purpose: Assign courses to students for ODD and EVEN days in block scheduling
+-->
+
+<DialogPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.eduscheduler.ui.controller.dialogs.OddEvenDayAssignmentDialogController"
+            styleClass="dialog-pane">
+
+    <content>
+        <VBox spacing="15" style="-fx-padding: 20; -fx-min-width: 900; -fx-min-height: 600;">
+            <!-- Header -->
+            <HBox alignment="CENTER_LEFT" spacing="10" styleClass="card">
+                <Label text="📅" styleClass="label-title" style="-fx-font-size: 24;"/>
+                <Label text="ODD/EVEN Day Course Assignment" styleClass="label-title" style="-fx-font-size: 18;"/>
+            </HBox>
+
+            <!-- Student Selection -->
+            <VBox spacing="5">
+                <Label text="Select Student:" styleClass="label-subtitle"/>
+                <ComboBox fx:id="studentComboBox" promptText="Choose a student..." styleClass="combo-box" maxWidth="Infinity">
+                    <tooltip>
+                        <Tooltip text="Select a student to assign their ODD/EVEN day courses"/>
+                    </tooltip>
+                </ComboBox>
+            </VBox>
+
+            <!-- Day Type Info Panel -->
+            <HBox spacing="10" style="-fx-padding: 10; -fx-background-color: #2a2a4a; -fx-background-radius: 5;">
+                <VBox spacing="3" HBox.hgrow="ALWAYS">
+                    <Label text="📆 ODD Days" styleClass="label-subtitle" style="-fx-text-fill: #00aaff;"/>
+                    <Label text="Monday, Wednesday, Friday" styleClass="label-caption" wrapText="true"/>
+                </VBox>
+                <Separator orientation="VERTICAL"/>
+                <VBox spacing="3" HBox.hgrow="ALWAYS">
+                    <Label text="📆 EVEN Days" styleClass="label-subtitle" style="-fx-text-fill: #ff8800;"/>
+                    <Label text="Tuesday, Thursday" styleClass="label-caption" wrapText="true"/>
+                </VBox>
+            </HBox>
+
+            <!-- Course Assignment Grid -->
+            <GridPane hgap="15" vgap="10" VBox.vgrow="ALWAYS">
+                <columnConstraints>
+                    <ColumnConstraints percentWidth="45"/>
+                    <ColumnConstraints percentWidth="10"/>
+                    <ColumnConstraints percentWidth="45"/>
+                </columnConstraints>
+
+                <!-- ODD Day Courses Column -->
+                <VBox GridPane.columnIndex="0" GridPane.rowIndex="0" spacing="5">
+                    <HBox alignment="CENTER_LEFT" spacing="10">
+                        <Label text="🔵 ODD Day Courses" styleClass="label-subtitle" style="-fx-text-fill: #00aaff;"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="oddDayCountLabel" text="0 selected" styleClass="label-caption"/>
+                    </HBox>
+                    <ListView fx:id="oddDayCoursesListView" VBox.vgrow="ALWAYS" styleClass="list-view">
+                        <tooltip>
+                            <Tooltip text="Courses assigned to ODD days (Mon/Wed/Fri)&#10;Use Ctrl+Click for multiple selections"/>
+                        </tooltip>
+                    </ListView>
+                    <HBox spacing="5">
+                        <Button text="← Add from Available" onAction="#handleAddToOddDay" styleClass="button" style="-fx-font-size: 10;"/>
+                        <Button text="Remove →" onAction="#handleRemoveFromOddDay" styleClass="button-danger" style="-fx-font-size: 10;"/>
+                    </HBox>
+                </VBox>
+
+                <!-- Middle Column - Available Courses -->
+                <VBox GridPane.columnIndex="1" GridPane.rowIndex="0" spacing="5" alignment="CENTER">
+                    <Label text="↕" styleClass="label-subtitle" style="-fx-font-size: 24;"/>
+                    <Label text="Available" styleClass="label-caption" style="-fx-font-size: 10; -fx-text-alignment: center;" wrapText="true"/>
+                    <ListView fx:id="availableCoursesListView" VBox.vgrow="ALWAYS" styleClass="list-view" prefWidth="150">
+                        <tooltip>
+                            <Tooltip text="Courses not yet assigned to ODD or EVEN days"/>
+                        </tooltip>
+                    </ListView>
+                    <Label fx:id="availableCountLabel" text="0 available" styleClass="label-caption" style="-fx-font-size: 10;"/>
+                </VBox>
+
+                <!-- EVEN Day Courses Column -->
+                <VBox GridPane.columnIndex="2" GridPane.rowIndex="0" spacing="5">
+                    <HBox alignment="CENTER_LEFT" spacing="10">
+                        <Label text="🟠 EVEN Day Courses" styleClass="label-subtitle" style="-fx-text-fill: #ff8800;"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="evenDayCountLabel" text="0 selected" styleClass="label-caption"/>
+                    </HBox>
+                    <ListView fx:id="evenDayCoursesListView" VBox.vgrow="ALWAYS" styleClass="list-view">
+                        <tooltip>
+                            <Tooltip text="Courses assigned to EVEN days (Tue/Thu)&#10;Use Ctrl+Click for multiple selections"/>
+                        </tooltip>
+                    </ListView>
+                    <HBox spacing="5">
+                        <Button text="← Add from Available" onAction="#handleAddToEvenDay" styleClass="button" style="-fx-font-size: 10;"/>
+                        <Button text="Remove →" onAction="#handleRemoveFromEvenDay" styleClass="button-danger" style="-fx-font-size: 10;"/>
+                    </HBox>
+                </VBox>
+            </GridPane>
+
+            <!-- Info Panel -->
+            <VBox spacing="5" styleClass="card" style="-fx-padding: 10; -fx-background-color: #2a2a4a;">
+                <Label text="ℹ️ Tips:" styleClass="label-subtitle" style="-fx-text-fill: #00aaff;"/>
+                <Label text="• Students typically take 3-4 courses on ODD days and 3-4 on EVEN days" styleClass="label-caption" wrapText="true"/>
+                <Label text="• Balance course load evenly between ODD and EVEN days" styleClass="label-caption" wrapText="true"/>
+                <Label text="• Longer class periods (90 min) allow for more in-depth learning" styleClass="label-caption" wrapText="true"/>
+            </VBox>
+
+            <!-- Status Label -->
+            <Label fx:id="statusLabel" styleClass="label-caption" style="-fx-text-fill: #888;" wrapText="true"/>
+        </VBox>
+    </content>
+
+    <buttonTypes>
+        <ButtonType fx:constant="CANCEL"/>
+        <ButtonType fx:id="saveButtonType" text="Save Assignments" buttonData="OK_DONE"/>
+    </buttonTypes>
+</DialogPane>

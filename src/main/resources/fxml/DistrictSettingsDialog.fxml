@@ -1,0 +1,411 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.eduscheduler.ui.controller.DistrictSettingsDialogController"
+      prefWidth="800" prefHeight="700"
+      style="-fx-background-color: white; -fx-border-color: #ccc; -fx-border-width: 1;">
+
+    <padding>
+        <Insets top="15" right="15" bottom="15" left="15"/>
+    </padding>
+
+    <!-- Header -->
+    <HBox alignment="CENTER_LEFT" spacing="10">
+        <Label text="District Settings" style="-fx-font-size: 18; -fx-font-weight: bold;"/>
+    </HBox>
+
+    <Separator>
+        <VBox.margin>
+            <Insets top="10" bottom="10"/>
+        </VBox.margin>
+    </Separator>
+
+    <!-- Tabbed Content -->
+    <TabPane VBox.vgrow="ALWAYS" tabClosingPolicy="UNAVAILABLE">
+
+        <!-- TAB 1: District Information -->
+        <Tab text="District Information">
+            <ScrollPane fitToWidth="true" style="-fx-background-color: white;">
+                <VBox spacing="15">
+                    <padding>
+                        <Insets top="15" right="15" bottom="15" left="15"/>
+                    </padding>
+
+                    <GridPane hgap="10" vgap="10">
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="NEVER" minWidth="150"/>
+                            <ColumnConstraints hgrow="ALWAYS"/>
+                        </columnConstraints>
+
+                        <!-- District Name -->
+                        <Label text="District Name:" GridPane.columnIndex="0" GridPane.rowIndex="0"
+                               style="-fx-font-weight: bold;"/>
+                        <TextField fx:id="districtNameField" GridPane.columnIndex="1" GridPane.rowIndex="0"
+                                   promptText="e.g., Hernando County Schools"/>
+
+                        <!-- Address -->
+                        <Label text="Address:" GridPane.columnIndex="0" GridPane.rowIndex="1"
+                               style="-fx-font-weight: bold;"/>
+                        <TextField fx:id="districtAddressField" GridPane.columnIndex="1" GridPane.rowIndex="1"
+                                   promptText="Street address"/>
+
+                        <!-- City -->
+                        <Label text="City:" GridPane.columnIndex="0" GridPane.rowIndex="2"
+                               style="-fx-font-weight: bold;"/>
+                        <TextField fx:id="districtCityField" GridPane.columnIndex="1" GridPane.rowIndex="2"
+                                   promptText="City"/>
+
+                        <!-- State -->
+                        <Label text="State:" GridPane.columnIndex="0" GridPane.rowIndex="3"
+                               style="-fx-font-weight: bold;"/>
+                        <TextField fx:id="districtStateField" GridPane.columnIndex="1" GridPane.rowIndex="3"
+                                   promptText="State"/>
+
+                        <!-- ZIP -->
+                        <Label text="ZIP Code:" GridPane.columnIndex="0" GridPane.rowIndex="4"
+                               style="-fx-font-weight: bold;"/>
+                        <TextField fx:id="districtZipField" GridPane.columnIndex="1" GridPane.rowIndex="4"
+                                   promptText="ZIP code"/>
+
+                        <!-- Phone -->
+                        <Label text="Phone:" GridPane.columnIndex="0" GridPane.rowIndex="5"
+                               style="-fx-font-weight: bold;"/>
+                        <TextField fx:id="districtPhoneField" GridPane.columnIndex="1" GridPane.rowIndex="5"
+                                   promptText="(555) 123-4567"/>
+
+                        <!-- Fax -->
+                        <Label text="Fax:" GridPane.columnIndex="0" GridPane.rowIndex="6"
+                               style="-fx-font-weight: bold;"/>
+                        <TextField fx:id="districtFaxField" GridPane.columnIndex="1" GridPane.rowIndex="6"
+                                   promptText="(555) 123-4568"/>
+
+                        <!-- Website -->
+                        <Label text="Website:" GridPane.columnIndex="0" GridPane.rowIndex="7"
+                               style="-fx-font-weight: bold;"/>
+                        <TextField fx:id="districtWebsiteField" GridPane.columnIndex="1" GridPane.rowIndex="7"
+                                   promptText="https://www.district.edu"/>
+
+                        <!-- Email -->
+                        <Label text="Email:" GridPane.columnIndex="0" GridPane.rowIndex="8"
+                               style="-fx-font-weight: bold;"/>
+                        <TextField fx:id="districtEmailField" GridPane.columnIndex="1" GridPane.rowIndex="8"
+                                   promptText="info@district.edu"/>
+                    </GridPane>
+                </VBox>
+            </ScrollPane>
+        </Tab>
+
+        <!-- TAB 2: Email Configuration -->
+        <Tab text="Email Settings">
+            <ScrollPane fitToWidth="true" style="-fx-background-color: white;">
+                <VBox spacing="20">
+                    <padding>
+                        <Insets top="15" right="15" bottom="15" left="15"/>
+                    </padding>
+
+                    <!-- Teacher Email Section -->
+                    <VBox spacing="10" style="-fx-border-color: #ddd; -fx-border-width: 1; -fx-padding: 10;">
+                        <Label text="Teacher/Staff Email Configuration" style="-fx-font-size: 14; -fx-font-weight: bold;"/>
+
+                        <GridPane hgap="10" vgap="10">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="NEVER" minWidth="150"/>
+                                <ColumnConstraints hgrow="ALWAYS"/>
+                            </columnConstraints>
+
+                            <Label text="Email Domain:" GridPane.columnIndex="0" GridPane.rowIndex="0"
+                                   style="-fx-font-weight: bold;"/>
+                            <TextField fx:id="teacherEmailDomainField" GridPane.columnIndex="1" GridPane.rowIndex="0"
+                                       promptText="@hcsb.k12.fl.us"/>
+
+                            <Label text="Email Format:" GridPane.columnIndex="0" GridPane.rowIndex="1"
+                                   style="-fx-font-weight: bold;"/>
+                            <TextField fx:id="teacherEmailFormatField" GridPane.columnIndex="1" GridPane.rowIndex="1"
+                                       promptText="{lastname}_{firstname_initial}"/>
+
+                            <Label text="Auto-Generate:" GridPane.columnIndex="0" GridPane.rowIndex="2"
+                                   style="-fx-font-weight: bold;"/>
+                            <CheckBox fx:id="autoGenerateTeacherEmailCheck" GridPane.columnIndex="1" GridPane.rowIndex="2"
+                                      text="Automatically generate teacher emails" selected="true"/>
+                        </GridPane>
+
+                        <Label text="Available placeholders: {firstname}, {lastname}, {firstname_initial}, {lastname_initial}, {middlename_initial}"
+                               style="-fx-font-size: 11; -fx-text-fill: #666;"/>
+                        <Label text="Example: {lastname}_{firstname_initial} = smith_j@domain.com"
+                               style="-fx-font-size: 11; -fx-text-fill: #666;"/>
+                    </VBox>
+
+                    <!-- Student Email Section -->
+                    <VBox spacing="10" style="-fx-border-color: #ddd; -fx-border-width: 1; -fx-padding: 10;">
+                        <Label text="Student Email Configuration" style="-fx-font-size: 14; -fx-font-weight: bold;"/>
+
+                        <GridPane hgap="10" vgap="10">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="NEVER" minWidth="150"/>
+                                <ColumnConstraints hgrow="ALWAYS"/>
+                            </columnConstraints>
+
+                            <Label text="Email Domain:" GridPane.columnIndex="0" GridPane.rowIndex="0"
+                                   style="-fx-font-weight: bold;"/>
+                            <TextField fx:id="studentEmailDomainField" GridPane.columnIndex="1" GridPane.rowIndex="0"
+                                       promptText="@hernandocountyschools.org"/>
+
+                            <Label text="Email Format:" GridPane.columnIndex="0" GridPane.rowIndex="1"
+                                   style="-fx-font-weight: bold;"/>
+                            <TextField fx:id="studentEmailFormatField" GridPane.columnIndex="1" GridPane.rowIndex="1"
+                                       promptText="{firstname}.{lastname}"/>
+
+                            <Label text="Auto-Generate:" GridPane.columnIndex="0" GridPane.rowIndex="2"
+                                   style="-fx-font-weight: bold;"/>
+                            <CheckBox fx:id="autoGenerateStudentEmailCheck" GridPane.columnIndex="1" GridPane.rowIndex="2"
+                                      text="Automatically generate student emails" selected="true"/>
+                        </GridPane>
+
+                        <Label text="Additional placeholders: {student_id}, {grad_year}, {grad_year_short}"
+                               style="-fx-font-size: 11; -fx-text-fill: #666;"/>
+                        <Label text="Example: {firstname}.{lastname} = jane.doe@domain.com"
+                               style="-fx-font-size: 11; -fx-text-fill: #666;"/>
+                    </VBox>
+                </VBox>
+            </ScrollPane>
+        </Tab>
+
+        <!-- TAB 3: ID Generation -->
+        <Tab text="ID Generation">
+            <ScrollPane fitToWidth="true" style="-fx-background-color: white;">
+                <VBox spacing="20">
+                    <padding>
+                        <Insets top="15" right="15" bottom="15" left="15"/>
+                    </padding>
+
+                    <!-- Teacher ID Section -->
+                    <VBox spacing="10" style="-fx-border-color: #ddd; -fx-border-width: 1; -fx-padding: 10;">
+                        <Label text="Teacher ID Configuration" style="-fx-font-size: 14; -fx-font-weight: bold;"/>
+
+                        <GridPane hgap="10" vgap="10">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="NEVER" minWidth="150"/>
+                                <ColumnConstraints hgrow="ALWAYS"/>
+                            </columnConstraints>
+
+                            <Label text="ID Prefix:" GridPane.columnIndex="0" GridPane.rowIndex="0"
+                                   style="-fx-font-weight: bold;"/>
+                            <TextField fx:id="teacherIdPrefixField" GridPane.columnIndex="1" GridPane.rowIndex="0"
+                                       promptText="T" prefWidth="100" maxWidth="100"/>
+
+                            <Label text="Start Number:" GridPane.columnIndex="0" GridPane.rowIndex="1"
+                                   style="-fx-font-weight: bold;"/>
+                            <Spinner fx:id="teacherIdStartSpinner" GridPane.columnIndex="1" GridPane.rowIndex="1"
+                                     editable="true" prefWidth="150" maxWidth="150"/>
+
+                            <Label text="Padding:" GridPane.columnIndex="0" GridPane.rowIndex="2"
+                                   style="-fx-font-weight: bold;"/>
+                            <Spinner fx:id="teacherIdPaddingSpinner" GridPane.columnIndex="1" GridPane.rowIndex="2"
+                                     editable="true" prefWidth="150" maxWidth="150"/>
+
+                            <Label text="Current Number:" GridPane.columnIndex="0" GridPane.rowIndex="3"
+                                   style="-fx-font-weight: bold;"/>
+                            <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                <Spinner fx:id="teacherIdCurrentSpinner" editable="true" prefWidth="150" maxWidth="150"/>
+                                <Label fx:id="teacherIdPreviewLabel" text="Preview: T0001"
+                                       style="-fx-font-style: italic; -fx-text-fill: #666;"/>
+                            </HBox>
+
+                            <Label text="Auto-Generate:" GridPane.columnIndex="0" GridPane.rowIndex="4"
+                                   style="-fx-font-weight: bold;"/>
+                            <CheckBox fx:id="autoGenerateTeacherIdCheck" GridPane.columnIndex="1" GridPane.rowIndex="4"
+                                      text="Automatically assign teacher IDs" selected="true"/>
+                        </GridPane>
+
+                        <Label text="Example: Prefix 'T' + Start 1 + Padding 4 = T0001, T0002, T0003..."
+                               style="-fx-font-size: 11; -fx-text-fill: #666;"/>
+                    </VBox>
+
+                    <!-- Student ID Section -->
+                    <VBox spacing="10" style="-fx-border-color: #ddd; -fx-border-width: 1; -fx-padding: 10;">
+                        <Label text="Student ID Configuration" style="-fx-font-size: 14; -fx-font-weight: bold;"/>
+
+                        <GridPane hgap="10" vgap="10">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="NEVER" minWidth="150"/>
+                                <ColumnConstraints hgrow="ALWAYS"/>
+                            </columnConstraints>
+
+                            <Label text="ID Format:" GridPane.columnIndex="0" GridPane.rowIndex="0"
+                                   style="-fx-font-weight: bold;"/>
+                            <TextField fx:id="studentIdFormatField" GridPane.columnIndex="1" GridPane.rowIndex="0"
+                                       promptText="{grad_year}-{sequence}"/>
+
+                            <Label text="ID Prefix:" GridPane.columnIndex="0" GridPane.rowIndex="1"
+                                   style="-fx-font-weight: bold;"/>
+                            <TextField fx:id="studentIdPrefixField" GridPane.columnIndex="1" GridPane.rowIndex="1"
+                                       promptText="S (optional)" prefWidth="100" maxWidth="100"/>
+
+                            <Label text="Sequence Padding:" GridPane.columnIndex="0" GridPane.rowIndex="2"
+                                   style="-fx-font-weight: bold;"/>
+                            <Spinner fx:id="studentIdPaddingSpinner" GridPane.columnIndex="1" GridPane.rowIndex="2"
+                                     editable="true" prefWidth="150" maxWidth="150"/>
+
+                            <Label text="Auto-Generate:" GridPane.columnIndex="0" GridPane.rowIndex="3"
+                                   style="-fx-font-weight: bold;"/>
+                            <CheckBox fx:id="autoGenerateStudentIdCheck" GridPane.columnIndex="1" GridPane.rowIndex="3"
+                                      text="Automatically assign student IDs" selected="true"/>
+                        </GridPane>
+
+                        <Label text="Available placeholders: {grad_year}, {grad_year_short}, {sequence}, {prefix}"
+                               style="-fx-font-size: 11; -fx-text-fill: #666;"/>
+                        <Label text="Example: {grad_year}-{sequence} with padding 4 = 2026-0001, 2026-0002..."
+                               style="-fx-font-size: 11; -fx-text-fill: #666;"/>
+                    </VBox>
+                </VBox>
+            </ScrollPane>
+        </Tab>
+
+        <!-- TAB 4: Room Phone Configuration -->
+        <Tab text="Room Phones">
+            <ScrollPane fitToWidth="true" style="-fx-background-color: white;">
+                <VBox spacing="15">
+                    <padding>
+                        <Insets top="15" right="15" bottom="15" left="15"/>
+                    </padding>
+
+                    <Label text="Room Phone Number Configuration" style="-fx-font-size: 14; -fx-font-weight: bold;"/>
+
+                    <GridPane hgap="10" vgap="10">
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="NEVER" minWidth="180"/>
+                            <ColumnConstraints hgrow="ALWAYS"/>
+                        </columnConstraints>
+
+                        <Label text="Phone Number Prefix:" GridPane.columnIndex="0" GridPane.rowIndex="0"
+                               style="-fx-font-weight: bold;"/>
+                        <TextField fx:id="roomPhonePrefixField" GridPane.columnIndex="1" GridPane.rowIndex="0"
+                                   promptText="(352) 754-"/>
+
+                        <Label text="Extension Start Number:" GridPane.columnIndex="0" GridPane.rowIndex="1"
+                               style="-fx-font-weight: bold;"/>
+                        <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                            <Spinner fx:id="roomPhoneExtensionStartSpinner" editable="true" prefWidth="150" maxWidth="150"/>
+                            <Label fx:id="roomPhonePreviewLabel" text="Preview: (352) 754-4101"
+                                   style="-fx-font-style: italic; -fx-text-fill: #666;"/>
+                        </HBox>
+
+                        <Label text="Auto-Generate:" GridPane.columnIndex="0" GridPane.rowIndex="2"
+                               style="-fx-font-weight: bold;"/>
+                        <CheckBox fx:id="autoGenerateRoomPhoneCheck" GridPane.columnIndex="1" GridPane.rowIndex="2"
+                                  text="Automatically generate room phone numbers" selected="true"/>
+                    </GridPane>
+
+                    <Separator/>
+
+                    <VBox spacing="10" style="-fx-background-color: #f5f5f5; -fx-padding: 10;">
+                        <Label text="How It Works:" style="-fx-font-weight: bold;"/>
+                        <Label text="• Room numbers are extracted (e.g., 'CLS-101' → 101)"
+                               style="-fx-font-size: 11;"/>
+                        <Label text="• Extension = Start Number + Room Number"
+                               style="-fx-font-size: 11;"/>
+                        <Label text="• Example: Prefix '(352) 754-' + Start 4000 + Room 101 = (352) 754-4101"
+                               style="-fx-font-size: 11;"/>
+                        <Label text="• You can enter either full number OR extension only"
+                               style="-fx-font-size: 11; -fx-font-weight: bold;"/>
+                    </VBox>
+                </VBox>
+            </ScrollPane>
+        </Tab>
+
+        <!-- TAB 5: Print/Export Settings -->
+        <Tab text="Print Settings">
+            <ScrollPane fitToWidth="true" style="-fx-background-color: white;">
+                <VBox spacing="15">
+                    <padding>
+                        <Insets top="15" right="15" bottom="15" left="15"/>
+                    </padding>
+
+                    <GridPane hgap="10" vgap="10">
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="NEVER" minWidth="180"/>
+                            <ColumnConstraints hgrow="ALWAYS"/>
+                        </columnConstraints>
+
+                        <Label text="School Logo Path:" GridPane.columnIndex="0" GridPane.rowIndex="0"
+                               style="-fx-font-weight: bold;"/>
+                        <HBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                            <TextField fx:id="logoPathField" HBox.hgrow="ALWAYS" promptText="Path to logo image"/>
+                            <Button text="Browse..." onAction="#handleBrowseLogo"
+                                    style="-fx-background-color: #757575; -fx-text-fill: white;"/>
+                        </HBox>
+
+                        <Label text="Schedule Header Text:" GridPane.columnIndex="0" GridPane.rowIndex="1"
+                               style="-fx-font-weight: bold;"/>
+                        <TextField fx:id="scheduleHeaderTextField" GridPane.columnIndex="1" GridPane.rowIndex="1"
+                                   promptText="Text to appear on printed schedules"/>
+
+                        <Label text="Print Footer Text:" GridPane.columnIndex="0" GridPane.rowIndex="2"
+                               style="-fx-font-weight: bold;"/>
+                        <TextField fx:id="printFooterTextField" GridPane.columnIndex="1" GridPane.rowIndex="2"
+                                   promptText="Footer text for printed materials"/>
+
+                        <Label text="Include District Info:" GridPane.columnIndex="0" GridPane.rowIndex="3"
+                               style="-fx-font-weight: bold;"/>
+                        <CheckBox fx:id="includeDistrictInfoCheck" GridPane.columnIndex="1" GridPane.rowIndex="3"
+                                  text="Include district information on printed materials" selected="true"/>
+                    </GridPane>
+                </VBox>
+            </ScrollPane>
+        </Tab>
+
+        <!-- TAB 6: Academic Defaults -->
+        <Tab text="Academic Settings">
+            <ScrollPane fitToWidth="true" style="-fx-background-color: white;">
+                <VBox spacing="15">
+                    <padding>
+                        <Insets top="15" right="15" bottom="15" left="15"/>
+                    </padding>
+
+                    <Label text="Default Time Durations (minutes)" style="-fx-font-size: 14; -fx-font-weight: bold;"/>
+
+                    <GridPane hgap="10" vgap="10">
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="NEVER" minWidth="180"/>
+                            <ColumnConstraints hgrow="ALWAYS"/>
+                        </columnConstraints>
+
+                        <Label text="Class Period Duration:" GridPane.columnIndex="0" GridPane.rowIndex="0"
+                               style="-fx-font-weight: bold;"/>
+                        <Spinner fx:id="periodDurationSpinner" GridPane.columnIndex="1" GridPane.rowIndex="0"
+                                 editable="true" prefWidth="150" maxWidth="150"/>
+
+                        <Label text="Passing Period Duration:" GridPane.columnIndex="0" GridPane.rowIndex="1"
+                               style="-fx-font-weight: bold;"/>
+                        <Spinner fx:id="passingPeriodSpinner" GridPane.columnIndex="1" GridPane.rowIndex="1"
+                                 editable="true" prefWidth="150" maxWidth="150"/>
+
+                        <Label text="Lunch Duration:" GridPane.columnIndex="0" GridPane.rowIndex="2"
+                               style="-fx-font-weight: bold;"/>
+                        <Spinner fx:id="lunchDurationSpinner" GridPane.columnIndex="1" GridPane.rowIndex="2"
+                                 editable="true" prefWidth="150" maxWidth="150"/>
+                    </GridPane>
+                </VBox>
+            </ScrollPane>
+        </Tab>
+    </TabPane>
+
+    <!-- Button Bar -->
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <VBox.margin>
+            <Insets top="15"/>
+        </VBox.margin>
+
+        <Button text="Reset to Defaults" onAction="#handleResetDefaults"
+                style="-fx-background-color: #FF9800; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5;"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="Cancel" onAction="#handleCancel"
+                style="-fx-background-color: #757575; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5;"/>
+        <Button text="Save Settings" onAction="#handleSave" defaultButton="true"
+                style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5;"/>
+    </HBox>
+</VBox>

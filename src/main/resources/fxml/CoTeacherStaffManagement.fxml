@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.eduscheduler.ui.controller.CoTeacherStaffManagementController">
+
+    <top>
+        <VBox spacing="10" style="-fx-background-color: white;">
+            <padding>
+                <Insets top="15" right="15" bottom="15" left="15"/>
+            </padding>
+
+            <!-- Title -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Co-Teacher Staff Management" style="-fx-font-size: 20; -fx-font-weight: bold;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="coTeacherCountLabel" text="Total: 0 co-teachers" style="-fx-font-size: 12;"/>
+            </HBox>
+
+            <!-- Search and Actions -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <TextField fx:id="coTeacherSearchField" promptText="Search co-teachers by name..." prefWidth="300"/>
+                <Button text="Search" onAction="#handleSearchCoTeachers"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="+ Add Co-Teacher" onAction="#handleAddCoTeacher" styleClass="button-primary"/>
+                <Button text="Refresh" onAction="#handleRefreshCoTeachers"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <TableView fx:id="coTeachersTable" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="ctNameColumn" text="Name" prefWidth="180"/>
+                <TableColumn fx:id="ctEmployeeIdColumn" text="Employee ID" prefWidth="120"/>
+                <TableColumn fx:id="ctSpecializationColumn" text="Specialization" prefWidth="150"/>
+                <TableColumn fx:id="ctEmailColumn" text="Email" prefWidth="200"/>
+                <TableColumn fx:id="ctPhoneColumn" text="Phone" prefWidth="130"/>
+                <TableColumn fx:id="ctCertificationsColumn" text="Certifications" prefWidth="200"/>
+                <TableColumn fx:id="ctStatusColumn" text="Status" prefWidth="80"/>
+                <TableColumn fx:id="ctActionsColumn" text="Actions" prefWidth="120"/>
+            </columns>
+            <placeholder>
+                <Label text="No co-teachers found. Click '+ Add Co-Teacher' to add one." style="-fx-text-fill: #999;"/>
+            </placeholder>
+        </TableView>
+    </center>
+
+    <bottom>
+        <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-background-color: #f0f0f0;">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            <Label text="Co-Teacher Staff - Permanent co-teaching assignments and support staff"/>
+            <Region HBox.hgrow="ALWAYS"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

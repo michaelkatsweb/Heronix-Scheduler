@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.eduscheduler.ui.controller.ScheduleGenerationDialogController"
+            prefWidth="600" prefHeight="550">
+    
+    <top>
+        <VBox spacing="10" style="-fx-background-color: #27ae60;">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+            <Label text="Generate AI-Optimized Schedule" textFill="white">
+                <font>
+                    <Font name="System Bold" size="24"/>
+                </font>
+            </Label>
+            <Label text="Configure parameters for schedule optimization" textFill="white">
+                <font>
+                    <Font size="14"/>
+                </font>
+            </Label>
+        </VBox>
+    </top>
+    
+    <center>
+        <ScrollPane fitToWidth="true" style="-fx-background-color: white;">
+            <VBox spacing="15">
+                <padding>
+                    <Insets top="20" right="20" bottom="20" left="20"/>
+                </padding>
+                
+                <!-- Schedule Name -->
+                <VBox spacing="5">
+                    <Label text="Schedule Name *" style="-fx-font-weight: bold;"/>
+                    <TextField fx:id="scheduleNameField" promptText="e.g., Fall 2025 Master Schedule"/>
+                </VBox>
+                
+                <!-- Schedule Type -->
+                <VBox spacing="5">
+                    <Label text="Schedule Type *" style="-fx-font-weight: bold;"/>
+                    <ComboBox fx:id="scheduleTypeCombo" prefWidth="560"/>
+                </VBox>
+                
+                <!-- Period -->
+                <VBox spacing="5">
+                    <Label text="Period *" style="-fx-font-weight: bold;"/>
+                    <ComboBox fx:id="periodCombo" prefWidth="560"/>
+                </VBox>
+                
+                <!-- Date Range -->
+                <HBox spacing="10">
+                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                        <Label text="Start Date *" style="-fx-font-weight: bold;"/>
+                        <DatePicker fx:id="startDatePicker" prefWidth="270"/>
+                    </VBox>
+                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                        <Label text="End Date *" style="-fx-font-weight: bold;"/>
+                        <DatePicker fx:id="endDatePicker" prefWidth="270"/>
+                    </VBox>
+                </HBox>
+                
+                <Separator/>
+                
+                <!-- Options -->
+                <Label text="Optimization Options" style="-fx-font-weight: bold; -fx-font-size: 16;"/>
+                
+                <CheckBox fx:id="useAICheckbox" text="Use AI Optimization (OptaPlanner)" selected="true"/>
+                <CheckBox fx:id="applyLeanCheckbox" text="Apply Lean Six Sigma Principles" selected="true"/>
+                <CheckBox fx:id="applyKanbanCheckbox" text="Apply Kanban WIP Limits" selected="true"/>
+                
+                <Separator/>
+                
+                <!-- Constraints -->
+                <Label text="Constraints" style="-fx-font-weight: bold; -fx-font-size: 16;"/>
+                
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="Max Consecutive Hours:"/>
+                    <Spinner fx:id="maxConsecutiveSpinner" prefWidth="100" editable="true"/>
+                </HBox>
+                
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="Break Duration (minutes):"/>
+                    <Spinner fx:id="breakDurationSpinner" prefWidth="100" editable="true"/>
+                </HBox>
+                
+                <Separator/>
+                
+                <!-- Estimated Time -->
+                <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-background-color: #ecf0f1; -fx-padding: 10;">
+                    <Label text="⏱️ Estimated Time: 2-5 minutes" style="-fx-font-weight: bold;"/>
+                </HBox>
+            </VBox>
+        </ScrollPane>
+    </center>
+    
+    <bottom>
+        <HBox spacing="10" alignment="CENTER_RIGHT" style="-fx-background-color: #f5f5f5;">
+            <padding>
+                <Insets top="15" right="15" bottom="15" left="15"/>
+            </padding>
+            <Button text="Cancel" onAction="#handleCancel" prefWidth="100" 
+                    style="-fx-background-color: #95a5a6; -fx-text-fill: white;"/>
+            <Button text="Generate Schedule" onAction="#handleGenerate" prefWidth="150" 
+                    style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold;"/>
+        </HBox>
+    </bottom>
+    
+</BorderPane>

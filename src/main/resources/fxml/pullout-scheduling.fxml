@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.eduscheduler.ui.controller.PullOutSchedulingController"
+            stylesheets="@../css/main-style.css"
+            prefWidth="1400" prefHeight="900">
+
+    <!-- Header -->
+    <top>
+        <VBox styleClass="header-section">
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label text="Pull-Out Service Scheduling" styleClass="header-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="Refresh" onAction="#handleRefresh" styleClass="btn-secondary"/>
+                <Button text="Auto-Schedule All" onAction="#handleAutoScheduleAll" styleClass="btn-primary"/>
+                <Button text="Check Conflicts" onAction="#handleCheckConflicts" styleClass="btn-secondary"/>
+            </HBox>
+            <padding>
+                <Insets top="15" right="20" bottom="15" left="20"/>
+            </padding>
+        </VBox>
+    </top>
+
+    <!-- Center Content -->
+    <center>
+        <SplitPane dividerPositions="0.35" VBox.vgrow="ALWAYS">
+            <!-- Left Panel: Services Needing Scheduling -->
+            <VBox spacing="10" styleClass="panel-container">
+                <padding>
+                    <Insets top="15" right="15" bottom="15" left="15"/>
+                </padding>
+
+                <Label text="Services Needing Scheduling" styleClass="panel-title"/>
+
+                <!-- Filter -->
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="Filter:"/>
+                    <ComboBox fx:id="serviceTypeFilter" promptText="All Service Types" prefWidth="180"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Label fx:id="unscheduledCountLabel" text="0 unscheduled"/>
+                </HBox>
+
+                <!-- Unscheduled Services Table -->
+                <TableView fx:id="unscheduledServicesTable" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="serviceStudentColumn" text="Student" prefWidth="150"/>
+                        <TableColumn fx:id="serviceTypeColumn" text="Service Type" prefWidth="120"/>
+                        <TableColumn fx:id="minutesRequiredColumn" text="Min/Week" prefWidth="80"/>
+                        <TableColumn fx:id="providerColumn" text="Provider" prefWidth="120"/>
+                        <TableColumn fx:id="scheduleActionColumn" text="Action" prefWidth="100"/>
+                    </columns>
+                    <placeholder>
+                        <Label text="All services are scheduled!"/>
+                    </placeholder>
+                </TableView>
+
+                <!-- Bulk Actions -->
+                <HBox spacing="10" alignment="CENTER_RIGHT">
+                    <Button text="Schedule Selected" onAction="#handleScheduleSelected" styleClass="btn-secondary"/>
+                    <Button text="Find Best Slots" onAction="#handleFindBestSlots" styleClass="btn-primary"/>
+                </HBox>
+            </VBox>
+
+            <!-- Right Panel: Schedule Grid and Details -->
+            <VBox spacing="10" styleClass="panel-container">
+                <padding>
+                    <Insets top="15" right="15" bottom="15" left="15"/>
+                </padding>
+
+                <Label text="Current Schedule" styleClass="panel-title"/>
+
+                <!-- Week Selector -->
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="View:"/>
+                    <ComboBox fx:id="viewSelector" prefWidth="150"/>
+                    <Label text="Student:"/>
+                    <ComboBox fx:id="studentSelector" promptText="Select student..." prefWidth="200"/>
+                    <Label text="Staff:"/>
+                    <ComboBox fx:id="staffSelector" promptText="Select staff..." prefWidth="200"/>
+                </HBox>
+
+                <!-- Weekly Schedule Grid -->
+                <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS">
+                    <GridPane fx:id="scheduleGrid" hgap="2" vgap="2" styleClass="schedule-grid">
+                        <!-- Header Row -->
+                        <Label text="Time" GridPane.columnIndex="0" GridPane.rowIndex="0" styleClass="grid-header"/>
+                        <Label text="Monday" GridPane.columnIndex="1" GridPane.rowIndex="0" styleClass="grid-header"/>
+                        <Label text="Tuesday" GridPane.columnIndex="2" GridPane.rowIndex="0" styleClass="grid-header"/>
+                        <Label text="Wednesday" GridPane.columnIndex="3" GridPane.rowIndex="0" styleClass="grid-header"/>
+                        <Label text="Thursday" GridPane.columnIndex="4" GridPane.rowIndex="0" styleClass="grid-header"/>
+                        <Label text="Friday" GridPane.columnIndex="5" GridPane.rowIndex="0" styleClass="grid-header"/>
+                    </GridPane>
+                </ScrollPane>
+
+                <!-- Scheduled Sessions Table -->
+                <Label text="Scheduled Sessions" styleClass="panel-subtitle"/>
+                <TableView fx:id="scheduledSessionsTable" prefHeight="200">
+                    <columns>
+                        <TableColumn fx:id="sessionStudentColumn" text="Student" prefWidth="130"/>
+                        <TableColumn fx:id="sessionServiceColumn" text="Service" prefWidth="100"/>
+                        <TableColumn fx:id="sessionDayColumn" text="Day" prefWidth="90"/>
+                        <TableColumn fx:id="sessionTimeColumn" text="Time" prefWidth="100"/>
+                        <TableColumn fx:id="sessionDurationColumn" text="Duration" prefWidth="70"/>
+                        <TableColumn fx:id="sessionStaffColumn" text="Staff" prefWidth="120"/>
+                        <TableColumn fx:id="sessionLocationColumn" text="Location" prefWidth="100"/>
+                        <TableColumn fx:id="sessionActionsColumn" text="Actions" prefWidth="120"/>
+                    </columns>
+                </TableView>
+            </VBox>
+        </SplitPane>
+    </center>
+
+    <!-- Bottom Status Bar -->
+    <bottom>
+        <HBox spacing="20" alignment="CENTER_LEFT" styleClass="status-bar">
+            <padding>
+                <Insets top="10" right="20" bottom="10" left="20"/>
+            </padding>
+            <Label fx:id="totalServicesLabel" text="Total Services: 0"/>
+            <Label fx:id="scheduledServicesLabel" text="Scheduled: 0"/>
+            <Label fx:id="conflictsLabel" text="Conflicts: 0"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="complianceLabel" text="Compliance: 0%"/>
+        </HBox>
+    </bottom>
+
+    <!-- Context Menu for Scheduled Sessions -->
+    <fx:define>
+        <ContextMenu fx:id="sessionContextMenu">
+            <items>
+                <MenuItem text="View Details" onAction="#handleViewSessionDetails"/>
+                <MenuItem text="Edit Session" onAction="#handleEditSession"/>
+                <SeparatorMenuItem/>
+                <MenuItem text="Reschedule" onAction="#handleRescheduleSession"/>
+                <MenuItem text="Find Alternative Slot" onAction="#handleFindAlternative"/>
+                <SeparatorMenuItem/>
+                <MenuItem text="Cancel Session" onAction="#handleCancelSession" style="-fx-text-fill: red;"/>
+            </items>
+        </ContextMenu>
+    </fx:define>
+</BorderPane>

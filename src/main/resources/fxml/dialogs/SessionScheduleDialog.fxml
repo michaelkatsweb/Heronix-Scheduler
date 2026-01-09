@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<DialogPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.eduscheduler.ui.controller.dialogs.SessionScheduleDialogController"
+            prefWidth="550" prefHeight="600">
+
+    <headerText>Schedule Pull-Out Session</headerText>
+
+    <content>
+        <VBox spacing="15">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <!-- Student and Service Info (read-only) -->
+            <VBox spacing="5" styleClass="info-section">
+                <HBox spacing="10">
+                    <Label text="Student:" styleClass="field-label"/>
+                    <Label fx:id="studentLabel" styleClass="field-value"/>
+                </HBox>
+                <HBox spacing="10">
+                    <Label text="Service:" styleClass="field-label"/>
+                    <Label fx:id="serviceLabel" styleClass="field-value"/>
+                </HBox>
+                <HBox spacing="10">
+                    <Label text="Required:" styleClass="field-label"/>
+                    <Label fx:id="minutesRequiredLabel" styleClass="field-value"/>
+                </HBox>
+            </VBox>
+
+            <Separator/>
+
+            <!-- Day of Week -->
+            <VBox spacing="5">
+                <Label text="Day of Week *" styleClass="field-label"/>
+                <ComboBox fx:id="dayOfWeekComboBox" maxWidth="Infinity" promptText="Select day..."/>
+            </VBox>
+
+            <!-- Time Selection -->
+            <HBox spacing="20">
+                <VBox spacing="5" HBox.hgrow="ALWAYS">
+                    <Label text="Start Time *" styleClass="field-label"/>
+                    <ComboBox fx:id="startTimeComboBox" maxWidth="Infinity" promptText="Select start time..."/>
+                </VBox>
+                <VBox spacing="5" HBox.hgrow="ALWAYS">
+                    <Label text="End Time *" styleClass="field-label"/>
+                    <ComboBox fx:id="endTimeComboBox" maxWidth="Infinity" promptText="Select end time..."/>
+                </VBox>
+            </HBox>
+
+            <!-- Duration Display -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Duration:"/>
+                <Label fx:id="durationLabel" text="0 minutes" styleClass="field-value"/>
+            </HBox>
+
+            <!-- Staff Assignment -->
+            <VBox spacing="5">
+                <Label text="Assigned Staff *" styleClass="field-label"/>
+                <ComboBox fx:id="staffComboBox" maxWidth="Infinity" promptText="Select staff member..."/>
+            </VBox>
+
+            <!-- Location -->
+            <VBox spacing="5">
+                <Label text="Location" styleClass="field-label"/>
+                <HBox spacing="10">
+                    <ComboBox fx:id="roomComboBox" HBox.hgrow="ALWAYS" promptText="Select room..."/>
+                    <TextField fx:id="locationField" HBox.hgrow="ALWAYS" promptText="Or enter location..."/>
+                </HBox>
+            </VBox>
+
+            <!-- Recurring Options -->
+            <VBox spacing="10" styleClass="recurring-section">
+                <CheckBox fx:id="recurringCheckBox" text="Recurring weekly" selected="true"/>
+
+                <HBox spacing="20">
+                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                        <Label text="Start Date *" styleClass="field-label"/>
+                        <DatePicker fx:id="startDatePicker" maxWidth="Infinity"/>
+                    </VBox>
+                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                        <Label text="End Date" styleClass="field-label"/>
+                        <DatePicker fx:id="endDatePicker" maxWidth="Infinity"/>
+                    </VBox>
+                </HBox>
+            </VBox>
+
+            <!-- Group Session -->
+            <VBox spacing="5">
+                <CheckBox fx:id="groupSessionCheckBox" text="Group session (include other students)"/>
+                <ListView fx:id="otherStudentsListView" prefHeight="80" visible="false" managed="false"/>
+            </VBox>
+
+            <!-- Notes -->
+            <VBox spacing="5">
+                <Label text="Notes" styleClass="field-label"/>
+                <TextArea fx:id="notesTextArea" prefRowCount="2" wrapText="true" promptText="Session notes..."/>
+            </VBox>
+
+            <!-- Conflict Warning -->
+            <Label fx:id="conflictWarningLabel"
+                   styleClass="warning-label"
+                   wrapText="true"
+                   visible="false"
+                   managed="false"/>
+        </VBox>
+    </content>
+
+    <buttonTypes>
+        <ButtonType fx:constant="OK"/>
+        <ButtonType fx:constant="CANCEL"/>
+    </buttonTypes>
+</DialogPane>

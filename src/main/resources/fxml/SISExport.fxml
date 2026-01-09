@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<!--
+SIS Export Dashboard
+Export schedules to various Student Information Systems
+
+Location: src/main/resources/fxml/SISExport.fxml
+-->
+
+<BorderPane xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.eduscheduler.ui.controller.SISExportController"
+            styleClass="main-container">
+
+    <!-- HEADER -->
+    <top>
+        <VBox styleClass="header-section">
+            <HBox alignment="CENTER_LEFT" spacing="20" styleClass="page-header">
+                <Label text="📤 SIS Export" styleClass="page-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="📁 Open Export Folder" onAction="#handleOpenExportFolder" styleClass="button-secondary"/>
+                <Button text="🔄 Refresh" onAction="#handleRefresh" styleClass="button-primary"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- MAIN CONTENT -->
+    <center>
+        <SplitPane dividerPositions="0.65" styleClass="split-pane">
+
+            <!-- LEFT: Export Configuration -->
+            <VBox spacing="15" styleClass="content-container">
+                <padding>
+                    <Insets top="15" right="15" bottom="15" left="15"/>
+                </padding>
+
+                <!-- Export Type Selection -->
+                <VBox spacing="10" styleClass="card">
+                    <Label text="1️⃣ Select Export Type" styleClass="section-title"/>
+
+                    <VBox spacing="8">
+                        <RadioButton fx:id="masterScheduleRadio" text="Master Schedule (All Sections)" toggleGroup="$exportTypeGroup" selected="true"/>
+                        <RadioButton fx:id="studentSchedulesRadio" text="Student Schedules" toggleGroup="$exportTypeGroup"/>
+                        <RadioButton fx:id="teacherSchedulesRadio" text="Teacher Schedules" toggleGroup="$exportTypeGroup"/>
+                        <RadioButton fx:id="courseSectionsRadio" text="Course Sections Only" toggleGroup="$exportTypeGroup"/>
+                        <RadioButton fx:id="enrollmentsRadio" text="Student Enrollments" toggleGroup="$exportTypeGroup"/>
+                    </VBox>
+                </VBox>
+
+                <!-- Format Selection -->
+                <VBox spacing="10" styleClass="card">
+                    <Label text="2️⃣ Select SIS Format" styleClass="section-title"/>
+
+                    <VBox spacing="10">
+                        <!-- PowerSchool -->
+                        <HBox spacing="10" alignment="CENTER_LEFT" styleClass="format-option"
+                              style="-fx-padding: 10; -fx-background-color: #e3f2fd; -fx-background-radius: 6;">
+                            <RadioButton fx:id="powerSchoolRadio" toggleGroup="$formatGroup" selected="true"/>
+                            <VBox spacing="3">
+                                <Label text="PowerSchool" style="-fx-font-weight: bold;"/>
+                                <Label text="CSV format compatible with PowerSchool SIS" wrapText="true"
+                                       style="-fx-font-size: 11; -fx-text-fill: #666;"/>
+                            </VBox>
+                        </HBox>
+
+                        <!-- Skyward -->
+                        <HBox spacing="10" alignment="CENTER_LEFT" styleClass="format-option"
+                              style="-fx-padding: 10; -fx-background-color: #f3e5f5; -fx-background-radius: 6;">
+                            <RadioButton fx:id="skywardRadio" toggleGroup="$formatGroup"/>
+                            <VBox spacing="3">
+                                <Label text="Skyward" style="-fx-font-weight: bold;"/>
+                                <Label text="Tab-delimited format for Skyward Student Management" wrapText="true"
+                                       style="-fx-font-size: 11; -fx-text-fill: #666;"/>
+                            </VBox>
+                        </HBox>
+
+                        <!-- Infinite Campus -->
+                        <HBox spacing="10" alignment="CENTER_LEFT" styleClass="format-option"
+                              style="-fx-padding: 10; -fx-background-color: #e8f5e9; -fx-background-radius: 6;">
+                            <RadioButton fx:id="infiniteCampusRadio" toggleGroup="$formatGroup"/>
+                            <VBox spacing="3">
+                                <Label text="Infinite Campus" style="-fx-font-weight: bold;"/>
+                                <Label text="CSV format for Infinite Campus SIS" wrapText="true"
+                                       style="-fx-font-size: 11; -fx-text-fill: #666;"/>
+                            </VBox>
+                        </HBox>
+
+                        <!-- Generic CSV -->
+                        <HBox spacing="10" alignment="CENTER_LEFT" styleClass="format-option"
+                              style="-fx-padding: 10; -fx-background-color: #fff3e0; -fx-background-radius: 6;">
+                            <RadioButton fx:id="genericCSVRadio" toggleGroup="$formatGroup"/>
+                            <VBox spacing="3">
+                                <Label text="Generic CSV" style="-fx-font-weight: bold;"/>
+                                <Label text="Standard CSV format for manual import" wrapText="true"
+                                       style="-fx-font-size: 11; -fx-text-fill: #666;"/>
+                            </VBox>
+                        </HBox>
+
+                        <!-- Excel -->
+                        <HBox spacing="10" alignment="CENTER_LEFT" styleClass="format-option"
+                              style="-fx-padding: 10; -fx-background-color: #e8eaf6; -fx-background-radius: 6;">
+                            <RadioButton fx:id="excelRadio" toggleGroup="$formatGroup"/>
+                            <VBox spacing="3">
+                                <Label text="Microsoft Excel" style="-fx-font-weight: bold;"/>
+                                <Label text="Excel workbook (.xlsx) for analysis" wrapText="true"
+                                       style="-fx-font-size: 11; -fx-text-fill: #666;"/>
+                            </VBox>
+                        </HBox>
+                    </VBox>
+                </VBox>
+
+                <!-- Export Options -->
+                <VBox spacing="10" styleClass="card">
+                    <Label text="3️⃣ Export Options" styleClass="section-title"/>
+
+                    <VBox spacing="8">
+                        <CheckBox fx:id="validateDataCheckbox" text="Validate data before export" selected="true"/>
+                        <CheckBox fx:id="openAfterExportCheckbox" text="Open file after export" selected="false"/>
+                        <CheckBox fx:id="includeHeaderCheckbox" text="Include header row" selected="true"/>
+                    </VBox>
+
+                    <Separator/>
+
+                    <!-- Custom Output Path -->
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Output Path:" prefWidth="100"/>
+                        <TextField fx:id="outputPathField" promptText="Auto-generate" HBox.hgrow="ALWAYS"/>
+                        <Button text="📁" onAction="#handleBrowseOutputPath" styleClass="button-secondary"/>
+                    </HBox>
+                </VBox>
+
+                <!-- Preview -->
+                <VBox spacing="10" styleClass="card" style="-fx-background-color: #f5f5f5;">
+                    <Label text="📋 Preview" styleClass="section-title"/>
+                    <TextArea fx:id="previewTextArea" prefRowCount="6" editable="false"
+                              promptText="Click 'Preview Export' to see sample data"
+                              style="-fx-font-family: 'Courier New'; -fx-font-size: 11;"/>
+                    <Button text="👁️ Preview Export" onAction="#handlePreview" prefWidth="150" styleClass="button-secondary"/>
+                </VBox>
+
+                <!-- Export Button -->
+                <HBox spacing="10" alignment="CENTER">
+                    <Button text="📤 Export Now" onAction="#handleExport" prefWidth="200" prefHeight="40"
+                            styleClass="button-primary"
+                            style="-fx-font-size: 14; -fx-font-weight: bold;"/>
+                </HBox>
+
+            </VBox>
+
+            <!-- RIGHT: Export History & Status -->
+            <VBox spacing="15" styleClass="details-panel" style="-fx-background-color: #fafafa; -fx-padding: 15;">
+
+                <!-- Current Export Status -->
+                <VBox spacing="10" styleClass="card">
+                    <Label text="⚙️ Export Status" styleClass="section-title"/>
+
+                    <VBox fx:id="statusContainer" spacing="8">
+                        <Label fx:id="statusLabel" text="Ready to export" styleClass="stat-description"/>
+                        <ProgressBar fx:id="exportProgressBar" progress="0" prefWidth="250" visible="false"/>
+                    </VBox>
+                </VBox>
+
+                <!-- Validation Results -->
+                <VBox spacing="10" styleClass="card" style="-fx-background-color: #fff9c4;">
+                    <Label text="✓ Validation" styleClass="section-title"/>
+                    <VBox fx:id="validationResultsContainer" spacing="5">
+                        <Label text="No validation run yet" style="-fx-font-size: 11; -fx-text-fill: #666;"/>
+                    </VBox>
+                    <Button text="Run Validation" onAction="#handleValidate" prefWidth="150" styleClass="button-secondary"/>
+                </VBox>
+
+                <!-- Export History -->
+                <VBox spacing="10" styleClass="card">
+                    <Label text="📜 Recent Exports" styleClass="section-title"/>
+
+                    <ListView fx:id="exportHistoryList" prefHeight="200" styleClass="export-history-list">
+                        <placeholder>
+                            <Label text="No exports yet"/>
+                        </placeholder>
+                    </ListView>
+
+                    <Button text="Clear History" onAction="#handleClearHistory" prefWidth="120" styleClass="button-secondary"/>
+                </VBox>
+
+                <!-- Export Statistics -->
+                <VBox spacing="10" styleClass="card" style="-fx-background-color: #e3f2fd;">
+                    <Label text="📊 Statistics" styleClass="section-title"/>
+
+                    <GridPane hgap="10" vgap="6">
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="120" prefWidth="130"/>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="40" prefWidth="50"/>
+                        </columnConstraints>
+
+                        <Label text="Total Sections:" styleClass="stat-label" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                        <Label fx:id="totalSectionsLabel" text="0" styleClass="stat-value" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                        <Label text="Total Students:" styleClass="stat-label" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                        <Label fx:id="totalStudentsLabel" text="0" styleClass="stat-value" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                        <Label text="Total Teachers:" styleClass="stat-label" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                        <Label fx:id="totalTeachersLabel" text="0" styleClass="stat-value" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                        <Label text="Exports Today:" styleClass="stat-label" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                        <Label fx:id="exportsTodayLabel" text="0" styleClass="stat-value" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                    </GridPane>
+                </VBox>
+
+                <!-- Help -->
+                <VBox spacing="8" styleClass="card" style="-fx-background-color: #d1ecf1;">
+                    <Label text="💡 Help" styleClass="section-title"/>
+                    <Label text="Export formats are optimized for direct import into each SIS system. Always validate your data before exporting."
+                           wrapText="true" style="-fx-font-size: 11; -fx-text-fill: #666;"/>
+                </VBox>
+
+            </VBox>
+
+        </SplitPane>
+    </center>
+
+    <!-- BOTTOM: Quick Actions -->
+    <bottom>
+        <HBox spacing="15" alignment="CENTER_LEFT" styleClass="footer-section"
+              style="-fx-background-color: #f8f9fa; -fx-padding: 10;">
+            <Label text="Quick Export:" styleClass="filter-label"/>
+            <Button text="PowerSchool Students" onAction="#handleQuickPowerSchoolStudents" styleClass="button-secondary"/>
+            <Button text="Skyward Sections" onAction="#handleQuickSkywardSections" styleClass="button-secondary"/>
+            <Button text="Excel Master Schedule" onAction="#handleQuickExcelMaster" styleClass="button-secondary"/>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <Label fx:id="footerStatusLabel" text="Ready" styleClass="status-label"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

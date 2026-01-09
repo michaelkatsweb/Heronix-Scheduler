@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.eduscheduler.ui.controller.LoginController"
+            prefWidth="450" prefHeight="550"
+            styleClass="login-root">
+
+    <!-- Header -->
+    <top>
+        <VBox spacing="10" alignment="CENTER" style="-fx-background-color: #2196F3; -fx-padding: 30;">
+            <Label text="Heronix Scheduling System" style="-fx-text-fill: white; -fx-font-size: 28; -fx-font-weight: bold;"/>
+            <Label text="Secure Login" style="-fx-text-fill: white; -fx-font-size: 14; -fx-opacity: 0.9;"/>
+        </VBox>
+    </top>
+
+    <!-- Center - Login Form -->
+    <center>
+        <VBox spacing="20" alignment="CENTER" style="-fx-padding: 40 40 30 40;">
+
+            <!-- Logo/Icon Area -->
+            <Label text="🔐" style="-fx-font-size: 48;"/>
+
+            <!-- Username Field -->
+            <VBox spacing="5">
+                <Label text="Username:" style="-fx-font-weight: bold;"/>
+                <TextField fx:id="usernameField"
+                          promptText="Enter your username"
+                          prefWidth="350"
+                          style="-fx-font-size: 14; -fx-padding: 10;">
+                </TextField>
+            </VBox>
+
+            <!-- Password Field -->
+            <VBox spacing="5">
+                <Label text="Password:" style="-fx-font-weight: bold;"/>
+                <PasswordField fx:id="passwordField"
+                              promptText="Enter your password"
+                              prefWidth="350"
+                              style="-fx-font-size: 14; -fx-padding: 10;">
+                </PasswordField>
+            </VBox>
+
+            <!-- Remember Me -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <CheckBox fx:id="rememberMeCheckBox" text="Remember me"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Hyperlink fx:id="forgotPasswordLink" text="Forgot Password?" onAction="#handleForgotPassword"/>
+            </HBox>
+
+            <!-- Error Message -->
+            <Label fx:id="errorLabel"
+                   text=""
+                   textFill="red"
+                   wrapText="true"
+                   maxWidth="350"
+                   visible="false"
+                   managed="false"
+                   style="-fx-font-size: 13; -fx-padding: 10; -fx-background-color: #ffebee; -fx-background-radius: 5;"/>
+
+            <!-- Info Message -->
+            <Label fx:id="infoLabel"
+                   text=""
+                   textFill="#1976D2"
+                   wrapText="true"
+                   maxWidth="350"
+                   visible="false"
+                   managed="false"
+                   style="-fx-font-size: 13; -fx-padding: 10; -fx-background-color: #e3f2fd; -fx-background-radius: 5;"/>
+
+            <!-- Login Button -->
+            <Button fx:id="loginButton"
+                    text="Login"
+                    onAction="#handleLogin"
+                    defaultButton="true"
+                    prefWidth="350"
+                    prefHeight="45"
+                    style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 16; -fx-font-weight: bold; -fx-background-radius: 5;">
+            </Button>
+
+            <!-- Loading Indicator -->
+            <HBox fx:id="loadingBox"
+                  spacing="10"
+                  alignment="CENTER"
+                  visible="false"
+                  managed="false">
+                <ProgressIndicator prefWidth="20" prefHeight="20"/>
+                <Label text="Authenticating..." style="-fx-text-fill: #666;"/>
+            </HBox>
+
+            <!-- Session Info (for debugging) -->
+            <Label fx:id="sessionInfoLabel"
+                   text=""
+                   style="-fx-font-size: 11; -fx-text-fill: #999;"
+                   visible="false"
+                   managed="false"/>
+
+        </VBox>
+    </center>
+
+    <!-- Bottom - Footer -->
+    <bottom>
+        <VBox spacing="10" alignment="CENTER" style="-fx-padding: 20; -fx-background-color: #f5f5f5;">
+            <Separator prefWidth="400"/>
+            <Label text="First time user? Default credentials:" style="-fx-font-size: 12; -fx-text-fill: #666;"/>
+            <Label text="Username: admin  |  Password: Admin@123" style="-fx-font-size: 11; -fx-text-fill: #999;"/>
+            <Label text="Please change the default password after first login" style="-fx-font-size: 10; -fx-text-fill: #F44336; -fx-font-weight: bold;"/>
+            <Separator prefWidth="400"/>
+            <HBox spacing="20" alignment="CENTER">
+                <Hyperlink text="Help" onAction="#handleHelp" style="-fx-font-size: 11;"/>
+                <Label text="•" style="-fx-text-fill: #ccc;"/>
+                <Hyperlink text="About" onAction="#handleAbout" style="-fx-font-size: 11;"/>
+                <Label text="•" style="-fx-text-fill: #ccc;"/>
+                <Label text="v1.0.0" style="-fx-font-size: 11; -fx-text-fill: #999;"/>
+            </HBox>
+        </VBox>
+    </bottom>
+
+</BorderPane>

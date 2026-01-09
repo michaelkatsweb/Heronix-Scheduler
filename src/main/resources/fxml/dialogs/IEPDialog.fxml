@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<DialogPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.eduscheduler.ui.controller.dialogs.IEPDialogController"
+            stylesheets="@../../css/main-style.css"
+            prefWidth="700" prefHeight="600">
+
+    <headerText>IEP Details</headerText>
+
+    <content>
+        <ScrollPane fitToWidth="true" fitToHeight="true">
+            <VBox spacing="20" style="-fx-padding: 20;">
+
+                <!-- Student Selection -->
+                <VBox spacing="5">
+                    <Label text="Student *" styleClass="field-label"/>
+                    <ComboBox fx:id="studentComboBox" promptText="Select student..." maxWidth="Infinity"/>
+                    <Label fx:id="studentErrorLabel" styleClass="error-label" visible="false" managed="false"/>
+                </VBox>
+
+                <!-- IEP Number -->
+                <HBox spacing="20">
+                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                        <Label text="IEP Number" styleClass="field-label"/>
+                        <TextField fx:id="iepNumberField" promptText="Auto-generated if blank"/>
+                    </VBox>
+                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                        <Label text="Status *" styleClass="field-label"/>
+                        <ComboBox fx:id="statusComboBox" maxWidth="Infinity"/>
+                    </VBox>
+                </HBox>
+
+                <!-- Dates -->
+                <HBox spacing="20">
+                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                        <Label text="Start Date *" styleClass="field-label"/>
+                        <DatePicker fx:id="startDatePicker" maxWidth="Infinity"/>
+                    </VBox>
+                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                        <Label text="End Date *" styleClass="field-label"/>
+                        <DatePicker fx:id="endDatePicker" maxWidth="Infinity"/>
+                    </VBox>
+                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                        <Label text="Next Review Date" styleClass="field-label"/>
+                        <DatePicker fx:id="reviewDatePicker" maxWidth="Infinity"/>
+                    </VBox>
+                </HBox>
+
+                <!-- Eligibility -->
+                <HBox spacing="20">
+                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                        <Label text="Eligibility Category *" styleClass="field-label"/>
+                        <ComboBox fx:id="eligibilityCategoryComboBox" maxWidth="Infinity" editable="true"/>
+                    </VBox>
+                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                        <Label text="Primary Disability" styleClass="field-label"/>
+                        <ComboBox fx:id="primaryDisabilityComboBox" maxWidth="Infinity" editable="true"/>
+                    </VBox>
+                </HBox>
+
+                <!-- Case Manager -->
+                <VBox spacing="5">
+                    <Label text="Case Manager" styleClass="field-label"/>
+                    <TextField fx:id="caseManagerField" promptText="Enter case manager name"/>
+                </VBox>
+
+                <!-- Goals -->
+                <VBox spacing="5">
+                    <Label text="IEP Goals" styleClass="field-label"/>
+                    <TextArea fx:id="goalsTextArea" promptText="Enter IEP goals..." prefRowCount="4"/>
+                </VBox>
+
+                <!-- Accommodations -->
+                <VBox spacing="5">
+                    <Label text="Accommodations" styleClass="field-label"/>
+                    <TextArea fx:id="accommodationsTextArea" promptText="Enter accommodations..." prefRowCount="3"/>
+                </VBox>
+
+                <!-- Notes -->
+                <VBox spacing="5">
+                    <Label text="Notes" styleClass="field-label"/>
+                    <TextArea fx:id="notesTextArea" promptText="Additional notes..." prefRowCount="3"/>
+                </VBox>
+
+                <!-- Services Section -->
+                <TitledPane text="Services" expanded="true" collapsible="true">
+                    <VBox spacing="10" style="-fx-padding: 10;">
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <Label text="IEP Services" styleClass="section-title"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Button fx:id="addServiceButton" text="+ Add Service" onAction="#handleAddService" styleClass="btn-primary"/>
+                        </HBox>
+                        <TableView fx:id="servicesTable" prefHeight="150">
+                            <columns>
+                                <TableColumn fx:id="serviceTypeColumn" text="Service Type" prefWidth="150"/>
+                                <TableColumn fx:id="minutesColumn" text="Min/Week" prefWidth="80"/>
+                                <TableColumn fx:id="frequencyColumn" text="Frequency" prefWidth="100"/>
+                                <TableColumn fx:id="deliveryColumn" text="Delivery" prefWidth="100"/>
+                                <TableColumn fx:id="serviceActionsColumn" text="Actions" prefWidth="100"/>
+                            </columns>
+                            <placeholder>
+                                <Label text="No services added yet"/>
+                            </placeholder>
+                        </TableView>
+                    </VBox>
+                </TitledPane>
+
+            </VBox>
+        </ScrollPane>
+    </content>
+
+    <buttonTypes>
+        <ButtonType fx:constant="CANCEL"/>
+        <ButtonType fx:constant="OK"/>
+    </buttonTypes>
+</DialogPane>

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.eduscheduler.ui.controller.ImportPreviewController"
+      prefWidth="900" prefHeight="700"
+      spacing="15"
+      styleClass="dialog-root">
+
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <!-- Header -->
+    <VBox spacing="5">
+        <Label text="Import Preview" styleClass="dialog-title">
+            <font>
+                <Font name="System Bold" size="18"/>
+            </font>
+        </Label>
+        <Label text="Review data before importing" styleClass="dialog-subtitle">
+            <font>
+                <Font size="12"/>
+            </font>
+        </Label>
+    </VBox>
+
+    <Separator/>
+
+    <!-- Import Information -->
+    <HBox spacing="15" alignment="CENTER_LEFT" style="-fx-background-color: #f5f5f5; -fx-padding: 10; -fx-background-radius: 5;">
+        <VBox spacing="5">
+            <HBox spacing="10">
+                <Label text="📄 File:" style="-fx-font-weight: bold;"/>
+                <Label fx:id="fileNameLabel" text="file.csv"/>
+            </HBox>
+            <HBox spacing="10">
+                <Label text="📊 Entity Type:" style="-fx-font-weight: bold;"/>
+                <Label fx:id="entityTypeLabel" text="Student"/>
+            </HBox>
+        </VBox>
+        <Region HBox.hgrow="ALWAYS"/>
+        <VBox spacing="5" alignment="CENTER_RIGHT">
+            <HBox spacing="10">
+                <Label text="Total Rows:" style="-fx-font-weight: bold;"/>
+                <Label fx:id="totalRowsLabel" text="0" style="-fx-text-fill: #2196F3;"/>
+            </HBox>
+            <HBox spacing="10">
+                <Label text="Valid Rows:" style="-fx-font-weight: bold;"/>
+                <Label fx:id="validRowsLabel" text="0" style="-fx-text-fill: #4CAF50;"/>
+            </HBox>
+            <HBox spacing="10">
+                <Label text="Error Rows:" style="-fx-font-weight: bold;"/>
+                <Label fx:id="errorRowsLabel" text="0" style="-fx-text-fill: #F44336;"/>
+            </HBox>
+        </VBox>
+    </HBox>
+
+    <!-- Preview Controls -->
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Show:"/>
+        <RadioButton fx:id="showAllRadio" text="All Rows" selected="true" toggleGroup="$previewFilter"/>
+        <RadioButton fx:id="showValidRadio" text="Valid Only" toggleGroup="$previewFilter"/>
+        <RadioButton fx:id="showErrorsRadio" text="Errors Only" toggleGroup="$previewFilter"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Label text="Preview Limit:"/>
+        <ComboBox fx:id="previewLimitCombo" prefWidth="100"/>
+    </HBox>
+
+    <!-- Preview Table -->
+    <VBox VBox.vgrow="ALWAYS" spacing="5">
+        <Label text="Data Preview:" style="-fx-font-weight: bold;"/>
+
+        <TableView fx:id="previewTable" VBox.vgrow="ALWAYS">
+            <placeholder>
+                <Label text="No data to preview"/>
+            </placeholder>
+        </TableView>
+
+        <!-- Row count indicator -->
+        <Label fx:id="rowCountLabel" text="Showing 0 of 0 rows" style="-fx-text-fill: #666;"/>
+    </VBox>
+
+    <!-- Validation Issues -->
+    <VBox fx:id="validationIssuesBox" spacing="5" managed="false" visible="false">
+        <Label text="⚠ Validation Issues:" style="-fx-font-weight: bold; -fx-text-fill: #ff9800;"/>
+        <VBox spacing="5" style="-fx-background-color: #fff3cd; -fx-padding: 10; -fx-background-radius: 5; -fx-max-height: 150;">
+            <ScrollPane fitToWidth="true" prefHeight="150">
+                <VBox fx:id="issuesContainer" spacing="5"/>
+            </ScrollPane>
+        </VBox>
+    </VBox>
+
+    <!-- Import Options -->
+    <VBox spacing="10" style="-fx-background-color: #e3f2fd; -fx-padding: 10; -fx-background-radius: 5;">
+        <Label text="Import Options:" style="-fx-font-weight: bold;"/>
+        <HBox spacing="20">
+            <CheckBox fx:id="skipErrorsCheckBox" text="Skip rows with errors" selected="true"/>
+            <CheckBox fx:id="createBackupCheckBox" text="Create backup before import" selected="true"/>
+            <CheckBox fx:id="validateDuplicatesCheckBox" text="Check for duplicates" selected="true"/>
+        </HBox>
+    </VBox>
+
+    <!-- Action Buttons -->
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Button fx:id="backButton" text="← Back to Mapping" onAction="#handleBack" prefWidth="150"/>
+        <Button fx:id="refreshButton" text="🔄 Refresh Preview" onAction="#handleRefresh" prefWidth="130"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button fx:id="cancelButton" text="Cancel" onAction="#handleCancel" prefWidth="100"/>
+        <Button fx:id="importButton" text="✓ Start Import" onAction="#handleImport" prefWidth="120"
+                style="-fx-background-color: #4CAF50; -fx-text-fill: white;" disable="true"/>
+    </HBox>
+
+</VBox>

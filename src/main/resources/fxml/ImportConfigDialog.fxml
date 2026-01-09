@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<!--
+Import Configuration Dialog - Universal Column Mapping
+Location: src/main/resources/fxml/ImportConfigDialog.fxml
+-->
+
+<DialogPane xmlns="http://javafx.com/javafx/21"
+    xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="com.eduscheduler.ui.controller.ImportConfigController"
+    prefWidth="900" prefHeight="700">
+
+    <header>
+        <VBox spacing="10" style="-fx-background-color: #f8f9fa; -fx-padding: 20;">
+            <Label text="📊 Import Configuration" 
+                style="-fx-font-size: 20; -fx-font-weight: bold;" />
+            <Label text="Map your CSV columns to system fields" 
+                style="-fx-text-fill: #666;" />
+        </VBox>
+    </header>
+
+    <content>
+        <VBox spacing="20" style="-fx-padding: 20;">
+            
+            <!-- Entity Type Selection -->
+            <VBox spacing="10">
+                <Label text="What are you importing?" 
+                    style="-fx-font-weight: bold; -fx-font-size: 14;" />
+                <HBox spacing="15">
+                    <RadioButton fx:id="autoDetectRadio" text="🔍 Auto-Detect" selected="true">
+                        <toggleGroup>
+                            <ToggleGroup fx:id="entityTypeGroup" />
+                        </toggleGroup>
+                    </RadioButton>
+                    <RadioButton fx:id="studentRadio" text="👨‍🎓 Students" toggleGroup="$entityTypeGroup" />
+                    <RadioButton fx:id="teacherRadio" text="👨‍🏫 Teachers" toggleGroup="$entityTypeGroup" />
+                    <RadioButton fx:id="courseRadio" text="📚 Courses" toggleGroup="$entityTypeGroup" />
+                    <RadioButton fx:id="roomRadio" text="🏫 Rooms" toggleGroup="$entityTypeGroup" />
+                </HBox>
+            </VBox>
+
+            <Separator />
+
+            <!-- Column Mapping Section -->
+            <VBox spacing="10">
+                <Label text="Column Mappings" 
+                    style="-fx-font-weight: bold; -fx-font-size: 14;" />
+                <Label text="Match your CSV columns (left) to system fields (right)" 
+                    style="-fx-text-fill: #666; -fx-font-size: 12;" />
+                
+                <!-- Mapping Grid -->
+                <ScrollPane fitToWidth="true" prefHeight="300">
+                    <GridPane fx:id="mappingGrid" hgap="20" vgap="10" 
+                        style="-fx-padding: 10; -fx-background-color: white;">
+                        
+                        <!-- Headers -->
+                        <Label text="CSV Column" GridPane.columnIndex="0" GridPane.rowIndex="0"
+                            style="-fx-font-weight: bold; -fx-text-fill: #2196F3;" />
+                        <Label text="➔" GridPane.columnIndex="1" GridPane.rowIndex="0"
+                            style="-fx-font-size: 18;" />
+                        <Label text="System Field" GridPane.columnIndex="2" GridPane.rowIndex="0"
+                            style="-fx-font-weight: bold; -fx-text-fill: #4CAF50;" />
+                        <Label text="Preview" GridPane.columnIndex="3" GridPane.rowIndex="0"
+                            style="-fx-font-weight: bold; -fx-text-fill: #666;" />
+                        
+                        <!-- Mappings will be added dynamically here -->
+                    </GridPane>
+                </ScrollPane>
+            </VBox>
+
+            <!-- Data Preview -->
+            <VBox spacing="10">
+                <Label text="Data Preview (First 5 Rows)" 
+                    style="-fx-font-weight: bold; -fx-font-size: 14;" />
+                
+                <TableView fx:id="previewTable" prefHeight="150">
+                    <!-- Columns will be added dynamically -->
+                </TableView>
+            </VBox>
+
+            <!-- Import Options -->
+            <HBox spacing="20">
+                <CheckBox fx:id="skipHeaderCheckBox" text="First row contains headers" selected="true" />
+                <CheckBox fx:id="skipDuplicatesCheckBox" text="Skip duplicate records" selected="true" />
+                <CheckBox fx:id="validateDataCheckBox" text="Validate data before import" selected="true" />
+            </HBox>
+
+            <!-- Statistics -->
+            <HBox spacing="30" style="-fx-background-color: #f0f0f0; -fx-padding: 10; -fx-background-radius: 5;">
+                <Label fx:id="totalRowsLabel" text="Total Rows: 0" />
+                <Label fx:id="mappedFieldsLabel" text="Mapped Fields: 0" />
+                <Label fx:id="unmappedFieldsLabel" text="Unmapped Fields: 0" 
+                    style="-fx-text-fill: #FF9800;" />
+            </HBox>
+        </VBox>
+    </content>
+
+    <buttonTypes>
+        <ButtonType fx:constant="CANCEL" />
+        <ButtonType text="Import" buttonData="OK_DONE" />
+    </buttonTypes>
+</DialogPane>

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<!--
+Gradebook View - Assignment-based grading with weighted categories
+Location: src/main/resources/fxml/Gradebook.fxml
+-->
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.eduscheduler.ui.controller.GradebookController"
+            styleClass="root">
+
+    <top>
+        <VBox spacing="15" style="-fx-padding: 20;">
+            <!-- Header Section -->
+            <HBox alignment="CENTER_LEFT" spacing="10" styleClass="card">
+                <Label text="Gradebook" styleClass="label-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <!-- Course Selector -->
+                <Label text="Course:" styleClass="label"/>
+                <ComboBox fx:id="courseComboBox" prefWidth="300" promptText="Select Course"/>
+
+                <Separator orientation="VERTICAL"/>
+
+                <!-- Term Selector -->
+                <Label text="Term:" styleClass="label"/>
+                <ComboBox fx:id="termComboBox" prefWidth="150" promptText="All Terms"/>
+
+                <Separator orientation="VERTICAL"/>
+
+                <Button text="+ Assignment" onAction="#handleAddAssignment" styleClass="button-success"/>
+                <Button text="Categories" onAction="#handleManageCategories" styleClass="button-primary"/>
+                <Button text="Refresh" onAction="#handleRefresh" styleClass="button"/>
+            </HBox>
+
+            <!-- Category Summary Bar -->
+            <HBox fx:id="categorySummaryBar" spacing="10" alignment="CENTER_LEFT" styleClass="card">
+                <Label text="Categories:" styleClass="label"/>
+                <!-- Categories will be added dynamically -->
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <SplitPane dividerPositions="0.7" orientation="HORIZONTAL">
+            <!-- Left: Assignment List -->
+            <VBox spacing="10" styleClass="card">
+                <padding>
+                    <Insets top="15" right="15" bottom="15" left="15"/>
+                </padding>
+
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label text="Assignments" styleClass="label-title"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Label fx:id="assignmentCountLabel" text="0 assignments" styleClass="label"/>
+                </HBox>
+
+                <!-- Filter Row -->
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <TextField fx:id="searchField" promptText="Search assignments..." prefWidth="200"/>
+                    <ComboBox fx:id="categoryFilterComboBox" promptText="All Categories" prefWidth="150"/>
+                    <ComboBox fx:id="statusFilterComboBox" promptText="All Status" prefWidth="120"/>
+                </HBox>
+
+                <TableView fx:id="assignmentsTable" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="categoryColumn" text="Category" prefWidth="100" minWidth="80"/>
+                        <TableColumn fx:id="titleColumn" text="Assignment" prefWidth="200" minWidth="150"/>
+                        <TableColumn fx:id="dueDateColumn" text="Due Date" prefWidth="100" minWidth="90"/>
+                        <TableColumn fx:id="maxPointsColumn" text="Points" prefWidth="70" minWidth="60"/>
+                        <TableColumn fx:id="classAvgColumn" text="Class Avg" prefWidth="80" minWidth="70"/>
+                        <TableColumn fx:id="gradedColumn" text="Graded" prefWidth="80" minWidth="70"/>
+                        <TableColumn fx:id="statusColumn" text="Status" prefWidth="80" minWidth="70"/>
+                        <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="120" minWidth="100"/>
+                    </columns>
+                </TableView>
+            </VBox>
+
+            <!-- Right: Grade Entry Panel -->
+            <VBox fx:id="gradeEntryPanel" spacing="10" styleClass="card">
+                <padding>
+                    <Insets top="15" right="15" bottom="15" left="15"/>
+                </padding>
+
+                <Label fx:id="selectedAssignmentLabel" text="Select an assignment" styleClass="label-title"/>
+                <Label fx:id="assignmentDetailsLabel" text="" styleClass="label"/>
+
+                <Separator/>
+
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <Label text="Quick Actions:" styleClass="label"/>
+                    <Button text="Grade All" onAction="#handleGradeAll" styleClass="button-primary"/>
+                    <Button text="Mark Missing" onAction="#handleMarkAllMissing" styleClass="button"/>
+                </HBox>
+
+                <TableView fx:id="studentGradesTable" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="studentNameColumn" text="Student" prefWidth="180" minWidth="150"/>
+                        <TableColumn fx:id="scoreColumn" text="Score" prefWidth="80" minWidth="70"/>
+                        <TableColumn fx:id="percentColumn" text="Percent" prefWidth="60" minWidth="50"/>
+                        <TableColumn fx:id="letterGradeColumn" text="Grade" prefWidth="60" minWidth="50"/>
+                        <TableColumn fx:id="gradeStatusColumn" text="Status" prefWidth="90" minWidth="80"/>
+                    </columns>
+                </TableView>
+
+                <!-- Class Statistics -->
+                <HBox spacing="20" alignment="CENTER" styleClass="card" style="-fx-padding: 10;">
+                    <VBox alignment="CENTER">
+                        <Label text="Class Avg" styleClass="label"/>
+                        <Label fx:id="classAvgLabel" text="-" style="-fx-font-size: 18; -fx-font-weight: bold;"/>
+                    </VBox>
+                    <VBox alignment="CENTER">
+                        <Label text="High" styleClass="label"/>
+                        <Label fx:id="classHighLabel" text="-" style="-fx-font-size: 18; -fx-text-fill: #4CAF50;"/>
+                    </VBox>
+                    <VBox alignment="CENTER">
+                        <Label text="Low" styleClass="label"/>
+                        <Label fx:id="classLowLabel" text="-" style="-fx-font-size: 18; -fx-text-fill: #F44336;"/>
+                    </VBox>
+                    <VBox alignment="CENTER">
+                        <Label text="Graded" styleClass="label"/>
+                        <Label fx:id="gradedCountLabel" text="0/0" style="-fx-font-size: 18;"/>
+                    </VBox>
+                </HBox>
+            </VBox>
+        </SplitPane>
+    </center>
+
+    <bottom>
+        <HBox spacing="10" alignment="CENTER_LEFT" styleClass="card" style="-fx-padding: 10 20;">
+            <Label fx:id="statusLabel" text="Ready" styleClass="label"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="Export Grades" onAction="#handleExportGrades" styleClass="button"/>
+            <Button text="Print Report" onAction="#handlePrintReport" styleClass="button"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.eduscheduler.controller.SubjectAreaManagementController"
+            styleClass="root">
+
+    <top>
+        <VBox spacing="10" styleClass="card">
+            <padding>
+                <Insets top="15" right="15" bottom="15" left="15"/>
+            </padding>
+
+            <!-- Title and Actions -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="📚 Subject Area Management" styleClass="header-large"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="New Subject Area" onAction="#handleNewSubjectArea" styleClass="button-primary"/>
+                <Button text="Import Subjects" onAction="#handleImportSubjects" styleClass="button"/>
+                <Button text="Refresh" onAction="#handleRefresh" styleClass="button"/>
+            </HBox>
+
+            <!-- Filters and Search -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Filter:"/>
+                <ComboBox fx:id="filterComboBox" promptText="All Subject Areas" prefWidth="200" onAction="#handleFilterChange"/>
+                <Region prefWidth="20"/>
+                <Label text="Search:"/>
+                <TextField fx:id="searchField" promptText="Search by name or code..." prefWidth="300"/>
+                <Button text="Clear" onAction="#handleClearSearch" styleClass="button"/>
+            </HBox>
+
+            <!-- Summary Bar -->
+            <HBox spacing="20" alignment="CENTER_LEFT" styleClass="info-bar">
+                <VBox spacing="2">
+                    <Label text="Total Subjects:" styleClass="label-small"/>
+                    <Label fx:id="totalSubjectsLabel" text="0" styleClass="value-text" style="-fx-font-size: 18;"/>
+                </VBox>
+                <Separator orientation="VERTICAL"/>
+                <VBox spacing="2">
+                    <Label text="Top-Level:" styleClass="label-small"/>
+                    <Label fx:id="topLevelLabel" text="0" styleClass="value-text" style="-fx-font-size: 18;"/>
+                </VBox>
+                <Separator orientation="VERTICAL"/>
+                <VBox spacing="2">
+                    <Label text="Sub-Subjects:" styleClass="label-small"/>
+                    <Label fx:id="subSubjectsLabel" text="0" styleClass="value-text" style="-fx-font-size: 18;"/>
+                </VBox>
+                <Separator orientation="VERTICAL"/>
+                <VBox spacing="2">
+                    <Label text="Total Courses:" styleClass="label-small"/>
+                    <Label fx:id="totalCoursesLabel" text="0" styleClass="value-text" style="-fx-font-size: 18;"/>
+                </VBox>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="activeFilterLabel" text="Showing: All" styleClass="label-small"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <SplitPane dividerPositions="0.60" VBox.vgrow="ALWAYS">
+            <!-- Left: Subject Areas Table -->
+            <VBox spacing="5">
+                <padding>
+                    <Insets top="10" right="10" bottom="10" left="10"/>
+                </padding>
+
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="Subject Areas" styleClass="section-header"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button text="Edit" onAction="#handleEdit" styleClass="button"/>
+                    <Button text="Delete" onAction="#handleDelete" styleClass="button-danger"/>
+                </HBox>
+
+                <TableView fx:id="subjectsTable" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="codeColumn" text="Code" prefWidth="80"/>
+                        <TableColumn fx:id="nameColumn" text="Name" prefWidth="200"/>
+                        <TableColumn fx:id="departmentColumn" text="Department" prefWidth="150"/>
+                        <TableColumn fx:id="parentColumn" text="Parent" prefWidth="120"/>
+                        <TableColumn fx:id="levelColumn" text="Level" prefWidth="60"/>
+                        <TableColumn fx:id="coursesColumn" text="Courses" prefWidth="80"/>
+                        <TableColumn fx:id="activeColumn" text="Active" prefWidth="70"/>
+                    </columns>
+                </TableView>
+
+                <!-- Action Buttons -->
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label fx:id="statusLabel" text="Ready"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Label fx:id="selectionLabel" text="No selection" styleClass="label-small"/>
+                </HBox>
+            </VBox>
+
+            <!-- Right: Details Panel -->
+            <VBox spacing="10" styleClass="card">
+                <padding>
+                    <Insets top="10" right="10" bottom="10" left="10"/>
+                </padding>
+
+                <Label text="Subject Area Details" styleClass="section-header"/>
+
+                <Separator/>
+
+                <!-- Basic Info -->
+                <VBox spacing="5">
+                    <Label text="Basic Information" styleClass="label-small" style="-fx-font-weight: bold;"/>
+                    <GridPane hgap="10" vgap="8">
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="35"/>
+                            <ColumnConstraints percentWidth="65"/>
+                        </columnConstraints>
+
+                        <Label text="Code:" GridPane.columnIndex="0" GridPane.rowIndex="0" styleClass="label-small"/>
+                        <Label fx:id="detailCodeLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                        <Label text="Name:" GridPane.columnIndex="0" GridPane.rowIndex="1" styleClass="label-small"/>
+                        <Label fx:id="detailNameLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                        <Label text="Department:" GridPane.columnIndex="0" GridPane.rowIndex="2" styleClass="label-small"/>
+                        <Label fx:id="detailDepartmentLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                        <Label text="Parent Subject:" GridPane.columnIndex="0" GridPane.rowIndex="3" styleClass="label-small"/>
+                        <Label fx:id="detailParentLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+                        <Label text="Hierarchy Level:" GridPane.columnIndex="0" GridPane.rowIndex="4" styleClass="label-small"/>
+                        <Label fx:id="detailLevelLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+
+                        <Label text="Display Color:" GridPane.columnIndex="0" GridPane.rowIndex="5" styleClass="label-small"/>
+                        <HBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                            <Label fx:id="detailColorLabel" text="-"/>
+                            <Region fx:id="colorPreview" prefWidth="20" prefHeight="20" style="-fx-border-color: #ccc; -fx-border-width: 1;"/>
+                        </HBox>
+                    </GridPane>
+                </VBox>
+
+                <Separator/>
+
+                <!-- Description -->
+                <VBox spacing="5" VBox.vgrow="ALWAYS">
+                    <Label text="Description" styleClass="label-small" style="-fx-font-weight: bold;"/>
+                    <TextArea fx:id="descriptionArea" wrapText="true" editable="false" VBox.vgrow="ALWAYS"
+                              promptText="No description available"/>
+                </VBox>
+
+                <Separator/>
+
+                <!-- Statistics -->
+                <VBox spacing="5">
+                    <Label text="Statistics" styleClass="label-small" style="-fx-font-weight: bold;"/>
+                    <GridPane hgap="10" vgap="8">
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="50"/>
+                            <ColumnConstraints percentWidth="50"/>
+                        </columnConstraints>
+
+                        <VBox spacing="3" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                            <Label text="Direct Courses" styleClass="label-small"/>
+                            <Label fx:id="detailCoursesLabel" text="0" style="-fx-font-size: 20; -fx-font-weight: bold;"/>
+                        </VBox>
+
+                        <VBox spacing="3" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                            <Label text="Total Courses" styleClass="label-small"/>
+                            <Label fx:id="detailTotalCoursesLabel" text="0" style="-fx-font-size: 20; -fx-font-weight: bold;"/>
+                        </VBox>
+
+                        <VBox spacing="3" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                            <Label text="Child Subjects" styleClass="label-small"/>
+                            <Label fx:id="detailChildrenLabel" text="0" style="-fx-font-size: 20; -fx-font-weight: bold;"/>
+                        </VBox>
+
+                        <VBox spacing="3" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                            <Label text="Status" styleClass="label-small"/>
+                            <Label fx:id="detailStatusLabel" text="Active" style="-fx-font-size: 20; -fx-font-weight: bold;"/>
+                        </VBox>
+                    </GridPane>
+                </VBox>
+
+                <Separator/>
+
+                <!-- Child Subjects -->
+                <VBox spacing="5">
+                    <Label text="Child Subjects" styleClass="label-small" style="-fx-font-weight: bold;"/>
+                    <ListView fx:id="childSubjectsListView" prefHeight="100"/>
+                </VBox>
+
+                <Separator/>
+
+                <!-- Quick Actions -->
+                <VBox spacing="8">
+                    <Button text="View Courses in This Subject" onAction="#handleViewCourses" styleClass="button-primary" prefWidth="Infinity"/>
+                    <Button text="View Related Course Sequences" onAction="#handleViewSequences" styleClass="button" prefWidth="Infinity"/>
+                    <Button text="Manage Graduation Requirements" onAction="#handleManageRequirements" styleClass="button" prefWidth="Infinity"/>
+                </VBox>
+            </VBox>
+        </SplitPane>
+    </center>
+
+    <bottom>
+        <HBox spacing="10" alignment="CENTER_LEFT" styleClass="card">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            <Label text="Subject Area Management" styleClass="label"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="lastUpdatedLabel" text="Last updated: Never" styleClass="label-small"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.eduscheduler.ui.controller.AssignmentReportsController"
+            prefWidth="1000" prefHeight="700">
+
+    <!-- Top: Header -->
+    <top>
+        <VBox spacing="10" styleClass="header-section">
+            <padding>
+                <Insets top="15" right="20" bottom="15" left="20"/>
+            </padding>
+
+            <Label text="Assignment Reports &amp; Analytics" styleClass="header-title"/>
+            <Label text="View comprehensive reports on course assignment effectiveness and system performance."
+                   styleClass="header-subtitle" wrapText="true"/>
+
+            <Separator/>
+
+            <!-- Summary Cards -->
+            <GridPane hgap="15" vgap="10">
+                <padding>
+                    <Insets top="10" bottom="10"/>
+                </padding>
+
+                <!-- Card 1 -->
+                <VBox spacing="5" styleClass="summary-card" GridPane.columnIndex="0">
+                    <padding>
+                        <Insets top="10" right="15" bottom="10" left="15"/>
+                    </padding>
+                    <Label fx:id="summaryCard1Label" text="Total Requests" styleClass="card-label"/>
+                    <Label fx:id="summaryCard1Value" text="0" styleClass="card-value"/>
+                </VBox>
+
+                <!-- Card 2 -->
+                <VBox spacing="5" styleClass="summary-card" GridPane.columnIndex="1">
+                    <padding>
+                        <Insets top="10" right="15" bottom="10" left="15"/>
+                    </padding>
+                    <Label fx:id="summaryCard2Label" text="Success Rate" styleClass="card-label"/>
+                    <Label fx:id="summaryCard2Value" text="0%" styleClass="card-value"/>
+                </VBox>
+
+                <!-- Card 3 -->
+                <VBox spacing="5" styleClass="summary-card" GridPane.columnIndex="2">
+                    <padding>
+                        <Insets top="10" right="15" bottom="10" left="15"/>
+                    </padding>
+                    <Label fx:id="summaryCard3Label" text="Approved" styleClass="card-label"/>
+                    <Label fx:id="summaryCard3Value" text="0" styleClass="card-value"/>
+                </VBox>
+
+                <!-- Card 4 -->
+                <VBox spacing="5" styleClass="summary-card" GridPane.columnIndex="3">
+                    <padding>
+                        <Insets top="10" right="15" bottom="10" left="15"/>
+                    </padding>
+                    <Label fx:id="summaryCard4Label" text="Waitlisted" styleClass="card-label"/>
+                    <Label fx:id="summaryCard4Value" text="0" styleClass="card-value"/>
+                </VBox>
+
+                <columnConstraints>
+                    <ColumnConstraints percentWidth="25"/>
+                    <ColumnConstraints percentWidth="25"/>
+                    <ColumnConstraints percentWidth="25"/>
+                    <ColumnConstraints percentWidth="25"/>
+                </columnConstraints>
+            </GridPane>
+        </VBox>
+    </top>
+
+    <!-- Center: Report Selection and Display -->
+    <center>
+        <VBox spacing="15" styleClass="content-section">
+            <padding>
+                <Insets top="15" right="20" bottom="15" left="20"/>
+            </padding>
+
+            <!-- Report Type Selection -->
+            <HBox spacing="15" alignment="CENTER_LEFT">
+                <Label text="Select Report:" styleClass="form-label"/>
+                <ComboBox fx:id="reportTypeCombo" prefWidth="300" styleClass="combo-box"/>
+                <Button fx:id="generateButton" text="Generate Report" onAction="#handleGenerateReport"
+                        styleClass="primary-button"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button fx:id="exportButton" text="Export" onAction="#handleExport"
+                        styleClass="secondary-button" disable="true"/>
+            </HBox>
+
+            <Separator/>
+
+            <!-- Report Display Area -->
+            <TextArea fx:id="reportTextArea" editable="false" wrapText="false"
+                      VBox.vgrow="ALWAYS" styleClass="report-text-area"
+                      promptText="Select a report type and click 'Generate Report' to view analytics"/>
+
+        </VBox>
+    </center>
+
+    <!-- Bottom: Action Buttons -->
+    <bottom>
+        <HBox spacing="10" alignment="CENTER_RIGHT" styleClass="button-bar">
+            <padding>
+                <Insets top="10" right="20" bottom="15" left="20"/>
+            </padding>
+            <Button fx:id="closeButton" text="Close" onAction="#handleClose" styleClass="secondary-button"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

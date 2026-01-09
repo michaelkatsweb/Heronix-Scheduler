@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<!--
+Teacher Load Heatmap
+Visual representation of teacher workload distribution across time periods
+
+Location: src/main/resources/fxml/TeacherLoadHeatmap.fxml
+-->
+
+<BorderPane xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.eduscheduler.ui.controller.TeacherLoadHeatmapController"
+            styleClass="main-container">
+
+    <!-- HEADER -->
+    <top>
+        <VBox styleClass="header-section">
+            <HBox alignment="CENTER_LEFT" spacing="20" styleClass="page-header">
+                <Label text="🔥 Teacher Load Heatmap" styleClass="page-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <ComboBox fx:id="departmentFilterComboBox" promptText="All Departments"
+                          onAction="#handleDepartmentFilterChange" styleClass="filter-combo"/>
+                <ComboBox fx:id="termFilterComboBox" promptText="Current Term"
+                          onAction="#handleTermFilterChange" styleClass="filter-combo"/>
+                <Button text="🔄 Refresh" onAction="#handleRefresh" styleClass="button-secondary"/>
+                <Button text="📊 Export" onAction="#handleExport" styleClass="button-primary"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- MAIN CONTENT -->
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="scroll-pane">
+            <VBox spacing="20" styleClass="content-container">
+                <padding>
+                    <Insets top="20" right="20" bottom="20" left="20"/>
+                </padding>
+
+                <!-- ========== SUMMARY METRICS ========== -->
+                <HBox spacing="15" styleClass="metrics-row">
+                    <!-- Average Load Card -->
+                    <VBox styleClass="card metric-card" HBox.hgrow="ALWAYS">
+                        <Label text="📊 Average Load" styleClass="metric-label"/>
+                        <Label fx:id="averageLoadLabel" text="--" styleClass="metric-value"/>
+                        <Label fx:id="averageLoadDescLabel" text="periods per teacher" styleClass="metric-description"/>
+                    </VBox>
+
+                    <!-- Overloaded Teachers Card -->
+                    <VBox styleClass="card metric-card" HBox.hgrow="ALWAYS">
+                        <Label text="⚠️ Overloaded Teachers" styleClass="metric-label"/>
+                        <Label fx:id="overloadedTeachersLabel" text="--" styleClass="metric-value"/>
+                        <Label fx:id="overloadedDescLabel" text="above recommended load" styleClass="metric-description"/>
+                    </VBox>
+
+                    <!-- Underutilized Teachers Card -->
+                    <VBox styleClass="card metric-card" HBox.hgrow="ALWAYS">
+                        <Label text="📉 Underutilized Teachers" styleClass="metric-label"/>
+                        <Label fx:id="underutilizedTeachersLabel" text="--" styleClass="metric-value"/>
+                        <Label fx:id="underutilizedDescLabel" text="below optimal load" styleClass="metric-description"/>
+                    </VBox>
+
+                    <!-- Load Balance Score Card -->
+                    <VBox styleClass="card metric-card" HBox.hgrow="ALWAYS">
+                        <Label text="⚖️ Balance Score" styleClass="metric-label"/>
+                        <Label fx:id="balanceScoreLabel" text="--" styleClass="metric-value"/>
+                        <Label fx:id="balanceDescLabel" text="load distribution" styleClass="metric-description"/>
+                    </VBox>
+                </HBox>
+
+                <!-- ========== HEATMAP LEGEND ========== -->
+                <VBox spacing="10" styleClass="card">
+                    <Label text="🎨 Load Intensity Legend" styleClass="section-title"/>
+                    <HBox spacing="30" alignment="CENTER_LEFT">
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <Region prefWidth="30" prefHeight="20" style="-fx-background-color: #e8f5e9;"/>
+                            <Label text="0-2 periods (Light)" styleClass="stat-label"/>
+                        </HBox>
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <Region prefWidth="30" prefHeight="20" style="-fx-background-color: #fff9c4;"/>
+                            <Label text="3-4 periods (Moderate)" styleClass="stat-label"/>
+                        </HBox>
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <Region prefWidth="30" prefHeight="20" style="-fx-background-color: #ffcc80;"/>
+                            <Label text="5-6 periods (High)" styleClass="stat-label"/>
+                        </HBox>
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <Region prefWidth="30" prefHeight="20" style="-fx-background-color: #ff9999;"/>
+                            <Label text="7+ periods (Overloaded)" styleClass="stat-label"/>
+                        </HBox>
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <Region prefWidth="30" prefHeight="20" style="-fx-background-color: #f0f0f0; -fx-border-color: #cccccc;"/>
+                            <Label text="No Assignment" styleClass="stat-label"/>
+                        </HBox>
+                    </HBox>
+                </VBox>
+
+                <!-- ========== TEACHER LOAD HEATMAP ========== -->
+                <VBox spacing="15" styleClass="card">
+                    <HBox alignment="CENTER_LEFT" spacing="15">
+                        <Label text="📅 Weekly Teacher Load Distribution" styleClass="section-title"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <CheckBox fx:id="showPrepsCheckbox" text="Show Prep Periods"
+                                  onAction="#handleTogglePreps" styleClass="checkbox"/>
+                        <CheckBox fx:id="showPercentagesCheckbox" text="Show Percentages"
+                                  onAction="#handleTogglePercentages" styleClass="checkbox"/>
+                    </HBox>
+
+                    <!-- Heatmap Grid Container -->
+                    <ScrollPane fitToWidth="true" prefHeight="600">
+                        <GridPane fx:id="heatmapGrid" hgap="2" vgap="2" styleClass="heatmap-grid">
+                            <padding>
+                                <Insets top="10" right="10" bottom="10" left="10"/>
+                            </padding>
+                        </GridPane>
+                    </ScrollPane>
+                </VBox>
+
+                <!-- ========== TEACHER WORKLOAD DETAILS ========== -->
+                <VBox spacing="15" styleClass="card">
+                    <HBox alignment="CENTER_LEFT" spacing="15">
+                        <Label text="👥 Teacher Workload Details" styleClass="section-title"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <ComboBox fx:id="workloadFilterComboBox" promptText="All Teachers"
+                                  onAction="#handleWorkloadFilterChange" styleClass="filter-combo"/>
+                    </HBox>
+
+                    <TableView fx:id="teacherWorkloadTable" styleClass="data-table">
+                        <columns>
+                            <TableColumn fx:id="teacherNameColumn" text="Teacher Name" prefWidth="200"/>
+                            <TableColumn fx:id="departmentColumn" text="Department" prefWidth="150"/>
+                            <TableColumn fx:id="totalPeriodsColumn" text="Total Periods" prefWidth="120"/>
+                            <TableColumn fx:id="uniqueCoursesColumn" text="Unique Courses" prefWidth="130"/>
+                            <TableColumn fx:id="uniquePrepsColumn" text="Unique Preps" prefWidth="120"/>
+                            <TableColumn fx:id="totalStudentsColumn" text="Total Students" prefWidth="120"/>
+                            <TableColumn fx:id="avgClassSizeColumn" text="Avg Class Size" prefWidth="120"/>
+                            <TableColumn fx:id="loadStatusColumn" text="Load Status" prefWidth="120"/>
+                            <TableColumn fx:id="detailsActionColumn" text="Details" prefWidth="100"/>
+                        </columns>
+                        <placeholder>
+                            <Label text="No teacher workload data available"/>
+                        </placeholder>
+                    </TableView>
+                </VBox>
+
+                <!-- ========== PERIOD-BY-PERIOD BREAKDOWN ========== -->
+                <VBox spacing="15" styleClass="card">
+                    <Label text="📊 Period-by-Period Load Distribution" styleClass="section-title"/>
+
+                    <GridPane hgap="20" vgap="15">
+                        <!-- Period 1 -->
+                        <VBox GridPane.columnIndex="0" GridPane.rowIndex="0">
+                            <Label text="Period 1" styleClass="stat-label"/>
+                            <Label fx:id="period1LoadLabel" text="--" styleClass="stat-value"/>
+                            <Label fx:id="period1DescLabel" text="teachers assigned" styleClass="stat-description"/>
+                        </VBox>
+
+                        <!-- Period 2 -->
+                        <VBox GridPane.columnIndex="1" GridPane.rowIndex="0">
+                            <Label text="Period 2" styleClass="stat-label"/>
+                            <Label fx:id="period2LoadLabel" text="--" styleClass="stat-value"/>
+                            <Label fx:id="period2DescLabel" text="teachers assigned" styleClass="stat-description"/>
+                        </VBox>
+
+                        <!-- Period 3 -->
+                        <VBox GridPane.columnIndex="2" GridPane.rowIndex="0">
+                            <Label text="Period 3" styleClass="stat-label"/>
+                            <Label fx:id="period3LoadLabel" text="--" styleClass="stat-value"/>
+                            <Label fx:id="period3DescLabel" text="teachers assigned" styleClass="stat-description"/>
+                        </VBox>
+
+                        <!-- Period 4 -->
+                        <VBox GridPane.columnIndex="3" GridPane.rowIndex="0">
+                            <Label text="Period 4" styleClass="stat-label"/>
+                            <Label fx:id="period4LoadLabel" text="--" styleClass="stat-value"/>
+                            <Label fx:id="period4DescLabel" text="teachers assigned" styleClass="stat-description"/>
+                        </VBox>
+
+                        <!-- Period 5 -->
+                        <VBox GridPane.columnIndex="0" GridPane.rowIndex="1">
+                            <Label text="Period 5" styleClass="stat-label"/>
+                            <Label fx:id="period5LoadLabel" text="--" styleClass="stat-value"/>
+                            <Label fx:id="period5DescLabel" text="teachers assigned" styleClass="stat-description"/>
+                        </VBox>
+
+                        <!-- Period 6 -->
+                        <VBox GridPane.columnIndex="1" GridPane.rowIndex="1">
+                            <Label text="Period 6" styleClass="stat-label"/>
+                            <Label fx:id="period6LoadLabel" text="--" styleClass="stat-value"/>
+                            <Label fx:id="period6DescLabel" text="teachers assigned" styleClass="stat-description"/>
+                        </VBox>
+
+                        <!-- Period 7 -->
+                        <VBox GridPane.columnIndex="2" GridPane.rowIndex="1">
+                            <Label text="Period 7" styleClass="stat-label"/>
+                            <Label fx:id="period7LoadLabel" text="--" styleClass="stat-value"/>
+                            <Label fx:id="period7DescLabel" text="teachers assigned" styleClass="stat-description"/>
+                        </VBox>
+
+                        <!-- Period 8 -->
+                        <VBox GridPane.columnIndex="3" GridPane.rowIndex="1">
+                            <Label text="Period 8" styleClass="stat-label"/>
+                            <Label fx:id="period8LoadLabel" text="--" styleClass="stat-value"/>
+                            <Label fx:id="period8DescLabel" text="teachers assigned" styleClass="stat-description"/>
+                        </VBox>
+                    </GridPane>
+                </VBox>
+
+                <!-- ========== RECOMMENDATIONS ========== -->
+                <VBox spacing="15" styleClass="card">
+                    <Label text="💡 Load Balancing Recommendations" styleClass="section-title"/>
+
+                    <VBox fx:id="recommendationsContainer" spacing="10">
+                        <Label text="Analyzing workload distribution..." styleClass="stat-description"/>
+                    </VBox>
+                </VBox>
+
+            </VBox>
+        </ScrollPane>
+    </center>
+
+</BorderPane>

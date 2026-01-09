@@ -1,0 +1,100 @@
+package com.heronix.model.enums;
+
+/**
+ * US States Enum
+ * For tracking which state issued a teacher certification
+ *
+ * @author Heronix Scheduling System Team
+ * @version 1.0.0
+ * @since 2025-11-06
+ */
+public enum USState {
+
+    AL("Alabama", "AL DOE"),
+    AK("Alaska", "AK DEED"),
+    AZ("Arizona", "AZ DOE"),
+    AR("Arkansas", "AR DOE"),
+    CA("California", "CA CTC"),
+    CO("Colorado", "CO DOE"),
+    CT("Connecticut", "CT SDE"),
+    DE("Delaware", "DE DOE"),
+    FL("Florida", "FL DOE"),
+    GA("Georgia", "GA PSC"),
+    HI("Hawaii", "HI DOE"),
+    ID("Idaho", "ID SDE"),
+    IL("Illinois", "IL ISBE"),
+    IN("Indiana", "IN DOE"),
+    IA("Iowa", "IA DOE"),
+    KS("Kansas", "KS KSDE"),
+    KY("Kentucky", "KY EPS"),
+    LA("Louisiana", "LA DOE"),
+    ME("Maine", "ME DOE"),
+    MD("Maryland", "MD MSDE"),
+    MA("Massachusetts", "MA DESE"),
+    MI("Michigan", "MI DOE"),
+    MN("Minnesota", "MN DOE"),
+    MS("Mississippi", "MS DOE"),
+    MO("Missouri", "MO DESE"),
+    MT("Montana", "MT OPI"),
+    NE("Nebraska", "NE DOE"),
+    NV("Nevada", "NV DOE"),
+    NH("New Hampshire", "NH DOE"),
+    NJ("New Jersey", "NJ DOE"),
+    NM("New Mexico", "NM PED"),
+    NY("New York", "NY SED"),
+    NC("North Carolina", "NC DPI"),
+    ND("North Dakota", "ND DPI"),
+    OH("Ohio", "OH DOE"),
+    OK("Oklahoma", "OK SDE"),
+    OR("Oregon", "OR TSPC"),
+    PA("Pennsylvania", "PA DOE"),
+    RI("Rhode Island", "RI RIDE"),
+    SC("South Carolina", "SC DOE"),
+    SD("South Dakota", "SD DOE"),
+    TN("Tennessee", "TN DOE"),
+    TX("Texas", "TX TEA"),
+    UT("Utah", "UT SBE"),
+    VT("Vermont", "VT AOE"),
+    VA("Virginia", "VA DOE"),
+    WA("Washington", "WA OSPI"),
+    WV("West Virginia", "WV DOE"),
+    WI("Wisconsin", "WI DPI"),
+    WY("Wyoming", "WY DOE"),
+    DC("District of Columbia", "DC OSSE"),
+
+    // Territories
+    PR("Puerto Rico", "PR DOE"),
+    GU("Guam", "Guam DOE"),
+    VI("US Virgin Islands", "VI DOE"),
+
+    // National certifications
+    NBPTS("National Board (NBPTS)", "National Board for Professional Teaching Standards"),
+    INTERSTATE("Interstate (Multi-State)", "Interstate Agreement"),
+    OTHER("Other", "Other Certifying Agency");
+
+    private final String displayName;
+    private final String certifyingAgency;
+
+    USState(String displayName, String certifyingAgency) {
+        this.displayName = displayName;
+        this.certifyingAgency = certifyingAgency;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public String getCertifyingAgency() {
+        return certifyingAgency;
+    }
+
+    /**
+     * Get full display name with abbreviation
+     */
+    public String getFullDisplayName() {
+        if (this == NBPTS || this == INTERSTATE || this == OTHER) {
+            return displayName;
+        }
+        return displayName + " (" + name() + ")";
+    }
+}

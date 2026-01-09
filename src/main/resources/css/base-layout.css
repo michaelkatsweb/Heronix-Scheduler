@@ -1,0 +1,309 @@
+/*
+ * ═══════════════════════════════════════════════════════════════════════
+ * BASE LAYOUT & STRUCTURE - Theme-Independent
+ * EduScheduler Pro - Layout and Positioning Styles
+ * ═══════════════════════════════════════════════════════════════════════
+ *
+ * This file contains all layout, positioning, spacing, and structural
+ * styles that are independent of color themes. This includes:
+ * - Padding and margins
+ * - Border radius and widths
+ * - Font sizes and weights
+ * - Flex and grid layouts
+ * - Positioning and alignment
+ *
+ * Color-specific styles belong in theme files (dark-theme.css, light-theme.css, main-theme.css)
+ */
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * ROOT & BASE CONFIGURATION
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+.root {
+    -fx-font-family: "Segoe UI", "Inter", "Roboto", sans-serif;
+    -fx-font-size: 14px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * CARDS & CONTAINERS - Structure Only
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+.card {
+    -fx-background-radius: 16px;
+    -fx-padding: 20px;
+    -fx-border-width: 1.5px;
+    -fx-border-radius: 16px;
+}
+
+.stat-card {
+    -fx-background-radius: 14px;
+    -fx-padding: 18px;
+    -fx-border-width: 1.5px;
+    -fx-border-radius: 14px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * LABELS & TEXT - Typography
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+.label-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: 700;
+}
+
+.label-subtitle {
+    -fx-font-size: 16px;
+    -fx-font-weight: 600;
+}
+
+.label-caption {
+    -fx-font-size: 12px;
+    -fx-font-weight: 400;
+}
+
+.stat-value {
+    -fx-font-size: 32px;
+    -fx-font-weight: 700;
+}
+
+.stat-description {
+    -fx-font-size: 11px;
+    -fx-font-weight: 400;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * BUTTONS - Structure & Sizing
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+.button {
+    -fx-background-radius: 10px;
+    -fx-border-width: 1.5px;
+    -fx-border-radius: 10px;
+    -fx-padding: 10px 20px;
+    -fx-font-weight: 500;
+    -fx-cursor: hand;
+}
+
+.button-primary,
+.button-success,
+.button-warning,
+.button-danger {
+    -fx-background-radius: 10px;
+    -fx-border-width: 1.5px;
+    -fx-border-radius: 10px;
+    -fx-padding: 10px 20px;
+    -fx-font-weight: 500;
+    -fx-cursor: hand;
+}
+
+.button:hover,
+.button-primary:hover,
+.button-success:hover,
+.button-warning:hover,
+.button-danger:hover {
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+
+.button:pressed,
+.button-primary:pressed,
+.button-success:pressed,
+.button-warning:pressed,
+.button-danger:pressed {
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * TEXT INPUTS - Structure
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+.text-field,
+.text-area {
+    -fx-background-radius: 10px;
+    -fx-border-width: 1.5px;
+    -fx-border-radius: 10px;
+    -fx-padding: 8px 12px;
+}
+
+.text-field:focused,
+.text-area:focused {
+    -fx-border-width: 2px;
+}
+
+/* ComboBox - Structure */
+.combo-box-base {
+    -fx-background-radius: 10px;
+    -fx-border-width: 1.5px;
+    -fx-border-radius: 10px;
+}
+
+.combo-box-base:focused {
+    -fx-border-width: 2px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * TABLES - Structure & Layout
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+.table-view .column-header {
+    -fx-font-weight: 600;
+    -fx-border-width: 0 0 1.5 0;
+    -fx-padding: 10px;
+}
+
+.table-view .table-cell {
+    -fx-padding: 8px;
+}
+
+.table-row-cell:hover {
+    -fx-scale-x: 1.005;
+    -fx-scale-y: 1.005;
+}
+
+.table-row-cell:hover .table-cell {
+    -fx-font-weight: 500;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * SCROLL BARS - Structure
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+.scroll-bar .thumb {
+    -fx-background-radius: 8px;
+}
+
+.scroll-bar .track {
+    -fx-background-radius: 8px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * TAB PANE - Structure
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+.tab {
+    -fx-background-radius: 8px 8px 0 0;
+    -fx-padding: 10px 20px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * PROGRESS BARS - Structure
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+.progress-bar {
+    -fx-background-radius: 8px;
+}
+
+.progress-bar .track {
+    -fx-background-radius: 8px;
+}
+
+.progress-bar .bar {
+    -fx-background-radius: 4px;
+    -fx-padding: 4px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * TOOLTIPS - Structure
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+.tooltip {
+    -fx-border-width: 1.5px;
+    -fx-background-radius: 8px;
+    -fx-padding: 8px 12px;
+    -fx-font-size: 12px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * DIALOGS - Structure
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+.dialog-pane {
+    -fx-padding: 20px;
+}
+
+.dialog-pane .header-panel {
+    -fx-border-width: 0 0 1.5 0;
+    -fx-padding: 15px;
+}
+
+.dialog-pane .content {
+    -fx-padding: 20px;
+}
+
+.dialog-pane .button-bar {
+    -fx-border-width: 1.5 0 0 0;
+    -fx-padding: 15px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * SEPARATORS
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+.separator {
+    -fx-padding: 5px 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * CHECKBOXES & RADIO BUTTONS - Structure
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+.check-box,
+.radio-button {
+    -fx-font-size: 14px;
+    -fx-padding: 5px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * SPINNERS - Structure
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+.spinner {
+    -fx-background-radius: 10px;
+    -fx-border-width: 1.5px;
+    -fx-border-radius: 10px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * DATE PICKER - Structure
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+.date-picker {
+    -fx-background-radius: 10px;
+    -fx-border-width: 1.5px;
+    -fx-border-radius: 10px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * SLIDERS - Structure
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+.slider .track {
+    -fx-background-radius: 4px;
+}
+
+.slider .thumb {
+    -fx-padding: 10px;
+    -fx-background-radius: 50%;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * MENU BAR - Structure
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+.menu-bar {
+    -fx-padding: 5px;
+}
+
+.menu-item {
+    -fx-padding: 8px 15px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * TOOLBAR - Structure
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+.tool-bar {
+    -fx-padding: 10px;
+    -fx-spacing: 10px;
+}

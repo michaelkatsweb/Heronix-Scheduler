@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<DialogPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.eduscheduler.ui.controller.dialogs.ServiceDialogController"
+            prefWidth="500" prefHeight="500">
+
+    <headerText>IEP Service Details</headerText>
+
+    <content>
+        <VBox spacing="15">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <!-- Service Type -->
+            <VBox spacing="5">
+                <Label text="Service Type *" styleClass="field-label"/>
+                <ComboBox fx:id="serviceTypeComboBox" maxWidth="Infinity" promptText="Select service type..."/>
+                <Label fx:id="serviceDescriptionLabel" styleClass="help-text" wrapText="true"/>
+            </VBox>
+
+            <!-- Minutes Configuration -->
+            <HBox spacing="20">
+                <VBox spacing="5" HBox.hgrow="ALWAYS">
+                    <Label text="Minutes Per Week *" styleClass="field-label"/>
+                    <Spinner fx:id="minutesPerWeekSpinner" maxWidth="Infinity" editable="true"/>
+                </VBox>
+                <VBox spacing="5" HBox.hgrow="ALWAYS">
+                    <Label text="Session Duration *" styleClass="field-label"/>
+                    <Spinner fx:id="sessionDurationSpinner" maxWidth="Infinity" editable="true"/>
+                </VBox>
+            </HBox>
+
+            <!-- Frequency -->
+            <VBox spacing="5">
+                <Label text="Frequency" styleClass="field-label"/>
+                <ComboBox fx:id="frequencyComboBox" maxWidth="Infinity" editable="true"/>
+            </VBox>
+
+            <!-- Delivery Model -->
+            <VBox spacing="5">
+                <Label text="Delivery Model *" styleClass="field-label"/>
+                <ComboBox fx:id="deliveryModelComboBox" maxWidth="Infinity" promptText="Select delivery model..."/>
+                <Label fx:id="deliveryDescriptionLabel" styleClass="help-text" wrapText="true"/>
+            </VBox>
+
+            <!-- Location -->
+            <VBox spacing="5">
+                <Label text="Preferred Location" styleClass="field-label"/>
+                <ComboBox fx:id="locationComboBox" maxWidth="Infinity" editable="true" promptText="Select or enter location..."/>
+            </VBox>
+
+            <!-- Assigned Staff -->
+            <VBox spacing="5">
+                <Label text="Assigned Staff" styleClass="field-label"/>
+                <ComboBox fx:id="assignedStaffComboBox" maxWidth="Infinity" promptText="Select staff member..."/>
+                <Label styleClass="help-text" text="Optional - can be assigned during scheduling"/>
+            </VBox>
+
+            <!-- Service Description -->
+            <VBox spacing="5" VBox.vgrow="ALWAYS">
+                <Label text="Service Description / Notes" styleClass="field-label"/>
+                <TextArea fx:id="descriptionTextArea" prefRowCount="3" wrapText="true" promptText="Additional details about this service..."/>
+            </VBox>
+        </VBox>
+    </content>
+
+    <buttonTypes>
+        <ButtonType fx:constant="OK"/>
+        <ButtonType fx:constant="CANCEL"/>
+    </buttonTypes>
+</DialogPane>

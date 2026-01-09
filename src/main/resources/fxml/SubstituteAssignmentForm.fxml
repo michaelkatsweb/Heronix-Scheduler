@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<ScrollPane xmlns="http://javafx.com/javafx"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="com.eduscheduler.ui.controller.SubstituteAssignmentController"
+           fitToWidth="true"
+           prefWidth="850" prefHeight="650"
+           maxWidth="950" maxHeight="750"
+           style="-fx-background-color: #f5f5f5;"
+           hbarPolicy="NEVER" vbarPolicy="AS_NEEDED">
+
+    <VBox spacing="15" style="-fx-padding: 20;">
+
+        <!-- Title Section -->
+        <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;">
+            <Label text="📝" style="-fx-font-size: 24;"/>
+            <VBox spacing="2">
+                <Label fx:id="formTitleLabel" text="Create Substitute Assignment" style="-fx-font-size: 20; -fx-font-weight: bold;"/>
+                <Label text="Assign a substitute to cover a staff member's absence" style="-fx-font-size: 12; -fx-text-fill: #666;"/>
+            </VBox>
+        </HBox>
+
+        <!-- Substitute Selection Section -->
+        <VBox spacing="10" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;">
+            <Label text="1. Select Substitute" style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #2196F3;"/>
+
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <VBox spacing="5" HBox.hgrow="ALWAYS">
+                    <Label text="Substitute *" style="-fx-font-size: 12; -fx-font-weight: 500;"/>
+                    <ComboBox fx:id="substituteComboBox" promptText="Select substitute..."
+                             HBox.hgrow="ALWAYS" maxWidth="Infinity"
+                             style="-fx-padding: 8;"/>
+                </VBox>
+                <VBox spacing="5">
+                    <Label text=" " style="-fx-font-size: 12;"/>
+                    <Button text="+ New Substitute" onAction="#handleNewSubstitute"
+                           style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-padding: 8 16; -fx-cursor: hand;"/>
+                </VBox>
+            </HBox>
+
+            <HBox spacing="15">
+                <VBox spacing="5" HBox.hgrow="ALWAYS">
+                    <Label text="Substitute Type" style="-fx-font-size: 12; -fx-font-weight: 500;"/>
+                    <ComboBox fx:id="substituteTypeComboBox" promptText="Select type..."
+                             HBox.hgrow="ALWAYS" maxWidth="Infinity" disable="true"
+                             style="-fx-padding: 8;"/>
+                </VBox>
+                <VBox spacing="5" HBox.hgrow="ALWAYS">
+                    <Label text="Contact Info" style="-fx-font-size: 12; -fx-font-weight: 500;"/>
+                    <TextField fx:id="substituteContactField" editable="false"
+                              style="-fx-background-color: #f9f9f9; -fx-padding: 8;"/>
+                </VBox>
+            </HBox>
+        </VBox>
+
+        <!-- Date and Time Section -->
+        <VBox spacing="10" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;">
+            <Label text="2. Date and Time" style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #2196F3;"/>
+
+            <HBox spacing="15">
+                <VBox spacing="5" HBox.hgrow="ALWAYS">
+                    <Label text="Assignment Date *" style="-fx-font-size: 12; -fx-font-weight: 500;"/>
+                    <DatePicker fx:id="assignmentDatePicker" promptText="Select date..."
+                               HBox.hgrow="ALWAYS" maxWidth="Infinity"
+                               style="-fx-padding: 8;"/>
+                </VBox>
+                <VBox spacing="5" HBox.hgrow="ALWAYS">
+                    <Label text="Duration Type *" style="-fx-font-size: 12; -fx-font-weight: 500;"/>
+                    <ComboBox fx:id="durationTypeComboBox" promptText="Select duration..."
+                             HBox.hgrow="ALWAYS" maxWidth="Infinity"
+                             style="-fx-padding: 8;"/>
+                </VBox>
+            </HBox>
+
+            <HBox spacing="15">
+                <VBox spacing="5" HBox.hgrow="ALWAYS">
+                    <Label text="Start Time *" style="-fx-font-size: 12; -fx-font-weight: 500;"/>
+                    <TextField fx:id="startTimeField" promptText="8:00 AM"
+                              style="-fx-padding: 8;"/>
+                    <Label text="Format: h:mm AM/PM" style="-fx-font-size: 10; -fx-text-fill: #999;"/>
+                </VBox>
+                <VBox spacing="5" HBox.hgrow="ALWAYS">
+                    <Label text="End Time *" style="-fx-font-size: 12; -fx-font-weight: 500;"/>
+                    <TextField fx:id="endTimeField" promptText="3:00 PM"
+                              style="-fx-padding: 8;"/>
+                    <Label text="Format: h:mm AM/PM" style="-fx-font-size: 10; -fx-text-fill: #999;"/>
+                </VBox>
+            </HBox>
+
+            <!-- Multi-Day Options (initially hidden) -->
+            <VBox fx:id="multiDaySection" spacing="10" visible="false" managed="false">
+                <Separator/>
+                <Label text="Multi-Day Assignment" style="-fx-font-size: 14; -fx-font-weight: 500;"/>
+                <HBox spacing="15">
+                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                        <Label text="End Date" style="-fx-font-size: 12; -fx-font-weight: 500;"/>
+                        <DatePicker fx:id="endDatePicker" promptText="Select end date..."
+                                   HBox.hgrow="ALWAYS" maxWidth="Infinity"
+                                   style="-fx-padding: 8;"/>
+                    </VBox>
+                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                        <Label text="Total Days" style="-fx-font-size: 12; -fx-font-weight: 500;"/>
+                        <TextField fx:id="totalDaysField" editable="false"
+                                  style="-fx-background-color: #f9f9f9; -fx-padding: 8;"/>
+                    </VBox>
+                </HBox>
+            </VBox>
+        </VBox>
+
+        <!-- Replaced Staff Section -->
+        <VBox spacing="10" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;">
+            <Label text="3. Staff Being Replaced" style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #2196F3;"/>
+
+            <HBox spacing="15">
+                <VBox spacing="5" HBox.hgrow="ALWAYS">
+                    <Label text="Staff Type *" style="-fx-font-size: 12; -fx-font-weight: 500;"/>
+                    <ComboBox fx:id="staffTypeComboBox" promptText="Select staff type..."
+                             HBox.hgrow="ALWAYS" maxWidth="Infinity"
+                             style="-fx-padding: 8;"/>
+                </VBox>
+                <VBox spacing="5" HBox.hgrow="ALWAYS">
+                    <Label text="Teacher/Staff Member" style="-fx-font-size: 12; -fx-font-weight: 500;"/>
+                    <ComboBox fx:id="replacedTeacherComboBox" promptText="Select teacher..."
+                             HBox.hgrow="ALWAYS" maxWidth="Infinity"
+                             style="-fx-padding: 8;"/>
+                </VBox>
+            </HBox>
+
+            <HBox spacing="15">
+                <VBox spacing="5" HBox.hgrow="ALWAYS">
+                    <Label text="Absence Reason *" style="-fx-font-size: 12; -fx-font-weight: 500;"/>
+                    <ComboBox fx:id="absenceReasonComboBox" promptText="Select reason..."
+                             HBox.hgrow="ALWAYS" maxWidth="Infinity"
+                             style="-fx-padding: 8;"/>
+                </VBox>
+                <VBox spacing="5" HBox.hgrow="ALWAYS">
+                    <Label text="Assignment Status *" style="-fx-font-size: 12; -fx-font-weight: 500;"/>
+                    <ComboBox fx:id="statusComboBox" promptText="Select status..."
+                             HBox.hgrow="ALWAYS" maxWidth="Infinity"
+                             style="-fx-padding: 8;"/>
+                </VBox>
+            </HBox>
+
+            <VBox spacing="5">
+                <Label text="Staff Name (if not in system)" style="-fx-font-size: 12; -fx-font-weight: 500;"/>
+                <TextField fx:id="replacedStaffNameField" promptText="Enter name manually if teacher not found..."
+                          style="-fx-padding: 8;"/>
+            </VBox>
+        </VBox>
+
+        <!-- Location and Course Section -->
+        <VBox spacing="10" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;">
+            <Label text="4. Location and Course (Optional)" style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #2196F3;"/>
+
+            <HBox spacing="15">
+                <VBox spacing="5" HBox.hgrow="ALWAYS">
+                    <Label text="Room" style="-fx-font-size: 12; -fx-font-weight: 500;"/>
+                    <ComboBox fx:id="roomComboBox" promptText="Select room..."
+                             HBox.hgrow="ALWAYS" maxWidth="Infinity"
+                             style="-fx-padding: 8;"/>
+                </VBox>
+                <VBox spacing="5" HBox.hgrow="ALWAYS">
+                    <Label text="Course" style="-fx-font-size: 12; -fx-font-weight: 500;"/>
+                    <ComboBox fx:id="courseComboBox" promptText="Select course..."
+                             HBox.hgrow="ALWAYS" maxWidth="Infinity"
+                             style="-fx-padding: 8;"/>
+                </VBox>
+            </HBox>
+
+            <CheckBox fx:id="isFloaterCheckbox" text="This is a floater assignment (covering multiple classes)"
+                     style="-fx-font-size: 12;"/>
+        </VBox>
+
+        <!-- Additional Details Section -->
+        <VBox spacing="10" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8;">
+            <Label text="5. Additional Details (Optional)" style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #2196F3;"/>
+
+            <HBox spacing="15">
+                <VBox spacing="5" HBox.hgrow="ALWAYS">
+                    <Label text="Total Hours" style="-fx-font-size: 12; -fx-font-weight: 500;"/>
+                    <TextField fx:id="totalHoursField" promptText="Auto-calculated from time..."
+                              style="-fx-padding: 8;"/>
+                </VBox>
+                <VBox spacing="5" HBox.hgrow="ALWAYS">
+                    <Label text="Pay Amount ($)" style="-fx-font-size: 12; -fx-font-weight: 500;"/>
+                    <TextField fx:id="payAmountField" promptText="0.00"
+                              style="-fx-padding: 8;"/>
+                </VBox>
+                <VBox spacing="5" HBox.hgrow="ALWAYS">
+                    <Label text="Frontline Job ID" style="-fx-font-size: 12; -fx-font-weight: 500;"/>
+                    <TextField fx:id="frontlineJobIdField" promptText="Optional..."
+                              style="-fx-padding: 8;"/>
+                </VBox>
+            </HBox>
+
+            <VBox spacing="5">
+                <Label text="Notes" style="-fx-font-size: 12; -fx-font-weight: 500;"/>
+                <TextArea fx:id="notesArea" promptText="Enter any additional notes or instructions..."
+                         prefRowCount="3" wrapText="true"
+                         style="-fx-padding: 8;"/>
+            </VBox>
+        </VBox>
+
+        <!-- Validation Messages -->
+        <VBox fx:id="validationSection" spacing="5" visible="false" managed="false"
+              style="-fx-background-color: #fff3f3; -fx-padding: 10; -fx-background-radius: 8; -fx-border-color: #F44336; -fx-border-radius: 8;">
+            <Label text="⚠ Please fix the following errors:" style="-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: #F44336;"/>
+            <Label fx:id="validationMessageLabel" wrapText="true" style="-fx-font-size: 12; -fx-text-fill: #F44336;"/>
+        </VBox>
+
+        <!-- Action Buttons -->
+        <HBox spacing="10" alignment="CENTER_RIGHT">
+            <Button fx:id="saveButton" text="Save Assignment" onAction="#handleSave"
+                   style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-padding: 12 24; -fx-cursor: hand; -fx-font-weight: bold; -fx-font-size: 14;"/>
+            <Button text="Cancel" onAction="#handleCancel"
+                   style="-fx-background-color: #757575; -fx-text-fill: white; -fx-padding: 12 24; -fx-cursor: hand; -fx-font-size: 14;"/>
+        </HBox>
+
+    </VBox>
+</ScrollPane>

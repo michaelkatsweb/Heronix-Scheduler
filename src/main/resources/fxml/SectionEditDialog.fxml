@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.eduscheduler.ui.controller.SectionEditDialogController"
+      prefWidth="500"
+      prefHeight="550"
+      style="-fx-background-color: white; -fx-padding: 20;">
+
+    <!-- Header -->
+    <Label fx:id="dialogTitle" text="Add Section"
+           style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50; -fx-padding: 0 0 20 0;"/>
+
+    <!-- Form -->
+    <GridPane hgap="15" vgap="15" VBox.vgrow="ALWAYS">
+        <columnConstraints>
+            <ColumnConstraints percentWidth="35"/>
+            <ColumnConstraints percentWidth="65"/>
+        </columnConstraints>
+
+        <!-- Section Number -->
+        <Label text="* Section Number:" GridPane.columnIndex="0" GridPane.rowIndex="0"
+               style="-fx-font-weight: bold;"/>
+        <TextField fx:id="sectionNumberField" GridPane.columnIndex="1" GridPane.rowIndex="0"
+                   promptText="e.g., 1, 2, 3..."/>
+
+        <!-- Teacher -->
+        <Label text="Teacher:" GridPane.columnIndex="0" GridPane.rowIndex="1"
+               style="-fx-font-weight: bold;"/>
+        <ComboBox fx:id="teacherCombo" GridPane.columnIndex="1" GridPane.rowIndex="1"
+                  promptText="Select teacher..." maxWidth="Infinity">
+            <tooltip>
+                <Tooltip text="Assign a teacher to this section"/>
+            </tooltip>
+        </ComboBox>
+
+        <!-- Room -->
+        <Label text="Room:" GridPane.columnIndex="0" GridPane.rowIndex="2"
+               style="-fx-font-weight: bold;"/>
+        <ComboBox fx:id="roomCombo" GridPane.columnIndex="1" GridPane.rowIndex="2"
+                  promptText="Select room..." maxWidth="Infinity">
+            <tooltip>
+                <Tooltip text="Assign a room to this section"/>
+            </tooltip>
+        </ComboBox>
+
+        <!-- Period -->
+        <Label text="Period:" GridPane.columnIndex="0" GridPane.rowIndex="3"
+               style="-fx-font-weight: bold;"/>
+        <ComboBox fx:id="periodCombo" GridPane.columnIndex="1" GridPane.rowIndex="3"
+                  promptText="Select period..." maxWidth="Infinity">
+            <tooltip>
+                <Tooltip text="Select the period when this section meets"/>
+            </tooltip>
+        </ComboBox>
+
+        <!-- Max Enrollment -->
+        <Label text="* Max Enrollment:" GridPane.columnIndex="0" GridPane.rowIndex="4"
+               style="-fx-font-weight: bold;"/>
+        <Spinner fx:id="maxEnrollmentSpinner" GridPane.columnIndex="1" GridPane.rowIndex="4"
+                 editable="true" initialValue="30" min="1" max="100" maxWidth="Infinity">
+            <tooltip>
+                <Tooltip text="Maximum number of students allowed in this section"/>
+            </tooltip>
+        </Spinner>
+
+        <!-- Min Enrollment -->
+        <Label text="Min Enrollment:" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+        <Spinner fx:id="minEnrollmentSpinner" GridPane.columnIndex="1" GridPane.rowIndex="5"
+                 editable="true" initialValue="10" min="1" max="50" maxWidth="Infinity">
+            <tooltip>
+                <Tooltip text="Minimum number of students required to run this section"/>
+            </tooltip>
+        </Spinner>
+
+        <!-- Target Enrollment -->
+        <Label text="Target Enrollment:" GridPane.columnIndex="0" GridPane.rowIndex="6"/>
+        <Spinner fx:id="targetEnrollmentSpinner" GridPane.columnIndex="1" GridPane.rowIndex="6"
+                 editable="true" initialValue="25" min="1" max="100" maxWidth="Infinity">
+            <tooltip>
+                <Tooltip text="Ideal number of students for this section"/>
+            </tooltip>
+        </Spinner>
+
+        <!-- Section Status -->
+        <Label text="* Status:" GridPane.columnIndex="0" GridPane.rowIndex="7"
+               style="-fx-font-weight: bold;"/>
+        <ComboBox fx:id="statusCombo" GridPane.columnIndex="1" GridPane.rowIndex="7"
+                  maxWidth="Infinity">
+            <tooltip>
+                <Tooltip text="Current status of this section"/>
+            </tooltip>
+        </ComboBox>
+
+        <!-- Honors/AP Flags -->
+        <Label text="Course Level:" GridPane.columnIndex="0" GridPane.rowIndex="8"/>
+        <HBox spacing="15" GridPane.columnIndex="1" GridPane.rowIndex="8">
+            <CheckBox fx:id="honorsCheckbox" text="Honors"/>
+            <CheckBox fx:id="apCheckbox" text="AP"/>
+        </HBox>
+
+        <!-- Validation Error -->
+        <Label fx:id="errorLabel" GridPane.columnIndex="0" GridPane.rowIndex="9" GridPane.columnSpan="2"
+               style="-fx-text-fill: #e74c3c; -fx-font-size: 12px;" wrapText="true" managed="false" visible="false"/>
+
+        <!-- Info Note -->
+        <VBox GridPane.columnIndex="0" GridPane.rowIndex="10" GridPane.columnSpan="2"
+              style="-fx-background-color: #e8f8f5; -fx-padding: 10; -fx-background-radius: 5;">
+            <Label text="Note: Conflicts will be checked automatically:" style="-fx-font-size: 11px; -fx-font-weight: bold;"/>
+            <Label text="• Teacher cannot be assigned to multiple sections at the same period" style="-fx-font-size: 10px;"/>
+            <Label text="• Room cannot host multiple sections at the same period" style="-fx-font-size: 10px;"/>
+        </VBox>
+    </GridPane>
+
+    <!-- Button Bar -->
+    <ButtonBar style="-fx-padding: 20 0 0 0;">
+        <buttons>
+            <Button text="Cancel" onAction="#handleCancel"
+                    style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-padding: 8 25; -fx-background-radius: 5;"/>
+            <Button fx:id="saveButton" text="Save Section" onAction="#handleSave"
+                    style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 25; -fx-background-radius: 5;"/>
+        </buttons>
+    </ButtonBar>
+
+</VBox>

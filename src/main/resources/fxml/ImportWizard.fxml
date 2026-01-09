@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<!--
+═══════════════════════════════════════════════════════════════════════
+    IMPORT WIZARD - COMPLETE & ENHANCED
+    Location: src/main/resources/fxml/ImportWizard.fxml
+    
+    ✅ FEATURES:
+    - Modern 3-step wizard interface
+    - File selection with preview
+    - Entity type selection with combo box
+    - Lenient/Strict mode toggle with descriptions
+    - Real-time progress tracking
+    - Detailed results display
+    
+    ✅ IMPROVEMENTS:
+    - Better spacing and layout
+    - Enhanced visual feedback
+    - Clear step indicators
+    - Informative tooltips
+    - Professional styling
+    
+    @version 3.0.0 - Enhanced with Lenient Import
+    @since 2025-10-17
+═══════════════════════════════════════════════════════════════════════
+-->
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+    xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="com.eduscheduler.ui.controller.ImportWizardController"
+    prefWidth="1100" prefHeight="850"
+    minWidth="1000" minHeight="750"
+    stylesheets="@../css/neumorphic-theme.css"
+    styleClass="root"
+    style="-fx-background-color: #f5f5f5;">
+
+    <!-- ================================================================== -->
+    <!-- HEADER -->
+    <!-- ================================================================== -->
+
+    <top>
+        <VBox spacing="15"
+            style="-fx-background-color: white; -fx-padding: 25; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 8, 0, 0, 2);">
+
+            <!-- Title -->
+            <Label text="📥 Import Data Wizard"
+                style="-fx-font-size: 28; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+
+            <Label text="Import teachers, students, courses, and rooms from Excel or CSV files"
+                style="-fx-font-size: 14; -fx-text-fill: #7f8c8d;" />
+
+            <!-- Step Indicator -->
+            <HBox spacing="15" alignment="CENTER_LEFT" style="-fx-padding: 10 0 0 0;">
+                <Label fx:id="step1Indicator" text="1️⃣ Select File"
+                    style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #4CAF50;" />
+                <Label text="→" style="-fx-text-fill: #bdc3c7; -fx-font-size: 18;" />
+                <Label fx:id="step2Indicator" text="2️⃣ Configure Import"
+                    style="-fx-font-size: 14; -fx-text-fill: #bdc3c7;" />
+                <Label text="→" style="-fx-text-fill: #bdc3c7; -fx-font-size: 18;" />
+                <Label fx:id="step3Indicator" text="3️⃣ Import &amp; Review"
+                    style="-fx-font-size: 14; -fx-text-fill: #bdc3c7;" />
+            </HBox>
+
+            <Separator />
+        </VBox>
+    </top>
+
+    <!-- ================================================================== -->
+    <!-- MAIN CONTENT AREA -->
+    <!-- ================================================================== -->
+
+    <center>
+        <StackPane>
+            <padding>
+                <Insets top="30" right="30" bottom="30" left="30" />
+            </padding>
+
+            <!-- ============================================================ -->
+            <!-- STEP 1: FILE SELECTION -->
+            <!-- ============================================================ -->
+
+            <VBox fx:id="step1Box" spacing="25" alignment="TOP_CENTER" maxWidth="700" visible="true">
+
+                <VBox spacing="15" alignment="CENTER"
+                    style="-fx-background-color: white; -fx-padding: 30; -fx-background-radius: 12; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 10, 0, 0, 3);">
+
+                    <Label text="Select File to Import"
+                        style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+
+                    <VBox spacing="8" alignment="CENTER_LEFT"
+                        style="-fx-padding: 15; -fx-background-color: #ecf0f1; -fx-background-radius: 8;">
+                        <Label text="📋 Supported file formats:"
+                            style="-fx-font-weight: bold; -fx-font-size: 13;" />
+                        <Label text="  • Excel files (.xlsx, .xls)"
+                            style="-fx-text-fill: #555; -fx-font-size: 12;" />
+                        <Label text="  • CSV files (.csv)"
+                            style="-fx-text-fill: #555; -fx-font-size: 12;" />
+                        <Label text="  • Up to 10,000 records per file"
+                            style="-fx-text-fill: #555; -fx-font-size: 12;" />
+                    </VBox>
+
+                    <HBox spacing="10" alignment="CENTER" style="-fx-padding: 10 0 0 0;">
+                        <TextField fx:id="filePathField"
+                            promptText="No file selected..."
+                            prefWidth="450" editable="false"
+                            style="-fx-background-color: #f8f9fa; -fx-padding: 12; -fx-font-size: 13; -fx-border-color: #dee2e6; -fx-border-radius: 6; -fx-background-radius: 6;" />
+                        <Button text="📁 Browse..." onAction="#handleBrowse"
+                            style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-padding: 12 25; -fx-font-size: 13; -fx-font-weight: bold; -fx-background-radius: 6; -fx-cursor: hand;">
+                            <tooltip>
+                                <Tooltip text="Select an Excel or CSV file to import" />
+                            </tooltip>
+                        </Button>
+                    </HBox>
+
+                    <!-- File Info Display -->
+                    <VBox fx:id="fileInfoBox" spacing="8" alignment="CENTER" visible="false"
+                        style="-fx-background-color: #d4edda; -fx-padding: 15; -fx-background-radius: 8; -fx-border-color: #c3e6cb; -fx-border-radius: 8;">
+                        <Label text="✅ File Selected"
+                            style="-fx-font-weight: bold; -fx-text-fill: #155724; -fx-font-size: 14;" />
+                        <Label fx:id="fileNameLabel"
+                            style="-fx-text-fill: #155724; -fx-font-size: 12;" />
+                        <Label fx:id="fileSizeLabel"
+                            style="-fx-text-fill: #155724; -fx-font-size: 12;" />
+                        <Label fx:id="fileTypeLabel"
+                            style="-fx-text-fill: #155724; -fx-font-size: 12;" />
+                    </VBox>
+                </VBox>
+
+                <Region VBox.vgrow="ALWAYS" />
+            </VBox>
+
+            <!-- ============================================================ -->
+            <!-- STEP 2: ENTITY TYPE & MODE SELECTION -->
+            <!-- ============================================================ -->
+
+            <VBox fx:id="step2Box" spacing="25" alignment="TOP_CENTER" maxWidth="700"
+                visible="false">
+
+                <VBox spacing="20" alignment="CENTER"
+                    style="-fx-background-color: white; -fx-padding: 30; -fx-background-radius: 12; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 10, 0, 0, 3);">
+
+                    <Label text="Configure Import Settings"
+                        style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+
+                    <!-- Entity Type Selection -->
+                    <VBox spacing="10" alignment="CENTER_LEFT" style="-fx-padding: 10;">
+                        <Label text="What type of data are you importing?"
+                            style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+
+                        <ComboBox fx:id="entityTypeComboBox"
+                            promptText="Select entity type..."
+                            prefWidth="500"
+                            style="-fx-font-size: 13; -fx-padding: 8;">
+                            <tooltip>
+                                <Tooltip
+                                    text="Choose the type of data in your file: Teachers, Students, Courses, or Rooms" />
+                            </tooltip>
+                        </ComboBox>
+                    </VBox>
+
+                    <Separator prefWidth="650" />
+
+                    <!-- Import Mode Selection -->
+                    <VBox spacing="12" alignment="CENTER_LEFT" style="-fx-padding: 10;">
+                        <Label text="Import Mode"
+                            style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+
+                        <HBox spacing="15" alignment="CENTER_LEFT">
+                            <CheckBox fx:id="lenientModeCheckBox"
+                                text="🔧 Lenient Mode (Recommended)"
+                                selected="true"
+                                style="-fx-font-size: 13; -fx-font-weight: bold;">
+                                <tooltip>
+                                    <Tooltip wrapText="true" maxWidth="350">
+                                        <text>
+                                            LENIENT MODE (Recommended):
+                                            ✅ Auto-generates missing data with smart defaults
+                                            ✅ Never fails or crashes
+                                            ✅ Flags incomplete records for review
+                                            ✅ You can complete missing data later in Data Review
+                                            STRICT MODE:
+                                            ❌ Rejects records with missing data
+                                            ❌ Import may fail if data is incomplete
+                                            ✅ Ensures high data quality from import
+                                        </text>
+                                    </Tooltip>
+                                </tooltip>
+                            </CheckBox>
+                        </HBox>
+
+                        <Label fx:id="modeDescriptionLabel" wrapText="true" maxWidth="600"
+                            style="-fx-font-size: 12; -fx-text-fill: #4CAF50; -fx-padding: 10; -fx-background-color: #f1f8f4; -fx-background-radius: 6;" />
+                    </VBox>
+
+                    <Separator prefWidth="650" />
+
+                    <!-- Additional Info -->
+                    <VBox spacing="8" alignment="CENTER_LEFT"
+                        style="-fx-padding: 10; -fx-background-color: #fff3cd; -fx-background-radius: 8;">
+                        <Label text="💡 Import Tips:"
+                            style="-fx-font-weight: bold; -fx-font-size: 13; -fx-text-fill: #856404;" />
+                        <Label text="  • First row should contain column headers"
+                            style="-fx-text-fill: #856404; -fx-font-size: 11;" />
+                        <Label text="  • Remove any merged cells before importing"
+                            style="-fx-text-fill: #856404; -fx-font-size: 11;" />
+                        <Label text="  • Date format: YYYY-MM-DD (e.g., 2025-01-15)"
+                            style="-fx-text-fill: #856404; -fx-font-size: 11;" />
+                        <Label text="  • Phone format: (555) 123-4567 or 555-123-4567"
+                            style="-fx-text-fill: #856404; -fx-font-size: 11;" />
+                    </VBox>
+                </VBox>
+
+                <Region VBox.vgrow="ALWAYS" />
+            </VBox>
+
+            <!-- ============================================================ -->
+            <!-- STEP 3: IMPORT PROGRESS & RESULTS -->
+            <!-- ============================================================ -->
+
+            <VBox fx:id="step3Box" spacing="25" alignment="TOP_CENTER" maxWidth="750"
+                visible="false">
+
+                <VBox spacing="20" alignment="CENTER"
+                    style="-fx-background-color: white; -fx-padding: 30; -fx-background-radius: 12; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 10, 0, 0, 3);">
+
+                    <Label text="Import Progress"
+                        style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+
+                    <!-- Progress Bar -->
+                    <VBox spacing="10" alignment="CENTER" style="-fx-padding: 20;">
+                        <ProgressBar fx:id="progressBar"
+                            prefWidth="650"
+                            prefHeight="25"
+                            style="-fx-accent: #4CAF50;" />
+                        <Label fx:id="progressLabel"
+                            text="Preparing import..."
+                            style="-fx-font-size: 13; -fx-text-fill: #7f8c8d;" />
+                    </VBox>
+
+                    <Separator prefWidth="700" />
+
+                    <!-- Results Display -->
+                    <VBox spacing="10" alignment="CENTER">
+                        <Label text="Import Results"
+                            style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+
+                        <ScrollPane fitToWidth="true" prefHeight="350"
+                            style="-fx-background-color: transparent; -fx-border-color: #dee2e6; -fx-border-radius: 8; -fx-background-radius: 8;">
+                            <TextArea fx:id="resultTextArea"
+                                wrapText="true"
+                                editable="false"
+                                style="-fx-font-family: 'Consolas', 'Monaco', monospace; -fx-font-size: 12; -fx-control-inner-background: #f8f9fa; -fx-text-fill: #2c3e50; -fx-background-color: #f8f9fa;">
+                            </TextArea>
+                        </ScrollPane>
+                    </VBox>
+
+                    <!-- Action Buttons (After Import) -->
+                    <HBox spacing="15" alignment="CENTER" style="-fx-padding: 10 0 0 0;">
+                        <Button text="📋 View Data Review" onAction="#handleViewDataReview"
+                            style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-padding: 10 20; -fx-font-size: 13; -fx-background-radius: 6; -fx-cursor: hand;">
+                            <tooltip>
+                                <Tooltip
+                                    text="Open Data Review screen to complete missing information" />
+                            </tooltip>
+                        </Button>
+                    </HBox>
+                </VBox>
+
+                <Region VBox.vgrow="ALWAYS" />
+            </VBox>
+
+        </StackPane>
+    </center>
+
+    <!-- ================================================================== -->
+    <!-- FOOTER - NAVIGATION BUTTONS -->
+    <!-- ================================================================== -->
+
+    <bottom>
+        <HBox spacing="15" alignment="CENTER"
+            style="-fx-background-color: white; -fx-padding: 20; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 8, 0, 0, -2);">
+
+            <!-- Back Button -->
+            <Button fx:id="backButton" text="⬅️ Back" onAction="#handleBack"
+                style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-padding: 12 30; -fx-font-size: 14; -fx-font-weight: bold; -fx-background-radius: 6; -fx-cursor: hand;" />
+
+            <Region HBox.hgrow="ALWAYS" />
+
+            <!-- Cancel Button -->
+            <Button fx:id="cancelButton" text="❌ Cancel" onAction="#handleCancel"
+                style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-padding: 12 30; -fx-font-size: 14; -fx-background-radius: 6; -fx-cursor: hand;">
+                <tooltip>
+                    <Tooltip text="Cancel and close the import wizard" />
+                </tooltip>
+            </Button>
+
+            <!-- Next Button -->
+            <Button fx:id="nextButton" text="Next ➡️" onAction="#handleNext"
+                disable="true"
+                style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-padding: 12 30; -fx-font-size: 14; -fx-font-weight: bold; -fx-background-radius: 6; -fx-cursor: hand;">
+                <tooltip>
+                    <Tooltip text="Continue to next step" />
+                </tooltip>
+            </Button>
+
+            <!-- Import Button -->
+            <Button fx:id="importButton" text="🚀 Start Import" onAction="#handleImport"
+                visible="false"
+                style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-padding: 12 35; -fx-font-size: 14; -fx-font-weight: bold; -fx-background-radius: 6; -fx-cursor: hand;">
+                <tooltip>
+                    <Tooltip text="Begin importing data from the selected file" />
+                </tooltip>
+            </Button>
+
+            <!-- Finish Button -->
+            <Button fx:id="finishButton" text="✅ Finish" onAction="#handleFinish"
+                visible="false" disable="true"
+                style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-padding: 12 35; -fx-font-size: 14; -fx-font-weight: bold; -fx-background-radius: 6; -fx-cursor: hand;">
+                <tooltip>
+                    <Tooltip text="Complete the import and close the wizard" />
+                </tooltip>
+            </Button>
+        </HBox>
+    </bottom>
+
+</BorderPane>

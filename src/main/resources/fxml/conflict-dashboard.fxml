@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<!--
+  Conflict Dashboard FXML
+  Comprehensive interface for viewing, analyzing, and resolving scheduling conflicts
+
+  Location: src/main/resources/fxml/conflict-dashboard.fxml
+
+  @author Heronix Scheduling System Team
+  @version 1.0.0
+  @since Phase 7B - Conflict Detection & Resolution
+-->
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.eduscheduler.ui.controller.ConflictDashboardController"
+            prefHeight="800.0" prefWidth="1200.0">
+
+    <!-- ========================================================================
+         TOP: HEADER & STATISTICS
+         ======================================================================== -->
+    <top>
+        <VBox spacing="10" styleClass="header-section">
+            <padding>
+                <Insets top="15" right="20" bottom="15" left="20"/>
+            </padding>
+
+            <!-- Title Bar -->
+            <HBox alignment="CENTER_LEFT" spacing="15">
+                <Label text="⚠️ Conflict Dashboard" styleClass="page-title">
+                    <font>
+                        <Font name="System Bold" size="24"/>
+                    </font>
+                </Label>
+
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <!-- Schedule Selector -->
+                <Label text="Schedule:"/>
+                <ComboBox fx:id="scheduleComboBox" prefWidth="200" promptText="Select Schedule"/>
+
+                <!-- Refresh Button -->
+                <Button fx:id="refreshButton" text="🔄 Refresh" onAction="#handleRefresh" styleClass="secondary-button"/>
+
+                <!-- Auto-Resolve Button -->
+                <Button fx:id="autoResolveButton" text="🤖 Auto-Resolve" onAction="#handleAutoResolve" styleClass="primary-button"/>
+
+                <!-- Auto-Refresh Checkbox -->
+                <CheckBox fx:id="autoRefreshCheckBox" text="Auto-Refresh (30s)"/>
+            </HBox>
+
+            <!-- Statistics Cards -->
+            <HBox spacing="15" alignment="CENTER_LEFT">
+                <!-- Total Conflicts Card -->
+                <VBox styleClass="stat-card" spacing="5" HBox.hgrow="ALWAYS">
+                    <padding>
+                        <Insets top="10" right="15" bottom="10" left="15"/>
+                    </padding>
+                    <Label text="Total Conflicts" styleClass="stat-label"/>
+                    <Label fx:id="totalConflictsLabel" text="0" styleClass="stat-value">
+                        <font>
+                            <Font name="System Bold" size="28"/>
+                        </font>
+                    </Label>
+                </VBox>
+
+                <!-- Critical Card -->
+                <VBox styleClass="stat-card, critical-card" spacing="5" HBox.hgrow="ALWAYS">
+                    <padding>
+                        <Insets top="10" right="15" bottom="10" left="15"/>
+                    </padding>
+                    <Label text="🔴 Critical" styleClass="stat-label"/>
+                    <Label fx:id="criticalCountLabel" text="0" styleClass="stat-value">
+                        <font>
+                            <Font name="System Bold" size="28"/>
+                        </font>
+                    </Label>
+                </VBox>
+
+                <!-- High Card -->
+                <VBox styleClass="stat-card, high-card" spacing="5" HBox.hgrow="ALWAYS">
+                    <padding>
+                        <Insets top="10" right="15" bottom="10" left="15"/>
+                    </padding>
+                    <Label text="🟠 High" styleClass="stat-label"/>
+                    <Label fx:id="highCountLabel" text="0" styleClass="stat-value">
+                        <font>
+                            <Font name="System Bold" size="28"/>
+                        </font>
+                    </Label>
+                </VBox>
+
+                <!-- Medium Card -->
+                <VBox styleClass="stat-card, medium-card" spacing="5" HBox.hgrow="ALWAYS">
+                    <padding>
+                        <Insets top="10" right="15" bottom="10" left="15"/>
+                    </padding>
+                    <Label text="🟡 Medium" styleClass="stat-label"/>
+                    <Label fx:id="mediumCountLabel" text="0" styleClass="stat-value">
+                        <font>
+                            <Font name="System Bold" size="28"/>
+                        </font>
+                    </Label>
+                </VBox>
+
+                <!-- Low Card -->
+                <VBox styleClass="stat-card, low-card" spacing="5" HBox.hgrow="ALWAYS">
+                    <padding>
+                        <Insets top="10" right="15" bottom="10" left="15"/>
+                    </padding>
+                    <Label text="🔵 Low" styleClass="stat-label"/>
+                    <Label fx:id="lowCountLabel" text="0" styleClass="stat-value">
+                        <font>
+                            <Font name="System Bold" size="28"/>
+                        </font>
+                    </Label>
+                </VBox>
+
+                <!-- Info Card -->
+                <VBox styleClass="stat-card, info-card" spacing="5" HBox.hgrow="ALWAYS">
+                    <padding>
+                        <Insets top="10" right="15" bottom="10" left="15"/>
+                    </padding>
+                    <Label text="ℹ️ Info" styleClass="stat-label"/>
+                    <Label fx:id="infoCountLabel" text="0" styleClass="stat-value">
+                        <font>
+                            <Font name="System Bold" size="28"/>
+                        </font>
+                    </Label>
+                </VBox>
+            </HBox>
+
+            <!-- Filter Bar -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Filter:"/>
+
+                <!-- Severity Filter -->
+                <ComboBox fx:id="severityFilterComboBox" prefWidth="150" promptText="All Severities"/>
+
+                <!-- Type Filter -->
+                <ComboBox fx:id="typeFilterComboBox" prefWidth="200" promptText="All Types"/>
+
+                <!-- Category Filter -->
+                <ComboBox fx:id="categoryFilterComboBox" prefWidth="150" promptText="All Categories"/>
+
+                <!-- Status Filter -->
+                <ComboBox fx:id="statusFilterComboBox" prefWidth="150" promptText="Active Only"/>
+
+                <!-- Search Field -->
+                <TextField fx:id="searchField" promptText="Search conflicts..." prefWidth="250" HBox.hgrow="ALWAYS"/>
+
+                <!-- Clear Filters Button -->
+                <Button text="Clear Filters" onAction="#handleClearFilters" styleClass="secondary-button"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- ========================================================================
+         CENTER: CONFLICT LIST & DETAILS
+         ======================================================================== -->
+    <center>
+        <SplitPane dividerPositions="0.5" VBox.vgrow="ALWAYS">
+
+            <!-- LEFT: Conflict List -->
+            <VBox spacing="10">
+                <padding>
+                    <Insets top="10" right="10" bottom="10" left="10"/>
+                </padding>
+
+                <Label text="Conflicts" styleClass="section-title">
+                    <font>
+                        <Font name="System Bold" size="16"/>
+                    </font>
+                </Label>
+
+                <!-- Conflicts Table -->
+                <TableView fx:id="conflictsTable" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="severityColumn" text="Severity" prefWidth="80"/>
+                        <TableColumn fx:id="typeColumn" text="Type" prefWidth="180"/>
+                        <TableColumn fx:id="titleColumn" text="Title" prefWidth="250"/>
+                        <TableColumn fx:id="detectedAtColumn" text="Detected" prefWidth="130"/>
+                        <TableColumn fx:id="statusColumn" text="Status" prefWidth="80"/>
+                    </columns>
+                    <placeholder>
+                        <Label text="No conflicts found. Select a schedule to detect conflicts."/>
+                    </placeholder>
+                </TableView>
+
+                <!-- Action Buttons -->
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Button fx:id="resolveButton" text="✅ Resolve" onAction="#handleResolve" styleClass="success-button" disable="true"/>
+                    <Button fx:id="ignoreButton" text="🚫 Ignore" onAction="#handleIgnore" styleClass="warning-button" disable="true"/>
+                    <Button fx:id="viewDetailsButton" text="🔍 View Details" onAction="#handleViewDetails" styleClass="secondary-button" disable="true"/>
+
+                    <Region HBox.hgrow="ALWAYS"/>
+
+                    <Button fx:id="exportButton" text="📄 Export Report" onAction="#handleExportReport" styleClass="secondary-button"/>
+                </HBox>
+            </VBox>
+
+            <!-- RIGHT: Conflict Details & Resolution -->
+            <VBox spacing="10">
+                <padding>
+                    <Insets top="10" right="10" bottom="10" left="10"/>
+                </padding>
+
+                <Label text="Conflict Details" styleClass="section-title">
+                    <font>
+                        <Font name="System Bold" size="16"/>
+                    </font>
+                </Label>
+
+                <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS">
+                    <VBox fx:id="detailsPane" spacing="15">
+                        <padding>
+                            <Insets top="10" right="10" bottom="10" left="10"/>
+                        </padding>
+
+                        <!-- Conflict Info Section -->
+                        <VBox spacing="10" styleClass="detail-section">
+                            <Label text="Conflict Information" styleClass="subsection-title">
+                                <font>
+                                    <Font name="System Bold" size="14"/>
+                                </font>
+                            </Label>
+
+                            <GridPane hgap="10" vgap="8">
+                                <columnConstraints>
+                                    <ColumnConstraints percentWidth="30"/>
+                                    <ColumnConstraints percentWidth="70"/>
+                                </columnConstraints>
+
+                                <Label text="Severity:" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="detail-label"/>
+                                <Label fx:id="detailSeverityLabel" text="-" GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="detail-value"/>
+
+                                <Label text="Type:" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="detail-label"/>
+                                <Label fx:id="detailTypeLabel" text="-" GridPane.rowIndex="1" GridPane.columnIndex="1" styleClass="detail-value"/>
+
+                                <Label text="Category:" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="detail-label"/>
+                                <Label fx:id="detailCategoryLabel" text="-" GridPane.rowIndex="2" GridPane.columnIndex="1" styleClass="detail-value"/>
+
+                                <Label text="Detected:" GridPane.rowIndex="3" GridPane.columnIndex="0" styleClass="detail-label"/>
+                                <Label fx:id="detailDetectedAtLabel" text="-" GridPane.rowIndex="3" GridPane.columnIndex="1" styleClass="detail-value"/>
+
+                                <Label text="Status:" GridPane.rowIndex="4" GridPane.columnIndex="0" styleClass="detail-label"/>
+                                <Label fx:id="detailStatusLabel" text="-" GridPane.rowIndex="4" GridPane.columnIndex="1" styleClass="detail-value"/>
+                            </GridPane>
+
+                            <Label text="Description:" styleClass="detail-label"/>
+                            <TextArea fx:id="detailDescriptionArea" wrapText="true" editable="false" prefRowCount="3"/>
+                        </VBox>
+
+                        <!-- Affected Entities Section -->
+                        <VBox spacing="10" styleClass="detail-section">
+                            <Label text="Affected Entities" styleClass="subsection-title">
+                                <font>
+                                    <Font name="System Bold" size="14"/>
+                                </font>
+                            </Label>
+
+                            <Label text="Teachers:" styleClass="detail-label"/>
+                            <ListView fx:id="affectedTeachersListView" prefHeight="80"/>
+
+                            <Label text="Students:" styleClass="detail-label"/>
+                            <ListView fx:id="affectedStudentsListView" prefHeight="80"/>
+
+                            <Label text="Rooms:" styleClass="detail-label"/>
+                            <ListView fx:id="affectedRoomsListView" prefHeight="80"/>
+
+                            <Label text="Courses:" styleClass="detail-label"/>
+                            <ListView fx:id="affectedCoursesListView" prefHeight="80"/>
+                        </VBox>
+
+                        <!-- Resolution Suggestions Section -->
+                        <VBox spacing="10" styleClass="detail-section">
+                            <Label text="Resolution Suggestions" styleClass="subsection-title">
+                                <font>
+                                    <Font name="System Bold" size="14"/>
+                                </font>
+                            </Label>
+
+                            <ListView fx:id="resolutionSuggestionsListView" prefHeight="150">
+                                <placeholder>
+                                    <Label text="No suggestions available"/>
+                                </placeholder>
+                            </ListView>
+
+                            <HBox spacing="10">
+                                <Button fx:id="applySuggestionButton" text="✅ Apply Selected" onAction="#handleApplySuggestion" styleClass="success-button" disable="true"/>
+                                <Button fx:id="rejectSuggestionButton" text="❌ Reject" onAction="#handleRejectSuggestion" styleClass="danger-button" disable="true"/>
+                            </HBox>
+                        </VBox>
+
+                        <!-- AI-Powered Resolution Suggestions Section -->
+                        <VBox spacing="10" styleClass="detail-section, ai-section">
+                            <Label text="🤖 AI-Powered Suggestions" styleClass="subsection-title">
+                                <font>
+                                    <Font name="System Bold" size="14"/>
+                                </font>
+                            </Label>
+
+                            <!-- Priority Score Display -->
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <Label fx:id="priorityScoreLabel" text="Priority Score: -" styleClass="detail-label"/>
+                                <ProgressBar fx:id="priorityScoreBar" prefWidth="200" progress="0"/>
+                            </HBox>
+
+                            <!-- AI Suggestions List -->
+                            <ListView fx:id="aiSuggestionsListView" prefHeight="200">
+                                <placeholder>
+                                    <Label text="No AI suggestions available"/>
+                                </placeholder>
+                            </ListView>
+
+                            <!-- AI Suggestion Details -->
+                            <GridPane hgap="10" vgap="8">
+                                <columnConstraints>
+                                    <ColumnConstraints percentWidth="30"/>
+                                    <ColumnConstraints percentWidth="70"/>
+                                </columnConstraints>
+
+                                <Label text="Confidence:" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="detail-label"/>
+                                <Label fx:id="aiConfidenceLabel" text="Confidence: -" GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="detail-value"/>
+
+                                <Label text="Impact:" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="detail-label"/>
+                                <Label fx:id="aiImpactLabel" text="Impact: -" GridPane.rowIndex="1" GridPane.columnIndex="1" styleClass="detail-value"/>
+
+                                <Label text="Success:" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="detail-label"/>
+                                <Label fx:id="aiSuccessProbLabel" text="Success: -" GridPane.rowIndex="2" GridPane.columnIndex="1" styleClass="detail-value"/>
+                            </GridPane>
+
+                            <Label text="Explanation:" styleClass="detail-label"/>
+                            <TextArea fx:id="aiExplanationArea" wrapText="true" editable="false" prefRowCount="4">
+                                <promptText>
+                                    Select an AI suggestion to see detailed explanation
+                                </promptText>
+                            </TextArea>
+
+                            <HBox spacing="10">
+                                <Button fx:id="applyAISuggestionButton" text="✅ Apply AI Suggestion" onAction="#handleApplyAISuggestion" styleClass="success-button" disable="true"/>
+                                <Button fx:id="viewAIDetailsButton" text="🔍 View Details" onAction="#handleViewAIDetails" styleClass="secondary-button" disable="true"/>
+                            </HBox>
+                        </VBox>
+
+                        <!-- Manual Resolution Section -->
+                        <VBox spacing="10" styleClass="detail-section">
+                            <Label text="Manual Resolution" styleClass="subsection-title">
+                                <font>
+                                    <Font name="System Bold" size="14"/>
+                                </font>
+                            </Label>
+
+                            <Label text="Resolution Notes:"/>
+                            <TextArea fx:id="resolutionNotesArea" wrapText="true" promptText="Enter notes about how this conflict was resolved..." prefRowCount="3"/>
+
+                            <HBox spacing="10">
+                                <Button fx:id="markResolvedButton" text="✅ Mark as Resolved" onAction="#handleMarkResolved" styleClass="success-button" disable="true"/>
+                                <Button fx:id="markIgnoredButton" text="🚫 Mark as Ignored" onAction="#handleMarkIgnored" styleClass="warning-button" disable="true"/>
+                            </HBox>
+                        </VBox>
+                    </VBox>
+                </ScrollPane>
+            </VBox>
+        </SplitPane>
+    </center>
+
+    <!-- ========================================================================
+         BOTTOM: STATUS BAR
+         ======================================================================== -->
+    <bottom>
+        <HBox spacing="15" alignment="CENTER_LEFT" styleClass="status-bar">
+            <padding>
+                <Insets top="10" right="20" bottom="10" left="20"/>
+            </padding>
+
+            <Label fx:id="statusLabel" text="Ready" HBox.hgrow="ALWAYS"/>
+            <Label fx:id="lastRefreshLabel" text="Last refresh: Never"/>
+            <ProgressIndicator fx:id="progressIndicator" visible="false" prefWidth="20" prefHeight="20"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

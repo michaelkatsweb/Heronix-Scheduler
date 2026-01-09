@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<!--
+    Academic Year Management View
+    Location: src/main/resources/fxml/AcademicYearManagement.fxml
+
+    Allows administrators to:
+    - View current academic year
+    - Create new academic years
+    - Progress to next year (grade progression)
+    - View statistics and history
+-->
+<VBox xmlns="http://javafx.com/javafx/21"
+    xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="com.eduscheduler.ui.controller.AcademicYearManagementController"
+    spacing="20"
+    style="-fx-background-color: #E4EBF5;"
+    styleClass="root">
+
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20" />
+    </padding>
+
+    <!-- Header -->
+    <HBox alignment="CENTER_LEFT" spacing="15"
+        style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 10;">
+        <Label text="📅 Academic Year Management"
+            style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #2196F3;" />
+        <Region HBox.hgrow="ALWAYS" />
+        <Button text="🔄 Refresh" onAction="#handleRefresh"
+            style="-fx-background-color: #607D8B; -fx-text-fill: white; -fx-padding: 10 20; -fx-cursor: hand; -fx-background-radius: 6;" />
+    </HBox>
+
+    <!-- Current Academic Year Card -->
+    <VBox spacing="15" style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);">
+        <Label text="Current Academic Year" style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #333;" />
+        <Separator />
+
+        <GridPane hgap="20" vgap="15">
+            <columnConstraints>
+                <ColumnConstraints percentWidth="20" />
+                <ColumnConstraints percentWidth="30" />
+                <ColumnConstraints percentWidth="20" />
+                <ColumnConstraints percentWidth="30" />
+            </columnConstraints>
+
+            <!-- Row 1 -->
+            <Label text="Year Name:" GridPane.columnIndex="0" GridPane.rowIndex="0"
+                style="-fx-font-weight: bold;" />
+            <Label fx:id="currentYearLabel" text="Not Set" GridPane.columnIndex="1" GridPane.rowIndex="0"
+                style="-fx-font-size: 16; -fx-text-fill: #2196F3; -fx-font-weight: bold;" />
+
+            <Label text="Status:" GridPane.columnIndex="2" GridPane.rowIndex="0"
+                style="-fx-font-weight: bold;" />
+            <HBox GridPane.columnIndex="3" GridPane.rowIndex="0" spacing="10" alignment="CENTER_LEFT">
+                <Label fx:id="statusLabel" text="●" style="-fx-text-fill: #4CAF50; -fx-font-size: 16;" />
+                <Label fx:id="statusTextLabel" text="Active" style="-fx-font-weight: bold; -fx-text-fill: #4CAF50;" />
+            </HBox>
+
+            <!-- Row 2 -->
+            <Label text="Start Date:" GridPane.columnIndex="0" GridPane.rowIndex="1"
+                style="-fx-font-weight: bold;" />
+            <Label fx:id="startDateLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+            <Label text="End Date:" GridPane.columnIndex="2" GridPane.rowIndex="1"
+                style="-fx-font-weight: bold;" />
+            <Label fx:id="endDateLabel" text="-" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+
+            <!-- Row 3 -->
+            <Label text="Graduation Date:" GridPane.columnIndex="0" GridPane.rowIndex="2"
+                style="-fx-font-weight: bold;" />
+            <Label fx:id="graduationDateLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+            <Label text="Graduated:" GridPane.columnIndex="2" GridPane.rowIndex="2"
+                style="-fx-font-weight: bold;" />
+            <Label fx:id="graduatedLabel" text="-" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+        </GridPane>
+    </VBox>
+
+    <!-- Student Statistics -->
+    <VBox spacing="15" style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);">
+        <Label text="Students by Grade Level" style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #333;" />
+        <Separator />
+
+        <GridPane hgap="30" vgap="15">
+            <columnConstraints>
+                <ColumnConstraints percentWidth="25" />
+                <ColumnConstraints percentWidth="25" />
+                <ColumnConstraints percentWidth="25" />
+                <ColumnConstraints percentWidth="25" />
+            </columnConstraints>
+
+            <!-- Grade 9 -->
+            <VBox GridPane.columnIndex="0" GridPane.rowIndex="0" spacing="5" alignment="CENTER"
+                style="-fx-background-color: #E3F2FD; -fx-padding: 15; -fx-background-radius: 8;">
+                <Label text="Grade 9" style="-fx-font-weight: bold; -fx-text-fill: #1976D2;" />
+                <Label fx:id="grade9CountLabel" text="0" style="-fx-font-size: 32; -fx-font-weight: bold; -fx-text-fill: #2196F3;" />
+                <Label text="Freshmen" style="-fx-font-size: 11; -fx-text-fill: #666;" />
+            </VBox>
+
+            <!-- Grade 10 -->
+            <VBox GridPane.columnIndex="1" GridPane.rowIndex="0" spacing="5" alignment="CENTER"
+                style="-fx-background-color: #E8F5E9; -fx-padding: 15; -fx-background-radius: 8;">
+                <Label text="Grade 10" style="-fx-font-weight: bold; -fx-text-fill: #388E3C;" />
+                <Label fx:id="grade10CountLabel" text="0" style="-fx-font-size: 32; -fx-font-weight: bold; -fx-text-fill: #4CAF50;" />
+                <Label text="Sophomores" style="-fx-font-size: 11; -fx-text-fill: #666;" />
+            </VBox>
+
+            <!-- Grade 11 -->
+            <VBox GridPane.columnIndex="2" GridPane.rowIndex="0" spacing="5" alignment="CENTER"
+                style="-fx-background-color: #FFF3E0; -fx-padding: 15; -fx-background-radius: 8;">
+                <Label text="Grade 11" style="-fx-font-weight: bold; -fx-text-fill: #F57C00;" />
+                <Label fx:id="grade11CountLabel" text="0" style="-fx-font-size: 32; -fx-font-weight: bold; -fx-text-fill: #FF9800;" />
+                <Label text="Juniors" style="-fx-font-size: 11; -fx-text-fill: #666;" />
+            </VBox>
+
+            <!-- Grade 12 -->
+            <VBox GridPane.columnIndex="3" GridPane.rowIndex="0" spacing="5" alignment="CENTER"
+                style="-fx-background-color: #FCE4EC; -fx-padding: 15; -fx-background-radius: 8;">
+                <Label text="Grade 12" style="-fx-font-weight: bold; -fx-text-fill: #C2185B;" />
+                <Label fx:id="grade12CountLabel" text="0" style="-fx-font-size: 32; -fx-font-weight: bold; -fx-text-fill: #E91E63;" />
+                <Label text="Seniors (Will Graduate)" style="-fx-font-size: 11; -fx-text-fill: #666;" />
+            </VBox>
+        </GridPane>
+
+        <!-- Total Students -->
+        <HBox spacing="10" alignment="CENTER" style="-fx-padding: 10 0 0 0;">
+            <Label text="Total Active Students:" style="-fx-font-weight: bold; -fx-font-size: 14;" />
+            <Label fx:id="totalStudentsLabel" text="0" style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #2196F3;" />
+        </HBox>
+    </VBox>
+
+    <!-- Action Buttons -->
+    <HBox spacing="15" alignment="CENTER">
+        <Button text="⏭️ Progress to Next Year" onAction="#handleProgressToNextYear"
+            style="-fx-background-color: #FF9800; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14; -fx-padding: 15 40; -fx-cursor: hand; -fx-background-radius: 8;">
+            <font>
+                <Font name="System Bold" size="14" />
+            </font>
+        </Button>
+
+        <Button text="📅 Create New Academic Year" onAction="#handleCreateNewYear"
+            style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14; -fx-padding: 15 40; -fx-cursor: hand; -fx-background-radius: 8;">
+            <font>
+                <Font name="System Bold" size="14" />
+            </font>
+        </Button>
+
+        <Button text="📊 View History" onAction="#handleViewHistory"
+            style="-fx-background-color: #9C27B0; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14; -fx-padding: 15 40; -fx-cursor: hand; -fx-background-radius: 8;">
+            <font>
+                <Font name="System Bold" size="14" />
+            </font>
+        </Button>
+    </HBox>
+
+    <!-- Academic Years List -->
+    <VBox spacing="15" style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);">
+        <Label text="All Academic Years" style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #333;" />
+        <Separator />
+
+        <TableView fx:id="yearsTable" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="yearNameColumn" text="Year Name" prefWidth="150" />
+                <TableColumn fx:id="startDateColumn" text="Start Date" prefWidth="120" />
+                <TableColumn fx:id="endDateColumn" text="End Date" prefWidth="120" />
+                <TableColumn fx:id="graduationDateColumn" text="Graduation" prefWidth="120" />
+                <TableColumn fx:id="activeColumn" text="Active" prefWidth="80" />
+                <TableColumn fx:id="graduatedColumn" text="Graduated" prefWidth="100" />
+                <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="150" />
+            </columns>
+        </TableView>
+    </VBox>
+
+</VBox>

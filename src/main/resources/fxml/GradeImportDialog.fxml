@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<!--
+Grade Import Dialog
+Location: src/main/resources/fxml/GradeImportDialog.fxml
+
+Features:
+- File upload with preview
+- Auto SIS platform detection
+- Field mapping configuration
+- Progress tracking
+- Result summary
+-->
+
+<DialogPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.eduscheduler.ui.controller.GradeImportDialogController"
+            styleClass="dialog-pane"
+            prefWidth="900"
+            prefHeight="700">
+
+    <content>
+        <VBox spacing="20" style="-fx-padding: 20;">
+
+            <!-- Header Section -->
+            <VBox spacing="10" styleClass="card">
+                <padding>
+                    <Insets top="15" right="15" bottom="15" left="15"/>
+                </padding>
+
+                <Label text="📥 Import Grades from CSV" styleClass="label-title"/>
+                <Label text="Import grades from Skyward, PowerSchool, Infinite Campus, or custom CSV files"
+                       styleClass="label" wrapText="true"/>
+
+                <Separator/>
+
+                <!-- File Selection -->
+                <HBox spacing="15" alignment="CENTER_LEFT">
+                    <Button fx:id="selectFileButton" text="📁 Select File"
+                            onAction="#handleSelectFile"
+                            styleClass="button-primary"
+                            prefWidth="150"/>
+
+                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                        <Label text="Selected File:" styleClass="label"/>
+                        <Label fx:id="fileNameLabel" text="No file selected"
+                               styleClass="label"
+                               style="-fx-text-fill: #aaaaaa;"/>
+                    </VBox>
+
+                    <VBox spacing="5" alignment="CENTER_RIGHT">
+                        <Label fx:id="detectedPlatformLabel" text="Platform: Unknown"
+                               styleClass="label"
+                               style="-fx-text-fill: #4CAF50; -fx-font-weight: bold;"/>
+                        <Label fx:id="recordCountLabel" text="Records: 0"
+                               styleClass="label"
+                               style="-fx-text-fill: #2196F3;"/>
+                    </VBox>
+                </HBox>
+
+                <!-- Auto-detect option -->
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <CheckBox fx:id="autoDetectCheckBox"
+                              text="Automatically detect field mapping"
+                              selected="true"/>
+                    <Label text="(Recommended for Skyward, PowerSchool, Infinite Campus)"
+                           styleClass="label"
+                           style="-fx-text-fill: #888888; -fx-font-size: 11;"/>
+                </HBox>
+            </VBox>
+
+            <!-- File Preview Section -->
+            <VBox spacing="10" styleClass="card" VBox.vgrow="ALWAYS">
+                <padding>
+                    <Insets top="15" right="15" bottom="15" left="15"/>
+                </padding>
+
+                <Label text="📄 File Preview (First 10 lines):" styleClass="label"/>
+
+                <TextArea fx:id="previewTextArea"
+                          promptText="Select a CSV file to preview..."
+                          wrapText="false"
+                          editable="false"
+                          VBox.vgrow="ALWAYS"
+                          style="-fx-font-family: 'Courier New'; -fx-font-size: 11;"/>
+            </VBox>
+
+            <!-- Field Mapping Section (hidden by default, shown if manual mapping needed) -->
+            <VBox fx:id="fieldMappingSection" spacing="10" styleClass="card" managed="false">
+                <padding>
+                    <Insets top="15" right="15" bottom="15" left="15"/>
+                </padding>
+
+                <Label text="🔧 Field Mapping Configuration" styleClass="label"/>
+                <Label text="Map your CSV columns to Heronix Scheduler fields:"
+                       styleClass="label"
+                       style="-fx-font-size: 11; -fx-text-fill: #888888;"/>
+
+                <GridPane hgap="15" vgap="10">
+                    <Label text="CSV Column →" GridPane.columnIndex="0" GridPane.rowIndex="0"
+                           style="-fx-font-weight: bold;"/>
+                    <Label text="Heronix Scheduler Field" GridPane.columnIndex="1" GridPane.rowIndex="0"
+                           style="-fx-font-weight: bold;"/>
+
+                    <!-- Field mapping controls would go here -->
+                    <Label text="Auto-mapping active" GridPane.columnIndex="0" GridPane.rowIndex="1"
+                           GridPane.columnSpan="2" style="-fx-text-fill: #4CAF50;"/>
+                </GridPane>
+            </VBox>
+
+            <!-- Progress Section -->
+            <VBox spacing="10" alignment="CENTER">
+                <ProgressBar fx:id="importProgressBar" prefWidth="Infinity" visible="false"/>
+                <Label fx:id="progressLabel" text="Importing..." visible="false"
+                       styleClass="label"/>
+            </VBox>
+
+            <!-- Results Section -->
+            <VBox spacing="10" styleClass="card" managed="false" visible="false"
+                  fx:id="resultSection" VBox.vgrow="SOMETIMES">
+                <padding>
+                    <Insets top="15" right="15" bottom="15" left="15"/>
+                </padding>
+
+                <Label text="📊 Import Results:" styleClass="label"/>
+
+                <TextArea fx:id="resultTextArea"
+                          editable="false"
+                          wrapText="true"
+                          prefHeight="200"
+                          style="-fx-font-family: 'Courier New'; -fx-font-size: 12;"/>
+            </VBox>
+
+            <!-- Info Box -->
+            <VBox spacing="5" styleClass="card"
+                  style="-fx-background-color: #1e3a5f; -fx-border-color: #2196F3; -fx-border-width: 1;">
+                <padding>
+                    <Insets top="10" right="10" bottom="10" left="10"/>
+                </padding>
+
+                <Label text="ℹ️ Supported Formats:" styleClass="label"
+                       style="-fx-font-weight: bold; -fx-text-fill: #2196F3;"/>
+
+                <HBox spacing="30">
+                    <VBox spacing="3">
+                        <Label text="• Skyward (auto-detected)" style="-fx-font-size: 11;"/>
+                        <Label text="• PowerSchool (auto-detected)" style="-fx-font-size: 11;"/>
+                        <Label text="• Infinite Campus (auto-detected)" style="-fx-font-size: 11;"/>
+                    </VBox>
+
+                    <VBox spacing="3">
+                        <Label text="Required Fields:" style="-fx-font-size: 11; -fx-font-weight: bold;"/>
+                        <Label text="• Student ID" style="-fx-font-size: 11;"/>
+                        <Label text="• Course Code" style="-fx-font-size: 11;"/>
+                        <Label text="• Letter Grade or Numerical Grade" style="-fx-font-size: 11;"/>
+                    </VBox>
+                </HBox>
+            </VBox>
+
+        </VBox>
+    </content>
+
+    <buttonTypes>
+        <ButtonType fx:id="importButtonType" text="📥 Import Grades" buttonData="OK_DONE"/>
+        <ButtonType fx:id="cancelButtonType" text="Cancel" buttonData="CANCEL_CLOSE"/>
+    </buttonTypes>
+
+    <!-- Custom buttons for better control -->
+    <expandableContent>
+        <HBox spacing="10" alignment="CENTER_RIGHT" style="-fx-padding: 10;">
+            <Button fx:id="importButton" text="📥 Import Grades"
+                    onAction="#handleImport"
+                    styleClass="button-success"
+                    prefWidth="150"
+                    disable="true"/>
+
+            <Button fx:id="closeButton" text="Close"
+                    onAction="#handleClose"
+                    styleClass="button"
+                    prefWidth="100"/>
+        </HBox>
+    </expandableContent>
+
+</DialogPane>

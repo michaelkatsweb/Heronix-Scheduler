@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<!--
+    Data Generator View
+    Location: src/main/resources/fxml/DataGenerator.fxml
+
+    Allows generation of comprehensive realistic test data for the school
+-->
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:id="mainContainer"
+      fx:controller="com.eduscheduler.ui.controller.DataGeneratorController"
+      spacing="15"
+      style="-fx-background-color: #f5f5f5; -fx-padding: 20;">
+
+    <!-- Header -->
+    <HBox alignment="CENTER_LEFT" spacing="15"
+          style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);">
+        <Label text="🎲" style="-fx-font-size: 36;"/>
+        <VBox spacing="5">
+            <Label text="Realistic Test Data Generator" style="-fx-font-size: 24; -fx-font-weight: bold;"/>
+            <Label text="Generate comprehensive school data for testing and demonstration"
+                   style="-fx-font-size: 14; -fx-text-fill: #666;"/>
+        </VBox>
+    </HBox>
+
+    <!-- Data Summary Card -->
+    <VBox spacing="10"
+          style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);">
+        <Label text="📊 What Will Be Generated" style="-fx-font-size: 18; -fx-font-weight: bold;"/>
+
+        <GridPane hgap="30" vgap="15">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+
+            <!-- Column 1 -->
+            <VBox spacing="8" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                <Label text="👥 Students" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #2196F3;"/>
+                <Label text="• 1,500 students (grades 9-12)" style="-fx-font-size: 12;"/>
+                <Label text="• ~375 per grade level" style="-fx-font-size: 12;"/>
+                <Label text="• Realistic names and addresses" style="-fx-font-size: 12;"/>
+                <Label text="• Parent/guardian information" style="-fx-font-size: 12;"/>
+                <Label text="• Course enrollments" style="-fx-font-size: 12;"/>
+            </VBox>
+
+            <VBox spacing="8" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                <Label text="👨‍🏫 Staff" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #4CAF50;"/>
+                <Label text="• 75 teachers (all subjects)" style="-fx-font-size: 12;"/>
+                <Label text="• 15 co-teachers" style="-fx-font-size: 12;"/>
+                <Label text="• 20 paraprofessionals" style="-fx-font-size: 12;"/>
+                <Label text="• Qualifications and experience" style="-fx-font-size: 12;"/>
+                <Label text="• Course assignments" style="-fx-font-size: 12;"/>
+            </VBox>
+
+            <!-- Column 2 -->
+            <VBox spacing="8" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                <Label text="📚 Courses" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #FF9800;"/>
+                <Label text="• 200+ courses" style="-fx-font-size: 12;"/>
+                <Label text="• Core: Math, English, Science, SS" style="-fx-font-size: 12;"/>
+                <Label text="• AP courses (11 subjects)" style="-fx-font-size: 12;"/>
+                <Label text="• Electives: Art, Music, PE, Tech" style="-fx-font-size: 12;"/>
+                <Label text="• World Languages (Spanish, French, German)" style="-fx-font-size: 12;"/>
+            </VBox>
+
+            <VBox spacing="8" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                <Label text="🏫 Facilities" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #9C27B0;"/>
+                <Label text="• 100+ rooms" style="-fx-font-size: 12;"/>
+                <Label text="• Classrooms (40)" style="-fx-font-size: 12;"/>
+                <Label text="• Science labs (9)" style="-fx-font-size: 12;"/>
+                <Label text="• Computer labs (5)" style="-fx-font-size: 12;"/>
+                <Label text="• Art, Music, Gym, Library" style="-fx-font-size: 12;"/>
+            </VBox>
+
+            <!-- Column 3 -->
+            <VBox spacing="8" GridPane.columnIndex="0" GridPane.rowIndex="2">
+                <Label text="📋 Special Programs" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #F44336;"/>
+                <Label text="• IEP plans (~7% of students)" style="-fx-font-size: 12;"/>
+                <Label text="• 504 plans (~3% of students)" style="-fx-font-size: 12;"/>
+                <Label text="• Accommodations and services" style="-fx-font-size: 12;"/>
+                <Label text="• Special education support" style="-fx-font-size: 12;"/>
+            </VBox>
+
+            <VBox spacing="8" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                <Label text="📅 Calendar" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #00BCD4;"/>
+                <Label text="• School holidays" style="-fx-font-size: 12;"/>
+                <Label text="• Half days and PD days" style="-fx-font-size: 12;"/>
+                <Label text="• Special events (homecoming, prom)" style="-fx-font-size: 12;"/>
+                <Label text="• Testing days (SAT, ACT, AP)" style="-fx-font-size: 12;"/>
+            </VBox>
+        </GridPane>
+    </VBox>
+
+    <!-- Action Buttons -->
+    <HBox spacing="10" alignment="CENTER">
+        <Button fx:id="generateButton"
+                text="🚀 Generate All Data"
+                onAction="#handleGenerateData"
+                style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-padding: 15 30; -fx-font-size: 16; -fx-font-weight: bold; -fx-cursor: hand; -fx-background-radius: 8;"/>
+
+        <Button text="🗑️ Clear All Data"
+                onAction="#handleClearData"
+                style="-fx-background-color: #F44336; -fx-text-fill: white; -fx-padding: 15 30; -fx-font-size: 16; -fx-font-weight: bold; -fx-cursor: hand; -fx-background-radius: 8;"/>
+    </HBox>
+
+    <!-- Progress Section -->
+    <VBox spacing="10"
+          style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);">
+        <Label text="📊 Progress" style="-fx-font-size: 18; -fx-font-weight: bold;"/>
+
+        <ProgressBar fx:id="progressBar" prefWidth="Infinity" prefHeight="25" visible="false"/>
+
+        <Label fx:id="statusLabel" text="Ready to generate data"
+               style="-fx-font-size: 14; -fx-text-fill: #666;"/>
+    </VBox>
+
+    <!-- Output Area -->
+    <VBox spacing="10" VBox.vgrow="ALWAYS"
+          style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);">
+        <Label text="📝 Output Log" style="-fx-font-size: 18; -fx-font-weight: bold;"/>
+
+        <TextArea fx:id="outputArea"
+                  wrapText="true"
+                  VBox.vgrow="ALWAYS"
+                  prefRowCount="10"
+                  style="-fx-font-family: 'Consolas', 'Monaco', monospace; -fx-font-size: 12;"/>
+    </VBox>
+
+    <!-- Warning Notice -->
+    <HBox spacing="10" alignment="CENTER_LEFT"
+          style="-fx-background-color: #fff3cd; -fx-padding: 15; -fx-background-radius: 8; -fx-border-color: #ffc107; -fx-border-radius: 8;">
+        <Label text="⚠️" style="-fx-font-size: 20;"/>
+        <VBox spacing="5">
+            <Label text="Important Notes:" style="-fx-font-weight: bold;"/>
+            <Label text="• Data generation may take 2-5 minutes depending on your system"
+                   style="-fx-font-size: 12;"/>
+            <Label text="• Ensure you have at least 500MB of free disk space"
+                   style="-fx-font-size: 12;"/>
+            <Label text="• This will add data to your existing database (use H2 Console to verify)"
+                   style="-fx-font-size: 12;"/>
+            <Label text="• Use 'Purge Database' from Admin menu if you want to start completely fresh"
+                   style="-fx-font-size: 12;"/>
+        </VBox>
+    </HBox>
+
+</VBox>

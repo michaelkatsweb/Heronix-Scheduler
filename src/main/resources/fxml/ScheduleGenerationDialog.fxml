@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<!--
+═══════════════════════════════════════════════════════════════════════
+    SCHEDULE GENERATION DIALOG - MODERN 3-COLUMN LAYOUT
+    Location: src/main/resources/fxml/ScheduleGenerationDialog.fxml
+
+    ✅ FEATURES:
+    - Modern 3-column neumorphic design
+    - Left: Schedule configuration settings
+    - Center: Available resources summary
+    - Right: Generation progress & log
+    - Responsive layout with proper spacing
+    - Neumorphic styling throughout
+
+    @version 2.0.0 - Redesigned with 3-column layout
+    @since 2025-11-04
+═══════════════════════════════════════════════════════════════════════
+-->
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.eduscheduler.ui.controller.ScheduleGenerationDialogController"
+            prefWidth="1100" prefHeight="700"
+            minWidth="900" minHeight="600"
+            maxWidth="1200" maxHeight="800"
+            stylesheets="@../css/neumorphic-theme.css"
+            styleClass="root"
+            style="-fx-background-color: #E4EBF5;">
+
+    <!-- ================================================================== -->
+    <!-- HEADER -->
+    <!-- ================================================================== -->
+    <top>
+        <VBox spacing="10" styleClass="neumorphic-card" style="-fx-padding: 20; -fx-background-color: -fx-surface-background; -fx-background-radius: 20 20 0 0;">
+            <Label text="🤖 AI-Powered Schedule Generator" styleClass="label-header" style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: -fx-text-primary;"/>
+            <Label text="Configure parameters and monitor real-time generation progress" styleClass="label-secondary" style="-fx-font-size: 13; -fx-text-fill: -fx-text-secondary;"/>
+            <Separator style="-fx-padding: 5 0 0 0;"/>
+        </VBox>
+    </top>
+
+    <!-- ================================================================== -->
+    <!-- MAIN 3-COLUMN LAYOUT -->
+    <!-- ================================================================== -->
+    <center>
+        <HBox spacing="15" style="-fx-padding: 15;">
+
+            <!-- ============================================================ -->
+            <!-- LEFT COLUMN: SCHEDULE CONFIGURATION (35%) -->
+            <!-- ============================================================ -->
+            <VBox spacing="15" HBox.hgrow="ALWAYS" prefWidth="350" styleClass="neumorphic-card" style="-fx-padding: 18; -fx-background-color: -fx-card-background;">
+
+                <Label text="⚙️ Schedule Configuration" styleClass="label-subheader" style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: -fx-text-primary;"/>
+
+                <Separator/>
+
+                <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-border-width: 0;" VBox.vgrow="ALWAYS">
+                    <VBox spacing="12">
+
+                        <!-- Schedule Name -->
+                        <VBox spacing="5">
+                            <Label text="Schedule Name *" style="-fx-font-weight: bold; -fx-font-size: 12; -fx-text-fill: -fx-text-primary;"/>
+                            <TextField fx:id="scheduleNameField"
+                                      promptText="e.g., Fall 2025 Master Schedule"
+                                      styleClass="neumorphic-inset"
+                                      style="-fx-font-size: 12; -fx-padding: 8;"/>
+                        </VBox>
+
+                        <!-- Schedule Type -->
+                        <VBox spacing="5">
+                            <Label text="Schedule Type *" style="-fx-font-weight: bold; -fx-font-size: 12; -fx-text-fill: -fx-text-primary;"/>
+                            <ComboBox fx:id="scheduleTypeCombo" maxWidth="Infinity" styleClass="neumorphic-surface" style="-fx-font-size: 12;"/>
+                        </VBox>
+
+                        <!-- Period -->
+                        <VBox spacing="5">
+                            <Label text="Academic Period *" style="-fx-font-weight: bold; -fx-font-size: 12; -fx-text-fill: -fx-text-primary;"/>
+                            <ComboBox fx:id="periodCombo" maxWidth="Infinity" styleClass="neumorphic-surface" style="-fx-font-size: 12;"/>
+
+                        <!-- Date Range -->
+                        <VBox spacing="5">
+                            <Label text="Date Range *" style="-fx-font-weight: bold; -fx-font-size: 12; -fx-text-fill: -fx-text-primary;"/>
+                            <HBox spacing="8">
+                                <VBox spacing="3" HBox.hgrow="ALWAYS">
+                                    <Label text="Start Date" style="-fx-text-fill: -fx-text-secondary; -fx-font-size: 10;"/>
+                                    <DatePicker fx:id="startDatePicker" maxWidth="Infinity" styleClass="neumorphic-inset"/>
+                                </VBox>
+                                <VBox spacing="3" HBox.hgrow="ALWAYS">
+                                    <Label text="End Date" style="-fx-text-fill: -fx-text-secondary; -fx-font-size: 10;"/>
+                                    <DatePicker fx:id="endDatePicker" maxWidth="Infinity" styleClass="neumorphic-inset"/>
+                                </VBox>
+                            </HBox>
+                        </VBox>
+
+                        <Separator/>
+
+                        <!-- Optimization Options -->
+                        <VBox spacing="8">
+                            <Label text="🎯 Optimization Options" style="-fx-font-weight: bold; -fx-font-size: 13; -fx-text-fill: -fx-text-primary;"/>
+                            <CheckBox fx:id="useAICheckbox" text="Use AI Optimization (OptaPlanner)" selected="true" style="-fx-font-size: 11; -fx-text-fill: -fx-text-primary;"/>
+                            <CheckBox fx:id="applyLeanCheckbox" text="Apply Lean Six Sigma Principles" selected="true" style="-fx-font-size: 11; -fx-text-fill: -fx-text-primary;"/>
+                            <CheckBox fx:id="applyKanbanCheckbox" text="Apply Kanban WIP Limits" selected="true" style="-fx-font-size: 11; -fx-text-fill: -fx-text-primary;"/>
+                        </VBox>
+
+                        <Separator/>
+
+                        <!-- Constraints -->
+                        <VBox spacing="8">
+                            <Label text="🔒 Constraints" style="-fx-font-weight: bold; -fx-font-size: 13; -fx-text-fill: -fx-text-primary;"/>
+
+                            <HBox spacing="8" alignment="CENTER_LEFT">
+                                <Label text="Max Consecutive Hours:" style="-fx-font-size: 11; -fx-text-fill: -fx-text-primary; -fx-min-width: 150;"/>
+                                <Spinner fx:id="maxConsecutiveSpinner" prefWidth="80" editable="true" styleClass="neumorphic-inset"/>
+                            </HBox>
+
+                            <HBox spacing="8" alignment="CENTER_LEFT">
+                                <Label text="Break Duration (min):" style="-fx-font-size: 11; -fx-text-fill: -fx-text-primary; -fx-min-width: 150;"/>
+                                <Spinner fx:id="breakDurationSpinner" prefWidth="80" editable="true" styleClass="neumorphic-inset"/>
+                            </HBox>
+                        </VBox>
+
+                        <Separator/>
+
+                        <!-- Estimated Time -->
+                        <HBox spacing="8" alignment="CENTER_LEFT" styleClass="neumorphic-inset" style="-fx-padding: 10; -fx-background-color: derive(-fx-surface-background, -3%); -fx-background-radius: 12;">
+                            <Label text="⏱️" style="-fx-font-size: 18;"/>
+                            <VBox spacing="2">
+                                <Label text="Estimated Time" style="-fx-font-weight: bold; -fx-font-size: 11; -fx-text-fill: -fx-text-primary;"/>
+                                <Label text="2-5 minutes (depends on complexity)" style="-fx-font-size: 10; -fx-text-fill: -fx-text-secondary;"/>
+                            </VBox>
+                        </HBox>
+
+                    </VBox>
+                </ScrollPane>
+
+            </VBox>
+
+            <!-- ============================================================ -->
+            <!-- CENTER COLUMN: AVAILABLE RESOURCES (30%) -->
+            <!-- ============================================================ -->
+            <VBox spacing="15" HBox.hgrow="ALWAYS" prefWidth="280" styleClass="neumorphic-card" style="-fx-padding: 18; -fx-background-color: -fx-card-background;">
+
+                <Label text="📊 Available Resources" styleClass="label-subheader" style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: -fx-text-primary;"/>
+
+                <Separator/>
+
+                <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-border-width: 0;" VBox.vgrow="ALWAYS">
+                    <VBox spacing="12">
+
+                        <!-- Teachers -->
+                        <VBox spacing="6" styleClass="neumorphic-inset" style="-fx-padding: 12; -fx-background-color: derive(-fx-surface-background, -2%); -fx-background-radius: 10;">
+                            <HBox spacing="8" alignment="CENTER_LEFT">
+                                <Label text="👨‍🏫" style="-fx-font-size: 20;"/>
+                                <VBox spacing="2">
+                                    <Label text="Teachers" style="-fx-font-weight: bold; -fx-font-size: 12; -fx-text-fill: -fx-text-primary;"/>
+                                    <Label fx:id="teacherCountLabel" text="Loading..." style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: -fx-accent-primary;"/>
+                                </VBox>
+                            </HBox>
+                            <Label text="Active teaching staff" style="-fx-font-size: 10; -fx-text-fill: -fx-text-secondary;"/>
+                        </VBox>
+
+                        <!-- Courses -->
+                        <VBox spacing="6" styleClass="neumorphic-inset" style="-fx-padding: 12; -fx-background-color: derive(-fx-surface-background, -2%); -fx-background-radius: 10;">
+                            <HBox spacing="8" alignment="CENTER_LEFT">
+                                <Label text="📚" style="-fx-font-size: 20;"/>
+                                <VBox spacing="2">
+                                    <Label text="Courses" style="-fx-font-weight: bold; -fx-font-size: 12; -fx-text-fill: -fx-text-primary;"/>
+                                    <Label fx:id="courseCountLabel" text="Loading..." style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: -fx-accent-success;"/>
+                                </VBox>
+                            </HBox>
+                            <Label text="Active courses" style="-fx-font-size: 10; -fx-text-fill: -fx-text-secondary;"/>
+                        </VBox>
+
+                        <!-- Rooms -->
+                        <VBox spacing="6" styleClass="neumorphic-inset" style="-fx-padding: 12; -fx-background-color: derive(-fx-surface-background, -2%); -fx-background-radius: 10;">
+                            <HBox spacing="8" alignment="CENTER_LEFT">
+                                <Label text="🏫" style="-fx-font-size: 20;"/>
+                                <VBox spacing="2">
+                                    <Label text="Rooms" style="-fx-font-weight: bold; -fx-font-size: 12; -fx-text-fill: -fx-text-primary;"/>
+                                    <Label fx:id="roomCountLabel" text="Loading..." style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: -fx-accent-warning;"/>
+                                </VBox>
+                            </HBox>
+                            <Label text="Classrooms" style="-fx-font-size: 10; -fx-text-fill: -fx-text-secondary;"/>
+                        </VBox>
+
+                        <!-- Students -->
+                        <VBox spacing="6" styleClass="neumorphic-inset" style="-fx-padding: 12; -fx-background-color: derive(-fx-surface-background, -2%); -fx-background-radius: 10;">
+                            <HBox spacing="8" alignment="CENTER_LEFT">
+                                <Label text="🎓" style="-fx-font-size: 20;"/>
+                                <VBox spacing="2">
+                                    <Label text="Students" style="-fx-font-weight: bold; -fx-font-size: 12; -fx-text-fill: -fx-text-primary;"/>
+                                    <Label fx:id="studentCountLabel" text="Loading..." style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: -fx-accent-info;"/>
+                                </VBox>
+                            </HBox>
+                            <Label text="Enrolled students" style="-fx-font-size: 10; -fx-text-fill: -fx-text-secondary;"/>
+                        </VBox>
+
+                        <!-- Time Slots -->
+                        <VBox spacing="6" styleClass="neumorphic-inset" style="-fx-padding: 12; -fx-background-color: derive(-fx-surface-background, -2%); -fx-background-radius: 10;">
+                            <HBox spacing="8" alignment="CENTER_LEFT">
+                                <Label text="⏰" style="-fx-font-size: 20;"/>
+                                <VBox spacing="2">
+                                    <Label text="Time Slots" style="-fx-font-weight: bold; -fx-font-size: 12; -fx-text-fill: -fx-text-primary;"/>
+                                    <Label fx:id="timeSlotCountLabel" text="Generated" style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: -fx-text-secondary;"/>
+                                </VBox>
+                            </HBox>
+                            <Label text="Scheduling periods" style="-fx-font-size: 10; -fx-text-fill: -fx-text-secondary;"/>
+                        </VBox>
+
+                        <Separator/>
+
+                        <!-- Resource Summary -->
+                        <VBox spacing="6" styleClass="neumorphic-card" style="-fx-padding: 12; -fx-background-color: derive(-fx-accent-primary, 80%); -fx-background-radius: 10;">
+                            <Label text="💡 Resource Status" style="-fx-font-weight: bold; -fx-font-size: 12; -fx-text-fill: -fx-text-primary;"/>
+                            <Label fx:id="resourceStatusLabel" text="All resources loaded and ready" wrapText="true" style="-fx-font-size: 10; -fx-text-fill: -fx-text-secondary;"/>
+                        </VBox>
+
+                    </VBox>
+                </ScrollPane>
+
+            </VBox>
+
+            <!-- ============================================================ -->
+            <!-- RIGHT COLUMN: GENERATION PROGRESS & LOG (35%) -->
+            <!-- ============================================================ -->
+            <VBox spacing="15" HBox.hgrow="ALWAYS" prefWidth="350" styleClass="neumorphic-card" style="-fx-padding: 18; -fx-background-color: -fx-card-background;">
+
+                <Label text="📈 Generation Progress" styleClass="label-subheader" style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: -fx-text-primary;"/>
+
+                <Separator/>
+
+                <!-- Progress Section -->
+                <VBox spacing="10" VBox.vgrow="ALWAYS">
+
+                    <!-- Progress Bar -->
+                    <VBox spacing="6">
+                        <HBox spacing="8" alignment="CENTER_LEFT">
+                            <Label text="Progress:" style="-fx-font-weight: bold; -fx-font-size: 12; -fx-text-fill: -fx-text-primary;"/>
+                            <Label fx:id="progressPercentLabel" text="0%" style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: -fx-accent-primary;"/>
+                        </HBox>
+                        <ProgressBar fx:id="progressBar" progress="0" maxWidth="Infinity" prefHeight="16" styleClass="neumorphic-inset"/>
+                        <Label fx:id="progressStatusLabel" text="Ready to generate schedule..." style="-fx-font-size: 11; -fx-text-fill: -fx-text-secondary; -fx-font-style: italic;"/>
+                    </VBox>
+
+                    <Separator/>
+
+                    <!-- Current Phase -->
+                    <VBox spacing="5" styleClass="neumorphic-inset" style="-fx-padding: 10; -fx-background-color: derive(-fx-surface-background, -3%); -fx-background-radius: 10;">
+                        <Label text="Current Phase:" style="-fx-font-weight: bold; -fx-font-size: 11; -fx-text-fill: -fx-text-primary;"/>
+                        <Label fx:id="currentPhaseLabel" text="Waiting to start..." wrapText="true" style="-fx-font-size: 11; -fx-text-fill: -fx-text-secondary;"/>
+                    </VBox>
+
+                    <!-- Generation Log -->
+                    <VBox spacing="6" VBox.vgrow="ALWAYS">
+                        <Label text="📋 Generation Log" style="-fx-font-weight: bold; -fx-font-size: 12; -fx-text-fill: -fx-text-primary;"/>
+                        <ScrollPane fitToWidth="true" fitToHeight="true" style="-fx-background-color: transparent;" VBox.vgrow="ALWAYS">
+                            <TextArea fx:id="generationLogArea"
+                                     editable="false"
+                                     wrapText="true"
+                                     prefRowCount="12"
+                                     promptText="Log messages will appear here during generation..."
+                                     styleClass="neumorphic-inset"
+                                     style="-fx-control-inner-background: derive(-fx-surface-background, -5%); -fx-text-fill: -fx-text-primary; -fx-font-family: 'Consolas', 'Monaco', monospace; -fx-font-size: 10; -fx-padding: 8;"/>
+                        </ScrollPane>
+                    </VBox>
+
+                    <!-- Statistics (shown after generation) -->
+                    <VBox fx:id="statisticsBox" spacing="5" visible="false" managed="false" styleClass="neumorphic-card" style="-fx-padding: 10; -fx-background-color: derive(-fx-accent-success, 80%); -fx-background-radius: 10;">
+                        <Label text="✅ Generation Complete!" style="-fx-font-weight: bold; -fx-font-size: 12; -fx-text-fill: -fx-accent-success;"/>
+                        <Label fx:id="statisticsLabel" text="Statistics will appear here" wrapText="true" style="-fx-font-size: 10; -fx-text-fill: -fx-text-secondary;"/>
+                    </VBox>
+
+                </VBox>
+
+            </VBox>
+
+        </HBox>
+    </center>
+
+    <!-- ================================================================== -->
+    <!-- BOTTOM: ACTION BUTTONS -->
+    <!-- ================================================================== -->
+    <bottom>
+        <HBox spacing="12" alignment="CENTER_RIGHT" styleClass="neumorphic-surface" style="-fx-padding: 15 20; -fx-background-color: -fx-surface-background; -fx-background-radius: 0 0 20 20;">
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <Button text="❌ Cancel"
+                    onAction="#handleCancel"
+                    prefWidth="120"
+                    prefHeight="38"
+                    styleClass="button"
+                    style="-fx-background-color: -fx-accent-danger; -fx-text-fill: white; -fx-font-size: 13; -fx-font-weight: bold; -fx-background-radius: 10;">
+                <tooltip>
+                    <Tooltip text="Cancel and close the dialog"/>
+                </tooltip>
+            </Button>
+
+            <Button fx:id="generateButton"
+                    text="🚀 Generate Schedule"
+                    onAction="#handleGenerate"
+                    prefWidth="190"
+                    prefHeight="38"
+                    styleClass="button"
+                    style="-fx-background-color: -fx-accent-success; -fx-text-fill: white; -fx-font-size: 14; -fx-font-weight: bold; -fx-background-radius: 10;">
+                <tooltip>
+                    <Tooltip text="Start AI-powered schedule generation"/>
+                </tooltip>
+            </Button>
+
+        </HBox>
+    </bottom>
+
+</BorderPane>

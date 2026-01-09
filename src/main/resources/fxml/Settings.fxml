@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<!--
+Settings Dialog - Dark Futuristic Theme
+Location: src/main/resources/fxml/Settings.fxml
+Controller: com.eduscheduler.ui.controller.SettingsController
+-->
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.eduscheduler.ui.controller.SettingsController"
+            prefWidth="900" prefHeight="700"
+            styleClass="root">
+
+    <!-- Header -->
+    <top>
+        <VBox spacing="10" styleClass="card" style="-fx-padding: 20;">
+            <Label text="⚙️ Application Settings" styleClass="label-title"/>
+            <Label text="Configure Heronix Scheduling System preferences" styleClass="label-subtitle"/>
+        </VBox>
+    </top>
+
+    <!-- Settings Content -->
+    <center>
+        <TabPane tabClosingPolicy="UNAVAILABLE" styleClass="tab-pane">
+
+            <!-- General Settings Tab -->
+            <Tab text="General">
+                <ScrollPane fitToWidth="true" styleClass="scroll-pane">
+                    <VBox spacing="20" style="-fx-padding: 20;">
+
+                        <!-- School Information -->
+                        <VBox spacing="10" styleClass="card">
+                            <Label text="School Information" styleClass="label-subtitle"/>
+                            <Separator/>
+
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <Label text="School Name:" prefWidth="150" styleClass="label"/>
+                                <TextField fx:id="schoolNameField" HBox.hgrow="ALWAYS"/>
+                            </HBox>
+
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <Label text="School Year:" prefWidth="150" styleClass="label"/>
+                                <TextField fx:id="schoolYearField" HBox.hgrow="ALWAYS"/>
+                            </HBox>
+                        </VBox>
+
+                        <!-- Application Settings -->
+                        <VBox spacing="10" styleClass="card">
+                            <Label text="Application Settings" styleClass="label-subtitle"/>
+                            <Separator/>
+
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <Label text="Theme:" prefWidth="150" styleClass="label"/>
+                                <ComboBox fx:id="themeCombo" prefWidth="200"/>
+                            </HBox>
+
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <CheckBox fx:id="autoSaveCheck" text="Enable Auto-Save" styleClass="label"/>
+                            </HBox>
+
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <Label text="Auto-Save Interval:" prefWidth="150" styleClass="label"/>
+                                <Spinner fx:id="autoSaveIntervalSpinner" prefWidth="100"/>
+                                <Label text="minutes" styleClass="label"/>
+                            </HBox>
+                        </VBox>
+                    </VBox>
+                </ScrollPane>
+            </Tab>
+
+            <!-- Schedule Settings Tab -->
+            <Tab text="Schedule">
+                <ScrollPane fitToWidth="true" styleClass="scroll-pane">
+                    <VBox spacing="20" style="-fx-padding: 20;">
+
+                        <!-- Default Schedule Settings -->
+                        <VBox spacing="10" styleClass="card">
+                            <Label text="Default Schedule Settings" styleClass="label-subtitle"/>
+                            <Separator/>
+
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <Label text="Schedule Type:" prefWidth="150" styleClass="label"/>
+                                <ComboBox fx:id="scheduleTypeCombo" HBox.hgrow="ALWAYS"/>
+                            </HBox>
+
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <Label text="Periods Per Day:" prefWidth="150" styleClass="label"/>
+                                <Spinner fx:id="periodsPerDaySpinner" prefWidth="100"/>
+                            </HBox>
+
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <Label text="Period Duration:" prefWidth="150" styleClass="label"/>
+                                <Spinner fx:id="periodDurationSpinner" prefWidth="100"/>
+                                <Label text="minutes" styleClass="label"/>
+                            </HBox>
+
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <Label text="School Start Time:" prefWidth="150" styleClass="label"/>
+                                <TextField fx:id="startTimeField" promptText="08:00" prefWidth="100"/>
+                            </HBox>
+
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <Label text="School End Time:" prefWidth="150" styleClass="label"/>
+                                <TextField fx:id="endTimeField" promptText="15:00" prefWidth="100"/>
+                            </HBox>
+
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <Label text="Break Duration:" prefWidth="150" styleClass="label"/>
+                                <Spinner fx:id="breakDurationSpinner" prefWidth="100"/>
+                                <Label text="minutes" styleClass="label"/>
+                            </HBox>
+                        </VBox>
+                    </VBox>
+                </ScrollPane>
+            </Tab>
+
+            <!-- Optimization Settings Tab -->
+            <Tab text="Optimization">
+                <ScrollPane fitToWidth="true" styleClass="scroll-pane">
+                    <VBox spacing="20" style="-fx-padding: 20;">
+
+                        <!-- AI Optimization -->
+                        <VBox spacing="10" styleClass="card">
+                            <Label text="AI Optimization (OptaPlanner)" styleClass="label-subtitle"/>
+                            <Separator/>
+
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <Label text="Optimization Time:" prefWidth="150" styleClass="label"/>
+                                <Slider fx:id="optimizationTimeSlider"
+                                        min="1" max="30"
+                                        HBox.hgrow="ALWAYS"
+                                        showTickLabels="true"
+                                        showTickMarks="true"
+                                        majorTickUnit="5"/>
+                                <Label fx:id="optimizationTimeLabel" text="5 minutes" prefWidth="100" styleClass="label"/>
+                            </HBox>
+                        </VBox>
+
+                        <!-- Management Principles -->
+                        <VBox spacing="10" styleClass="card">
+                            <Label text="Management Principles" styleClass="label-subtitle"/>
+                            <Separator/>
+
+                            <CheckBox fx:id="applyLeanCheck"
+                                      text="Apply Lean Six Sigma Principles"
+                                      selected="true" styleClass="label"/>
+                            <Label text="   • Minimize waste and maximize efficiency" styleClass="label-caption"/>
+
+                            <CheckBox fx:id="applyKanbanCheck"
+                                      text="Apply Kanban WIP Limits"
+                                      selected="true" styleClass="label"/>
+                            <Label text="   • Limit work-in-progress for better flow" styleClass="label-caption"/>
+
+                            <CheckBox fx:id="applyEisenhowerCheck"
+                                      text="Apply Eisenhower Matrix Prioritization"
+                                      selected="true" styleClass="label"/>
+                            <Label text="   • Priority-based time slot allocation" styleClass="label-caption"/>
+                        </VBox>
+
+                        <!-- Constraints -->
+                        <VBox spacing="10" styleClass="card">
+                            <Label text="Teacher Constraints" styleClass="label-subtitle"/>
+                            <Separator/>
+
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <Label text="Max Consecutive Hours:" prefWidth="180" styleClass="label"/>
+                                <Spinner fx:id="maxConsecutiveHoursSpinner" prefWidth="100"/>
+                                <Label text="hours" styleClass="label"/>
+                            </HBox>
+
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <Label text="Minimum Break:" prefWidth="180" styleClass="label"/>
+                                <Spinner fx:id="minBreakMinutesSpinner" prefWidth="100"/>
+                                <Label text="minutes" styleClass="label"/>
+                            </HBox>
+                        </VBox>
+                    </VBox>
+                </ScrollPane>
+            </Tab>
+
+            <!-- Database Settings Tab -->
+            <Tab text="Database">
+                <ScrollPane fitToWidth="true" styleClass="scroll-pane">
+                    <VBox spacing="20" style="-fx-padding: 20;">
+
+                        <!-- Database Configuration -->
+                        <VBox spacing="10" styleClass="card">
+                            <Label text="Database Configuration" styleClass="label-subtitle"/>
+                            <Separator/>
+
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <Label text="Database Path:" prefWidth="150" styleClass="label"/>
+                                <TextField fx:id="databasePathField" HBox.hgrow="ALWAYS"/>
+                                <Button fx:id="browseDatabaseButton" text="Browse..."
+                                        onAction="#handleBrowseDatabase" styleClass="button"/>
+                            </HBox>
+
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <Button text="Test Connection"
+                                        onAction="#handleTestConnection" styleClass="button-primary"/>
+                                <Label text="✓ Connection OK" styleClass="accent-success"
+                                       visible="false"/>
+                            </HBox>
+                        </VBox>
+
+                        <!-- Backup Settings -->
+                        <VBox spacing="10" styleClass="card">
+                            <Label text="Backup Settings" styleClass="label-subtitle"/>
+                            <Separator/>
+
+                            <CheckBox fx:id="autoBackupCheck"
+                                      text="Enable Automatic Backups"
+                                      selected="true" styleClass="label"/>
+
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <Label text="Backup Location:" prefWidth="150" styleClass="label"/>
+                                <TextField fx:id="backupPathField" HBox.hgrow="ALWAYS"/>
+                                <Button fx:id="browseBackupButton" text="Browse..."
+                                        onAction="#handleBrowseBackup" styleClass="button"/>
+                            </HBox>
+
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <Label text="Backup Frequency:" prefWidth="150" styleClass="label"/>
+                                <ComboBox fx:id="backupFrequencyCombo" prefWidth="200"/>
+                            </HBox>
+
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <Button text="Create Backup Now"
+                                        onAction="#handleBackupNow" styleClass="button-success"/>
+                            </HBox>
+                        </VBox>
+                    </VBox>
+                </ScrollPane>
+            </Tab>
+
+            <!-- Import/Export Settings Tab -->
+            <Tab text="Import/Export">
+                <ScrollPane fitToWidth="true" styleClass="scroll-pane">
+                    <VBox spacing="20" style="-fx-padding: 20;">
+
+                        <!-- Import Settings -->
+                        <VBox spacing="10" styleClass="card">
+                            <Label text="Import Settings" styleClass="label-subtitle"/>
+                            <Separator/>
+
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <Label text="Default Import Path:" prefWidth="150" styleClass="label"/>
+                                <TextField fx:id="importPathField" HBox.hgrow="ALWAYS"/>
+                            </HBox>
+
+                            <CheckBox fx:id="autoImportCheck"
+                                      text="Automatically detect file format" styleClass="label"/>
+                        </VBox>
+
+                        <!-- Export Settings -->
+                        <VBox spacing="10" styleClass="card">
+                            <Label text="Export Settings" styleClass="label-subtitle"/>
+                            <Separator/>
+
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <Label text="Default Export Path:" prefWidth="150" styleClass="label"/>
+                                <TextField fx:id="exportPathField" HBox.hgrow="ALWAYS"/>
+                            </HBox>
+
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <Label text="Default Format:" prefWidth="150" styleClass="label"/>
+                                <ComboBox fx:id="defaultExportFormatCombo" prefWidth="200"/>
+                            </HBox>
+                        </VBox>
+                    </VBox>
+                </ScrollPane>
+            </Tab>
+
+        </TabPane>
+    </center>
+
+    <!-- Action Buttons -->
+    <bottom>
+        <HBox spacing="10" alignment="CENTER_RIGHT" styleClass="card" style="-fx-padding: 15;">
+            <Button text="Reset to Defaults"
+                    onAction="#handleReset"
+                    prefWidth="140" styleClass="button-danger"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="Cancel"
+                    onAction="#handleCancel"
+                    prefWidth="100" styleClass="button"/>
+            <Button text="Save Settings"
+                    onAction="#handleSave"
+                    prefWidth="120" styleClass="button-success"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

@@ -1,0 +1,415 @@
+/* ============================================================================
+   GLASSMORPHIC THEME - iOS-Inspired Design
+   Beautiful frosted glass effect with soft colors and smooth animations
+   ============================================================================ */
+
+/* Root Color Palette - Soft, Elegant Colors */
+.root {
+    /* Background Gradients */
+    -fx-background-gradient-start: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -fx-background-gradient-alt: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+
+    /* Glassmorphic Colors */
+    -fx-glass-white: rgba(255, 255, 255, 0.15);
+    -fx-glass-border: rgba(255, 255, 255, 0.25);
+    -fx-glass-shadow: rgba(0, 0, 0, 0.1);
+
+    /* Text Colors - High Contrast for Readability */
+    -fx-text-primary: #FFFFFF;
+    -fx-text-secondary: rgba(255, 255, 255, 0.85);
+    -fx-text-tertiary: rgba(255, 255, 255, 0.65);
+    -fx-text-muted: rgba(255, 255, 255, 0.45);
+
+    /* Status Colors - Vibrant but Readable */
+    -fx-color-success: #34D399;    /* Soft Green */
+    -fx-color-warning: #FBBF24;    /* Soft Amber */
+    -fx-color-danger: #F87171;     /* Soft Red */
+    -fx-color-info: #60A5FA;       /* Soft Blue */
+
+    /* Accent Colors */
+    -fx-accent-primary: #8B5CF6;   /* Purple */
+    -fx-accent-secondary: #EC4899; /* Pink */
+}
+
+/* ============================================================================
+   MAIN CONTAINER - Gradient Background
+   ============================================================================ */
+.at-risk-container {
+    -fx-background-color: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -fx-padding: 24;
+}
+
+/* ============================================================================
+   GLASSMORPHIC CARDS
+   ============================================================================ */
+.glass-card {
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+    -fx-background-radius: 20;
+    -fx-padding: 20;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 20, 0.3, 0, 8);
+    -fx-border-color: rgba(255, 255, 255, 0.25);
+    -fx-border-width: 1.5;
+    -fx-border-radius: 20;
+    /* Backdrop blur effect simulation */
+    -fx-background-insets: 0;
+}
+
+.glass-card:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.20);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 25, 0.4, 0, 10);
+    -fx-cursor: hand;
+}
+
+/* ============================================================================
+   HEADER SECTION
+   ============================================================================ */
+.glass-header {
+    -fx-background-color: rgba(255, 255, 255, 0.12);
+    -fx-background-radius: 18;
+    -fx-padding: 16 24;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 15, 0.2, 0, 4);
+    -fx-border-color: rgba(255, 255, 255, 0.2);
+    -fx-border-width: 1;
+    -fx-border-radius: 18;
+}
+
+.header-title {
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 28px;
+    -fx-font-weight: 600;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 4, 0.5, 0, 2);
+}
+
+/* ============================================================================
+   STATISTICS CARDS
+   ============================================================================ */
+.stat-card {
+    -fx-background-color: rgba(255, 255, 255, 0.18);
+    -fx-background-radius: 16;
+    -fx-padding: 24;
+    -fx-min-width: 200;
+    -fx-pref-width: 220;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.12), 18, 0.3, 0, 6);
+    -fx-border-color: rgba(255, 255, 255, 0.3);
+    -fx-border-width: 1.5;
+    -fx-border-radius: 16;
+}
+
+.stat-card:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.22);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.18), 22, 0.4, 0, 8);
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+}
+
+.stat-label {
+    -fx-text-fill: rgba(255, 255, 255, 0.75);
+    -fx-font-size: 14px;
+    -fx-font-weight: 500;
+}
+
+.stat-value {
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 42px;
+    -fx-font-weight: 700;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 3, 0.6, 0, 1);
+}
+
+.stat-description {
+    -fx-text-fill: rgba(255, 255, 255, 0.55);
+    -fx-font-size: 11px;
+    -fx-font-weight: 400;
+    -fx-wrap-text: true;
+    -fx-text-alignment: center;
+}
+
+/* Color Variants for Stats */
+.stat-success .stat-value { -fx-text-fill: #34D399; }
+.stat-warning .stat-value { -fx-text-fill: #FBBF24; }
+.stat-danger .stat-value { -fx-text-fill: #F87171; }
+
+/* ============================================================================
+   MODERN BUTTONS
+   ============================================================================ */
+.glass-button {
+    -fx-background-color: rgba(255, 255, 255, 0.20);
+    -fx-background-radius: 12;
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
+    -fx-padding: 10 20;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 10, 0.3, 0, 4);
+    -fx-border-color: rgba(255, 255, 255, 0.3);
+    -fx-border-width: 1;
+    -fx-border-radius: 12;
+}
+
+.glass-button:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.28);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 12, 0.4, 0, 5);
+    -fx-scale-x: 1.03;
+    -fx-scale-y: 1.03;
+}
+
+.glass-button:pressed {
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+}
+
+/* Button Color Variants */
+.btn-success {
+    -fx-background-color: linear-gradient(135deg, #34D399 0%, #10B981 100%);
+    -fx-border-color: rgba(255, 255, 255, 0.4);
+}
+
+.btn-primary {
+    -fx-background-color: linear-gradient(135deg, #60A5FA 0%, #3B82F6 100%);
+    -fx-border-color: rgba(255, 255, 255, 0.4);
+}
+
+.btn-warning {
+    -fx-background-color: linear-gradient(135deg, #FBBF24 0%, #F59E0B 100%);
+    -fx-border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* ============================================================================
+   FILTERS SECTION
+   ============================================================================ */
+.glass-filters {
+    -fx-background-color: rgba(255, 255, 255, 0.12);
+    -fx-background-radius: 14;
+    -fx-padding: 16;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 12, 0.2, 0, 3);
+    -fx-border-color: rgba(255, 255, 255, 0.2);
+    -fx-border-width: 1;
+    -fx-border-radius: 14;
+}
+
+.filter-label {
+    -fx-text-fill: rgba(255, 255, 255, 0.85);
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
+}
+
+/* ComboBox Styling */
+.combo-box {
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+    -fx-background-radius: 10;
+    -fx-border-color: rgba(255, 255, 255, 0.25);
+    -fx-border-width: 1;
+    -fx-border-radius: 10;
+}
+
+.combo-box .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 13px;
+    -fx-padding: 8 12;
+}
+
+.combo-box:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.20);
+}
+
+.combo-box .arrow-button {
+    -fx-background-color: transparent;
+}
+
+.combo-box .arrow {
+    -fx-background-color: #FFFFFF;
+}
+
+/* ComboBox Popup */
+.combo-box-popup .list-view {
+    -fx-background-color: rgba(255, 255, 255, 0.95);
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 20, 0.4, 0, 8);
+    -fx-border-color: rgba(255, 255, 255, 0.5);
+    -fx-border-width: 1;
+    -fx-border-radius: 10;
+}
+
+.combo-box-popup .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: #374151;
+    -fx-padding: 10 16;
+}
+
+.combo-box-popup .list-cell:hover {
+    -fx-background-color: rgba(139, 92, 246, 0.15);
+}
+
+.combo-box-popup .list-cell:selected {
+    -fx-background-color: rgba(139, 92, 246, 0.25);
+    -fx-text-fill: #5B21B6;
+}
+
+/* ============================================================================
+   TABLE VIEW - Glassmorphic Style
+   ============================================================================ */
+.table-view {
+    -fx-background-color: rgba(255, 255, 255, 0.10);
+    -fx-background-radius: 16;
+    -fx-border-color: rgba(255, 255, 255, 0.2);
+    -fx-border-width: 1.5;
+    -fx-border-radius: 16;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 18, 0.3, 0, 6);
+    -fx-table-cell-border-color: transparent;
+}
+
+/* Table Header */
+.table-view .column-header-background {
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+    -fx-background-radius: 16 16 0 0;
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent transparent rgba(255, 255, 255, 0.2) transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+    -fx-padding: 12 8;
+}
+
+/* Table Rows */
+.table-row-cell {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 4 0;
+    -fx-border-color: transparent;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: rgba(255, 255, 255, 0.03);
+}
+
+.table-row-cell:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.12);
+}
+
+.table-row-cell:selected {
+    -fx-background-color: rgba(139, 92, 246, 0.25);
+}
+
+/* Table Cells */
+.table-cell {
+    -fx-text-fill: rgba(255, 255, 255, 0.95);
+    -fx-font-size: 13px;
+    -fx-padding: 10 8;
+    -fx-border-color: transparent;
+}
+
+/* Row Color Coding for Status */
+.table-row-cell.status-on-track {
+    -fx-background-color: rgba(52, 211, 153, 0.08);
+    -fx-border-color: transparent transparent rgba(52, 211, 153, 0.2) transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+.table-row-cell.status-at-risk {
+    -fx-background-color: rgba(251, 191, 36, 0.08);
+    -fx-border-color: transparent transparent rgba(251, 191, 36, 0.2) transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+.table-row-cell.status-retention-risk {
+    -fx-background-color: rgba(248, 113, 113, 0.08);
+    -fx-border-color: transparent transparent rgba(248, 113, 113, 0.2) transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+/* ============================================================================
+   FOOTER
+   ============================================================================ */
+.glass-footer {
+    -fx-background-color: rgba(255, 255, 255, 0.10);
+    -fx-background-radius: 12;
+    -fx-padding: 12 16;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.08), 10, 0.2, 0, 2);
+    -fx-border-color: rgba(255, 255, 255, 0.15);
+    -fx-border-width: 1;
+    -fx-border-radius: 12;
+}
+
+.footer-text {
+    -fx-text-fill: rgba(255, 255, 255, 0.75);
+    -fx-font-size: 12px;
+    -fx-wrap-text: true;
+}
+
+.footer-icon {
+    -fx-text-fill: #60A5FA;
+    -fx-font-size: 16px;
+}
+
+/* ============================================================================
+   SCROLLBAR - Minimal & Elegant
+   ============================================================================ */
+.scroll-bar {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: rgba(255, 255, 255, 0.25);
+    -fx-background-radius: 8;
+}
+
+.scroll-bar .thumb:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.35);
+}
+
+.scroll-bar .thumb:pressed {
+    -fx-background-color: rgba(255, 255, 255, 0.45);
+}
+
+.scroll-bar .track {
+    -fx-background-color: rgba(0, 0, 0, 0.05);
+    -fx-background-radius: 8;
+}
+
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+/* ============================================================================
+   TOOLTIPS
+   ============================================================================ */
+.tooltip {
+    -fx-background-color: rgba(30, 30, 30, 0.95);
+    -fx-background-radius: 8;
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 12px;
+    -fx-padding: 8 12;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 15, 0.4, 0, 4);
+    -fx-border-color: rgba(255, 255, 255, 0.2);
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+}
+
+/* ============================================================================
+   ANIMATIONS & TRANSITIONS
+   ============================================================================ */
+.animated {
+    -fx-transition: all 0.3s ease;
+}
+
+/* ============================================================================
+   UTILITY CLASSES
+   ============================================================================ */
+.text-white { -fx-text-fill: #FFFFFF; }
+.text-secondary { -fx-text-fill: rgba(255, 255, 255, 0.85); }
+.text-muted { -fx-text-fill: rgba(255, 255, 255, 0.55); }
+
+.text-success { -fx-text-fill: #34D399; }
+.text-warning { -fx-text-fill: #FBBF24; }
+.text-danger { -fx-text-fill: #F87171; }
+.text-info { -fx-text-fill: #60A5FA; }

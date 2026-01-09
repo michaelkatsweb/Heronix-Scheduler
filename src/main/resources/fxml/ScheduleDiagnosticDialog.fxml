@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.eduscheduler.ui.controller.ScheduleDiagnosticDialogController"
+            prefWidth="900" prefHeight="700"
+            styleClass="diagnostic-dialog">
+
+    <!-- Header -->
+    <top>
+        <VBox styleClass="diagnostic-header">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <Label text="Schedule Generation Diagnostic Report" styleClass="diagnostic-title"/>
+            <Label fx:id="statusLabel" text="Status: Checking..." styleClass="diagnostic-status"/>
+            <Label fx:id="timestampLabel" text="Report generated: ..." styleClass="diagnostic-timestamp"/>
+
+            <Separator>
+                <VBox.margin>
+                    <Insets top="15"/>
+                </VBox.margin>
+            </Separator>
+        </VBox>
+    </top>
+
+    <!-- Center: Main Content -->
+    <center>
+        <TabPane fx:id="diagnosticTabs" tabClosingPolicy="UNAVAILABLE">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+
+            <!-- Tab 1: Summary -->
+            <Tab text="Summary" closable="false">
+                <ScrollPane fitToWidth="true">
+                    <VBox spacing="15">
+                        <padding>
+                            <Insets top="20" right="20" bottom="20" left="20"/>
+                        </padding>
+
+                        <!-- Summary Message -->
+                        <VBox styleClass="summary-section">
+                            <Label text="Summary" styleClass="section-header"/>
+                            <TextArea fx:id="summaryTextArea" editable="false" wrapText="true"
+                                     prefHeight="100" styleClass="summary-text"/>
+                        </VBox>
+
+                        <!-- Resource Counts -->
+                        <VBox styleClass="resource-section">
+                            <Label text="Resource Overview" styleClass="section-header"/>
+                            <GridPane hgap="20" vgap="10" fx:id="resourceGrid">
+                                <columnConstraints>
+                                    <ColumnConstraints percentWidth="33"/>
+                                    <ColumnConstraints percentWidth="33"/>
+                                    <ColumnConstraints percentWidth="33"/>
+                                </columnConstraints>
+                            </GridPane>
+                        </VBox>
+
+                        <!-- Recommended Actions -->
+                        <VBox fx:id="actionsBox" styleClass="actions-section">
+                            <Label text="Recommended Actions" styleClass="section-header"/>
+                            <TextArea fx:id="actionsTextArea" editable="false" wrapText="true"
+                                     prefHeight="120" styleClass="actions-text"/>
+                        </VBox>
+                    </VBox>
+                </ScrollPane>
+            </Tab>
+
+            <!-- Tab 2: Critical Issues -->
+            <Tab text="Critical Issues" fx:id="criticalTab" closable="false">
+                <ScrollPane fitToWidth="true">
+                    <VBox spacing="10" fx:id="criticalIssuesBox">
+                        <padding>
+                            <Insets top="20" right="20" bottom="20" left="20"/>
+                        </padding>
+                    </VBox>
+                </ScrollPane>
+            </Tab>
+
+            <!-- Tab 3: Warnings -->
+            <Tab text="Warnings" fx:id="warningsTab" closable="false">
+                <ScrollPane fitToWidth="true">
+                    <VBox spacing="10" fx:id="warningsBox">
+                        <padding>
+                            <Insets top="20" right="20" bottom="20" left="20"/>
+                        </padding>
+                    </VBox>
+                </ScrollPane>
+            </Tab>
+
+            <!-- Tab 4: Detailed Report -->
+            <Tab text="Detailed Report" closable="false">
+                <ScrollPane fitToWidth="true">
+                    <VBox spacing="15" fx:id="detailedReportBox">
+                        <padding>
+                            <Insets top="20" right="20" bottom="20" left="20"/>
+                        </padding>
+                    </VBox>
+                </ScrollPane>
+            </Tab>
+        </TabPane>
+    </center>
+
+    <!-- Bottom: Action Buttons -->
+    <bottom>
+        <HBox spacing="10" alignment="CENTER_RIGHT" styleClass="button-bar">
+            <padding>
+                <Insets top="15" right="20" bottom="15" left="20"/>
+            </padding>
+
+            <Button fx:id="refreshButton" text="Refresh Report" onAction="#handleRefresh"
+                    styleClass="secondary-button"/>
+            <Button fx:id="exportButton" text="Export to PDF" onAction="#handleExport"
+                    styleClass="secondary-button"/>
+            <Button fx:id="closeButton" text="Close" onAction="#handleClose"
+                    styleClass="primary-button"/>
+        </HBox>
+    </bottom>
+</BorderPane>

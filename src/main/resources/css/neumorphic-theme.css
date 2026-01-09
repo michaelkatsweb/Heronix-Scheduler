@@ -1,0 +1,577 @@
+/*
+ * ═══════════════════════════════════════════════════════════════════════
+ * NEUMORPHIC THEME - Modern Soft UI Design
+ * Location: src/main/resources/css/neumorphic-theme.css
+ *
+ * A modern, elegant neumorphic design system for EduScheduler Pro.
+ * Features soft shadows, subtle depth, and smooth transitions.
+ *
+ * Supports both Light and Dark modes.
+ *
+ * @version 1.0.0
+ * @since 2025-11-04
+ * ═══════════════════════════════════════════════════════════════════════
+ */
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * ROOT COLOR VARIABLES - Light Mode (Default)
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+.root {
+    /* Background Colors */
+    -fx-base-background: #1e2230;
+    -fx-surface-background: #1e2230;
+    -fx-card-background: #1e2230;
+
+    /* Text Colors */
+    -fx-text-primary: #2C3E50;
+    -fx-text-secondary: #7F8C8D;
+    -fx-text-tertiary: #95A5A6;
+    -fx-text-inverted: #FFFFFF;
+
+    /* Shadow Colors - Neumorphic Effect */
+    -fx-shadow-light: rgba(255, 255, 255, 0.8);
+    -fx-shadow-dark: rgba(163, 177, 198, 0.6);
+    -fx-shadow-inset-light: rgba(255, 255, 255, 0.5);
+    -fx-shadow-inset-dark: rgba(163, 177, 198, 0.4);
+
+    /* Accent Colors */
+    -fx-accent-primary: #3498DB;
+    -fx-accent-success: #27AE60;
+    -fx-accent-warning: #F39C12;
+    -fx-accent-danger: #E74C3C;
+    -fx-accent-info: #9B59B6;
+
+    /* Border Colors */
+    -fx-border-subtle: rgba(0, 0, 0, 0.05);
+    -fx-border-medium: rgba(0, 0, 0, 0.1);
+
+    /* Subject Colors (for schedule legend) */
+    -fx-subject-math: #3498DB;        /* Blue */
+    -fx-subject-language: #27AE60;    /* Green */
+    -fx-subject-social: #F39C12;      /* Orange */
+    -fx-subject-arts: #9B59B6;        /* Purple */
+    -fx-subject-physical: #E74C3C;    /* Red */
+    -fx-subject-science: #F1C40F;     /* Yellow */
+    -fx-subject-break: #95A5A6;       /* Gray */
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * DARK MODE COLOR VARIABLES
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+.root.dark-mode {
+    /* Background Colors */
+    -fx-base-background: #1E2127;
+    -fx-surface-background: #1E2127;
+    -fx-card-background: #1E2127;
+
+    /* Text Colors */
+    -fx-text-primary: #E4EBF5;
+    -fx-text-secondary: #cacaca;
+    -fx-text-tertiary: #b7b8b8;
+    -fx-text-inverted: #1E2127;
+
+    /* Shadow Colors - Neumorphic Effect (Dark) */
+    -fx-shadow-light: rgba(44, 48, 56, 0.8);
+    -fx-shadow-dark: rgba(0, 0, 0, 0.8);
+    -fx-shadow-inset-light: rgba(44, 48, 56, 0.5);
+    -fx-shadow-inset-dark: rgba(0, 0, 0, 0.6);
+
+    /* Border Colors */
+    -fx-border-subtle: rgba(255, 255, 255, 0.05);
+    -fx-border-medium: rgba(255, 255, 255, 0.1);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * BASE COMPONENTS
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+/* Root Container */
+.root {
+    -fx-background-color: -fx-base-background;
+    -fx-font-family: "Segoe UI", "San Francisco", "Helvetica Neue", Arial, sans-serif;
+    -fx-font-size: 14px;
+}
+
+/* Neumorphic Surface - Raised */
+.neumorphic-surface {
+    -fx-background-color: -fx-surface-background;
+    -fx-background-radius: 16px;
+    -fx-effect: dropshadow(gaussian, -fx-shadow-dark, 12, 0, 6, 6),
+                dropshadow(gaussian, -fx-shadow-light, 12, 0, -6, -6);
+}
+
+/* Neumorphic Surface - Pressed/Inset */
+.neumorphic-inset {
+    -fx-background-color: -fx-surface-background;
+    -fx-background-radius: 16px;
+    -fx-effect: innershadow(gaussian, -fx-shadow-dark, 10, 0, 4, 4),
+                innershadow(gaussian, -fx-shadow-light, 10, 0, -4, -4);
+}
+
+/* Neumorphic Card */
+.neumorphic-card {
+    -fx-background-color: -fx-card-background;
+    -fx-background-radius: 20px;
+    -fx-padding: 20px;
+    -fx-effect: dropshadow(gaussian, -fx-shadow-dark, 15, 0, 8, 8),
+                dropshadow(gaussian, -fx-shadow-light, 15, 0, -8, -8);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * BUTTONS
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+.button {
+    -fx-background-color: -fx-surface-background;
+    -fx-text-fill: -fx-text-primary;
+    -fx-background-radius: 12px;
+    -fx-padding: 10px 20px;
+    -fx-cursor: hand;
+    -fx-font-weight: 600;
+    -fx-effect: dropshadow(gaussian, -fx-shadow-dark, 8, 0, 4, 4),
+                dropshadow(gaussian, -fx-shadow-light, 8, 0, -4, -4);
+    -fx-transition: all 0.2s ease;
+}
+
+.button:hover {
+    -fx-effect: dropshadow(gaussian, -fx-shadow-dark, 12, 0, 6, 6),
+                dropshadow(gaussian, -fx-shadow-light, 12, 0, -6, -6);
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+}
+
+.button:pressed {
+    -fx-effect: innershadow(gaussian, -fx-shadow-dark, 8, 0, 3, 3),
+                innershadow(gaussian, -fx-shadow-light, 8, 0, -3, -3);
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+}
+
+/* Primary Button */
+.button-primary {
+    -fx-background-color: -fx-accent-primary;
+    -fx-text-fill: white;
+}
+
+/* Success Button */
+.button-success {
+    -fx-background-color: -fx-accent-success;
+    -fx-text-fill: white;
+}
+
+/* Warning Button */
+.button-warning {
+    -fx-background-color: -fx-accent-warning;
+    -fx-text-fill: white;
+}
+
+/* Danger Button */
+.button-danger {
+    -fx-background-color: -fx-accent-danger;
+    -fx-text-fill: white;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * TEXT FIELDS & TEXT AREAS
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+.text-field, .text-area {
+    -fx-background-color: -fx-surface-background;
+    -fx-text-fill: -fx-text-primary;
+    -fx-prompt-text-fill: -fx-text-tertiary;
+    -fx-background-radius: 12px;
+    -fx-padding: 12px 16px;
+    -fx-effect: innershadow(gaussian, -fx-shadow-dark, 6, 0, 3, 3),
+                innershadow(gaussian, -fx-shadow-light, 6, 0, -3, -3);
+    -fx-border-color: transparent;
+}
+
+.text-field:focused, .text-area:focused {
+    -fx-effect: innershadow(gaussian, -fx-accent-primary, 8, 0, 0, 0),
+                innershadow(gaussian, -fx-shadow-dark, 6, 0, 3, 3),
+                innershadow(gaussian, -fx-shadow-light, 6, 0, -3, -3);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * COMBO BOXES & CHOICE BOXES
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+.combo-box, .choice-box {
+    -fx-background-color: -fx-surface-background;
+    -fx-background-radius: 12px;
+    -fx-effect: dropshadow(gaussian, -fx-shadow-dark, 8, 0, 4, 4),
+                dropshadow(gaussian, -fx-shadow-light, 8, 0, -4, -4);
+}
+
+.combo-box .list-cell, .choice-box .list-cell {
+    -fx-text-fill: -fx-text-primary;
+    -fx-background-color: transparent;
+}
+
+.combo-box-popup .list-view {
+    -fx-background-color: -fx-surface-background;
+    -fx-effect: dropshadow(gaussian, -fx-shadow-dark, 15, 0, 8, 8);
+    -fx-background-radius: 12px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * LABELS
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+.label {
+    -fx-text-fill: -fx-text-primary;
+}
+
+.label-secondary {
+    -fx-text-fill: -fx-text-secondary;
+}
+
+.label-header {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-text-primary;
+}
+
+.label-subheader {
+    -fx-font-size: 18px;
+    -fx-font-weight: 600;
+    -fx-text-fill: -fx-text-primary;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * PROGRESS BAR & PROGRESS INDICATOR
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+.progress-bar {
+    -fx-background-color: -fx-surface-background;
+    -fx-background-radius: 12px;
+    -fx-padding: 4px;
+    -fx-effect: innershadow(gaussian, -fx-shadow-dark, 6, 0, 3, 3),
+                innershadow(gaussian, -fx-shadow-light, 6, 0, -3, -3);
+}
+
+.progress-bar .bar {
+    -fx-background-color: linear-gradient(to right, -fx-accent-primary, -fx-accent-info);
+    -fx-background-radius: 10px;
+    -fx-padding: 8px;
+    -fx-effect: dropshadow(gaussian, -fx-accent-primary, 8, 0.5, 0, 0);
+}
+
+.progress-bar .track {
+    -fx-background-color: transparent;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * SCROLL BAR
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+.scroll-bar {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: -fx-text-tertiary;
+    -fx-background-radius: 8px;
+}
+
+.scroll-bar .thumb:hover {
+    -fx-background-color: -fx-text-secondary;
+}
+
+.scroll-bar .track {
+    -fx-background-color: transparent;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * TAB PANE & TABS
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+.tab-pane {
+    -fx-background-color: transparent;
+}
+
+.tab-pane .tab-header-area {
+    -fx-background-color: -fx-surface-background;
+    -fx-padding: 10px;
+}
+
+.tab {
+    -fx-background-color: -fx-surface-background;
+    -fx-background-radius: 12px 12px 0 0;
+    -fx-padding: 12px 24px;
+    -fx-effect: innershadow(gaussian, -fx-shadow-dark, 4, 0, 2, 2);
+}
+
+.tab:selected {
+    -fx-background-color: -fx-card-background;
+    -fx-effect: dropshadow(gaussian, -fx-shadow-dark, 8, 0, 0, -4);
+}
+
+.tab .tab-label {
+    -fx-text-fill: -fx-text-secondary;
+    -fx-font-weight: 600;
+}
+
+.tab:selected .tab-label {
+    -fx-text-fill: -fx-text-primary;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * TABLE VIEW
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+.table-view {
+    -fx-background-color: -fx-card-background;
+    -fx-background-radius: 16px;
+    -fx-effect: dropshadow(gaussian, -fx-shadow-dark, 12, 0, 6, 6),
+                dropshadow(gaussian, -fx-shadow-light, 12, 0, -6, -6);
+}
+
+.table-view .column-header {
+    -fx-background-color: -fx-surface-background;
+    -fx-text-fill: -fx-text-primary;
+    -fx-font-weight: bold;
+    -fx-padding: 12px;
+}
+
+.table-view .table-cell {
+    -fx-text-fill: -fx-text-primary;
+    -fx-padding: 10px;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: derive(-fx-surface-background, -2%);
+}
+
+.table-row-cell:even {
+    -fx-background-color: -fx-surface-background;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: derive(-fx-accent-primary, 50%);
+    -fx-text-fill: rgba(255, 255, 255, 0.39);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * CHECKBOX & RADIO BUTTON
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+.check-box, .radio-button {
+    -fx-text-fill: -fx-text-primary;
+}
+
+.check-box .box, .radio-button .radio {
+    -fx-background-color: -fx-surface-background;
+    -fx-background-radius: 6px;
+    -fx-effect: innershadow(gaussian, -fx-shadow-dark, 4, 0, 2, 2),
+                innershadow(gaussian, -fx-shadow-light, 4, 0, -2, -2);
+}
+
+.check-box:selected .box, .radio-button:selected .radio {
+    -fx-background-color: -fx-accent-primary;
+    -fx-effect: dropshadow(gaussian, -fx-accent-primary, 6, 0.5, 0, 0);
+}
+
+.check-box .mark, .radio-button .dot {
+    -fx-background-color: white;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * DIALOGS & ALERTS
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+.dialog-pane {
+    -fx-background-color: -fx-card-background;
+    -fx-background-radius: 20px;
+    -fx-effect: dropshadow(gaussian, -fx-shadow-dark, 20, 0, 10, 10);
+}
+
+.dialog-pane .header-panel {
+    -fx-background-color: transparent;
+    -fx-padding: 20px;
+}
+
+.dialog-pane .content {
+    -fx-background-color: transparent;
+    -fx-padding: 20px;
+}
+
+.dialog-pane .button-bar {
+    -fx-background-color: transparent;
+    -fx-padding: 15px 20px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * SEPARATOR
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+.separator {
+    -fx-background-color: -fx-border-subtle;
+}
+
+.separator .line {
+    -fx-border-color: -fx-border-subtle;
+    -fx-border-width: 1px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * TOOLTIP
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+.tooltip {
+    -fx-background-color: derive(-fx-surface-background, -10%);
+    -fx-text-fill: -fx-text-primary;
+    -fx-background-radius: 8px;
+    -fx-padding: 8px 12px;
+    -fx-font-size: 12px;
+    -fx-effect: dropshadow(gaussian, -fx-shadow-dark, 10, 0, 4, 4);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * MENU BAR & MENUS
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+.menu-bar {
+    -fx-background-color: -fx-surface-background;
+    -fx-effect: dropshadow(gaussian, -fx-shadow-dark, 6, 0, 0, 3);
+}
+
+.menu-bar .label {
+    -fx-text-fill: -fx-text-primary;
+    -fx-font-weight: 600;
+}
+
+.context-menu {
+    -fx-background-color: -fx-card-background;
+    -fx-background-radius: 12px;
+    -fx-effect: dropshadow(gaussian, -fx-shadow-dark, 15, 0, 8, 8);
+}
+
+.menu-item {
+    -fx-background-color: transparent;
+    -fx-text-fill: -fx-text-primary;
+    -fx-padding: 8px 16px;
+}
+
+.menu-item:hover {
+    -fx-background-color: derive(-fx-surface-background, -5%);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * SCHEDULE COLOR LEGEND BOXES
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+.legend-box {
+    -fx-min-width: 24px;
+    -fx-min-height: 24px;
+    -fx-max-width: 24px;
+    -fx-max-height: 24px;
+    -fx-background-radius: 6px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 4, 0, 2, 2);
+}
+
+.legend-box-math {
+    -fx-background-color: -fx-subject-math;
+}
+
+.legend-box-language {
+    -fx-background-color: -fx-subject-language;
+}
+
+.legend-box-social {
+    -fx-background-color: -fx-subject-social;
+}
+
+.legend-box-arts {
+    -fx-background-color: -fx-subject-arts;
+}
+
+.legend-box-physical {
+    -fx-background-color: -fx-subject-physical;
+}
+
+.legend-box-science {
+    -fx-background-color: -fx-subject-science;
+}
+
+.legend-box-break {
+    -fx-background-color: -fx-subject-break;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * CALENDAR GRID CELLS
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+.calendar-cell {
+    -fx-background-color: -fx-card-background;
+    -fx-background-radius: 12px;
+    -fx-padding: 8px;
+    -fx-effect: dropshadow(gaussian, -fx-shadow-dark, 6, 0, 3, 3),
+                dropshadow(gaussian, -fx-shadow-light, 6, 0, -3, -3);
+}
+
+.calendar-cell:hover {
+    -fx-effect: dropshadow(gaussian, -fx-shadow-dark, 10, 0, 5, 5),
+                dropshadow(gaussian, -fx-shadow-light, 10, 0, -5, -5);
+    -fx-cursor: hand;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * UTILITY CLASSES
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+.spacing-small {
+    -fx-spacing: 8px;
+}
+
+.spacing-medium {
+    -fx-spacing: 16px;
+}
+
+.spacing-large {
+    -fx-spacing: 24px;
+}
+
+.padding-small {
+    -fx-padding: 8px;
+}
+
+.padding-medium {
+    -fx-padding: 16px;
+}
+
+.padding-large {
+    -fx-padding: 24px;
+}
+
+/* Text Alignment */
+.text-left {
+    -fx-alignment: CENTER_LEFT;
+}
+
+.text-center {
+    -fx-alignment: CENTER;
+}
+
+.text-right {
+    -fx-alignment: CENTER_RIGHT;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * ANIMATIONS (via PseudoClass transitions)
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+.animated {
+    -fx-transition: all 0.3s ease;
+}
+
+.fade-in {
+    -fx-opacity: 0;
+    -fx-transition: opacity 0.3s ease;
+}
+
+.fade-in:visible {
+    -fx-opacity: 1;
+}

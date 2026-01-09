@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      spacing="24"
+      style="-fx-background-color: #f8fafc;">
+    
+    <padding>
+        <Insets top="24" right="24" bottom="24" left="24"/>
+    </padding>
+    
+    <!-- Header Section -->
+    <HBox alignment="CENTER_LEFT" spacing="16">
+        <VBox spacing="4" HBox.hgrow="ALWAYS">
+            <Label text="Dashboard" styleClass="label-title"/>
+            <Label text="Overview of your scheduling system" styleClass="label-subheading"/>
+        </VBox>
+        <Button text="Generate New Schedule" styleClass="button-primary" 
+                onAction="#handleGenerateSchedule"/>
+    </HBox>
+    
+    <!-- Metrics Row -->
+    <HBox spacing="16" VBox.vgrow="NEVER">
+        <!-- Quality Score Card -->
+        <VBox styleClass="metric-card" spacing="12" HBox.hgrow="ALWAYS">
+            <Label text="OPTIMIZATION SCORE" styleClass="metric-title"/>
+            <HBox alignment="BASELINE_LEFT" spacing="8">
+                <Label fx:id="qualityScoreLabel" text="0.0%" styleClass="metric-value"/>
+                <Label fx:id="qualityTrendLabel" text="↑ 5.2%" 
+                       style="-fx-text-fill: #10b981; -fx-font-size: 16; -fx-font-weight: 600;"/>
+            </HBox>
+            <ProgressBar fx:id="qualityProgressBar" progress="0.0" 
+                        style="-fx-accent: #10b981;" 
+                        maxWidth="Infinity"/>
+            <Label text="Target: >90%" styleClass="metric-subtitle"/>
+        </VBox>
+        
+        <!-- Efficiency Card -->
+        <VBox styleClass="metric-card" spacing="12" HBox.hgrow="ALWAYS">
+            <Label text="EFFICIENCY RATE" styleClass="metric-title"/>
+            <HBox alignment="BASELINE_LEFT" spacing="8">
+                <Label fx:id="efficiencyScoreLabel" text="0.0%" styleClass="metric-value"/>
+                <Label fx:id="efficiencyTrendLabel" text="↑ 3.1%" 
+                       style="-fx-text-fill: #10b981; -fx-font-size: 16; -fx-font-weight: 600;"/>
+            </HBox>
+            <ProgressBar fx:id="efficiencyProgressBar" progress="0.0" 
+                        style="-fx-accent: #2563eb;" 
+                        maxWidth="Infinity"/>
+            <Label text="Target: >85%" styleClass="metric-subtitle"/>
+        </VBox>
+        
+        <!-- Conflicts Card -->
+        <VBox styleClass="metric-card" spacing="12" HBox.hgrow="ALWAYS">
+            <Label text="CONFLICTS" styleClass="metric-title"/>
+            <HBox alignment="BASELINE_LEFT" spacing="8">
+                <Label fx:id="conflictsLabel" text="0" styleClass="metric-value"
+                       style="-fx-text-fill: #10b981;"/>
+                <Label text="✓ RESOLVED" 
+                       style="-fx-text-fill: #10b981; -fx-font-size: 16; -fx-font-weight: 600;"/>
+            </HBox>
+            <ProgressBar progress="1.0" 
+                        style="-fx-accent: #10b981;" 
+                        maxWidth="Infinity"/>
+            <Label text="Target: 0 conflicts" styleClass="metric-subtitle"/>
+        </VBox>
+        
+        <!-- Utilization Card -->
+        <VBox styleClass="metric-card" spacing="12" HBox.hgrow="ALWAYS">
+            <Label text="RESOURCE UTILIZATION" styleClass="metric-title"/>
+            <HBox alignment="BASELINE_LEFT" spacing="8">
+                <Label fx:id="utilizationLabel" text="0.0%" styleClass="metric-value"
+                       style="-fx-text-fill: #2563eb;"/>
+            </HBox>
+            <ProgressBar fx:id="utilizationProgressBar" progress="0.0" 
+                        style="-fx-accent: #f59e0b;" 
+                        maxWidth="Infinity"/>
+            <Label text="Teachers, Rooms, Time Slots" styleClass="metric-subtitle"/>
+        </VBox>
+    </HBox>
+    
+    <!-- Quick Stats Row -->
+    <HBox spacing="16">
+        <!-- Teachers Card -->
+        <VBox styleClass="metric-card" spacing="8" HBox.hgrow="ALWAYS">
+            <HBox alignment="CENTER_LEFT" spacing="12">
+                <Label text="👨‍🏫" style="-fx-font-size: 32;"/>
+                <VBox spacing="2">
+                    <Label fx:id="teacherCountLabel" text="15" 
+                           style="-fx-font-size: 24; -fx-font-weight: 700; -fx-text-fill: #1e293b;"/>
+                    <Label text="Active Teachers" styleClass="metric-subtitle"/>
+                </VBox>
+            </HBox>
+        </VBox>
+        
+        <!-- Courses Card -->
+        <VBox styleClass="metric-card" spacing="8" HBox.hgrow="ALWAYS">
+            <HBox alignment="CENTER_LEFT" spacing="12">
+                <Label text="📚" style="-fx-font-size: 32;"/>
+                <VBox spacing="2">
+                    <Label fx:id="courseCountLabel" text="20" 
+                           style="-fx-font-size: 24; -fx-font-weight: 700; -fx-text-fill: #1e293b;"/>
+                    <Label text="Total Courses" styleClass="metric-subtitle"/>
+                </VBox>
+            </HBox>
+        </VBox>
+        
+        <!-- Rooms Card -->
+        <VBox styleClass="metric-card" spacing="8" HBox.hgrow="ALWAYS">
+            <HBox alignment="CENTER_LEFT" spacing="12">
+                <Label text="🏫" style="-fx-font-size: 32;"/>
+                <VBox spacing="2">
+                    <Label fx:id="roomCountLabel" text="10" 
+                           style="-fx-font-size: 24; -fx-font-weight: 700; -fx-text-fill: #1e293b;"/>
+                    <Label text="Available Rooms" styleClass="metric-subtitle"/>
+                </VBox>
+            </HBox>
+        </VBox>
+        
+        <!-- Schedules Card -->
+        <VBox styleClass="metric-card" spacing="8" HBox.hgrow="ALWAYS">
+            <HBox alignment="CENTER_LEFT" spacing="12">
+                <Label text="📅" style="-fx-font-size: 32;"/>
+                <VBox spacing="2">
+                    <Label fx:id="scheduleCountLabel" text="0" 
+                           style="-fx-font-size: 24; -fx-font-weight: 700; -fx-text-fill: #1e293b;"/>
+                    <Label text="Generated Schedules" styleClass="metric-subtitle"/>
+                </VBox>
+            </HBox>
+        </VBox>
+    </HBox>
+    
+    <!-- Recent Activity -->
+    <VBox styleClass="metric-card" spacing="16" VBox.vgrow="ALWAYS">
+        <HBox alignment="CENTER_LEFT" spacing="12">
+            <Label text="Recent Activity" styleClass="label-heading" HBox.hgrow="ALWAYS"/>
+            <Button text="View All" style="-fx-text-fill: #2563eb; -fx-background-color: transparent;"/>
+        </HBox>
+        
+        <VBox fx:id="activityList" spacing="12">
+            <!-- Activity items will be added dynamically -->
+            <HBox spacing="12" alignment="CENTER_LEFT" 
+                  style="-fx-padding: 12; -fx-background-color: #f8fafc; -fx-background-radius: 6;">
+                <Label text="✓" style="-fx-text-fill: #10b981; -fx-font-size: 18; -fx-font-weight: 700;"/>
+                <VBox spacing="4" HBox.hgrow="ALWAYS">
+                    <Label text="Schedule generated successfully" 
+                           style="-fx-font-weight: 600; -fx-text-fill: #1e293b;"/>
+                    <Label text="Fall 2025 Master Schedule • Just now" 
+                           style="-fx-text-fill: #64748b; -fx-font-size: 12;"/>
+                </VBox>
+            </HBox>
+        </VBox>
+    </VBox>
+    
+</VBox>

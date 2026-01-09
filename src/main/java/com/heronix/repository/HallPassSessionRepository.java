@@ -1,0 +1,192 @@
+package com.heronix.repository;
+
+import com.heronix.model.domain.HallPassSession;
+import com.heronix.model.domain.HallPassSession.SessionStatus;
+import com.heronix.model.domain.HallPassSession.Destination;
+import com.heronix.model.domain.Student;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+
+/**
+ * Repository for Hall Pass Session operations
+ *
+ * @author Heronix Scheduling System Team
+ * @version 1.0.0
+ * @since December 12, 2025 - QR Attendance System Phase 1
+ */
+@Repository
+public interface HallPassSessionRepository extends JpaRepository<HallPassSession, Long> {
+
+    /**
+     * Find all hall pass sessions for a specific student
+     */
+    List<HallPassSession> findByStudentOrderByDepartureTimeDesc(Student student);
+
+    /**
+     * Find all hall pass sessions for a student by ID
+     */
+    List<HallPassSession> findByStudent_IdOrderByDepartureTimeDesc(Long studentId);
+
+    /**
+     * Find hall pass sessions by status
+     */
+    List<HallPassSession> findByStatusOrderByDepartureTimeDesc(SessionStatus status);
+
+    /**
+     * Find all active hall pass sessions
+     */
+    @Query("SELECT h FROM HallPassSession h WHERE h.status IN ('ACTIVE', 'OVERDUE') ORDER BY h.departureTime DESC")
+    List<HallPassSession> findAllActive();
+
+    /**
+     * Find active hall pass for a specific student
+     */
+    Optional<HallPassSession> findByStudentAndStatus(Student student, SessionStatus status);
+
+    /**
+     * Find active hall pass for a student by ID
+     */
+    @Query("SELECT h FROM HallPassSession h WHERE h.student.id = :studentId AND h.status IN ('ACTIVE', 'OVERDUE')")
+    Optional<HallPassSession> findActiveByStudentId(@Param("studentId") Long studentId);
+
+    /**
+     * Find hall pass sessions for a specific date range
+     */
+    @Query("SELECT h FROM HallPassSession h WHERE h.departureTime >= :startDate " +
+           "AND h.departureTime < :endDate ORDER BY h.departureTime DESC")
+    List<HallPassSession> findByDateRange(
+        @Param("startDate") LocalDateTime startDate,
+        @Param("endDate") LocalDateTime endDate
+    );
+
+    /**
+     * Find hall pass sessions for a student on a specific date
+     */
+    @Query("SELECT h FROM HallPassSession h WHERE h.student.id = :studentId " +
+           "AND h.departureTime >= :startDate AND h.departureTime < :endDate " +
+           "ORDER BY h.departureTime DESC")
+    List<HallPassSession> findByStudentAndDate(
+        @Param("studentId") Long studentId,
+        @Param("startDate") LocalDateTime startDate,
+        @Param("endDate") LocalDateTime endDate
+    );
+
+    /**
+     * Find hall pass sessions by destination
+     */
+    List<HallPassSession> findByDestinationOrderByDepartureTimeDesc(Destination destination);
+
+    /**
+     * Find hall pass sessions from a specific room
+     */
+    List<HallPassSession> findByDepartureRoomOrderByDepartureTimeDesc(String departureRoom);
+
+    /**
+     * Find hall pass sessions for a teacher
+     */
+    List<HallPassSession> findByTeacher_IdOrderByDepartureTimeDesc(Long teacherId);
+
+    /**
+     * Find overdue hall passes (still active and departed more than X minutes ago)
+     */
+    @Query("SELECT h FROM HallPassSession h WHERE h.status = 'ACTIVE' " +
+           "AND h.departureTime < :overdueThreshold ORDER BY h.departureTime ASC")
+    List<HallPassSession> findOverdueSessions(@Param("overdueThreshold") LocalDateTime overdueThreshold);
+
+    /**
+     * Find hall passes that need parent notification (departure)
+     */
+    List<HallPassSession> findByParentNotifiedDepartureFalseOrderByDepartureTimeDesc();
+
+    /**
+     * Find hall passes that need parent notification (return)
+     */
+    @Query("SELECT h FROM HallPassSession h WHERE h.status = 'COMPLETED' " +
+           "AND h.parentNotifiedReturn = false ORDER BY h.returnTime DESC")
+    List<HallPassSession> findNeedingReturnNotification();
+
+    /**
+     * Count active hall passes
+     */
+    @Query("SELECT COUNT(h) FROM HallPassSession h WHERE h.status IN ('ACTIVE', 'OVERDUE')")
+    Long countActive();
+
+    /**
+     * Count active hall passes for a specific student
+     */
+    @Query("SELECT COUNT(h) FROM HallPassSession h WHERE h.student.id = :studentId " +
+           "AND h.status IN ('ACTIVE', 'OVERDUE')")
+    Long countActiveByStudent(@Param("studentId") Long studentId);
+
+    /**
+     * Get average duration for completed sessions
+     */
+    @Query("SELECT AVG(h.durationMinutes) FROM HallPassSession h WHERE h.status = 'COMPLETED' " +
+           "AND h.durationMinutes IS NOT NULL")
+    Double getAverageDuration();
+
+    /**
+     * Get average duration for a specific destination
+     */
+    @Query("SELECT AVG(h.durationMinutes) FROM HallPassSession h WHERE h.status = 'COMPLETED' " +
+           "AND h.destination = :destination AND h.durationMinutes IS NOT NULL")
+    Double getAverageDurationByDestination(@Param("destination") Destination destination);
+
+    /**
+     * Find sessions exceeding a specific duration
+     */
+    @Query("SELECT h FROM HallPassSession h WHERE h.durationMinutes > :minutes " +
+           "ORDER BY h.durationMinutes DESC")
+    List<HallPassSession> findExceedingDuration(@Param("minutes") Integer minutes);
+
+    /**
+     * Get hall pass statistics by destination
+     */
+    @Query("SELECT h.destination, COUNT(h), AVG(h.durationMinutes) FROM HallPassSession h " +
+           "WHERE h.departureTime >= :startDate AND h.departureTime < :endDate " +
+           "AND h.status = 'COMPLETED' GROUP BY h.destination")
+    List<Object[]> getStatisticsByDestination(
+        @Param("startDate") LocalDateTime startDate,
+        @Param("endDate") LocalDateTime endDate
+    );
+
+    /**
+     * Get hall pass statistics by student
+     */
+    @Query("SELECT h.student.id, COUNT(h), AVG(h.durationMinutes), MAX(h.durationMinutes) " +
+           "FROM HallPassSession h WHERE h.departureTime >= :startDate AND h.departureTime < :endDate " +
+           "GROUP BY h.student.id ORDER BY COUNT(h) DESC")
+    List<Object[]> getStatisticsByStudent(
+        @Param("startDate") LocalDateTime startDate,
+        @Param("endDate") LocalDateTime endDate
+    );
+
+    /**
+     * Find abandoned sessions (need admin follow-up)
+     */
+    List<HallPassSession> findByStatusOrderByDepartureTimeAsc(SessionStatus status);
+
+    /**
+     * Count hall passes by student in date range
+     */
+    @Query("SELECT COUNT(h) FROM HallPassSession h WHERE h.student.id = :studentId " +
+           "AND h.departureTime >= :startDate AND h.departureTime < :endDate")
+    Long countByStudentAndDateRange(
+        @Param("studentId") Long studentId,
+        @Param("startDate") LocalDateTime startDate,
+        @Param("endDate") LocalDateTime endDate
+    );
+
+    /**
+     * Find sessions with low facial recognition confidence
+     */
+    @Query("SELECT h FROM HallPassSession h WHERE (h.departureFaceMatchScore < :threshold " +
+           "OR h.returnFaceMatchScore < :threshold) ORDER BY h.departureTime DESC")
+    List<HallPassSession> findLowConfidenceSessions(@Param("threshold") Double threshold);
+}

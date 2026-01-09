@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.eduscheduler.ui.controller.IEPManagementController"
+            stylesheets="@../css/main-style.css"
+            prefWidth="1200" prefHeight="800">
+
+    <!-- Header -->
+    <top>
+        <VBox styleClass="header-section">
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label text="IEP Management" styleClass="header-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="Refresh" onAction="#handleRefresh" styleClass="btn-secondary"/>
+                <Button text="Create New IEP" onAction="#handleCreateIEP" styleClass="btn-primary"/>
+                <Button text="Export Report" onAction="#handleExportReport" styleClass="btn-secondary"/>
+            </HBox>
+            <padding>
+                <Insets top="15" right="20" bottom="15" left="20"/>
+            </padding>
+        </VBox>
+    </top>
+
+    <!-- Center Content -->
+    <center>
+        <VBox spacing="15" styleClass="content-container">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <!-- Search and Filter Section -->
+            <HBox spacing="15" alignment="CENTER_LEFT">
+                <Label text="Search:"/>
+                <TextField fx:id="searchField" promptText="Search by student name or IEP number..."
+                          prefWidth="300" onKeyReleased="#handleSearch"/>
+
+                <Label text="Status:"/>
+                <ComboBox fx:id="statusFilter" promptText="All Statuses" prefWidth="150"
+                         onAction="#handleFilterChange"/>
+
+                <Label text="Case Manager:"/>
+                <ComboBox fx:id="caseManagerFilter" promptText="All Case Managers" prefWidth="180"
+                         onAction="#handleFilterChange"/>
+
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <Button text="Clear Filters" onAction="#handleClearFilters" styleClass="btn-link"/>
+            </HBox>
+
+            <!-- IEP Table -->
+            <TableView fx:id="iepTable" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="studentColumn" text="Student" prefWidth="180" sortable="true"/>
+                    <TableColumn fx:id="iepNumberColumn" text="IEP Number" prefWidth="120" sortable="true"/>
+                    <TableColumn fx:id="statusColumn" text="Status" prefWidth="100" sortable="true"/>
+                    <TableColumn fx:id="startDateColumn" text="Start Date" prefWidth="100" sortable="true"/>
+                    <TableColumn fx:id="endDateColumn" text="End Date" prefWidth="100" sortable="true"/>
+                    <TableColumn fx:id="daysRemainingColumn" text="Days Remaining" prefWidth="120" sortable="true"/>
+                    <TableColumn fx:id="categoryColumn" text="Eligibility" prefWidth="150" sortable="true"/>
+                    <TableColumn fx:id="caseManagerColumn" text="Case Manager" prefWidth="150" sortable="true"/>
+                    <TableColumn fx:id="servicesColumn" text="Services" prefWidth="80" sortable="true"/>
+                    <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="150" sortable="false"/>
+                </columns>
+                <placeholder>
+                    <Label text="No IEPs found. Create a new IEP to get started."/>
+                </placeholder>
+            </TableView>
+
+            <!-- Summary Footer -->
+            <HBox spacing="30" alignment="CENTER_LEFT" styleClass="summary-bar">
+                <padding>
+                    <Insets top="10" right="10" bottom="10" left="10"/>
+                </padding>
+                <Label fx:id="totalIEPsLabel" text="Total: 0"/>
+                <Label fx:id="activeIEPsLabel" text="Active: 0"/>
+                <Label fx:id="draftIEPsLabel" text="Draft: 0"/>
+                <Label fx:id="expiringIEPsLabel" text="Expiring Soon: 0"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="selectionLabel" text="No IEP selected"/>
+            </HBox>
+        </VBox>
+    </center>
+
+    <!-- Context Menu for Table Rows -->
+    <fx:define>
+        <ContextMenu fx:id="rowContextMenu">
+            <items>
+                <MenuItem text="View Details" onAction="#handleViewDetails"/>
+                <MenuItem text="Edit IEP" onAction="#handleEditIEP"/>
+                <SeparatorMenuItem/>
+                <MenuItem text="Add Service" onAction="#handleAddService"/>
+                <MenuItem text="Manage Services" onAction="#handleManageServices"/>
+                <SeparatorMenuItem/>
+                <MenuItem text="Activate IEP" onAction="#handleActivateIEP"/>
+                <MenuItem text="Mark for Review" onAction="#handleMarkForReview"/>
+                <MenuItem text="Expire IEP" onAction="#handleExpireIEP"/>
+                <SeparatorMenuItem/>
+                <MenuItem text="Generate Report" onAction="#handleGenerateIEPReport"/>
+                <MenuItem text="Print IEP" onAction="#handlePrintIEP"/>
+                <SeparatorMenuItem/>
+                <MenuItem text="Delete IEP" onAction="#handleDeleteIEP" style="-fx-text-fill: red;"/>
+            </items>
+        </ContextMenu>
+    </fx:define>
+</BorderPane>

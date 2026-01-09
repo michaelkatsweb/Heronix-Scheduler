@@ -1,0 +1,704 @@
+/*
+ * ═══════════════════════════════════════════════════════════════════════
+ * DARK NEUMORPHIC/GLASSMORPHIC THEME - JavaFX Compatible
+ * Modern 2025 Design with Glass Hover Effects
+ * Inspired by: sample1.PNG + Modern Glassmorphism Trends
+ * ═══════════════════════════════════════════════════════════════════════
+ */
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * ROOT & BASE COLORS
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+.root {
+    -fx-base: #0f1419;
+    -fx-background: #0a0e12;
+    -fx-control-inner-background: #1a1f2e;
+    -fx-control-inner-background-alt: #1f2533;
+    -fx-accent: #5b8def;
+
+    -fx-focus-color: #5b8def;
+    -fx-faint-focus-color: rgba(91, 141, 239, 0.2);
+
+    -fx-default-button: #5b8def;
+    -fx-text-base-color: #e8eaed;
+    -fx-text-fill: #e8eaed;
+
+    -fx-font-family: "Segoe UI", "Inter", "Roboto", sans-serif;
+    -fx-font-size: ;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * CARDS & CONTAINERS - Glassmorphic Design
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+.card {
+    -fx-background-color: rgba(36, 41, 56, 0.7);
+    -fx-background-radius: ;
+    -fx-padding: ;
+    -fx-border-color: rgba(91, 141, 239, 0.25);
+    -fx-border-width: ;
+    -fx-border-radius: ;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 20, 0.3, 0, 8);
+}
+
+/* Removed hover effect from cards - they are not clickable */
+
+.stat-card {
+    -fx-background-color: rgba(36, 41, 56, 0.65);
+    -fx-background-radius: ;
+    -fx-padding: ;
+    -fx-border-color: rgba(91, 141, 239, 0.2);
+    -fx-border-width: ;
+    -fx-border-radius: ;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 15, 0.25, 0, 6);
+}
+
+/* Removed hover effect from stat-cards - they are not clickable */
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * LABELS & TEXT
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+.label {
+    -fx-text-fill: #e8eaed;
+}
+
+.label-title {
+    -fx-font-size: ;
+    -fx-font-weight: 700;
+    -fx-text-fill: #e8eaed;
+}
+
+.label-subtitle {
+    -fx-font-size: ;
+    -fx-font-weight: 600;
+    -fx-text-fill: #b4b8c5;
+}
+
+.label-caption {
+    -fx-font-size: ;
+    -fx-text-fill: #8a8f9e;
+}
+
+.stat-value {
+    -fx-font-size: ;
+    -fx-font-weight: 700;
+    -fx-text-fill: #5b8def;
+}
+
+.stat-label {
+    -fx-font-size: ;
+    -fx-font-weight: 600;
+    -fx-text-fill: #b4b8c5;
+}
+
+.stat-description {
+    -fx-font-size: ;
+    -fx-font-weight: 400;
+    -fx-text-fill: #8a8f9e;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * BUTTONS - Glassmorphic with Hover Effects
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+.button {
+    -fx-background-color: rgba(45, 53, 72, 0.7);
+    -fx-text-fill: #e8eaed;
+    -fx-background-radius: ;
+    -fx-border-color: rgba(91, 141, 239, 0.3);
+    -fx-border-width: ;
+    -fx-border-radius: ;
+    -fx-padding:  ;
+    -fx-font-weight: 500;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0.2, 0, 4);
+}
+
+.button:hover {
+    -fx-background-color: rgba(50, 59, 82, 0.95);
+    -fx-border-color: rgba(91, 141, 239, 0.6);
+    -fx-effect: dropshadow(gaussian, rgba(91, 141, 239, 0.4), 15, 0.4, 0, 6);
+    -fx-scale-x: 1.03;
+    -fx-scale-y: 1.03;
+}
+
+.button:pressed {
+    -fx-background-color: rgba(42, 50, 66, 0.9);
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+}
+
+.button-primary {
+    -fx-background-color: linear-gradient(to bottom, rgba(91, 141, 239, 0.9), rgba(75, 123, 216, 0.9));
+    -fx-text-fill: white;
+    -fx-border-color: rgba(91, 141, 239, 0.5);
+    -fx-effect: dropshadow(gaussian, rgba(91, 141, 239, 0.4), 12, 0.3, 0, 5);
+}
+
+.button-primary:hover {
+    -fx-background-color: linear-gradient(to bottom, rgba(75, 123, 216, 1.0), rgba(91, 141, 239, 1.0));
+    -fx-border-color: rgba(91, 141, 239, 0.8);
+    -fx-effect: dropshadow(gaussian, rgba(91, 141, 239, 0.6), 18, 0.5, 0, 7);
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+
+.button-success {
+    -fx-background-color: linear-gradient(to bottom, rgba(16, 185, 129, 0.9), rgba(14, 168, 113, 0.9));
+    -fx-text-fill: white;
+    -fx-border-color: rgba(16, 185, 129, 0.5);
+    -fx-effect: dropshadow(gaussian, rgba(16, 185, 129, 0.4), 12, 0.3, 0, 5);
+}
+
+.button-success:hover {
+    -fx-background-color: linear-gradient(to bottom, rgba(14, 168, 113, 1.0), rgba(16, 185, 129, 1.0));
+    -fx-border-color: rgba(16, 185, 129, 0.8);
+    -fx-effect: dropshadow(gaussian, rgba(16, 185, 129, 0.6), 18, 0.5, 0, 7);
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+
+.button-warning {
+    -fx-background-color: linear-gradient(to bottom, rgba(245, 158, 11, 0.9), rgba(217, 119, 6, 0.9));
+    -fx-text-fill: white;
+    -fx-border-color: rgba(245, 158, 11, 0.5);
+    -fx-effect: dropshadow(gaussian, rgba(245, 158, 11, 0.4), 12, 0.3, 0, 5);
+}
+
+.button-warning:hover {
+    -fx-background-color: linear-gradient(to bottom, rgba(217, 119, 6, 1.0), rgba(245, 158, 11, 1.0));
+    -fx-border-color: rgba(245, 158, 11, 0.8);
+    -fx-effect: dropshadow(gaussian, rgba(245, 158, 11, 0.6), 18, 0.5, 0, 7);
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+
+.button-danger {
+    -fx-background-color: linear-gradient(to bottom, rgba(239, 68, 68, 0.9), rgba(220, 38, 38, 0.9));
+    -fx-text-fill: white;
+    -fx-border-color: rgba(239, 68, 68, 0.5);
+    -fx-effect: dropshadow(gaussian, rgba(239, 68, 68, 0.4), 12, 0.3, 0, 5);
+}
+
+.button-danger:hover {
+    -fx-background-color: linear-gradient(to bottom, rgba(220, 38, 38, 1.0), rgba(239, 68, 68, 1.0));
+    -fx-border-color: rgba(239, 68, 68, 0.8);
+    -fx-effect: dropshadow(gaussian, rgba(239, 68, 68, 0.6), 18, 0.5, 0, 7);
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * TEXT INPUTS - Glassmorphic Design
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+.text-field,
+.text-area {
+    -fx-background-color: rgba(26, 31, 46, 0.6);
+    -fx-text-fill: #e8eaed;
+    -fx-prompt-text-fill: #6b7280;
+    -fx-highlight-fill: #5b8def;
+    -fx-highlight-text-fill: white;
+    -fx-background-radius: ;
+    -fx-border-color: rgba(91, 141, 239, 0.25);
+    -fx-border-width: ;
+    -fx-border-radius: ;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 8, 0.2, 0, 3);
+}
+
+.text-field:focused,
+.text-area:focused {
+    -fx-border-color: rgba(91, 141, 239, 0.8);
+    -fx-border-width: ;
+    -fx-background-color: rgba(31, 37, 51, 0.8);
+    -fx-effect: dropshadow(gaussian, rgba(91, 141, 239, 0.4), 12, 0.4, 0, 4);
+}
+
+/* ComboBox - Glassmorphic */
+.combo-box-base {
+    -fx-background-color: rgba(26, 31, 46, 0.6);
+    -fx-background-radius: ;
+    -fx-border-color: rgba(91, 141, 239, 0.25);
+    -fx-border-width: ;
+    -fx-border-radius: ;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 8, 0.2, 0, 3);
+}
+
+.combo-box-base:focused {
+    -fx-border-color: rgba(91, 141, 239, 0.8);
+    -fx-border-width: ;
+    -fx-effect: dropshadow(gaussian, rgba(91, 141, 239, 0.4), 12, 0.4, 0, 4);
+}
+
+.combo-box-base .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: #e8eaed;
+}
+
+.combo-box-popup .list-view {
+    -fx-background-color: rgba(36, 41, 56, 0.95);
+    -fx-border-color: rgba(91, 141, 239, 0.4);
+    -fx-border-width: ;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 15, 0.3, 0, 6);
+}
+
+.combo-box-popup .list-view .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: #e8eaed;
+}
+
+.combo-box-popup .list-view .list-cell:hover {
+    -fx-background-color: rgba(91, 141, 239, 0.2);
+    -fx-effect: dropshadow(gaussian, rgba(91, 141, 239, 0.3), 8, 0.3, 0, 2);
+}
+
+.combo-box-popup .list-view .list-cell:selected {
+    -fx-background-color: rgba(91, 141, 239, 0.35);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * TABLES - Glassmorphic with Glass Hover Effect
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+.table-view {
+    -fx-background-color: transparent;
+    -fx-table-cell-border-color: transparent;
+    -fx-control-inner-background: transparent;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: rgba(45, 53, 72, 0.7);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0.2, 0, 4);
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+    -fx-text-fill: #b4b8c5;
+    -fx-font-weight: 600;
+    -fx-border-color: rgba(91, 141, 239, 0.2);
+    -fx-border-width: 0 0 1.5 0;
+    -fx-padding: ;
+}
+
+.table-view .table-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: #e8eaed;
+    -fx-border-color: transparent;
+    -fx-padding: ;
+}
+
+.table-row-cell {
+    -fx-background-color: transparent;
+    -fx-table-cell-border-color: transparent;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: rgba(255, 255, 255, 0.02);
+}
+
+.table-row-cell:hover {
+    -fx-background-color: rgba(91, 141, 239, 0.35);
+    -fx-effect: dropshadow(gaussian, rgba(91, 141, 239, 0.3), 10, 0.3, 0, 3);
+    -fx-scale-x: 1.005;
+    -fx-scale-y: 1.005;
+}
+
+.table-row-cell:hover .table-cell {
+    -fx-text-fill: #000000;
+    -fx-font-weight: 500;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: rgba(91, 141, 239, 0.2);
+    -fx-table-cell-border-color: transparent;
+    -fx-effect: dropshadow(gaussian, rgba(91, 141, 239, 0.35), 12, 0.4, 0, 4);
+}
+
+.table-row-cell:selected .table-cell {
+    -fx-text-fill: #ffffff;
+}
+
+.table-view .filler {
+    -fx-background-color: transparent;
+}
+
+.table-view:focused .table-row-cell:selected {
+    -fx-background-color: rgba(91, 141, 239, 0.25);
+    -fx-effect: dropshadow(gaussian, rgba(91, 141, 239, 0.45), 14, 0.5, 0, 5);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * SCROLL BARS
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+.scroll-bar {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: #6b7280;
+    -fx-background-radius: ;
+}
+
+.scroll-bar .thumb:hover {
+    -fx-background-color: #8a8f9e;
+}
+
+.scroll-bar .track {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+.scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane > .corner {
+    -fx-background-color: #242938;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * TAB PANE - Glassmorphic
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+.tab-pane {
+    -fx-background-color: transparent;
+}
+
+.tab-pane .tab-header-area {
+    -fx-background-color: rgba(36, 41, 56, 0.6);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0.2, 0, 4);
+}
+
+.tab-pane .tab-header-background {
+    -fx-background-color: rgba(36, 41, 56, 0.6);
+}
+
+.tab {
+    -fx-background-color: transparent;
+    -fx-text-fill: #b4b8c5;
+    -fx-background-radius:   0 0;
+}
+
+.tab:selected {
+    -fx-background-color: rgba(91, 141, 239, 0.9);
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(gaussian, rgba(91, 141, 239, 0.5), 12, 0.4, 0, 4);
+}
+
+.tab:hover {
+    -fx-background-color: rgba(91, 141, 239, 0.2);
+    -fx-effect: dropshadow(gaussian, rgba(91, 141, 239, 0.25), 8, 0.3, 0, 2);
+}
+
+.tab-pane .tab-content-area {
+    -fx-background-color: transparent;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * CHECKBOXES & RADIO BUTTONS
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+.check-box,
+.radio-button {
+    -fx-text-fill: #e8eaed;
+}
+
+.check-box .box {
+    -fx-background-color: #1a1f2e;
+    -fx-border-color: rgba(91, 141, 239, 0.3);
+    -fx-border-radius: ;
+}
+
+.check-box:selected .box {
+    -fx-background-color: #5b8def;
+    -fx-border-color: #5b8def;
+}
+
+.check-box:selected .mark {
+    -fx-background-color: white;
+}
+
+.radio-button .radio {
+    -fx-background-color: #1a1f2e;
+    -fx-border-color: rgba(91, 141, 239, 0.3);
+}
+
+.radio-button:selected .radio {
+    -fx-background-color: transparent;
+    -fx-border-color: #5b8def;
+}
+
+.radio-button:selected .dot {
+    -fx-background-color: #5b8def;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * SEPARATORS
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+.separator .line {
+    -fx-background-color: rgba(91, 141, 239, 0.15);
+    -fx-border-color: rgba(91, 141, 239, 0.15);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * PROGRESS BAR
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+.progress-bar .track {
+    -fx-background-color: #2d3548;
+    -fx-background-radius: ;
+}
+
+.progress-bar .bar {
+    -fx-background-color: #5b8def;
+    -fx-background-radius: ;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * MENUS - Glassmorphic
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+.menu-bar {
+    -fx-background-color: rgba(36, 41, 56, 0.8);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0.2, 0, 4);
+}
+
+.menu-bar .label {
+    -fx-text-fill: #e8eaed;
+}
+
+.menu-bar .menu .label {
+    -fx-text-fill: #e8eaed;
+}
+
+.menu-item {
+    -fx-background-color: transparent;
+    -fx-text-fill: #e8eaed;
+}
+
+.menu-item .label {
+    -fx-text-fill: #e8eaed;
+}
+
+.menu-item:hover,
+.menu-item:focused {
+    -fx-background-color: rgba(91, 141, 239, 0.25);
+    -fx-effect: dropshadow(gaussian, rgba(91, 141, 239, 0.3), 6, 0.3, 0, 2);
+}
+
+.context-menu {
+    -fx-background-color: rgba(36, 41, 56, 0.95);
+    -fx-border-color: rgba(91, 141, 239, 0.4);
+    -fx-border-width: ;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 20, 0.4, 0, 8);
+}
+
+/* Toolbar - Glassmorphic */
+.tool-bar {
+    -fx-background-color: rgba(36, 41, 56, 0.7);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 8, 0.2, 0, 3);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * TOOLTIPS - Glassmorphic
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+.tooltip {
+    -fx-background-color: rgba(45, 53, 72, 0.95);
+    -fx-text-fill: #e8eaed;
+    -fx-border-color: rgba(91, 141, 239, 0.4);
+    -fx-border-width: ;
+    -fx-background-radius: ;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 15, 0.4, 0, 6);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * DIALOGS - Glassmorphic
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+.dialog-pane {
+    -fx-background-color: rgba(36, 41, 56, 0.95);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 30, 0.5, 0, 10);
+}
+
+.dialog-pane .header-panel {
+    -fx-background-color: rgba(45, 53, 72, 0.9);
+    -fx-border-color: rgba(91, 141, 239, 0.3);
+    -fx-border-width: 0 0 1.5 0;
+}
+
+.dialog-pane .content {
+    -fx-background-color: rgba(36, 41, 56, 0.95);
+}
+
+.dialog-pane .button-bar {
+    -fx-background-color: rgba(36, 41, 56, 0.95);
+    -fx-border-color: rgba(91, 141, 239, 0.2);
+    -fx-border-width: 1.5 0 0 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * ACCENT COLOR UTILITIES
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+.accent-blue { -fx-text-fill: #5b8def; }
+.accent-primary { -fx-text-fill: #5b8def; }
+.accent-success { -fx-text-fill: #10b981; }
+.accent-green { -fx-text-fill: #10b981; }
+.accent-warning { -fx-text-fill: #f59e0b; }
+.accent-orange { -fx-text-fill: #f59e0b; }
+.accent-danger { -fx-text-fill: #ef4444; }
+.accent-red { -fx-text-fill: #ef4444; }
+.accent-purple { -fx-text-fill: #8b5cf6; }
+.accent-info { -fx-text-fill: #8b5cf6; }
+.accent-cyan { -fx-text-fill: #06b6d4; }
+.accent-pink { -fx-text-fill: #ec4899; }
+.accent-muted { -fx-text-fill: #6b7280; }
+
+.bg-blue { -fx-background-color: rgba(91, 141, 239, 0.15); }
+.bg-green { -fx-background-color: rgba(16, 185, 129, 0.15); }
+.bg-orange { -fx-background-color: rgba(245, 158, 11, 0.15); }
+.bg-red { -fx-background-color: rgba(239, 68, 68, 0.15); }
+.bg-purple { -fx-background-color: rgba(139, 92, 246, 0.15); }
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * COMMAND PALETTE (Ctrl+K) - Global Search
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+.command-palette-container {
+    -fx-background-color: rgba(26, 31, 46, 0.98);
+    -fx-background-radius: ;
+    -fx-border-color: rgba(91, 141, 239, 0.4);
+    -fx-border-width: ;
+    -fx-border-radius: ;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 30, 0.4, 0, 10);
+}
+
+.command-palette-search-box {
+    -fx-background-color: rgba(31, 37, 51, 0.8);
+    -fx-background-radius: 0;
+    -fx-border-color: transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-border-style: solid;
+}
+
+.command-palette-filter-bar {
+    -fx-background-color: rgba(21, 26, 36, 0.6);
+    -fx-padding: 8 10;
+}
+
+.filter-pill {
+    -fx-background-color: rgba(91, 141, 239, 0.1);
+    -fx-background-radius: ;
+    -fx-text-fill: #a8b3c7;
+    -fx-font-size: ;
+    -fx-padding: 6 14;
+    -fx-border-color: transparent;
+    -fx-border-width: ;
+    -fx-border-radius: ;
+    -fx-cursor: hand;
+}
+
+.filter-pill:hover {
+    -fx-background-color: rgba(91, 141, 239, 0.2);
+    -fx-text-fill: #e8eaed;
+}
+
+.filter-pill:selected {
+    -fx-background-color: #5b8def;
+    -fx-text-fill: #ffffff;
+    -fx-border-color: #5b8def;
+}
+
+.command-palette-results {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 5;
+}
+
+.command-palette-results .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: #e8eaed;
+    -fx-padding: 10 15;
+    -fx-background-radius: ;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+}
+
+.command-palette-results .list-cell:hover {
+    -fx-background-color: rgba(91, 141, 239, 0.15);
+}
+
+.command-palette-results .list-cell:selected {
+    -fx-background-color: rgba(91, 141, 239, 0.25);
+    -fx-text-fill: #ffffff;
+}
+
+.command-palette-results .list-cell:focused {
+    -fx-border-color: rgba(91, 141, 239, 0.5);
+    -fx-border-width: ;
+}
+
+.command-palette-footer {
+    -fx-background-color: rgba(21, 26, 36, 0.7);
+    -fx-background-radius: 0 0 12 12;
+    -fx-border-color: rgba(91, 141, 239, 0.15);
+    -fx-border-width: 1 0 0 0;
+}
+
+.search-field {
+    -fx-background-color: transparent;
+    -fx-text-fill: #e8eaed;
+    -fx-prompt-text-fill: #6b7280;
+    -fx-font-size: ;
+    -fx-padding: 2 0;
+}
+
+.search-field:focused {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+ * INLINE TABLE EDITING
+ * ═══════════════════════════════════════════════════════════════════════ */
+
+.editable-table-cell {
+    -fx-cursor: hand;
+}
+
+.editable-table-cell:hover {
+    -fx-background-color: rgba(91, 141, 239, 0.08);
+    -fx-border-color: rgba(91, 141, 239, 0.3);
+    -fx-border-width: 0 0 1 0;
+}
+
+.editable-table-cell .text-field {
+    -fx-background-color: rgba(91, 141, 239, 0.15);
+    -fx-text-fill: #e8eaed;
+    -fx-border-color: #5b8def;
+    -fx-border-width: ;
+    -fx-border-radius: ;
+    -fx-background-radius: ;
+    -fx-padding: 4 8;
+    -fx-font-size: ;
+}
+
+.editable-table-cell .text-field:focused {
+    -fx-background-color: rgba(91, 141, 239, 0.2);
+    -fx-border-color: #5b8def;
+    -fx-effect: dropshadow(gaussian, rgba(91, 141, 239, 0.4), 8, 0.3, 0, 0);
+}

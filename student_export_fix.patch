@@ -1,0 +1,11 @@
+--- a/src/main/java/com/eduscheduler/ui/controller/StudentsController.java
++++ b/src/main/java/com/eduscheduler/ui/controller/StudentsController.java
+@@ -315,7 +315,7 @@
+     private String escapeCsv(String value) {
+         if (value == null) return "";
+-        if (value.contains(",") || value.contains("\"") || value.contains("
+-")) {
++        if (value.contains(",") || value.contains("\"") || value.contains("\n")) {
+             return "\"" + value.replace("\"", "\"\"") + "\"";
+         }
+         return value;

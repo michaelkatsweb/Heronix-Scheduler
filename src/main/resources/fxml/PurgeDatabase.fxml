@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<!--
+    Purge Database Confirmation Dialog
+    Location: src/main/resources/fxml/PurgeDatabase.fxml
+
+    Nuclear option - Deletes ALL data from database
+    Requires confirmation before proceeding
+-->
+<VBox xmlns="http://javafx.com/javafx/21"
+    xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="com.eduscheduler.ui.controller.PurgeDatabaseController"
+    spacing="20"
+    style="-fx-background-color: white; -fx-padding: 30;">
+
+    <!-- Warning Icon and Title -->
+    <VBox alignment="CENTER" spacing="15">
+        <Label text="⚠️" style="-fx-font-size: 64; -fx-text-fill: #F44336;" />
+        <Label text="PURGE DATABASE" style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #F44336;" />
+        <Label text="WARNING: This action is IRREVERSIBLE!" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #FF5722;" />
+    </VBox>
+
+    <Separator />
+
+    <!-- Warning Message -->
+    <VBox spacing="12" style="-fx-background-color: #FFEBEE; -fx-padding: 20; -fx-background-radius: 8;">
+        <Label text="This operation will DELETE ALL DATA from the database:"
+            style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #C62828;" />
+
+        <VBox spacing="8" style="-fx-padding: 0 0 0 20;">
+            <Label text="❌ All Teachers and certifications" style="-fx-text-fill: #D32F2F;" />
+            <Label text="❌ All Students and enrollments" style="-fx-text-fill: #D32F2F;" />
+            <Label text="❌ All Courses and prerequisites" style="-fx-text-fill: #D32F2F;" />
+            <Label text="❌ All Rooms and equipment" style="-fx-text-fill: #D32F2F;" />
+            <Label text="❌ All Schedules and assignments" style="-fx-text-fill: #D32F2F;" />
+            <Label text="❌ All Events and conflicts" style="-fx-text-fill: #D32F2F;" />
+            <Label text="❌ All Substitutes, Paraprofessionals, Co-Teachers" style="-fx-text-fill: #D32F2F;" />
+        </VBox>
+
+        <Label text="⚠️ User accounts will NOT be deleted (only data)"
+            style="-fx-font-size: 12; -fx-font-style: italic; -fx-text-fill: #666; -fx-padding: 10 0 0 0;" />
+    </VBox>
+
+    <!-- Use Cases -->
+    <VBox spacing="10" style="-fx-background-color: #E3F2FD; -fx-padding: 15; -fx-background-radius: 8;">
+        <Label text="ℹ️ When to use this:" style="-fx-font-weight: bold; -fx-text-fill: #1976D2;" />
+        <VBox spacing="5" style="-fx-padding: 0 0 0 20;">
+            <Label text="• Testing CSV imports with fresh data" style="-fx-text-fill: #0277BD;" />
+            <Label text="• Starting a new school year" style="-fx-text-fill: #0277BD;" />
+            <Label text="• Clearing test/demo data before production use" style="-fx-text-fill: #0277BD;" />
+            <Label text="• Fixing corrupted data issues" style="-fx-text-fill: #0277BD;" />
+        </VBox>
+    </VBox>
+
+    <!-- Confirmation Section -->
+    <VBox spacing="15">
+        <Label text="To confirm, type: DELETE ALL DATA"
+            style="-fx-font-weight: bold; -fx-font-size: 13; -fx-text-fill: #333;" />
+
+        <TextField fx:id="confirmationField" promptText="Type here to confirm..."
+            style="-fx-font-size: 14; -fx-padding: 10; -fx-border-color: #F44336; -fx-border-width: 2; -fx-border-radius: 5; -fx-background-radius: 5;" />
+
+        <CheckBox fx:id="confirmCheckbox" text="I understand this action cannot be undone"
+            style="-fx-font-weight: bold; -fx-text-fill: #D32F2F;" />
+
+        <Label fx:id="errorLabel" text="" style="-fx-text-fill: #F44336; -fx-font-weight: bold;" visible="false" />
+    </VBox>
+
+    <Separator />
+
+    <!-- Action Buttons -->
+    <HBox spacing="15" alignment="CENTER">
+        <Button text="❌ PURGE DATABASE" onAction="#handlePurge" fx:id="purgeButton"
+            disable="true"
+            style="-fx-background-color: #F44336; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14; -fx-padding: 12 40; -fx-cursor: hand; -fx-background-radius: 6;">
+            <font>
+                <Font name="System Bold" size="14" />
+            </font>
+        </Button>
+
+        <Button text="✅ Cancel (Safe)" onAction="#handleCancel"
+            style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14; -fx-padding: 12 40; -fx-cursor: hand; -fx-background-radius: 6;">
+            <font>
+                <Font name="System Bold" size="14" />
+            </font>
+        </Button>
+    </HBox>
+
+    <!-- Progress Indicator (hidden by default) -->
+    <VBox fx:id="progressContainer" spacing="10" alignment="CENTER" visible="false" style="-fx-padding: 20;">
+        <ProgressBar fx:id="progressBar" prefWidth="400" />
+        <Label fx:id="progressLabel" text="Purging database..." style="-fx-font-weight: bold;" />
+    </VBox>
+
+</VBox>

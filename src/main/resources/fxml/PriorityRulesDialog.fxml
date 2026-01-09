@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.eduscheduler.ui.controller.PriorityRulesController"
+      spacing="15" style="-fx-background-color: white;">
+
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <!-- Header -->
+    <VBox spacing="5">
+        <Label text="Priority Rules Configuration" styleClass="header-label">
+            <font>
+                <Font name="System Bold" size="20.0"/>
+            </font>
+        </Label>
+        <Label text="Configure priority rules to determine student course assignment priority"
+               styleClass="subheader-label" wrapText="true"/>
+        <Separator/>
+    </VBox>
+
+    <!-- Statistics Panel -->
+    <HBox spacing="30" style="-fx-padding: 10; -fx-background-color: #f0f0f0; -fx-background-radius: 5;">
+        <Label fx:id="activeRulesLabel" text="Active Rules: 0 / 0">
+            <font>
+                <Font name="System Bold" size="12.0"/>
+            </font>
+        </Label>
+        <Label fx:id="totalBonusLabel" text="Total Possible Bonus: 0 pts">
+            <font>
+                <Font name="System Bold" size="12.0"/>
+            </font>
+        </Label>
+    </HBox>
+
+    <!-- Table -->
+    <TableView fx:id="rulesTable" VBox.vgrow="ALWAYS" prefHeight="400">
+        <columns>
+            <TableColumn fx:id="ruleNameColumn" text="Rule Name" prefWidth="180" />
+            <TableColumn fx:id="ruleTypeColumn" text="Type" prefWidth="120" />
+            <TableColumn fx:id="weightColumn" text="Weight" prefWidth="60" />
+            <TableColumn fx:id="bonusPointsColumn" text="Bonus" prefWidth="60" />
+            <TableColumn fx:id="activeColumn" text="Status" prefWidth="80" />
+            <TableColumn fx:id="criteriaColumn" text="Criteria" prefWidth="250" />
+        </columns>
+        <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+        </columnResizePolicy>
+    </TableView>
+
+    <!-- Button Panel -->
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Button fx:id="addButton" text="Add Rule" onAction="#handleAdd"
+                styleClass="primary-button" prefWidth="100"/>
+        <Button fx:id="editButton" text="Edit" onAction="#handleEdit"
+                disable="true" prefWidth="100"/>
+        <Button fx:id="deleteButton" text="Delete" onAction="#handleDelete"
+                disable="true" prefWidth="100"/>
+        <Button fx:id="toggleActiveButton" text="Toggle Active" onAction="#handleToggleActive"
+                disable="true" prefWidth="120"/>
+
+        <Region HBox.hgrow="ALWAYS"/>
+
+        <Button fx:id="closeButton" text="Close" onAction="#handleClose"
+                cancelButton="true" prefWidth="100"/>
+    </HBox>
+
+    <!-- Help Text -->
+    <VBox spacing="5" style="-fx-padding: 10; -fx-background-color: #e8f4f8; -fx-background-radius: 5;">
+        <Label text="💡 Tips:" style="-fx-font-weight: bold;"/>
+        <Label text="• Weight determines rule application order (higher weight = applied first)" wrapText="true"/>
+        <Label text="• Bonus points are added to student priority scores when rule criteria match" wrapText="true"/>
+        <Label text="• Multiple rules can apply to the same student (bonuses stack)" wrapText="true"/>
+        <Label text="• Use GPA threshold rules for merit-based priority" wrapText="true"/>
+        <Label text="• Use special needs rules to prioritize IEP/504 students" wrapText="true"/>
+    </VBox>
+
+</VBox>

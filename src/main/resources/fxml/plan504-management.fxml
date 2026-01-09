@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.eduscheduler.ui.controller.Plan504Controller"
+            stylesheets="@../css/main-style.css"
+            prefWidth="1200" prefHeight="800">
+
+    <!-- Header -->
+    <top>
+        <VBox styleClass="header-section">
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label text="504 Plan Management" styleClass="header-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="Refresh" onAction="#handleRefresh" styleClass="btn-secondary"/>
+                <Button text="Create New 504 Plan" onAction="#handleCreatePlan" styleClass="btn-primary"/>
+                <Button text="Export Report" onAction="#handleExportReport" styleClass="btn-secondary"/>
+            </HBox>
+            <padding>
+                <Insets top="15" right="20" bottom="15" left="20"/>
+            </padding>
+        </VBox>
+    </top>
+
+    <!-- Center Content -->
+    <center>
+        <VBox spacing="15" styleClass="content-container">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <!-- Search and Filter Section -->
+            <HBox spacing="15" alignment="CENTER_LEFT">
+                <Label text="Search:"/>
+                <TextField fx:id="searchField" promptText="Search by student name or plan number..."
+                          prefWidth="300" onKeyReleased="#handleSearch"/>
+
+                <Label text="Status:"/>
+                <ComboBox fx:id="statusFilter" promptText="All Statuses" prefWidth="150"
+                         onAction="#handleFilterChange"/>
+
+                <Label text="Coordinator:"/>
+                <ComboBox fx:id="coordinatorFilter" promptText="All Coordinators" prefWidth="180"
+                         onAction="#handleFilterChange"/>
+
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <Button text="Clear Filters" onAction="#handleClearFilters" styleClass="btn-link"/>
+            </HBox>
+
+            <!-- 504 Plan Table -->
+            <TableView fx:id="planTable" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="studentColumn" text="Student" prefWidth="180" sortable="true"/>
+                    <TableColumn fx:id="planNumberColumn" text="Plan Number" prefWidth="120" sortable="true"/>
+                    <TableColumn fx:id="statusColumn" text="Status" prefWidth="100" sortable="true"/>
+                    <TableColumn fx:id="startDateColumn" text="Start Date" prefWidth="100" sortable="true"/>
+                    <TableColumn fx:id="endDateColumn" text="End Date" prefWidth="100" sortable="true"/>
+                    <TableColumn fx:id="daysRemainingColumn" text="Days Remaining" prefWidth="120" sortable="true"/>
+                    <TableColumn fx:id="disabilityColumn" text="Disability" prefWidth="150" sortable="true"/>
+                    <TableColumn fx:id="coordinatorColumn" text="Coordinator" prefWidth="150" sortable="true"/>
+                    <TableColumn fx:id="accommodationsColumn" text="Accommodations" prefWidth="100" sortable="true"/>
+                    <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="150" sortable="false"/>
+                </columns>
+                <placeholder>
+                    <Label text="No 504 Plans found. Create a new plan to get started."/>
+                </placeholder>
+            </TableView>
+
+            <!-- Summary Footer -->
+            <HBox spacing="30" alignment="CENTER_LEFT" styleClass="summary-bar">
+                <padding>
+                    <Insets top="10" right="10" bottom="10" left="10"/>
+                </padding>
+                <Label fx:id="totalPlansLabel" text="Total: 0"/>
+                <Label fx:id="activePlansLabel" text="Active: 0"/>
+                <Label fx:id="draftPlansLabel" text="Draft: 0"/>
+                <Label fx:id="expiringPlansLabel" text="Expiring Soon: 0"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="selectionLabel" text="No plan selected"/>
+            </HBox>
+        </VBox>
+    </center>
+
+    <!-- Context Menu for Table Rows -->
+    <fx:define>
+        <ContextMenu fx:id="rowContextMenu">
+            <items>
+                <MenuItem text="View Details" onAction="#handleViewDetails"/>
+                <MenuItem text="Edit Plan" onAction="#handleEditPlan"/>
+                <SeparatorMenuItem/>
+                <MenuItem text="Manage Accommodations" onAction="#handleManageAccommodations"/>
+                <SeparatorMenuItem/>
+                <MenuItem text="Activate Plan" onAction="#handleActivatePlan"/>
+                <MenuItem text="Mark for Review" onAction="#handleMarkForReview"/>
+                <MenuItem text="Expire Plan" onAction="#handleExpirePlan"/>
+                <SeparatorMenuItem/>
+                <MenuItem text="Generate Report" onAction="#handleGeneratePlanReport"/>
+                <MenuItem text="Print Plan" onAction="#handlePrintPlan"/>
+                <SeparatorMenuItem/>
+                <MenuItem text="Delete Plan" onAction="#handleDeletePlan" style="-fx-text-fill: red;"/>
+            </items>
+        </ContextMenu>
+    </fx:define>
+</BorderPane>

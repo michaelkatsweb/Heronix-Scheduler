@@ -1,0 +1,153 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] -----------------< com.eduscheduler:eduscheduler-pro >------------------
+[INFO] Building EduScheduler Pro 1.0.0
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] >>> javafx:0.0.8:run (default-cli) > process-classes @ eduscheduler-pro >>>
+[WARNING] 6 problems were encountered while building the effective model for org.openjfx:javafx-controls:jar:21 during dependency collection step for project (use -X to see details)
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ eduscheduler-pro ---
+[INFO] Copying 144 resources from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.11.0:compile (default-compile) @ eduscheduler-pro ---
+[INFO] Changes detected - recompiling the module! :source
+[INFO] Compiling 582 source files with javac [debug release 17] to target\classes
+[WARNING] /H:/EduScheduler/eduscheduler-pro/src/main/java/com/eduscheduler/model/domain/CourseSequenceStep.java:[98,20] @Builder will ignore the initializing expression entirely. If you want the initializing expression to serve as default, add @Builder.Default. If it is not supposed to be settable during building, make the field final.
+[INFO] /H:/EduScheduler/eduscheduler-pro/src/main/java/com/eduscheduler/model/domain/ScheduleSlot.java: Some input files use or override a deprecated API.
+[INFO] /H:/EduScheduler/eduscheduler-pro/src/main/java/com/eduscheduler/model/domain/ScheduleSlot.java: Recompile with -Xlint:deprecation for details.
+[INFO] /H:/EduScheduler/eduscheduler-pro/src/main/java/com/eduscheduler/service/OllamaAIService.java: Some input files use unchecked or unsafe operations.
+[INFO] /H:/EduScheduler/eduscheduler-pro/src/main/java/com/eduscheduler/service/OllamaAIService.java: Recompile with -Xlint:unchecked for details.
+[INFO] 
+[INFO] <<< javafx:0.0.8:run (default-cli) < process-classes @ eduscheduler-pro <<<
+[INFO] 
+[INFO] 
+[INFO] --- javafx:0.0.8:run (default-cli) @ eduscheduler-pro ---
+19:24:29.706 [JavaFX-Launcher] INFO com.eduscheduler.EduSchedulerApplication -- Initializing Spring Boot context...
+Standard Commons Logging discovery in action with spring-jcl: please remove commons-logging.jar from classpath in order to avoid potential conflicts
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.0)
+
+2025-12-07 19:24:30 [JavaFX-Launcher] INFO  o.s.boot.SpringApplication - Starting application using Java 20.0.1 with PID 70400 (started by Gamer in H:\EduScheduler\eduscheduler-pro)
+2025-12-07 19:24:30 [JavaFX-Launcher] INFO  o.s.boot.SpringApplication - No active profile set, falling back to 1 default profile: "default"
+2025-12-07 19:24:32 [JavaFX-Launcher] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-12-07 19:24:33 [JavaFX-Launcher] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 307 ms. Found 66 JPA repository interfaces.
+2025-12-07 19:24:34 [JavaFX-Launcher] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-12-07 19:24:34 [JavaFX-Launcher] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.3.1.Final
+2025-12-07 19:24:34 [JavaFX-Launcher] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-12-07 19:24:34 [JavaFX-Launcher] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-12-07 19:24:34 [JavaFX-Launcher] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-12-07 19:24:34 [JavaFX-Launcher] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection conn0: url=jdbc:h2:file:./data/eduscheduler user=SA
+2025-12-07 19:24:34 [JavaFX-Launcher] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-12-07 19:24:34 [JavaFX-Launcher] WARN  org.hibernate.orm.deprecation - HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-12-07 19:24:38 [JavaFX-Launcher] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-12-07 19:24:44 [JavaFX-Launcher] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-12-07 19:24:44 [JavaFX-Launcher] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-12-07 19:24:50 [JavaFX-Launcher] INFO  c.e.config.OptaPlannerConfig - ========================================
+2025-12-07 19:24:50 [JavaFX-Launcher] INFO  c.e.config.OptaPlannerConfig - INITIALIZING OPTAPLANNER SOLVER MANAGER
+2025-12-07 19:24:50 [JavaFX-Launcher] INFO  c.e.config.OptaPlannerConfig - ========================================
+2025-12-07 19:24:50 [JavaFX-Launcher] INFO  c.e.config.OptaPlannerConfig - Loading solver configuration from: solverConfig.xml
+2025-12-07 19:24:50 [JavaFX-Launcher] INFO  c.e.config.OptaPlannerConfig - SUCCESS: Solver configuration loaded successfully
+2025-12-07 19:24:50 [JavaFX-Launcher] INFO  c.e.config.OptaPlannerConfig -    - Solution class: class com.eduscheduler.model.planning.SchedulingSolution
+2025-12-07 19:24:50 [JavaFX-Launcher] INFO  c.e.config.OptaPlannerConfig -    - Entity classes: [class com.eduscheduler.model.domain.ScheduleSlot]
+2025-12-07 19:24:50 [JavaFX-Launcher] INFO  c.e.config.OptaPlannerConfig -    - Parallel solver count: 7
+2025-12-07 19:24:53 [JavaFX-Launcher] INFO  c.e.config.OptaPlannerConfig - SUCCESS: OptaPlanner SolverManager initialized successfully
+2025-12-07 19:24:53 [JavaFX-Launcher] INFO  c.e.config.OptaPlannerConfig - ========================================
+2025-12-07 19:24:54 [JavaFX-Launcher] INFO  c.e.service.impl.TimeSlotServiceImpl - Initializing TimeSlotService with default time slots
+2025-12-07 19:24:54 [JavaFX-Launcher] INFO  c.e.service.impl.TimeSlotServiceImpl - Initialized 40 default time slots
+2025-12-07 19:24:54 [JavaFX-Launcher] INFO  c.e.service.impl.UserServiceImpl - Checking for default users...
+2025-12-07 19:24:54 [JavaFX-Launcher] INFO  c.e.service.impl.UserServiceImpl - Admin user already exists. Skipping default user creation.
+2025-12-07 19:24:56 [JavaFX-Launcher] INFO  c.e.s.i.ScheduleParametersServiceImpl - Parameters file: C:\Users\Gamer\.eduscheduler\schedule_parameters.json
+2025-12-07 19:24:56 [JavaFX-Launcher] INFO  c.e.solver.HybridSchedulingSolver - Initializing HybridSchedulingSolver
+2025-12-07 19:24:58 [JavaFX-Launcher] INFO  c.e.solver.HybridSchedulingSolver - HybridSchedulingSolver initialized successfully
+2025-12-07 19:24:58 [JavaFX-Launcher] INFO  c.e.util.DiagnosticChecker - ================================================================
+2025-12-07 19:24:58 [JavaFX-Launcher] INFO  c.e.util.DiagnosticChecker - 📊 DATABASE DIAGNOSTICS
+2025-12-07 19:24:58 [JavaFX-Launcher] INFO  c.e.util.DiagnosticChecker - ================================================================
+2025-12-07 19:24:58 [JavaFX-Launcher] INFO  c.e.util.DiagnosticChecker - 👨‍🏫 TEACHERS: 5
+2025-12-07 19:24:58 [JavaFX-Launcher] INFO  c.e.util.DiagnosticChecker -    Sample: John Smith
+2025-12-07 19:24:58 [JavaFX-Launcher] INFO  c.e.util.DiagnosticChecker -    Departments: 5
+2025-12-07 19:24:58 [JavaFX-Launcher] INFO  c.e.util.DiagnosticChecker - 📚 COURSES: 3
+2025-12-07 19:24:58 [JavaFX-Launcher] INFO  c.e.util.DiagnosticChecker -    Sample: English I
+2025-12-07 19:24:58 [JavaFX-Launcher] INFO  c.e.util.DiagnosticChecker -    Subjects: 3
+2025-12-07 19:24:58 [JavaFX-Launcher] INFO  c.e.util.DiagnosticChecker - 🏫 ROOMS: 3
+2025-12-07 19:24:58 [JavaFX-Launcher] INFO  c.e.util.DiagnosticChecker -    Sample: 100
+2025-12-07 19:24:58 [JavaFX-Launcher] INFO  c.e.util.DiagnosticChecker -    Buildings: 1
+2025-12-07 19:24:58 [JavaFX-Launcher] INFO  c.e.util.DiagnosticChecker - 👨‍🎓 STUDENTS: 0
+2025-12-07 19:24:58 [JavaFX-Launcher] INFO  c.e.util.DiagnosticChecker - 📅 SCHEDULES: 0
+2025-12-07 19:24:58 [JavaFX-Launcher] INFO  c.e.util.DiagnosticChecker - ================================================================
+2025-12-07 19:24:58 [JavaFX-Launcher] INFO  c.e.util.DiagnosticChecker - ✅ DIAGNOSTIC SUMMARY
+2025-12-07 19:24:58 [JavaFX-Launcher] INFO  c.e.util.DiagnosticChecker - ================================================================
+2025-12-07 19:24:58 [JavaFX-Launcher] WARN  c.e.util.DiagnosticChecker - ⚠️ NO STUDENTS FOUND - Import students first!
+2025-12-07 19:24:58 [JavaFX-Launcher] INFO  c.e.util.DiagnosticChecker - ✅ Ready for FIRST schedule generation
+2025-12-07 19:24:58 [JavaFX-Launcher] INFO  c.e.util.DiagnosticChecker - ================================================================
+
+2025-12-07 19:24:58 [JavaFX-Launcher] INFO  c.e.config.OptaPlannerConfig - Creating OptaPlanner SolverFactory
+2025-12-07 19:24:59 [JavaFX-Launcher] INFO  c.e.config.OptaPlannerConfig - SUCCESS: SolverFactory created successfully
+2025-12-07 19:24:59 [JavaFX-Launcher] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@52f421f5, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@33c69834, org.springframework.security.web.context.SecurityContextHolderFilter@e522e23, org.springframework.security.web.header.HeaderWriterFilter@42fc3c04, org.springframework.security.web.authentication.logout.LogoutFilter@73ec1906, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@463ddaec, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@567f9f62, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@1664c825, org.springframework.security.web.access.ExceptionTranslationFilter@3f1ed495, org.springframework.security.web.access.intercept.AuthorizationFilter@6190187f]
+2025-12-07 19:25:00 [JavaFX-Launcher] INFO  o.s.boot.SpringApplication - Started application in 30.55 seconds (process running for 31.51)
+2025-12-07 19:25:00 [JavaFX-Launcher] INFO  c.e.config.Phase5FMigrationRunner - 🔄 Phase 5F Migration: Checking for rooms without activity tags...
+2025-12-07 19:25:00 [JavaFX-Launcher] INFO  c.e.config.Phase5FMigrationRunner - ✅ Phase 5F Migration: All rooms already configured (3 total rooms)
+2025-12-07 19:25:00 [JavaFX-Launcher] INFO  c.e.util.AssignCoursesToTeachers - ╔══════════════════════════════════════════════════════════════════════════╗
+2025-12-07 19:25:00 [JavaFX-Launcher] INFO  c.e.util.AssignCoursesToTeachers - ║ ASSIGN COURSES TO TEACHERS - Starting...                                 ║
+2025-12-07 19:25:00 [JavaFX-Launcher] INFO  c.e.util.AssignCoursesToTeachers - ╚══════════════════════════════════════════════════════════════════════════╝
+2025-12-07 19:25:00 [JavaFX-Launcher] INFO  c.e.util.AssignCoursesToTeachers - 
+=== STEP 1: CHECKING CURRENT STATE ===
+
+2025-12-07 19:25:00 [JavaFX-Launcher] INFO  c.e.util.AssignCoursesToTeachers - Checking teachers and their current assignments...
+
+2025-12-07 19:25:00 [JavaFX-Launcher] INFO  c.e.util.AssignCoursesToTeachers - Current Teachers:
+2025-12-07 19:25:00 [JavaFX-Launcher] INFO  c.e.util.AssignCoursesToTeachers -   Sarah Johnson (English) - 0 courses
+2025-12-07 19:25:00 [JavaFX-Launcher] INFO  c.e.util.AssignCoursesToTeachers -   Emily Wilson (History) - 0 courses
+2025-12-07 19:25:00 [JavaFX-Launcher] INFO  c.e.util.AssignCoursesToTeachers -   John Smith (Mathematics) - 0 courses
+2025-12-07 19:25:00 [JavaFX-Launcher] INFO  c.e.util.AssignCoursesToTeachers -   David Martinez (Physical Education) - 0 courses
+2025-12-07 19:25:00 [JavaFX-Launcher] INFO  c.e.util.AssignCoursesToTeachers -   Michael Davis (Science) - 0 courses
+2025-12-07 19:25:00 [JavaFX-Launcher] INFO  c.e.util.AssignCoursesToTeachers - 
+Unassigned courses: 3
+
+2025-12-07 19:25:00 [JavaFX-Launcher] INFO  c.e.util.AssignCoursesToTeachers - 
+=== STEP 2: ASSIGNING COURSES TO TEACHERS ===
+
+2025-12-07 19:25:00 [JavaFX-Launcher] INFO  c.e.util.AssignCoursesToTeachers - Assigning Mathematics courses...
+2025-12-07 19:25:00 [JavaFX-Launcher] INFO  c.e.util.AssignCoursesToTeachers -   ✅ Assigned 1 mathematics courses
+2025-12-07 19:25:00 [JavaFX-Launcher] INFO  c.e.util.AssignCoursesToTeachers - Assigning Science courses...
+2025-12-07 19:25:00 [JavaFX-Launcher] INFO  c.e.util.AssignCoursesToTeachers -   ✅ Assigned 1 science courses
+2025-12-07 19:25:00 [JavaFX-Launcher] INFO  c.e.util.AssignCoursesToTeachers - Assigning English courses...
+2025-12-07 19:25:00 [JavaFX-Launcher] INFO  c.e.util.AssignCoursesToTeachers -   ✅ Assigned 0 english courses
+2025-12-07 19:25:00 [JavaFX-Launcher] INFO  c.e.util.AssignCoursesToTeachers - Assigning Social Studies courses...
+2025-12-07 19:25:00 [JavaFX-Launcher] INFO  c.e.util.AssignCoursesToTeachers -   ✅ Assigned 0 social studies courses
+2025-12-07 19:25:00 [JavaFX-Launcher] INFO  c.e.util.AssignCoursesToTeachers - Assigning World Languages courses...
+2025-12-07 19:25:00 [JavaFX-Launcher] INFO  c.e.util.AssignCoursesToTeachers -   ✅ Assigned 0 language courses
+2025-12-07 19:25:00 [JavaFX-Launcher] INFO  c.e.util.AssignCoursesToTeachers - Assigning Arts courses...
+2025-12-07 19:25:00 [JavaFX-Launcher] INFO  c.e.util.AssignCoursesToTeachers -   ✅ Assigned 1 arts courses
+2025-12-07 19:25:00 [JavaFX-Launcher] INFO  c.e.util.AssignCoursesToTeachers - Assigning Physical Education courses...
+2025-12-07 19:25:00 [JavaFX-Launcher] INFO  c.e.util.AssignCoursesToTeachers -   ✅ Assigned 0 PE courses
+2025-12-07 19:25:00 [JavaFX-Launcher] INFO  c.e.util.AssignCoursesToTeachers - Assigning Technology courses...
+2025-12-07 19:25:00 [JavaFX-Launcher] INFO  c.e.util.AssignCoursesToTeachers -   ✅ Assigned 0 technology courses
+2025-12-07 19:25:00 [JavaFX-Launcher] INFO  c.e.util.AssignCoursesToTeachers - 
+✅ TOTAL COURSES ASSIGNED: 3
+
+2025-12-07 19:25:00 [JavaFX-Launcher] INFO  c.e.util.AssignCoursesToTeachers - 
+=== STEP 3: VERIFYING RESULTS ===
+
+2025-12-07 19:25:00 [JavaFX-Launcher] INFO  c.e.util.AssignCoursesToTeachers - Final course distribution by teacher:
+
+2025-12-07 19:25:00 [JavaFX-Launcher] INFO  c.e.util.AssignCoursesToTeachers -   John Smith (Mathematics) - 1 courses
+2025-12-07 19:25:00 [JavaFX-Launcher] INFO  c.e.util.AssignCoursesToTeachers -   Michael Davis (Science) - 1 courses
+2025-12-07 19:25:00 [JavaFX-Launcher] INFO  c.e.util.AssignCoursesToTeachers - 
+✅ Remaining unassigned courses: 1
+2025-12-07 19:25:00 [JavaFX-Launcher] WARN  c.e.util.AssignCoursesToTeachers - 
+⚠️  Some courses remain unassigned. This may be because:
+2025-12-07 19:25:00 [JavaFX-Launcher] WARN  c.e.util.AssignCoursesToTeachers -    - No teachers exist for those departments
+2025-12-07 19:25:00 [JavaFX-Launcher] WARN  c.e.util.AssignCoursesToTeachers -    - Course subjects don't match any teacher departments
+2025-12-07 19:25:00 [JavaFX-Launcher] WARN  c.e.util.AssignCoursesToTeachers -    - These courses may need manual assignment
+2025-12-07 19:25:00 [JavaFX-Launcher] INFO  c.e.util.AssignCoursesToTeachers - 
+╔══════════════════════════════════════════════════════════════════════════╗
+2025-12-07 19:25:00 [JavaFX-Launcher] INFO  c.e.util.AssignCoursesToTeachers - ║ ✅ ASSIGNMENT COMPLETE!                                                   ║
+2025-12-07 19:25:00 [JavaFX-Launcher] INFO  c.e.util.AssignCoursesToTeachers - ╚════════════════════════════════════════════════�

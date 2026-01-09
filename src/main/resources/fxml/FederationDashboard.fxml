@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<!--
+Multi-Campus Federation Dashboard
+Features: District Management, Campus Overview, Teacher Sharing, Cross-Enrollment
+Location: src/main/resources/fxml/FederationDashboard.fxml
+-->
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.eduscheduler.ui.controller.FederationDashboardController"
+            prefWidth="1200" prefHeight="800">
+
+    <top>
+        <VBox spacing="15" styleClass="header-section">
+            <padding>
+                <Insets top="20" right="20" bottom="10" left="20"/>
+            </padding>
+
+            <HBox alignment="CENTER_LEFT" spacing="15">
+                <Label text="Multi-Campus Federation" styleClass="page-title">
+                    <font>
+                        <Font name="System Bold" size="24"/>
+                    </font>
+                </Label>
+
+                <Label text="District-Wide Management" style="-fx-text-fill: #6c757d; -fx-font-style: italic;"/>
+
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <Label text="Active District:"/>
+                <ComboBox fx:id="districtCombo" prefWidth="200" onAction="#handleDistrictChange"/>
+
+                <Button fx:id="refreshButton" text="Refresh" onAction="#handleRefresh"
+                        styleClass="secondary-button"/>
+                <Button fx:id="newDistrictButton" text="+ New District" onAction="#handleNewDistrict"
+                        styleClass="primary-button"/>
+            </HBox>
+
+            <Separator/>
+        </VBox>
+    </top>
+
+    <center>
+        <ScrollPane fitToWidth="true" fitToHeight="true">
+            <VBox spacing="20">
+                <padding>
+                    <Insets top="20" right="20" bottom="20" left="20"/>
+                </padding>
+
+                <!-- District Summary Cards -->
+                <HBox spacing="15">
+                    <VBox styleClass="metric-card" HBox.hgrow="ALWAYS">
+                        <Label text="Total Campuses" styleClass="metric-label"/>
+                        <Label fx:id="totalCampusesLabel" text="0" styleClass="metric-value">
+                            <font><Font size="32"/></font>
+                        </Label>
+                        <Label text="in district" styleClass="metric-subtitle"/>
+                    </VBox>
+
+                    <VBox styleClass="metric-card" HBox.hgrow="ALWAYS">
+                        <Label text="Total Students" styleClass="metric-label"/>
+                        <Label fx:id="totalStudentsLabel" text="0" styleClass="metric-value" style="-fx-text-fill: #28a745;">
+                            <font><Font size="32"/></font>
+                        </Label>
+                        <Label text="enrolled district-wide" styleClass="metric-subtitle"/>
+                    </VBox>
+
+                    <VBox styleClass="metric-card" HBox.hgrow="ALWAYS">
+                        <Label text="Available Capacity" styleClass="metric-label"/>
+                        <Label fx:id="availableCapacityLabel" text="0" styleClass="metric-value">
+                            <font><Font size="32"/></font>
+                        </Label>
+                        <Label text="open seats" styleClass="metric-subtitle"/>
+                    </VBox>
+
+                    <VBox styleClass="metric-card" HBox.hgrow="ALWAYS">
+                        <Label text="Utilization" styleClass="metric-label"/>
+                        <Label fx:id="utilizationLabel" text="0%" styleClass="metric-value" style="-fx-text-fill: #ffc107;">
+                            <font><Font size="32"/></font>
+                        </Label>
+                        <Label text="capacity used" styleClass="metric-subtitle"/>
+                    </VBox>
+                </HBox>
+
+                <TabPane tabClosingPolicy="UNAVAILABLE" fx:id="federationTabPane">
+
+                    <!-- Campuses Tab -->
+                    <Tab text="Campuses">
+                        <VBox spacing="15" style="-fx-padding: 15;">
+                            <HBox spacing="15" alignment="CENTER_LEFT">
+                                <Label text="Campus Management" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <TextField fx:id="campusSearchField" promptText="Search campuses..." prefWidth="200"/>
+                                <Button text="+ Add Campus" onAction="#handleAddCampus" styleClass="primary-button"/>
+                            </HBox>
+
+                            <TableView fx:id="campusTable" VBox.vgrow="ALWAYS" minHeight="300">
+                                <columns>
+                                    <TableColumn fx:id="campusCodeColumn" text="Code" prefWidth="80"/>
+                                    <TableColumn fx:id="campusNameColumn" text="Campus Name" prefWidth="180"/>
+                                    <TableColumn fx:id="campusTypeColumn" text="Type" prefWidth="100"/>
+                                    <TableColumn fx:id="gradeLevelsColumn" text="Grades" prefWidth="100"/>
+                                    <TableColumn fx:id="enrollmentColumn" text="Enrollment" prefWidth="100"/>
+                                    <TableColumn fx:id="capacityColumn" text="Capacity" prefWidth="100"/>
+                                    <TableColumn fx:id="campusUtilColumn" text="Utilization" prefWidth="100"/>
+                                    <TableColumn fx:id="campusStatusColumn" text="Status" prefWidth="100"/>
+                                    <TableColumn fx:id="campusActionsColumn" text="Actions" prefWidth="120"/>
+                                </columns>
+                            </TableView>
+                        </VBox>
+                    </Tab>
+
+                    <!-- Shared Teachers Tab -->
+                    <Tab text="Shared Teachers">
+                        <VBox spacing="15" style="-fx-padding: 15;">
+                            <Label text="Cross-Campus Teacher Sharing" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+                            <Label text="Teachers who can be shared between campuses in this district."
+                                   style="-fx-text-fill: #666666;"/>
+
+                            <!-- Sharing Status Summary -->
+                            <HBox spacing="15">
+                                <VBox styleClass="metric-card" HBox.hgrow="ALWAYS">
+                                    <Label text="Available for Sharing" styleClass="metric-label"/>
+                                    <Label fx:id="availableTeachersLabel" text="0" styleClass="metric-value">
+                                        <font><Font size="28"/></font>
+                                    </Label>
+                                </VBox>
+                                <VBox styleClass="metric-card" HBox.hgrow="ALWAYS">
+                                    <Label text="Currently Shared" styleClass="metric-label"/>
+                                    <Label fx:id="currentlySharedLabel" text="0" styleClass="metric-value" style="-fx-text-fill: #28a745;">
+                                        <font><Font size="28"/></font>
+                                    </Label>
+                                </VBox>
+                                <VBox styleClass="metric-card" HBox.hgrow="ALWAYS">
+                                    <Label text="Sharing Enabled" styleClass="metric-label"/>
+                                    <Label fx:id="sharingEnabledLabel" text="Yes" styleClass="metric-value">
+                                        <font><Font size="28"/></font>
+                                    </Label>
+                                </VBox>
+                            </HBox>
+
+                            <HBox spacing="20" VBox.vgrow="ALWAYS">
+                                <!-- Available Teachers -->
+                                <VBox spacing="10" HBox.hgrow="ALWAYS">
+                                    <Label text="Available Teachers" style="-fx-font-weight: bold;"/>
+                                    <TableView fx:id="availableTeachersTable" VBox.vgrow="ALWAYS">
+                                        <columns>
+                                            <TableColumn fx:id="teacherNameColumn" text="Teacher" prefWidth="150"/>
+                                            <TableColumn fx:id="homeCampusColumn" text="Home Campus" prefWidth="120"/>
+                                            <TableColumn fx:id="certificationsColumn" text="Certifications" prefWidth="150"/>
+                                            <TableColumn fx:id="maxPeriodsColumn" text="Max Periods" prefWidth="80"/>
+                                            <TableColumn fx:id="shareActionColumn" text="Action" prefWidth="100"/>
+                                        </columns>
+                                    </TableView>
+                                </VBox>
+
+                                <!-- Active Sharing Assignments -->
+                                <VBox spacing="10" prefWidth="350">
+                                    <Label text="Active Sharing Assignments" style="-fx-font-weight: bold;"/>
+                                    <ListView fx:id="sharingAssignmentsList" VBox.vgrow="ALWAYS"/>
+                                    <Button fx:id="removeSharingButton" text="Remove Assignment"
+                                            onAction="#handleRemoveSharing" styleClass="secondary-button"
+                                            disable="true" maxWidth="Infinity"/>
+                                </VBox>
+                            </HBox>
+                        </VBox>
+                    </Tab>
+
+                    <!-- Cross-Campus Enrollment Tab -->
+                    <Tab text="Cross-Campus Enrollment">
+                        <VBox spacing="15" style="-fx-padding: 15;">
+                            <Label text="Cross-Campus Student Enrollment" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+                            <Label text="Enable students to take courses at other campuses in the district."
+                                   style="-fx-text-fill: #666666;"/>
+
+                            <!-- Enrollment Status -->
+                            <HBox spacing="15">
+                                <VBox styleClass="metric-card" HBox.hgrow="ALWAYS">
+                                    <Label text="Cross-Enrolled Students" styleClass="metric-label"/>
+                                    <Label fx:id="crossEnrolledLabel" text="0" styleClass="metric-value">
+                                        <font><Font size="28"/></font>
+                                    </Label>
+                                </VBox>
+                                <VBox styleClass="metric-card" HBox.hgrow="ALWAYS">
+                                    <Label text="Available Programs" styleClass="metric-label"/>
+                                    <Label fx:id="availableProgramsLabel" text="0" styleClass="metric-value" style="-fx-text-fill: #28a745;">
+                                        <font><Font size="28"/></font>
+                                    </Label>
+                                </VBox>
+                                <VBox styleClass="metric-card" HBox.hgrow="ALWAYS">
+                                    <Label text="Transportation Needed" styleClass="metric-label"/>
+                                    <Label fx:id="transportationNeededLabel" text="0" styleClass="metric-value" style="-fx-text-fill: #ffc107;">
+                                        <font><Font size="28"/></font>
+                                    </Label>
+                                </VBox>
+                            </HBox>
+
+                            <HBox spacing="15" alignment="CENTER_LEFT">
+                                <Label text="Find Student:"/>
+                                <TextField fx:id="studentSearchField" promptText="Enter student name or ID" prefWidth="200"/>
+                                <Button text="Search" onAction="#handleStudentSearch" styleClass="secondary-button"/>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Button text="New Cross-Enrollment" onAction="#handleNewCrossEnrollment"
+                                        styleClass="primary-button"/>
+                            </HBox>
+
+                            <HBox spacing="20" VBox.vgrow="ALWAYS">
+                                <!-- Campus Options -->
+                                <VBox spacing="10" HBox.hgrow="ALWAYS">
+                                    <Label text="Available Campuses" style="-fx-font-weight: bold;"/>
+                                    <TableView fx:id="enrollmentOptionsTable" VBox.vgrow="ALWAYS">
+                                        <columns>
+                                            <TableColumn fx:id="optionCampusColumn" text="Campus" prefWidth="150"/>
+                                            <TableColumn fx:id="optionGradesColumn" text="Grades" prefWidth="80"/>
+                                            <TableColumn fx:id="optionProgramsColumn" text="Special Programs" prefWidth="150"/>
+                                            <TableColumn fx:id="optionAvailColumn" text="Available Seats" prefWidth="100"/>
+                                            <TableColumn fx:id="optionEnrollColumn" text="Action" prefWidth="100"/>
+                                        </columns>
+                                    </TableView>
+                                </VBox>
+
+                                <!-- Current Cross-Enrollments -->
+                                <VBox spacing="10" prefWidth="350">
+                                    <Label text="Current Cross-Enrollments" style="-fx-font-weight: bold;"/>
+                                    <ListView fx:id="crossEnrollmentsList" VBox.vgrow="ALWAYS"/>
+                                    <Button fx:id="cancelEnrollmentButton" text="Cancel Enrollment"
+                                            onAction="#handleCancelEnrollment" styleClass="secondary-button"
+                                            disable="true" maxWidth="Infinity"/>
+                                </VBox>
+                            </HBox>
+                        </VBox>
+                    </Tab>
+
+                    <!-- Capacity Analysis Tab -->
+                    <Tab text="Capacity Analysis">
+                        <VBox spacing="15" style="-fx-padding: 15;">
+                            <Label text="District Capacity Analysis" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+                            <Label text="Overview of capacity utilization and resource distribution across campuses."
+                                   style="-fx-text-fill: #666666;"/>
+
+                            <!-- Capacity Warnings -->
+                            <HBox spacing="15">
+                                <VBox styleClass="metric-card alert-card" HBox.hgrow="ALWAYS">
+                                    <Label text="Overcrowded" styleClass="metric-label"/>
+                                    <Label fx:id="overcrowdedLabel" text="0" styleClass="metric-value" style="-fx-text-fill: #dc3545;">
+                                        <font><Font size="28"/></font>
+                                    </Label>
+                                    <Label text="campuses >95% capacity" styleClass="metric-subtitle"/>
+                                </VBox>
+                                <VBox styleClass="metric-card" HBox.hgrow="ALWAYS">
+                                    <Label text="Near Capacity" styleClass="metric-label"/>
+                                    <Label fx:id="nearCapacityLabel" text="0" styleClass="metric-value" style="-fx-text-fill: #ffc107;">
+                                        <font><Font size="28"/></font>
+                                    </Label>
+                                    <Label text="campuses 85-95%" styleClass="metric-subtitle"/>
+                                </VBox>
+                                <VBox styleClass="metric-card" HBox.hgrow="ALWAYS">
+                                    <Label text="Healthy" styleClass="metric-label"/>
+                                    <Label fx:id="healthyCapacityLabel" text="0" styleClass="metric-value" style="-fx-text-fill: #28a745;">
+                                        <font><Font size="28"/></font>
+                                    </Label>
+                                    <Label text="campuses 50-85%" styleClass="metric-subtitle"/>
+                                </VBox>
+                                <VBox styleClass="metric-card" HBox.hgrow="ALWAYS">
+                                    <Label text="Underutilized" styleClass="metric-label"/>
+                                    <Label fx:id="underutilizedLabel" text="0" styleClass="metric-value">
+                                        <font><Font size="28"/></font>
+                                    </Label>
+                                    <Label text="campuses &lt;50%" styleClass="metric-subtitle"/>
+                                </VBox>
+                            </HBox>
+
+                            <HBox spacing="20" VBox.vgrow="ALWAYS">
+                                <!-- Capacity Table -->
+                                <VBox spacing="10" HBox.hgrow="ALWAYS">
+                                    <Label text="Campus Capacity Details" style="-fx-font-weight: bold;"/>
+                                    <TableView fx:id="capacityTable" VBox.vgrow="ALWAYS">
+                                        <columns>
+                                            <TableColumn fx:id="capCampusColumn" text="Campus" prefWidth="150"/>
+                                            <TableColumn fx:id="capEnrollmentColumn" text="Enrollment" prefWidth="100"/>
+                                            <TableColumn fx:id="capMaxColumn" text="Max Capacity" prefWidth="100"/>
+                                            <TableColumn fx:id="capAvailableColumn" text="Available" prefWidth="100"/>
+                                            <TableColumn fx:id="capUtilColumn" text="Utilization" prefWidth="100"/>
+                                            <TableColumn fx:id="capStatusColumn" text="Status" prefWidth="100"/>
+                                        </columns>
+                                    </TableView>
+                                </VBox>
+
+                                <!-- Recommendations -->
+                                <VBox spacing="10" prefWidth="350">
+                                    <Label text="Resource Sharing Recommendations" style="-fx-font-weight: bold;"/>
+                                    <ListView fx:id="recommendationsList" VBox.vgrow="ALWAYS"/>
+                                    <Button fx:id="applyRecommendationButton" text="Apply Recommendation"
+                                            onAction="#handleApplyRecommendation" styleClass="primary-button"
+                                            disable="true" maxWidth="Infinity"/>
+                                </VBox>
+                            </HBox>
+                        </VBox>
+                    </Tab>
+
+                    <!-- District Settings Tab -->
+                    <Tab text="Settings">
+                        <VBox spacing="20" style="-fx-padding: 20;">
+                            <Label text="District Federation Settings" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+
+                            <VBox spacing="15" styleClass="settings-section">
+                                <Label text="Federation Policies" style="-fx-font-weight: bold;"/>
+
+                                <HBox spacing="10" alignment="CENTER_LEFT">
+                                    <CheckBox fx:id="allowCrossEnrollmentCheck" text="Allow Cross-Campus Enrollment"/>
+                                    <Label text="Students can enroll in courses at other campuses"
+                                           style="-fx-text-fill: #666666;"/>
+                                </HBox>
+
+                                <HBox spacing="10" alignment="CENTER_LEFT">
+                                    <CheckBox fx:id="allowSharedTeachersCheck" text="Allow Shared Teachers"/>
+                                    <Label text="Teachers can be shared between campuses"
+                                           style="-fx-text-fill: #666666;"/>
+                                </HBox>
+
+                                <HBox spacing="10" alignment="CENTER_LEFT">
+                                    <CheckBox fx:id="centralizedSchedulingCheck" text="Centralized Scheduling"/>
+                                    <Label text="District-level scheduling coordination"
+                                           style="-fx-text-fill: #666666;"/>
+                                </HBox>
+                            </VBox>
+
+                            <VBox spacing="15" styleClass="settings-section">
+                                <Label text="Calendar Settings" style="-fx-font-weight: bold;"/>
+
+                                <HBox spacing="10" alignment="CENTER_LEFT">
+                                    <Label text="Calendar Type:"/>
+                                    <ComboBox fx:id="calendarTypeCombo" prefWidth="200"/>
+                                </HBox>
+
+                                <HBox spacing="10" alignment="CENTER_LEFT">
+                                    <Label text="Fiscal Year:"/>
+                                    <TextField fx:id="fiscalYearField" prefWidth="150" promptText="e.g., 2024-2025"/>
+                                </HBox>
+                            </VBox>
+
+                            <Region VBox.vgrow="ALWAYS"/>
+
+                            <HBox spacing="10" alignment="CENTER_RIGHT">
+                                <Button text="Reset to Defaults" onAction="#handleResetSettings"
+                                        styleClass="secondary-button"/>
+                                <Button text="Save Settings" onAction="#handleSaveSettings"
+                                        styleClass="primary-button"/>
+                            </HBox>
+                        </VBox>
+                    </Tab>
+
+                </TabPane>
+            </VBox>
+        </ScrollPane>
+    </center>
+
+    <stylesheets>
+        <String fx:value="@../css/main.css"/>
+    </stylesheets>
+</BorderPane>

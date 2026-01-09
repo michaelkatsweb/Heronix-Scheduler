@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+
+<!--
+  Teacher Room Preferences Dialog
+  Phase 6B-4: Room Preferences UI
+
+  Allows administrators to configure teacher room preferences:
+  - Preferences (SOFT) - scheduler will prefer these rooms
+  - Restrictions (HARD) - teacher can ONLY use these rooms
+  - Preference strength (LOW/MEDIUM/HIGH)
+
+  Date: December 3, 2025
+-->
+
+<DialogPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.eduscheduler.controller.TeacherRoomPreferencesDialogController"
+            prefWidth="700" prefHeight="650">
+
+    <headerText>
+        Room Preferences
+    </headerText>
+
+    <content>
+        <VBox spacing="15" styleClass="dialog-content">
+            <padding>
+                <Insets top="10" right="20" bottom="10" left="20"/>
+            </padding>
+
+            <!-- Teacher Name Display -->
+            <HBox alignment="CENTER_LEFT" spacing="10" styleClass="info-section">
+                <Label text="Teacher:" styleClass="label-bold"/>
+                <Label fx:id="teacherNameLabel" text="[Teacher Name]" styleClass="teacher-name"/>
+            </HBox>
+
+            <Separator/>
+
+            <!-- Preference Type Section -->
+            <VBox spacing="8" styleClass="preference-type-section">
+                <Label text="Preference Type:" styleClass="section-label"/>
+
+                <RadioButton fx:id="preferenceRadioButton"
+                           text="Preferences (SOFT) - Scheduler will prefer these rooms but can use others"
+                           styleClass="preference-radio"
+                           selected="true">
+                    <toggleGroup>
+                        <ToggleGroup fx:id="preferenceTypeToggle"/>
+                    </toggleGroup>
+                </RadioButton>
+
+                <RadioButton fx:id="restrictionRadioButton"
+                           text="Restrictions (HARD) - Teacher can ONLY use these specific rooms"
+                           styleClass="restriction-radio"
+                           toggleGroup="$preferenceTypeToggle"/>
+
+                <Text text="💡 Use preferences for flexibility, use restrictions for safety/equipment requirements (PE, Science labs, etc.)"
+                      wrappingWidth="650"
+                      styleClass="info-text"/>
+            </VBox>
+
+            <Separator/>
+
+            <!-- Preference Strength Section (disabled when restrictions selected) -->
+            <HBox spacing="15" alignment="CENTER_LEFT" styleClass="strength-section">
+                <Label text="Preference Strength:" styleClass="section-label" fx:id="strengthLabel"/>
+                <ComboBox fx:id="strengthComboBox" prefWidth="150"/>
+                <!-- Note: Items are populated in controller initialize() method -->
+                <Label fx:id="strengthDescriptionLabel"
+                       text="(3 point penalty if not met)"
+                       styleClass="strength-description"/>
+            </HBox>
+
+            <Separator/>
+
+            <!-- Room Selection Section -->
+            <VBox spacing="10" VBox.vgrow="ALWAYS">
+                <HBox alignment="CENTER_LEFT" spacing="15">
+                    <Label text="Selected Rooms:" styleClass="section-label"/>
+                    <Label fx:id="selectedCountLabel" text="(0 selected)" styleClass="count-label"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <TextField fx:id="searchField"
+                             promptText="Search rooms..."
+                             prefWidth="200"
+                             styleClass="search-field"/>
+                </HBox>
+
+                <!-- Room List with Checkboxes -->
+                <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS"
+                          styleClass="room-list-scroll" prefHeight="300">
+                    <VBox fx:id="roomListContainer" spacing="5" styleClass="room-list-container">
+                        <padding>
+                            <Insets top="5" right="5" bottom="5" left="5"/>
+                        </padding>
+                    </VBox>
+                </ScrollPane>
+
+                <!-- Action Buttons Row -->
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Button text="Select All"
+                           onAction="#handleSelectAll"
+                           styleClass="secondary-button"/>
+                    <Button text="Clear All"
+                           onAction="#handleClearAll"
+                           styleClass="secondary-button"/>
+                    <Separator orientation="VERTICAL"/>
+                    <Label text="Filter by type:"/>
+                    <ComboBox fx:id="roomTypeFilterCombo"
+                            onAction="#handleFilterChange"
+                            prefWidth="150"/>
+                    <!-- Note: Items are populated in controller initialize() method -->
+                </HBox>
+            </VBox>
+
+            <Separator/>
+
+            <!-- Summary Section -->
+            <VBox spacing="5" styleClass="summary-section">
+                <Label text="Summary:" styleClass="section-label"/>
+                <Label fx:id="summaryLabel"
+                       text="No room preferences configured"
+                       wrapText="true"
+                       styleClass="summary-text"/>
+            </VBox>
+
+        </VBox>
+    </content>
+
+    <buttonTypes>
+        <ButtonType fx:constant="OK"/>
+        <ButtonType fx:constant="CANCEL"/>
+    </buttonTypes>
+
+    <stylesheets>
+        <String fx:value="@../css/styles.css"/>
+    </stylesheets>
+
+</DialogPane>

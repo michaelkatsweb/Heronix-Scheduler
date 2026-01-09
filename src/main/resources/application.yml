@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: Heronix Scheduling System
+
+# AI Configuration (Ollama Local LLM)
+ai:
+  ollama:
+    enabled: true  # Set to true to enable AI features (requires Ollama server)
+    base-url: http://localhost:11434
+    model: mistral:7b-instruct  # Recommended: mistral, llama3.1:8b, or phi-3:3.8b
+    timeout: 30000  # 30 seconds
+    background-analysis:
+      enabled: true  # Enable background schedule analysis
+      interval: 600000  # 10 minutes (in milliseconds)
+
+# OptaPlanner Configuration
+optaplanner:
+  solver:
+    termination:
+      spent-limit: 30s # Allow 30 seconds for solving
+      unimproved-spent-limit: 10s
+    environment-mode: FAST_ASSERT # Enable detailed error messages
+  solver-manager:
+    parallel-solver-count: AUTO

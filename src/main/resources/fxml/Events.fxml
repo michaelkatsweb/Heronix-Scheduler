@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<!--
+Events Management View - Dark Futuristic Theme
+Location: src/main/resources/fxml/Events.fxml
+Controller: com.eduscheduler.ui.controller.EventsController
+-->
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.eduscheduler.ui.controller.EventsController"
+            styleClass="root">
+
+    <top>
+        <VBox spacing="15" style="-fx-padding: 20;">
+            <!-- Header Section -->
+            <HBox alignment="CENTER_LEFT" spacing="15" styleClass="card">
+                <Label text="📅 Events Management" styleClass="label-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="➕ Add Event" onAction="#handleAddEvent" styleClass="button-success"/>
+                <Button text="📆 Upcoming" onAction="#handleUpcoming" styleClass="button-primary"/>
+                <Button text="📋 Compliance" onAction="#handleCompliance" styleClass="button-danger"/>
+                <Button text="🔄 Refresh" onAction="#handleRefresh" styleClass="button"/>
+                <Button text="📥 Export" onAction="#handleExport" styleClass="button"/>
+            </HBox>
+
+            <!-- Search and Filter Bar -->
+            <HBox spacing="10" alignment="CENTER_LEFT" styleClass="card">
+                <Label text="🔍 Search:" styleClass="label"/>
+                <TextField fx:id="searchField" promptText="Event name, description..."
+                           prefWidth="300" onKeyReleased="#handleSearch"/>
+
+                <Separator orientation="VERTICAL"/>
+
+                <Label text="Filter:" styleClass="label"/>
+                <ComboBox fx:id="typeFilter" promptText="Event Type"
+                          prefWidth="150" onAction="#handleFilter"/>
+                <ComboBox fx:id="statusFilter" promptText="Status"
+                          prefWidth="120" onAction="#handleFilter"/>
+                <Button text="Clear" onAction="#handleClearFilters" styleClass="button"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <!-- Events Table Container -->
+        <VBox spacing="10" styleClass="card">
+            <padding>
+                <Insets top="15" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label text="All Events" styleClass="label-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="recordCountLabel" text="Total: 0" styleClass="label"/>
+            </HBox>
+
+            <TableView fx:id="eventsTable" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="nameColumn" text="Event Name"
+                                 prefWidth="200" minWidth="150"/>
+                    <TableColumn fx:id="typeColumn" text="Type"
+                                 prefWidth="180" minWidth="150"/>
+                    <TableColumn fx:id="dateColumn" text="Date"
+                                 prefWidth="120" minWidth="100"/>
+                    <TableColumn fx:id="timeColumn" text="Time"
+                                 prefWidth="150" minWidth="120"/>
+                    <TableColumn fx:id="durationColumn" text="Duration"
+                                 prefWidth="80" minWidth="70"/>
+                    <TableColumn fx:id="blockingColumn" text="Blocking"
+                                 prefWidth="100" minWidth="80"/>
+                    <TableColumn fx:id="statusColumn" text="Status"
+                                 prefWidth="100" minWidth="80"/>
+                    <TableColumn fx:id="actionsColumn" text="Actions"
+                                 prefWidth="120" minWidth="100"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </center>
+
+</BorderPane>

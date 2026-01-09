@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.eduscheduler.ui.controller.WaitlistManagerController"
+            prefWidth="1000" prefHeight="700">
+
+    <!-- Top: Header -->
+    <top>
+        <VBox spacing="10" styleClass="header-section">
+            <padding>
+                <Insets top="15" right="20" bottom="15" left="20"/>
+            </padding>
+
+            <Label text="Waitlist Manager" styleClass="header-title"/>
+            <Label text="View and manage course waitlists. Promote students when seats become available."
+                   styleClass="header-subtitle" wrapText="true"/>
+
+            <Separator/>
+        </VBox>
+    </top>
+
+    <!-- Center: Split View -->
+    <center>
+        <SplitPane dividerPositions="0.5" styleClass="split-pane">
+
+            <!-- Left Panel: Courses with Waitlists -->
+            <VBox spacing="10" styleClass="panel">
+                <padding>
+                    <Insets top="10" right="10" bottom="10" left="10"/>
+                </padding>
+
+                <Label text="Courses with Waitlists" styleClass="section-title"/>
+
+                <TableView fx:id="courseTable" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="courseCodeColumn" text="Code" prefWidth="80"/>
+                        <TableColumn fx:id="courseNameColumn" text="Course Name" prefWidth="180"/>
+                        <TableColumn fx:id="waitlistSizeColumn" text="Waitlist" prefWidth="70" style="-fx-alignment: CENTER;"/>
+                        <TableColumn fx:id="availableSeatsColumn" text="Available" prefWidth="70" style="-fx-alignment: CENTER;"/>
+                        <TableColumn fx:id="statusColumn" text="Status" prefWidth="120"/>
+                    </columns>
+                    <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                    </columnResizePolicy>
+                </TableView>
+
+                <HBox spacing="10" alignment="CENTER_RIGHT">
+                    <Button fx:id="refreshButton" text="Refresh" onAction="#handleRefresh" styleClass="secondary-button"/>
+                </HBox>
+            </VBox>
+
+            <!-- Right Panel: Waitlist Details -->
+            <VBox spacing="10" styleClass="panel">
+                <padding>
+                    <Insets top="10" right="10" bottom="10" left="10"/>
+                </padding>
+
+                <Label text="Waitlist Details" styleClass="section-title"/>
+
+                <!-- Course Info -->
+                <VBox spacing="5" styleClass="info-box">
+                    <padding>
+                        <Insets top="10" right="10" bottom="10" left="10"/>
+                    </padding>
+                    <Label fx:id="selectedCourseLabel" text="No course selected" styleClass="info-label"/>
+                    <Label fx:id="enrollmentLabel" text="Enrollment: -" styleClass="info-label"/>
+                    <Label fx:id="availableSeatsLabel" text="Available Seats: -" styleClass="info-label"/>
+                </VBox>
+
+                <!-- Waitlist Table -->
+                <TableView fx:id="waitlistTable" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="positionColumn" text="Position" prefWidth="60" style="-fx-alignment: CENTER;"/>
+                        <TableColumn fx:id="studentNameColumn" text="Student Name" prefWidth="150"/>
+                        <TableColumn fx:id="studentIdColumn" text="Student ID" prefWidth="100"/>
+                        <TableColumn fx:id="priorityColumn" text="Priority" prefWidth="70" style="-fx-alignment: CENTER;"/>
+                        <TableColumn fx:id="preferenceColumn" text="Preference" prefWidth="100"/>
+                    </columns>
+                    <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                    </columnResizePolicy>
+                </TableView>
+
+                <!-- Action Buttons -->
+                <HBox spacing="10" alignment="CENTER">
+                    <Button fx:id="promoteOneButton" text="Promote Selected" onAction="#handlePromoteOne"
+                            styleClass="primary-button" disable="true"/>
+                    <Button fx:id="promoteAllButton" text="Promote All Available" onAction="#handlePromoteAll"
+                            styleClass="primary-button" disable="true"/>
+                    <Button fx:id="removeFromWaitlistButton" text="Remove from Waitlist" onAction="#handleRemoveFromWaitlist"
+                            styleClass="danger-button" disable="true"/>
+                </HBox>
+            </VBox>
+
+        </SplitPane>
+    </center>
+
+    <!-- Bottom: Close Button -->
+    <bottom>
+        <HBox spacing="10" alignment="CENTER_RIGHT" styleClass="button-bar">
+            <padding>
+                <Insets top="10" right="20" bottom="15" left="20"/>
+            </padding>
+            <Button fx:id="closeButton" text="Close" onAction="#handleClose" styleClass="secondary-button"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

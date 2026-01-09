@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.eduscheduler.ui.controller.StudentEnrollmentRequestController"
+            prefWidth="1400" prefHeight="800">
+
+    <!-- Top: Header -->
+    <top>
+        <VBox spacing="10" styleClass="header-section">
+            <padding>
+                <Insets top="15" right="20" bottom="15" left="20"/>
+            </padding>
+
+            <Label text="Create Student Enrollment Requests" styleClass="header-title"/>
+            <Label text="Select a student, choose up to 4 elective preferences, and create enrollment requests for processing."
+                   styleClass="header-subtitle" wrapText="true"/>
+
+            <Separator/>
+        </VBox>
+    </top>
+
+    <!-- Center: Three-Panel Layout -->
+    <center>
+        <HBox spacing="15" styleClass="content-section">
+            <padding>
+                <Insets top="15" right="20" bottom="15" left="20"/>
+            </padding>
+
+            <!-- ============================================================ -->
+            <!-- LEFT PANEL: Student Selection -->
+            <!-- ============================================================ -->
+            <VBox spacing="10" prefWidth="350" styleClass="panel">
+                <Label text="1. Select Student" styleClass="section-title"/>
+
+                <!-- Student Search -->
+                <TextField fx:id="studentSearchField" promptText="Search by name or ID..." styleClass="search-field"/>
+
+                <!-- Student List -->
+                <ListView fx:id="studentListView" VBox.vgrow="ALWAYS" styleClass="list-view"/>
+
+                <!-- Selected Student Info -->
+                <Separator/>
+                <VBox spacing="5" styleClass="info-box">
+                    <padding>
+                        <Insets top="10" right="10" bottom="10" left="10"/>
+                    </padding>
+                    <Label text="Selected Student:" styleClass="info-label-bold"/>
+                    <Label fx:id="selectedStudentLabel" text="None selected" styleClass="info-label"/>
+                    <Label fx:id="studentGPALabel" text="GPA: -" styleClass="info-label"/>
+                    <Label fx:id="studentGradeLabel" text="Grade: -" styleClass="info-label"/>
+                    <Separator/>
+                    <Label fx:id="basePriorityLabel" text="Base Priority: -" styleClass="info-label-bold"/>
+                </VBox>
+            </VBox>
+
+            <!-- ============================================================ -->
+            <!-- MIDDLE PANEL: Available Courses -->
+            <!-- ============================================================ -->
+            <VBox spacing="10" prefWidth="500" VBox.vgrow="ALWAYS" styleClass="panel">
+                <Label text="2. Browse Available Courses (Drag to preferences →)" styleClass="section-title"/>
+
+                <!-- Filters -->
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <TextField fx:id="courseSearchField" promptText="Search courses..." prefWidth="200" styleClass="search-field"/>
+                    <ComboBox fx:id="subjectFilterCombo" prefWidth="180" styleClass="combo-box"/>
+                    <CheckBox fx:id="showFullCoursesCheck" text="Show Full Courses"/>
+                </HBox>
+
+                <!-- Course Table -->
+                <TableView fx:id="availableCoursesTable" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="courseCodeColumn" text="Code" prefWidth="80"/>
+                        <TableColumn fx:id="courseNameColumn" text="Course Name" prefWidth="180"/>
+                        <TableColumn fx:id="subjectColumn" text="Subject" prefWidth="100"/>
+                        <TableColumn fx:id="enrollmentColumn" text="Enrolled" prefWidth="70" style="-fx-alignment: CENTER;"/>
+                        <TableColumn fx:id="gpaReqColumn" text="Min GPA" prefWidth="70" style="-fx-alignment: CENTER;"/>
+                    </columns>
+                    <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                    </columnResizePolicy>
+                </TableView>
+
+                <Label text="💡 Tip: Drag courses from the table to preference slots on the right" styleClass="hint-label" wrapText="true"/>
+            </VBox>
+
+            <!-- ============================================================ -->
+            <!-- RIGHT PANEL: Preferences -->
+            <!-- ============================================================ -->
+            <VBox spacing="10" prefWidth="400" styleClass="panel">
+                <Label text="3. Set Course Preferences" styleClass="section-title"/>
+
+                <!-- Preference 1 -->
+                <VBox spacing="5">
+                    <Label text="1st Choice (Highest Priority)" styleClass="preference-label"/>
+                    <ListView fx:id="preference1List" prefHeight="80" styleClass="preference-list" style="-fx-border-color: #4CAF50; -fx-border-width: 2;"/>
+                    <Label fx:id="priority1Label" text="Priority: -" styleClass="priority-label"/>
+                </VBox>
+
+                <!-- Preference 2 -->
+                <VBox spacing="5">
+                    <Label text="2nd Choice" styleClass="preference-label"/>
+                    <ListView fx:id="preference2List" prefHeight="80" styleClass="preference-list" style="-fx-border-color: #2196F3; -fx-border-width: 2;"/>
+                    <Label fx:id="priority2Label" text="Priority: -" styleClass="priority-label"/>
+                </VBox>
+
+                <!-- Preference 3 -->
+                <VBox spacing="5">
+                    <Label text="3rd Choice" styleClass="preference-label"/>
+                    <ListView fx:id="preference3List" prefHeight="80" styleClass="preference-list" style="-fx-border-color: #FF9800; -fx-border-width: 2;"/>
+                    <Label fx:id="priority3Label" text="Priority: -" styleClass="priority-label"/>
+                </VBox>
+
+                <!-- Preference 4 -->
+                <VBox spacing="5">
+                    <Label text="4th Choice (Alternate)" styleClass="preference-label"/>
+                    <ListView fx:id="preference4List" prefHeight="80" styleClass="preference-list" style="-fx-border-color: #9E9E9E; -fx-border-width: 2;"/>
+                    <Label fx:id="priority4Label" text="Priority: -" styleClass="priority-label"/>
+                </VBox>
+
+                <Region VBox.vgrow="ALWAYS"/>
+
+                <Label text="💡 Drop zones accept one course each" styleClass="hint-label" wrapText="true"/>
+            </VBox>
+
+        </HBox>
+    </center>
+
+    <!-- Bottom: Action Buttons -->
+    <bottom>
+        <HBox spacing="15" alignment="CENTER_RIGHT" styleClass="button-bar">
+            <padding>
+                <Insets top="10" right="20" bottom="15" left="20"/>
+            </padding>
+            <Button fx:id="clearButton" text="Clear Preferences" onAction="#handleClear" styleClass="secondary-button"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button fx:id="createRequestsButton" text="Create Enrollment Requests" onAction="#handleCreateRequests"
+                    styleClass="primary-button" disable="true"/>
+            <Button fx:id="closeButton" text="Close" onAction="#handleClose" styleClass="secondary-button"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

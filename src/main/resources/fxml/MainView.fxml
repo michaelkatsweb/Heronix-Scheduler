@@ -1,0 +1,121 @@
+<MenuBar>
+    <Menu text="File">
+        <MenuItem text="New Schedule" onAction="#handleNewSchedule"/>
+        <MenuItem text="Import Data" onAction="#handleImport"/>
+        <SeparatorMenuItem/>
+        <MenuItem text="Export to Excel" onAction="#handleExportExcel"/>
+        <MenuItem text="Export to PDF" onAction="#handleExportPDF"/>
+        <SeparatorMenuItem/>
+        <MenuItem text="Exit" onAction="#handleExit"/>
+    </Menu>
+    
+    <Menu text="Manage">
+        <MenuItem text="Teachers" onAction="#showTeachersTab"/>
+        <MenuItem text="Co-Teacher Staff" onAction="#showCoTeacherStaffTab"/>
+        <MenuItem text="Paraprofessional Staff" onAction="#showParaprofessionalStaffTab"/>
+        <MenuItem text="Courses" onAction="#showCoursesTab"/>
+        <MenuItem text="Rooms" onAction="#showRoomsTab"/>
+        <SeparatorMenuItem/>
+        <MenuItem text="Student Enrollment" onAction="#showStudentEnrollmentTab"/>
+        <SeparatorMenuItem/>
+        <MenuItem text="Lunch Periods" onAction="#handleLunchPeriods"/>
+        <MenuItem text="Special Event Blocks (IEP/504/Planning)" onAction="#handleSpecialEventBlocks"/>
+    </Menu>
+
+    <Menu text="View">
+        <MenuItem text="Student Schedules" onAction="#handleStudentScheduleViewer"/>
+    </Menu>
+
+    <Menu text="Tools">
+        <MenuItem text="Check Conflicts" onAction="#handleCheckConflicts"/>
+        <MenuItem text="Database Cleanup" onAction="#handleDatabaseCleanup"/>
+        <SeparatorMenuItem/>
+        <MenuItem text="Notification Center" onAction="#handleNotificationCenter"/>
+        <MenuItem text="SIS Export" onAction="#handleSISExport"/>
+        <MenuItem text="SPED Scheduling" onAction="#handleSPEDScheduling"/>
+        <MenuItem text="Enrollment Forecasting" onAction="#handleEnrollmentForecasting"/>
+        <SeparatorMenuItem/>
+        <MenuItem text="Settings" onAction="#handleSettings"/>
+    </Menu>
+
+    <Menu text="Help">
+        <MenuItem text="User Guide" onAction="#handleUserGuide"/>
+        <MenuItem text="About" onAction="#handleAbout"/>
+    </Menu>
+    <ToolBar styleClass="main-toolbar">
+    <Button text="New" onAction="#handleNew" styleClass="toolbar-button">
+        <graphic>
+            <Label text="📄" style="-fx-font-size: 16;"/>
+        </graphic>
+    </Button>
+    
+    <Button text="Import" onAction="#handleImport" styleClass="toolbar-button">
+        <graphic>
+            <Label text="📥" style="-fx-font-size: 16;"/>
+        </graphic>
+    </Button>
+    
+    <Button text="Generate Schedule" onAction="#handleGenerateSchedule" 
+            styleClass="toolbar-button,primary-button">
+        <graphic>
+            <Label text="🤖" style="-fx-font-size: 16;"/>
+        </graphic>
+    </Button>
+    
+    <Separator orientation="VERTICAL"/>
+    
+    <Button text="Teachers" onAction="#showTeachersTab" styleClass="toolbar-button"/>
+    <Button text="Courses" onAction="#showCoursesTab" styleClass="toolbar-button"/>
+    <Button text="Rooms" onAction="#showRoomsTab" styleClass="toolbar-button"/>
+    
+    <Separator orientation="VERTICAL"/>
+    
+    <Button text="Lunch Periods" onAction="#handleLunchPeriods" styleClass="toolbar-button">
+        <graphic>
+            <Label text="🍽️" style="-fx-font-size: 14;"/>
+        </graphic>
+    </Button>
+    
+    <Button text="Special Events" onAction="#handleSpecialEventBlocks" styleClass="toolbar-button">
+        <graphic>
+            <Label text="📋" style="-fx-font-size: 14;"/>
+        </graphic>
+    </Button>
+    
+    <Separator orientation="VERTICAL"/>
+    
+    <Button text="Check Conflicts" onAction="#handleCheckConflicts" styleClass="toolbar-button">
+        <graphic>
+            <Label text="⚠️" style="-fx-font-size: 14;"/>
+        </graphic>
+    </Button>
+    
+    <Region HBox.hgrow="ALWAYS"/>
+    
+    <Button text="Edit" onAction="#handleEditSchedule" styleClass="toolbar-button,secondary-button">
+        <graphic>
+            <Label text="✏️" style="-fx-font-size: 14;"/>
+        </graphic>
+    </Button>
+    
+    <Button text="Print" onAction="#handlePrint" styleClass="toolbar-button">
+        <graphic>
+            <Label text="🖨️" style="-fx-font-size: 14;"/>
+        </graphic>
+    </Button>
+    
+    <Button text="Export" onAction="#handleExportExcel" styleClass="toolbar-button,success-button">
+        <graphic>
+            <Label text="📤" style="-fx-font-size: 14;"/>
+        </graphic>
+    </Button>
+    
+    <Separator orientation="VERTICAL"/>
+    
+    <Button text="Database Cleanup" onAction="#handleDatabaseCleanup" styleClass="toolbar-button">
+        <graphic>
+            <Label text="🧹" style="-fx-font-size: 14;"/>
+        </graphic>
+    </Button>
+</ToolBar>
+</MenuBar>

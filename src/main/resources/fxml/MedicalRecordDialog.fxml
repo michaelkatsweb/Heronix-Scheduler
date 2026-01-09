@@ -1,0 +1,434 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<!--
+Medical Record Dialog - Comprehensive medical information management
+Location: src/main/resources/fxml/MedicalRecordDialog.fxml
+Purpose: Allow nurses and authorized staff to manage student medical records
+-->
+
+<DialogPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.eduscheduler.ui.controller.MedicalRecordDialogController"
+            styleClass="dialog-pane">
+
+    <content>
+        <VBox spacing="15" styleClass="card" prefWidth="900" prefHeight="700">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <!-- Header Section with Student Info -->
+            <HBox alignment="CENTER_LEFT" spacing="15" styleClass="card-header">
+                <Label text="🏥 Medical Record" styleClass="label-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="studentNameLabel" text="Student Name" styleClass="label-subtitle"/>
+                <Label fx:id="studentIdLabel" text="ID: 000000" styleClass="label"/>
+            </HBox>
+
+            <!-- TabPane for organized medical information -->
+            <TabPane fx:id="medicalTabPane" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+
+                <!-- ALLERGIES TAB -->
+                <Tab text="🥜 Allergies">
+                    <ScrollPane fitToWidth="true" styleClass="scroll-pane">
+                        <VBox spacing="15" styleClass="form-container">
+                            <padding>
+                                <Insets top="15" right="15" bottom="15" left="15"/>
+                            </padding>
+
+                            <!-- Allergy Severity -->
+                            <VBox spacing="8">
+                                <Label text="Allergy Severity Level:" styleClass="label-bold"/>
+                                <ComboBox fx:id="allergySeverityCombo" promptText="Select severity"
+                                          prefWidth="300" styleClass="combo-box"/>
+                                <Label fx:id="severityDescriptionLabel"
+                                       text="Severity description will appear here"
+                                       styleClass="label-info" wrapText="true"/>
+                            </VBox>
+
+                            <Separator/>
+
+                            <!-- Food Allergies -->
+                            <VBox spacing="8">
+                                <HBox alignment="CENTER_LEFT" spacing="10">
+                                    <Label text="Food Allergies:" styleClass="label-bold"/>
+                                    <Label text="(e.g., Peanuts, Tree nuts, Milk, Eggs, Shellfish)"
+                                           styleClass="label-hint"/>
+                                </HBox>
+                                <TextArea fx:id="foodAllergiesArea" promptText="List all food allergies..."
+                                          prefRowCount="3" wrapText="true" styleClass="text-area"/>
+                            </VBox>
+
+                            <!-- Medication Allergies -->
+                            <VBox spacing="8">
+                                <HBox alignment="CENTER_LEFT" spacing="10">
+                                    <Label text="Medication Allergies:" styleClass="label-bold"/>
+                                    <Label text="(e.g., Penicillin, Aspirin, Codeine)"
+                                           styleClass="label-hint"/>
+                                </HBox>
+                                <TextArea fx:id="medicationAllergiesArea"
+                                          promptText="List all medication allergies..."
+                                          prefRowCount="3" wrapText="true" styleClass="text-area"/>
+                            </VBox>
+
+                            <!-- Environmental Allergies -->
+                            <VBox spacing="8">
+                                <HBox alignment="CENTER_LEFT" spacing="10">
+                                    <Label text="Environmental Allergies:" styleClass="label-bold"/>
+                                    <Label text="(e.g., Bee stings, Latex, Pollen)"
+                                           styleClass="label-hint"/>
+                                </HBox>
+                                <TextArea fx:id="environmentalAllergiesArea"
+                                          promptText="List all environmental allergies..."
+                                          prefRowCount="3" wrapText="true" styleClass="text-area"/>
+                            </VBox>
+
+                            <Separator/>
+
+                            <!-- EpiPen Information -->
+                            <HBox spacing="15" alignment="CENTER_LEFT">
+                                <CheckBox fx:id="hasEpiPenCheck" text="Student carries EpiPen"
+                                          styleClass="check-box"/>
+                                <VBox spacing="5" HBox.hgrow="ALWAYS">
+                                    <Label text="EpiPen Location:" styleClass="label-bold"/>
+                                    <TextField fx:id="epiPenLocationField"
+                                               promptText="e.g., Nurse's office, Student backpack"
+                                               disable="true" styleClass="text-field"/>
+                                </VBox>
+                            </HBox>
+
+                            <!-- Inhaler Information -->
+                            <HBox spacing="15" alignment="CENTER_LEFT">
+                                <CheckBox fx:id="hasInhalerCheck" text="Student carries Inhaler"
+                                          styleClass="check-box"/>
+                                <VBox spacing="5" HBox.hgrow="ALWAYS">
+                                    <Label text="Inhaler Location:" styleClass="label-bold"/>
+                                    <TextField fx:id="inhalerLocationField"
+                                               promptText="e.g., Nurse's office, Student backpack"
+                                               disable="true" styleClass="text-field"/>
+                                </VBox>
+                            </HBox>
+                        </VBox>
+                    </ScrollPane>
+                </Tab>
+
+                <!-- CHRONIC CONDITIONS TAB -->
+                <Tab text="💉 Chronic Conditions">
+                    <ScrollPane fitToWidth="true" styleClass="scroll-pane">
+                        <VBox spacing="15" styleClass="form-container">
+                            <padding>
+                                <Insets top="15" right="15" bottom="15" left="15"/>
+                            </padding>
+
+                            <!-- Diabetes -->
+                            <VBox spacing="8" styleClass="condition-section">
+                                <HBox spacing="10" alignment="CENTER_LEFT">
+                                    <CheckBox fx:id="hasDiabetesCheck" text="Diabetes"
+                                              styleClass="check-box-large"/>
+                                    <Region HBox.hgrow="ALWAYS"/>
+                                    <Label text="Type:" styleClass="label-bold"/>
+                                    <ComboBox fx:id="diabetesTypeCombo" promptText="Select type"
+                                              prefWidth="150" disable="true" styleClass="combo-box"/>
+                                </HBox>
+                                <TextArea fx:id="diabetesManagementArea"
+                                          promptText="Diabetes management plan (insulin schedule, blood sugar monitoring, etc.)"
+                                          prefRowCount="3" wrapText="true" disable="true"
+                                          styleClass="text-area"/>
+                            </VBox>
+
+                            <Separator/>
+
+                            <!-- Asthma -->
+                            <VBox spacing="8" styleClass="condition-section">
+                                <HBox spacing="10" alignment="CENTER_LEFT">
+                                    <CheckBox fx:id="hasAsthmaCheck" text="Asthma"
+                                              styleClass="check-box-large"/>
+                                    <Region HBox.hgrow="ALWAYS"/>
+                                    <Label text="Severity:" styleClass="label-bold"/>
+                                    <ComboBox fx:id="asthmaSeverityCombo" promptText="Select severity"
+                                              prefWidth="150" disable="true" styleClass="combo-box"/>
+                                </HBox>
+                                <TextArea fx:id="asthmaTriggersArea"
+                                          promptText="Known triggers (exercise, cold air, allergies, etc.)"
+                                          prefRowCount="2" wrapText="true" disable="true"
+                                          styleClass="text-area"/>
+                            </VBox>
+
+                            <Separator/>
+
+                            <!-- Seizure Disorder -->
+                            <VBox spacing="8" styleClass="condition-section">
+                                <HBox spacing="10" alignment="CENTER_LEFT">
+                                    <CheckBox fx:id="hasSeizureDisorderCheck" text="Seizure Disorder"
+                                              styleClass="check-box-large"/>
+                                    <Region HBox.hgrow="ALWAYS"/>
+                                    <Label text="Type:" styleClass="label-bold"/>
+                                    <TextField fx:id="seizureTypeField" promptText="e.g., Epilepsy, Grand mal"
+                                               prefWidth="200" disable="true" styleClass="text-field"/>
+                                </HBox>
+                                <TextArea fx:id="seizureProtocolArea"
+                                          promptText="Seizure protocol and emergency procedures"
+                                          prefRowCount="3" wrapText="true" disable="true"
+                                          styleClass="text-area"/>
+                            </VBox>
+
+                            <Separator/>
+
+                            <!-- Heart Condition -->
+                            <VBox spacing="8" styleClass="condition-section">
+                                <HBox spacing="10" alignment="CENTER_LEFT">
+                                    <CheckBox fx:id="hasHeartConditionCheck" text="Heart Condition"
+                                              styleClass="check-box-large"/>
+                                    <Region HBox.hgrow="ALWAYS"/>
+                                    <Label text="Type:" styleClass="label-bold"/>
+                                    <TextField fx:id="heartConditionTypeField"
+                                               promptText="e.g., Arrhythmia, Congenital defect"
+                                               prefWidth="250" disable="true" styleClass="text-field"/>
+                                </HBox>
+                                <TextArea fx:id="heartConditionNotesArea"
+                                          promptText="Activity restrictions and management notes"
+                                          prefRowCount="2" wrapText="true" disable="true"
+                                          styleClass="text-area"/>
+                            </VBox>
+
+                            <Separator/>
+
+                            <!-- Other Conditions -->
+                            <VBox spacing="8">
+                                <Label text="Other Medical Conditions:" styleClass="label-bold"/>
+                                <TextArea fx:id="otherConditionsArea"
+                                          promptText="List any other medical conditions (ADHD, anxiety, celiac disease, etc.)"
+                                          prefRowCount="4" wrapText="true" styleClass="text-area"/>
+                            </VBox>
+                        </VBox>
+                    </ScrollPane>
+                </Tab>
+
+                <!-- MEDICATIONS TAB -->
+                <Tab text="💊 Medications">
+                    <ScrollPane fitToWidth="true" styleClass="scroll-pane">
+                        <VBox spacing="15" styleClass="form-container">
+                            <padding>
+                                <Insets top="15" right="15" bottom="15" left="15"/>
+                            </padding>
+
+                            <!-- Current Medications -->
+                            <VBox spacing="8">
+                                <Label text="Current Medications:" styleClass="label-bold"/>
+                                <TextArea fx:id="currentMedicationsArea"
+                                          promptText="List all current medications (name, dosage, purpose)&#10;Example: Amoxicillin 500mg - Antibiotic for infection"
+                                          prefRowCount="5" wrapText="true" styleClass="text-area"/>
+                            </VBox>
+
+                            <!-- Medication Schedule -->
+                            <VBox spacing="8">
+                                <Label text="Medication Schedule:" styleClass="label-bold"/>
+                                <TextArea fx:id="medicationScheduleArea"
+                                          promptText="When medications should be administered at school&#10;Example: Ritalin 10mg - 12:00 PM (lunch time)"
+                                          prefRowCount="4" wrapText="true" styleClass="text-area"/>
+                            </VBox>
+
+                            <!-- Self Administration -->
+                            <HBox spacing="15" alignment="CENTER_LEFT">
+                                <CheckBox fx:id="selfAdministersCheck"
+                                          text="Student self-administers medication"
+                                          styleClass="check-box"/>
+                                <Label text="(Check if student is responsible for taking own medication)"
+                                       styleClass="label-hint"/>
+                            </HBox>
+
+                            <Separator/>
+
+                            <!-- Medication Instructions -->
+                            <VBox spacing="8">
+                                <Label text="Special Instructions for Medication Administration:"
+                                       styleClass="label-bold"/>
+                                <TextArea fx:id="medicationInstructionsArea"
+                                          promptText="Any special instructions for administering medications"
+                                          prefRowCount="3" wrapText="true" styleClass="text-area"/>
+                            </VBox>
+                        </VBox>
+                    </ScrollPane>
+                </Tab>
+
+                <!-- EMERGENCY TAB -->
+                <Tab text="🚨 Emergency">
+                    <ScrollPane fitToWidth="true" styleClass="scroll-pane">
+                        <VBox spacing="15" styleClass="form-container">
+                            <padding>
+                                <Insets top="15" right="15" bottom="15" left="15"/>
+                            </padding>
+
+                            <!-- Medical Alert (Critical) -->
+                            <VBox spacing="8" styleClass="alert-section">
+                                <HBox alignment="CENTER_LEFT" spacing="10">
+                                    <Label text="⚠️ MEDICAL ALERT (Critical):"
+                                           styleClass="label-bold"
+                                           style="-fx-text-fill: #ff6b6b;"/>
+                                    <Label text="This will be prominently displayed to all staff"
+                                           styleClass="label-hint"/>
+                                </HBox>
+                                <TextArea fx:id="medicalAlertArea"
+                                          promptText="Brief, critical medical alert (e.g., 'SEVERE PEANUT ALLERGY - EPIPEN REQUIRED')"
+                                          prefRowCount="2" wrapText="true" styleClass="text-area-alert"/>
+                            </VBox>
+
+                            <Separator/>
+
+                            <!-- Emergency Action Plan -->
+                            <VBox spacing="8">
+                                <Label text="Emergency Action Plan:" styleClass="label-bold"/>
+                                <TextArea fx:id="emergencyActionPlanArea"
+                                          promptText="Detailed emergency response procedures&#10;&#10;Example:&#10;1. If allergic reaction occurs, administer EpiPen immediately&#10;2. Call 911&#10;3. Contact parent at XXX-XXX-XXXX&#10;4. Monitor student until help arrives"
+                                          prefRowCount="8" wrapText="true" styleClass="text-area"/>
+                            </VBox>
+
+                            <Separator/>
+
+                            <!-- Physical Restrictions -->
+                            <VBox spacing="8">
+                                <Label text="Physical Activity Restrictions:" styleClass="label-bold"/>
+                                <TextArea fx:id="physicalRestrictionsArea"
+                                          promptText="Any restrictions on physical activities (PE, recess, sports)"
+                                          prefRowCount="3" wrapText="true" styleClass="text-area"/>
+                            </VBox>
+
+                            <Separator/>
+
+                            <!-- Dietary Restrictions -->
+                            <VBox spacing="8">
+                                <Label text="Dietary Restrictions:" styleClass="label-bold"/>
+                                <TextArea fx:id="dietaryRestrictionsArea"
+                                          promptText="Dietary restrictions related to medical conditions"
+                                          prefRowCount="3" wrapText="true" styleClass="text-area"/>
+                            </VBox>
+                        </VBox>
+                    </ScrollPane>
+                </Tab>
+
+                <!-- PHYSICIAN & INSURANCE TAB -->
+                <Tab text="👨‍⚕️ Physician Info">
+                    <ScrollPane fitToWidth="true" styleClass="scroll-pane">
+                        <VBox spacing="15" styleClass="form-container">
+                            <padding>
+                                <Insets top="15" right="15" bottom="15" left="15"/>
+                            </padding>
+
+                            <!-- Physician Information -->
+                            <VBox spacing="12">
+                                <Label text="Primary Physician Information:" styleClass="label-bold"/>
+
+                                <HBox spacing="15">
+                                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                                        <Label text="Physician Name:" styleClass="label"/>
+                                        <TextField fx:id="physicianNameField"
+                                                   promptText="Dr. First Last"
+                                                   styleClass="text-field"/>
+                                    </VBox>
+                                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                                        <Label text="Phone:" styleClass="label"/>
+                                        <TextField fx:id="physicianPhoneField"
+                                                   promptText="(555) 123-4567"
+                                                   styleClass="text-field"/>
+                                    </VBox>
+                                </HBox>
+
+                                <VBox spacing="5">
+                                    <Label text="Address:" styleClass="label"/>
+                                    <TextField fx:id="physicianAddressField"
+                                               promptText="Street Address, City, State ZIP"
+                                               styleClass="text-field"/>
+                                </VBox>
+                            </VBox>
+
+                            <Separator/>
+
+                            <!-- Insurance Information -->
+                            <VBox spacing="12">
+                                <Label text="Insurance Information:" styleClass="label-bold"/>
+
+                                <HBox spacing="15">
+                                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                                        <Label text="Insurance Provider:" styleClass="label"/>
+                                        <TextField fx:id="insuranceProviderField"
+                                                   promptText="e.g., Blue Cross Blue Shield"
+                                                   styleClass="text-field"/>
+                                    </VBox>
+                                    <VBox spacing="5" prefWidth="200">
+                                        <Label text="Policy Number:" styleClass="label"/>
+                                        <TextField fx:id="policyNumberField"
+                                                   promptText="Policy #"
+                                                   styleClass="text-field"/>
+                                    </VBox>
+                                </HBox>
+
+                                <VBox spacing="5">
+                                    <Label text="Group Number:" styleClass="label"/>
+                                    <TextField fx:id="groupNumberField"
+                                               promptText="Group #"
+                                               prefWidth="300" styleClass="text-field"/>
+                                </VBox>
+                            </VBox>
+
+                            <Separator/>
+
+                            <!-- Additional Notes -->
+                            <VBox spacing="8">
+                                <Label text="Additional Medical Notes:" styleClass="label-bold"/>
+                                <TextArea fx:id="additionalNotesArea"
+                                          promptText="Any additional medical information not covered above"
+                                          prefRowCount="5" wrapText="true" styleClass="text-area"/>
+                            </VBox>
+
+                            <Separator/>
+
+                            <!-- Review Tracking -->
+                            <HBox spacing="30">
+                                <VBox spacing="5">
+                                    <Label text="Last Reviewed:" styleClass="label-bold"/>
+                                    <DatePicker fx:id="lastReviewedDatePicker"
+                                                promptText="Select date"
+                                                prefWidth="180" styleClass="date-picker"/>
+                                </VBox>
+                                <VBox spacing="5">
+                                    <Label text="Reviewed By:" styleClass="label-bold"/>
+                                    <TextField fx:id="reviewedByField"
+                                               promptText="Staff member name"
+                                               prefWidth="250" styleClass="text-field"/>
+                                </VBox>
+                            </HBox>
+
+                            <!-- Verification Checkbox -->
+                            <HBox spacing="10" alignment="CENTER_LEFT"
+                                  style="-fx-background-color: rgba(52, 211, 153, 0.1); -fx-padding: 15; -fx-background-radius: 8;">
+                                <CheckBox fx:id="verifiedCheck"
+                                          text="I verify that this medical information is accurate and current"
+                                          styleClass="check-box-large"/>
+                            </HBox>
+                        </VBox>
+                    </ScrollPane>
+                </Tab>
+            </TabPane>
+
+            <!-- Status Bar with Indicators -->
+            <HBox spacing="15" alignment="CENTER_LEFT" styleClass="status-bar">
+                <Label fx:id="criticalIndicator" text="⚠️ CRITICAL CASE"
+                       styleClass="label-alert" visible="false"/>
+                <Label fx:id="hasMedicalConditionsIndicator" text="📋 Has Medical Conditions"
+                       styleClass="label-info" visible="false"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="lastModifiedLabel" text="Last Modified: Never"
+                       styleClass="label-hint"/>
+            </HBox>
+        </VBox>
+    </content>
+
+    <buttonTypes>
+        <ButtonType fx:id="saveButtonType" text="Save" buttonData="OK_DONE"/>
+        <ButtonType fx:id="cancelButtonType" text="Cancel" buttonData="CANCEL_CLOSE"/>
+    </buttonTypes>
+</DialogPane>

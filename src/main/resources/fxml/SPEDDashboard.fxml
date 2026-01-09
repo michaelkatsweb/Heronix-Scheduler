@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+
+<!--
+SPED Dashboard
+Comprehensive view of Special Education services, IEP compliance, and scheduling
+
+Location: src/main/resources/fxml/SPEDDashboard.fxml
+-->
+
+<BorderPane xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.eduscheduler.ui.controller.SPEDDashboardController"
+            styleClass="main-container">
+
+    <!-- HEADER -->
+    <top>
+        <VBox styleClass="header-section">
+            <HBox alignment="CENTER_LEFT" spacing="20" styleClass="page-header">
+                <Label text="🎓 Special Education Dashboard" styleClass="page-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="🔄 Refresh" onAction="#handleRefresh" styleClass="button-secondary"/>
+                <Button text="📊 Export Report" onAction="#handleExportReport" styleClass="button-secondary"/>
+                <Button text="➕ Add IEP" onAction="#handleAddIEP" styleClass="button-primary"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- MAIN CONTENT -->
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="scroll-pane">
+            <VBox spacing="20" styleClass="content-container">
+                <padding>
+                    <Insets top="20" right="20" bottom="20" left="20"/>
+                </padding>
+
+                <!-- ========== OVERVIEW CARDS ========== -->
+                <HBox spacing="15" styleClass="metrics-row">
+                    <!-- Active IEPs Card -->
+                    <VBox styleClass="card metric-card" HBox.hgrow="ALWAYS">
+                        <Label text="📋 Active IEPs" styleClass="metric-label"/>
+                        <Label fx:id="activeIEPsLabel" text="--" styleClass="metric-value"/>
+                        <Label fx:id="iepComplianceLabel" text="-- students compliant" styleClass="metric-description"/>
+                    </VBox>
+
+                    <!-- Active 504 Plans Card -->
+                    <VBox styleClass="card metric-card" HBox.hgrow="ALWAYS">
+                        <Label text="📝 Active 504 Plans" styleClass="metric-label"/>
+                        <Label fx:id="active504Label" text="--" styleClass="metric-value"/>
+                        <Label fx:id="plan504ComplianceLabel" text="-- students compliant" styleClass="metric-description"/>
+                    </VBox>
+
+                    <!-- Scheduled Services Card -->
+                    <VBox styleClass="card metric-card" HBox.hgrow="ALWAYS">
+                        <Label text="✅ Service Scheduling" styleClass="metric-label"/>
+                        <Label fx:id="scheduledServicesLabel" text="--" styleClass="metric-value"/>
+                        <Label fx:id="schedulingRateLabel" text="--% scheduled" styleClass="metric-description"/>
+                    </VBox>
+
+                    <!-- Upcoming Reviews Card -->
+                    <VBox styleClass="card metric-card" HBox.hgrow="ALWAYS">
+                        <Label text="📅 Upcoming Reviews" styleClass="metric-label"/>
+                        <Label fx:id="upcomingReviewsLabel" text="--" styleClass="metric-value"/>
+                        <Label fx:id="overdueReviewsLabel" text="-- overdue" styleClass="metric-description"/>
+                    </VBox>
+                </HBox>
+
+                <!-- ========== COMPLIANCE STATUS ========== -->
+                <VBox spacing="15" styleClass="card">
+                    <Label text="📊 Service Delivery Compliance" styleClass="section-title"/>
+
+                    <HBox spacing="15" alignment="CENTER_LEFT">
+                        <VBox spacing="5" HBox.hgrow="ALWAYS">
+                            <Label text="Overall Compliance Rate" styleClass="stat-label"/>
+                            <Label fx:id="overallComplianceLabel" text="--%" styleClass="stat-value"
+                                   style="-fx-font-size: 36;"/>
+                        </VBox>
+
+                        <Separator orientation="VERTICAL"/>
+
+                        <VBox spacing="10" HBox.hgrow="ALWAYS">
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <Label text="●" style="-fx-text-fill: #00ff88; -fx-font-size: 24;"/>
+                                <VBox>
+                                    <Label fx:id="fullyScheduledLabel" text="--" styleClass="stat-value"/>
+                                    <Label text="Fully Scheduled" styleClass="stat-description"/>
+                                </VBox>
+                            </HBox>
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <Label text="●" style="-fx-text-fill: #ffee00; -fx-font-size: 24;"/>
+                                <VBox>
+                                    <Label fx:id="partiallyScheduledLabel" text="--" styleClass="stat-value"/>
+                                    <Label text="Partially Scheduled" styleClass="stat-description"/>
+                                </VBox>
+                            </HBox>
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <Label text="●" style="-fx-text-fill: #ff4444; -fx-font-size: 24;"/>
+                                <VBox>
+                                    <Label fx:id="notScheduledLabel" text="--" styleClass="stat-value"/>
+                                    <Label text="Not Scheduled" styleClass="stat-description"/>
+                                </VBox>
+                            </HBox>
+                        </VBox>
+                    </HBox>
+                </VBox>
+
+                <!-- ========== SERVICE TYPE BREAKDOWN ========== -->
+                <VBox spacing="15" styleClass="card">
+                    <HBox alignment="CENTER_LEFT" spacing="15">
+                        <Label text="🎯 Service Type Breakdown" styleClass="section-title"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Button text="📅 Schedule All" onAction="#handleScheduleAllServices"
+                                styleClass="button-primary"/>
+                    </HBox>
+
+                    <GridPane hgap="15" vgap="10">
+                        <!-- Speech Therapy -->
+                        <VBox GridPane.columnIndex="0" GridPane.rowIndex="0">
+                            <Label text="🗣️ Speech Therapy" styleClass="stat-label"/>
+                            <Label fx:id="speechTherapyLabel" text="--" styleClass="stat-value"/>
+                            <Label fx:id="speechScheduledLabel" text="-- scheduled" styleClass="stat-description"/>
+                        </VBox>
+
+                        <!-- Occupational Therapy -->
+                        <VBox GridPane.columnIndex="1" GridPane.rowIndex="0">
+                            <Label text="✋ Occupational Therapy" styleClass="stat-label"/>
+                            <Label fx:id="occupationalTherapyLabel" text="--" styleClass="stat-value"/>
+                            <Label fx:id="otScheduledLabel" text="-- scheduled" styleClass="stat-description"/>
+                        </VBox>
+
+                        <!-- Physical Therapy -->
+                        <VBox GridPane.columnIndex="2" GridPane.rowIndex="0">
+                            <Label text="🏃 Physical Therapy" styleClass="stat-label"/>
+                            <Label fx:id="physicalTherapyLabel" text="--" styleClass="stat-value"/>
+                            <Label fx:id="ptScheduledLabel" text="-- scheduled" styleClass="stat-description"/>
+                        </VBox>
+
+                        <!-- Counseling -->
+                        <VBox GridPane.columnIndex="3" GridPane.rowIndex="0">
+                            <Label text="💭 Counseling" styleClass="stat-label"/>
+                            <Label fx:id="counselingLabel" text="--" styleClass="stat-value"/>
+                            <Label fx:id="counselingScheduledLabel" text="-- scheduled" styleClass="stat-description"/>
+                        </VBox>
+                    </GridPane>
+                </VBox>
+
+                <!-- ========== STUDENTS NEEDING ATTENTION ========== -->
+                <VBox spacing="15" styleClass="card">
+                    <Label text="⚠️ Students Needing Attention" styleClass="section-title"/>
+
+                    <TableView fx:id="studentsNeedingAttentionTable" styleClass="data-table">
+                        <columns>
+                            <TableColumn fx:id="studentNameColumn" text="Student Name" prefWidth="200"/>
+                            <TableColumn fx:id="studentGradeColumn" text="Grade" prefWidth="80"/>
+                            <TableColumn fx:id="issueTypeColumn" text="Issue" prefWidth="150"/>
+                            <TableColumn fx:id="issueDetailsColumn" text="Details" prefWidth="300"/>
+                            <TableColumn fx:id="dueDateColumn" text="Due Date" prefWidth="120"/>
+                            <TableColumn fx:id="actionColumn" text="Action" prefWidth="150"/>
+                        </columns>
+                        <placeholder>
+                            <Label text="✓ No students requiring immediate attention"/>
+                        </placeholder>
+                    </TableView>
+                </VBox>
+
+                <!-- ========== UNSCHEDULED SERVICES ========== -->
+                <VBox spacing="15" styleClass="card">
+                    <HBox alignment="CENTER_LEFT" spacing="15">
+                        <Label text="📋 Unscheduled Services" styleClass="section-title"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <ComboBox fx:id="filterServiceTypeComboBox" promptText="All Types"
+                                  onAction="#handleFilterChange" styleClass="filter-combo"/>
+                    </HBox>
+
+                    <TableView fx:id="unscheduledServicesTable" styleClass="data-table">
+                        <columns>
+                            <TableColumn fx:id="serviceStudentColumn" text="Student" prefWidth="180"/>
+                            <TableColumn fx:id="serviceTypeColumn" text="Service Type" prefWidth="150"/>
+                            <TableColumn fx:id="frequencyColumn" text="Frequency" prefWidth="120"/>
+                            <TableColumn fx:id="durationColumn" text="Duration" prefWidth="100"/>
+                            <TableColumn fx:id="providerColumn" text="Provider" prefWidth="150"/>
+                            <TableColumn fx:id="statusColumn" text="Status" prefWidth="120"/>
+                            <TableColumn fx:id="scheduleActionColumn" text="Action" prefWidth="150"/>
+                        </columns>
+                        <placeholder>
+                            <Label text="✓ All services are scheduled"/>
+                        </placeholder>
+                    </TableView>
+                </VBox>
+
+                <!-- ========== PROVIDER WORKLOAD ========== -->
+                <VBox spacing="15" styleClass="card">
+                    <Label text="👥 Provider Workload" styleClass="section-title"/>
+
+                    <TableView fx:id="providerWorkloadTable" styleClass="data-table">
+                        <columns>
+                            <TableColumn fx:id="providerNameColumn" text="Provider Name" prefWidth="200"/>
+                            <TableColumn fx:id="providerRoleColumn" text="Role" prefWidth="150"/>
+                            <TableColumn fx:id="activeServicesColumn" text="Active Services" prefWidth="120"/>
+                            <TableColumn fx:id="totalMinutesColumn" text="Minutes/Week" prefWidth="120"/>
+                            <TableColumn fx:id="studentCountColumn" text="Students" prefWidth="100"/>
+                            <TableColumn fx:id="workloadStatusColumn" text="Workload" prefWidth="120"/>
+                        </columns>
+                        <placeholder>
+                            <Label text="No SPED providers found"/>
+                        </placeholder>
+                    </TableView>
+                </VBox>
+
+            </VBox>
+        </ScrollPane>
+    </center>
+
+</BorderPane>

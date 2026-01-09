@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.eduscheduler.ui.controller.CourseManagementController"
+            styleClass="root">
+
+    <top>
+        <VBox spacing="10" styleClass="card">
+            <padding>
+                <Insets top="15" right="15" bottom="15" left="15"/>
+            </padding>
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <TextField fx:id="searchField" promptText="Search courses..." prefWidth="300"/>
+                <Button text="Search" onAction="#handleSearch" styleClass="button"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="Add Course" onAction="#handleAddCourse" styleClass="button-primary"/>
+                <Button text="Refresh" onAction="#handleRefresh" styleClass="button"/>
+            </HBox>
+
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Filter by Subject:" styleClass="label"/>
+                <ComboBox fx:id="subjectFilter" promptText="All Subjects" onAction="#handleFilter"/>
+                <Label text="Level:" styleClass="label"/>
+                <ComboBox fx:id="levelFilter" promptText="All Levels" onAction="#handleFilter"/>
+                <Label text="Status:" styleClass="label"/>
+                <ComboBox fx:id="statusFilter" promptText="All" onAction="#handleFilter"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <VBox spacing="0">
+            <!-- Selection Toolbar (will be populated programmatically) -->
+            <HBox fx:id="selectionToolbar"/>
+
+            <TableView fx:id="courseTable" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="idColumn" text="ID" prefWidth="60"/>
+                <TableColumn fx:id="courseCodeColumn" text="Course Code" prefWidth="100"/>
+                <TableColumn fx:id="courseNameColumn" text="Course Name" prefWidth="200"/>
+                <TableColumn fx:id="subjectColumn" text="Subject" prefWidth="120"/>
+                <TableColumn fx:id="levelColumn" text="Level" prefWidth="100"/>
+                <TableColumn fx:id="teacherColumn" text="Teacher" prefWidth="150"/>
+                <TableColumn fx:id="roomColumn" text="Room" prefWidth="80"/>
+                <TableColumn fx:id="maxStudentsColumn" text="Max Students" prefWidth="90"/>
+                <TableColumn fx:id="enrollmentColumn" text="Enrolled" prefWidth="80"/>
+                <TableColumn fx:id="durationColumn" text="Duration" prefWidth="80"/>
+                <TableColumn fx:id="activeColumn" text="Active" prefWidth="70"/>
+                <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="150"/>
+            </columns>
+        </TableView>
+        </VBox>
+    </center>
+
+    <bottom>
+        <HBox spacing="10" alignment="CENTER_LEFT" styleClass="card">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            <Label fx:id="recordCountLabel" text="0 courses" styleClass="label"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="Export to Excel" onAction="#handleExport" styleClass="button"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

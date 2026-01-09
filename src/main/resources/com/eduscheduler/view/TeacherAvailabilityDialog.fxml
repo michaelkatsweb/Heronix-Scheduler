@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.eduscheduler.controller.TeacherAvailabilityDialogController"
+      spacing="15" prefWidth="600" prefHeight="500">
+
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <!-- Header -->
+    <HBox alignment="CENTER_LEFT" spacing="10">
+        <Label text="Teacher Availability - " styleClass="dialog-title"/>
+        <Label fx:id="teacherNameLabel" styleClass="dialog-title" text=""/>
+    </HBox>
+
+    <Separator/>
+
+    <!-- Info Text -->
+    <Text text="Define when this teacher is unavailable (meetings, appointments, etc.). The scheduler will enforce these as hard constraints."
+          wrappingWidth="560" styleClass="help-text"/>
+
+    <!-- Unavailable Time Blocks List -->
+    <VBox spacing="10" VBox.vgrow="ALWAYS">
+        <Label text="Unavailable Time Blocks:" styleClass="section-label"/>
+
+        <TableView fx:id="blocksTable" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="dayColumn" text="Day" prefWidth="120"/>
+                <TableColumn fx:id="startTimeColumn" text="Start Time" prefWidth="100"/>
+                <TableColumn fx:id="endTimeColumn" text="End Time" prefWidth="100"/>
+                <TableColumn fx:id="reasonColumn" text="Reason" prefWidth="180"/>
+                <TableColumn fx:id="recurringColumn" text="Recurring" prefWidth="80"/>
+            </columns>
+            <placeholder>
+                <Label text="No unavailable time blocks defined. Click 'Add Block' to add restrictions."/>
+            </placeholder>
+        </TableView>
+
+        <!-- Action Buttons -->
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Button text="Add Block" onAction="#handleAddBlock" styleClass="primary-button"/>
+            <Button fx:id="editBlockButton" text="Edit Block" onAction="#handleEditBlock" disable="true"/>
+            <Button fx:id="removeBlockButton" text="Remove Block" onAction="#handleRemoveBlock" disable="true"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="blockCountLabel" text="0 blocks defined" styleClass="info-label"/>
+        </HBox>
+    </VBox>
+
+    <Separator/>
+
+    <!-- Bottom Buttons -->
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Button text="Save" onAction="#handleSave" styleClass="primary-button" defaultButton="true"/>
+        <Button text="Cancel" onAction="#handleCancel" cancelButton="true"/>
+    </HBox>
+</VBox>

@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.eduscheduler.ui.controller.EnrollmentRequestManagementController"
+            prefWidth="1400" prefHeight="900">
+
+    <!-- Top: Header and Statistics -->
+    <top>
+        <VBox spacing="15" styleClass="header-section">
+            <padding>
+                <Insets top="15" right="20" bottom="15" left="20"/>
+            </padding>
+
+            <!-- Title -->
+            <Label text="Enrollment Request Management" styleClass="header-title"/>
+            <Label text="View, search, filter, and manage all enrollment requests. Use checkboxes for bulk operations."
+                   styleClass="header-subtitle" wrapText="true"/>
+
+            <Separator/>
+
+            <!-- Statistics Dashboard -->
+            <HBox spacing="30" alignment="CENTER_LEFT" styleClass="statistics-bar">
+                <padding>
+                    <Insets top="10" right="10" bottom="10" left="10"/>
+                </padding>
+
+                <VBox alignment="CENTER" spacing="5">
+                    <Label text="Total Requests" styleClass="stat-label"/>
+                    <Label fx:id="totalRequestsLabel" text="0" styleClass="stat-value"/>
+                </VBox>
+
+                <Separator orientation="VERTICAL"/>
+
+                <VBox alignment="CENTER" spacing="5">
+                    <Label text="Pending" styleClass="stat-label"/>
+                    <Label fx:id="pendingRequestsLabel" text="0" styleClass="stat-value" style="-fx-text-fill: #2196F3;"/>
+                </VBox>
+
+                <Separator orientation="VERTICAL"/>
+
+                <VBox alignment="CENTER" spacing="5">
+                    <Label text="Assigned" styleClass="stat-label"/>
+                    <Label fx:id="assignedRequestsLabel" text="0" styleClass="stat-value" style="-fx-text-fill: #4CAF50;"/>
+                </VBox>
+
+                <Separator orientation="VERTICAL"/>
+
+                <VBox alignment="CENTER" spacing="5">
+                    <Label text="Cancelled" styleClass="stat-label"/>
+                    <Label fx:id="cancelledRequestsLabel" text="0" styleClass="stat-value" style="-fx-text-fill: #F44336;"/>
+                </VBox>
+
+                <Separator orientation="VERTICAL"/>
+
+                <VBox alignment="CENTER" spacing="5">
+                    <Label text="Waitlist" styleClass="stat-label"/>
+                    <Label fx:id="waitlistRequestsLabel" text="0" styleClass="stat-value" style="-fx-text-fill: #FF9800;"/>
+                </VBox>
+            </HBox>
+
+            <Separator/>
+
+            <!-- Search and Filters -->
+            <GridPane hgap="15" vgap="10" styleClass="filter-section">
+                <padding>
+                    <Insets top="10" right="10" bottom="10" left="10"/>
+                </padding>
+
+                <!-- Row 1: Search Fields -->
+                <Label text="Search Student:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                <TextField fx:id="searchStudentField" promptText="Name or ID..."
+                           GridPane.columnIndex="1" GridPane.rowIndex="0" prefWidth="200"/>
+
+                <Label text="Search Course:" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+                <TextField fx:id="searchCourseField" promptText="Code or Name..."
+                           GridPane.columnIndex="3" GridPane.rowIndex="0" prefWidth="200"/>
+
+                <!-- Row 2: Filter Dropdowns -->
+                <Label text="Status:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                <ComboBox fx:id="statusFilterCombo" GridPane.columnIndex="1" GridPane.rowIndex="1" prefWidth="200"/>
+
+                <Label text="Grade Level:" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+                <ComboBox fx:id="gradeFilterCombo" GridPane.columnIndex="3" GridPane.rowIndex="1" prefWidth="200"/>
+
+                <Label text="Preference:" GridPane.columnIndex="4" GridPane.rowIndex="1"/>
+                <ComboBox fx:id="preferenceFilterCombo" GridPane.columnIndex="5" GridPane.rowIndex="1" prefWidth="150"/>
+
+                <Button fx:id="clearFiltersButton" text="Clear Filters" onAction="#handleClearFilters"
+                        GridPane.columnIndex="6" GridPane.rowIndex="1" styleClass="secondary-button"/>
+            </GridPane>
+
+            <Separator/>
+        </VBox>
+    </top>
+
+    <!-- Center: Table View -->
+    <center>
+        <VBox spacing="10">
+            <padding>
+                <Insets top="10" right="20" bottom="10" left="20"/>
+            </padding>
+
+            <!-- Instructions -->
+            <Label text="💡 Tip: Check boxes to select requests for bulk cancel/delete operations. Click a row to edit individual request."
+                   styleClass="hint-label" wrapText="true"/>
+
+            <!-- Requests Table -->
+            <TableView fx:id="requestsTable" VBox.vgrow="ALWAYS" styleClass="data-table">
+                <columns>
+                    <!-- Selection Column -->
+                    <TableColumn fx:id="selectColumn" text="☑" minWidth="40" maxWidth="40" sortable="false"/>
+
+                    <!-- Student ID Column -->
+                    <TableColumn fx:id="studentIdColumn" text="Student ID" minWidth="100" prefWidth="120"/>
+
+                    <!-- Student Name Column -->
+                    <TableColumn fx:id="studentNameColumn" text="Student Name" minWidth="150" prefWidth="200"/>
+
+                    <!-- Course Code Column -->
+                    <TableColumn fx:id="courseCodeColumn" text="Course" minWidth="80" prefWidth="100"/>
+
+                    <!-- Course Name Column -->
+                    <TableColumn fx:id="courseNameColumn" text="Course Name" minWidth="150" prefWidth="250"/>
+
+                    <!-- Preference Rank Column -->
+                    <TableColumn fx:id="preferenceColumn" text="Pref" minWidth="50" prefWidth="60" style="-fx-alignment: CENTER;"/>
+
+                    <!-- Priority Score Column -->
+                    <TableColumn fx:id="priorityColumn" text="Priority" minWidth="70" prefWidth="80" style="-fx-alignment: CENTER-RIGHT;"/>
+
+                    <!-- Status Column -->
+                    <TableColumn fx:id="statusColumn" text="Status" minWidth="100" prefWidth="120"/>
+
+                    <!-- Date Column -->
+                    <TableColumn fx:id="dateColumn" text="Created" minWidth="100" prefWidth="120"/>
+                </columns>
+
+                <columnResizePolicy>
+                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                </columnResizePolicy>
+            </TableView>
+        </VBox>
+    </center>
+
+    <!-- Bottom: Action Buttons -->
+    <bottom>
+        <HBox spacing="15" alignment="CENTER_RIGHT" styleClass="button-bar">
+            <padding>
+                <Insets top="15" right="20" bottom="15" left="20"/>
+            </padding>
+
+            <Label text="Actions:" styleClass="label-bold"/>
+
+            <Button fx:id="refreshButton" text="Refresh" onAction="#handleRefresh"
+                    styleClass="secondary-button" prefWidth="100"/>
+
+            <Button fx:id="editButton" text="Edit Selected" onAction="#handleEdit"
+                    styleClass="primary-button" prefWidth="120"/>
+
+            <Separator orientation="VERTICAL"/>
+
+            <Button fx:id="cancelButton" text="Cancel Checked" onAction="#handleCancel"
+                    styleClass="warning-button" prefWidth="130"/>
+
+            <Button fx:id="deleteButton" text="Delete Checked" onAction="#handleDelete"
+                    styleClass="danger-button" prefWidth="130"/>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <Button fx:id="closeButton" text="Close" onAction="#handleClose"
+                    styleClass="secondary-button" prefWidth="100"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

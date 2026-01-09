@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.eduscheduler.ui.controller.SubstituteAssignmentDialogController"
+            prefWidth="700" prefHeight="650"
+            styleClass="dialog-pane">
+
+    <!-- Header -->
+    <top>
+        <VBox styleClass="dialog-header" spacing="5">
+            <padding>
+                <Insets top="15" right="20" bottom="15" left="20"/>
+            </padding>
+            <Label fx:id="dialogTitle" text="New Substitute Assignment" styleClass="dialog-title"/>
+            <Label text="Assign a substitute teacher to cover for an absent teacher" styleClass="dialog-subtitle"/>
+        </VBox>
+    </top>
+
+    <!-- Content -->
+    <center>
+        <ScrollPane fitToWidth="true" fitToHeight="true" styleClass="form-scroll">
+            <VBox spacing="20" styleClass="form-content">
+                <padding>
+                    <Insets top="20" right="20" bottom="20" left="20"/>
+                </padding>
+
+                <!-- Assignment Information Section -->
+                <VBox spacing="10" styleClass="form-section">
+                    <Label text="Assignment Details" styleClass="section-title"/>
+                    <Separator/>
+
+                    <!-- Assignment Date -->
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Assignment Date:" minWidth="150" styleClass="form-label">
+                            <tooltip>
+                                <Tooltip text="Date when the substitute is needed"/>
+                            </tooltip>
+                        </Label>
+                        <DatePicker fx:id="assignmentDatePicker" prefWidth="200" promptText="Select date">
+                            <tooltip>
+                                <Tooltip text="Select the date for substitute assignment"/>
+                            </tooltip>
+                        </DatePicker>
+                        <Label text="*" styleClass="required-indicator"/>
+                    </HBox>
+
+                    <!-- Time Range -->
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Time Period:" minWidth="150" styleClass="form-label"/>
+                        <ComboBox fx:id="startTimeCombo" prefWidth="120" promptText="Start Time"/>
+                        <Label text="to"/>
+                        <ComboBox fx:id="endTimeCombo" prefWidth="120" promptText="End Time"/>
+                        <CheckBox fx:id="fullDayCheckbox" text="Full Day" onAction="#handleFullDayToggle"/>
+                    </HBox>
+
+                    <!-- Reason -->
+                    <VBox spacing="5">
+                        <Label text="Reason for Absence:" styleClass="form-label"/>
+                        <ComboBox fx:id="reasonCombo" prefWidth="300">
+                            <tooltip>
+                                <Tooltip text="Select reason for teacher absence"/>
+                            </tooltip>
+                        </ComboBox>
+                    </VBox>
+                </VBox>
+
+                <!-- Absent Teacher Section -->
+                <VBox spacing="10" styleClass="form-section">
+                    <Label text="Absent Staff Member" styleClass="section-title"/>
+                    <Separator/>
+
+                    <!-- Staff Type -->
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Staff Type:" minWidth="150" styleClass="form-label"/>
+                        <ComboBox fx:id="staffTypeCombo" prefWidth="200" onAction="#handleStaffTypeChange">
+                            <tooltip>
+                                <Tooltip text="Type of staff member being replaced"/>
+                            </tooltip>
+                        </ComboBox>
+                        <Label text="*" styleClass="required-indicator"/>
+                    </HBox>
+
+                    <!-- Teacher Selector (visible when staff type is TEACHER) -->
+                    <HBox fx:id="teacherSelectorBox" spacing="10" alignment="CENTER_LEFT" managed="false" visible="false">
+                        <Label text="Absent Teacher:" minWidth="150" styleClass="form-label"/>
+                        <ComboBox fx:id="absentTeacherCombo" prefWidth="300" onAction="#handleTeacherSelection">
+                            <tooltip>
+                                <Tooltip text="Select the teacher who will be absent"/>
+                            </tooltip>
+                        </ComboBox>
+                        <Label text="*" styleClass="required-indicator"/>
+                    </HBox>
+
+                    <!-- Other Staff Name (visible for non-teacher staff) -->
+                    <HBox fx:id="staffNameBox" spacing="10" alignment="CENTER_LEFT" managed="false" visible="false">
+                        <Label text="Staff Name:" minWidth="150" styleClass="form-label"/>
+                        <TextField fx:id="staffNameField" prefWidth="300" promptText="Enter staff member name"/>
+                        <Label text="*" styleClass="required-indicator"/>
+                    </HBox>
+
+                    <!-- Teacher Schedule Info -->
+                    <VBox fx:id="teacherScheduleBox" spacing="5" managed="false" visible="false">
+                        <Label text="Teacher's Schedule for Selected Date:" styleClass="info-label"/>
+                        <TextArea fx:id="teacherScheduleArea" prefHeight="100" editable="false"
+                                 styleClass="info-area" wrapText="true"/>
+                    </VBox>
+                </VBox>
+
+                <!-- Substitute Selection Section -->
+                <VBox spacing="10" styleClass="form-section">
+                    <Label text="Substitute Assignment" styleClass="section-title"/>
+                    <Separator/>
+
+                    <!-- Substitute Selector -->
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Select Substitute:" minWidth="150" styleClass="form-label"/>
+                        <ComboBox fx:id="substituteCombo" prefWidth="300" onAction="#handleSubstituteSelection">
+                            <tooltip>
+                                <Tooltip text="Select an available substitute teacher"/>
+                            </tooltip>
+                        </ComboBox>
+                        <Label text="*" styleClass="required-indicator"/>
+                        <Button text="Show All" onAction="#handleShowAllSubstitutes" styleClass="secondary-button"/>
+                    </HBox>
+
+                    <!-- Filter Options -->
+                    <HBox spacing="15" alignment="CENTER_LEFT">
+                        <CheckBox fx:id="onlyAvailableCheckbox" text="Only Available" selected="true"
+                                 onAction="#handleFilterChange"/>
+                        <CheckBox fx:id="sameDepartmentCheckbox" text="Same Department"
+                                 onAction="#handleFilterChange"/>
+                        <CheckBox fx:id="certifiedOnlyCheckbox" text="Certified Only"
+                                 onAction="#handleFilterChange"/>
+                    </HBox>
+
+                    <!-- Substitute Info -->
+                    <VBox fx:id="substituteInfoBox" spacing="5" managed="false" visible="false">
+                        <Label text="Substitute Information:" styleClass="info-label"/>
+                        <GridPane hgap="10" vgap="5" styleClass="info-grid">
+                            <Label text="Department:" GridPane.columnIndex="0" GridPane.rowIndex="0" styleClass="info-label"/>
+                            <Label fx:id="subDepartmentLabel" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                            <Label text="Certifications:" GridPane.columnIndex="0" GridPane.rowIndex="1" styleClass="info-label"/>
+                            <Label fx:id="subCertificationsLabel" GridPane.columnIndex="1" GridPane.rowIndex="1" wrapText="true"/>
+
+                            <Label text="This Week:" GridPane.columnIndex="0" GridPane.rowIndex="2" styleClass="info-label"/>
+                            <Label fx:id="subWeekHoursLabel" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                            <Label text="This Month:" GridPane.columnIndex="0" GridPane.rowIndex="3" styleClass="info-label"/>
+                            <Label fx:id="subMonthHoursLabel" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                        </GridPane>
+                    </VBox>
+
+                    <!-- Conflicts Warning -->
+                    <VBox fx:id="conflictsBox" spacing="5" managed="false" visible="false" styleClass="warning-box">
+                        <Label text="⚠ Scheduling Conflicts Detected:" styleClass="warning-title"/>
+                        <TextArea fx:id="conflictsArea" prefHeight="80" editable="false"
+                                 styleClass="warning-area" wrapText="true"/>
+                    </VBox>
+                </VBox>
+
+                <!-- Additional Options Section -->
+                <VBox spacing="10" styleClass="form-section">
+                    <Label text="Additional Options" styleClass="section-title"/>
+                    <Separator/>
+
+                    <!-- Notes -->
+                    <VBox spacing="5">
+                        <Label text="Notes (Optional):" styleClass="form-label"/>
+                        <TextArea fx:id="notesArea" prefHeight="80" wrapText="true"
+                                 promptText="Add any special instructions or notes..."/>
+                    </VBox>
+
+                    <!-- Notification Options -->
+                    <VBox spacing="5">
+                        <Label text="Notifications:" styleClass="form-label"/>
+                        <CheckBox fx:id="notifySubstituteCheckbox" text="Send notification to substitute" selected="true"/>
+                        <CheckBox fx:id="notifyAdminCheckbox" text="Notify administrator" selected="false"/>
+                        <CheckBox fx:id="notifyDepartmentCheckbox" text="Notify department chair" selected="false"/>
+                    </VBox>
+                </VBox>
+
+                <!-- Summary Section -->
+                <VBox spacing="10" styleClass="form-section summary-section">
+                    <Label text="Assignment Summary" styleClass="section-title"/>
+                    <Separator/>
+                    <TextArea fx:id="summaryArea" prefHeight="100" editable="false"
+                             styleClass="summary-area" wrapText="true"/>
+                </VBox>
+
+            </VBox>
+        </ScrollPane>
+    </center>
+
+    <!-- Button Bar -->
+    <bottom>
+        <HBox spacing="10" alignment="CENTER_RIGHT" styleClass="button-bar">
+            <padding>
+                <Insets top="15" right="20" bottom="15" left="20"/>
+            </padding>
+            <Button text="Preview" onAction="#handlePreview" styleClass="secondary-button"/>
+            <Button text="Save Assignment" onAction="#handleSave" styleClass="primary-button" defaultButton="true"/>
+            <Button text="Cancel" onAction="#handleCancel" styleClass="secondary-button" cancelButton="true"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

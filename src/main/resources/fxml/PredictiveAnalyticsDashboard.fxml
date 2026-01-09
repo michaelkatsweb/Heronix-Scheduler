@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.chart.*?>
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
+
+<!--
+Predictive Analytics Dashboard
+Features: Enrollment Forecasting, ML Conflict Resolution, Optimal Assignments
+Location: src/main/resources/fxml/PredictiveAnalyticsDashboard.fxml
+-->
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.eduscheduler.ui.controller.PredictiveAnalyticsDashboardController"
+            prefWidth="1200" prefHeight="800">
+
+    <top>
+        <VBox spacing="15" styleClass="header-section">
+            <padding>
+                <Insets top="20" right="20" bottom="10" left="20"/>
+            </padding>
+
+            <HBox alignment="CENTER_LEFT" spacing="15">
+                <Label text="Predictive Analytics" styleClass="page-title">
+                    <font>
+                        <Font name="System Bold" size="24"/>
+                    </font>
+                </Label>
+
+                <Label text="ML-Powered Insights" style="-fx-text-fill: #6c757d; -fx-font-style: italic;"/>
+
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <Button fx:id="refreshButton" text="Refresh All" onAction="#handleRefresh"
+                        styleClass="primary-button"/>
+                <Button fx:id="exportButton" text="Export Report" onAction="#handleExport"
+                        styleClass="secondary-button"/>
+            </HBox>
+
+            <Separator/>
+        </VBox>
+    </top>
+
+    <center>
+        <ScrollPane fitToWidth="true" fitToHeight="true">
+            <VBox spacing="20">
+                <padding>
+                    <Insets top="20" right="20" bottom="20" left="20"/>
+                </padding>
+
+                <TabPane tabClosingPolicy="UNAVAILABLE" fx:id="predictiveTabPane">
+
+                    <!-- Enrollment Forecasting Tab -->
+                    <Tab text="Enrollment Forecasting">
+                        <VBox spacing="15" style="-fx-padding: 15;">
+                            <Label text="Predictive Enrollment Forecasting" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+                            <Label text="Linear regression with seasonal adjustments to predict future course enrollment."
+                                   style="-fx-text-fill: #666666;"/>
+
+                            <!-- Forecast Controls -->
+                            <HBox spacing="15" alignment="CENTER_LEFT">
+                                <Label text="Forecast Periods Ahead:"/>
+                                <Spinner fx:id="forecastPeriodsSpinner" prefWidth="100" min="1" max="5"/>
+                                <Button text="Generate Forecast" onAction="#handleGenerateForecast" styleClass="primary-button"/>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Label text="Model Confidence:" style="-fx-font-weight: bold;"/>
+                                <Label fx:id="modelConfidenceLabel" text="N/A"/>
+                            </HBox>
+
+                            <!-- At-Risk Summary -->
+                            <HBox spacing="15">
+                                <VBox styleClass="metric-card alert-card" HBox.hgrow="ALWAYS">
+                                    <Label text="At-Risk Courses" styleClass="metric-label"/>
+                                    <Label fx:id="atRiskCoursesLabel" text="0" styleClass="metric-value" style="-fx-text-fill: #dc3545;">
+                                        <font><Font size="32"/></font>
+                                    </Label>
+                                    <Label text="may exceed capacity" styleClass="metric-subtitle"/>
+                                </VBox>
+
+                                <VBox styleClass="metric-card" HBox.hgrow="ALWAYS">
+                                    <Label text="Over Capacity" styleClass="metric-label"/>
+                                    <Label fx:id="overCapacityLabel" text="0" styleClass="metric-value" style="-fx-text-fill: #ffc107;">
+                                        <font><Font size="32"/></font>
+                                    </Label>
+                                    <Label text="predicted over-enrollment" styleClass="metric-subtitle"/>
+                                </VBox>
+
+                                <VBox styleClass="metric-card" HBox.hgrow="ALWAYS">
+                                    <Label text="Avg Growth Rate" styleClass="metric-label"/>
+                                    <Label fx:id="avgGrowthLabel" text="0%" styleClass="metric-value">
+                                        <font><Font size="32"/></font>
+                                    </Label>
+                                    <Label text="across all courses" styleClass="metric-subtitle"/>
+                                </VBox>
+
+                                <VBox styleClass="metric-card" HBox.hgrow="ALWAYS">
+                                    <Label text="Total Forecasted" styleClass="metric-label"/>
+                                    <Label fx:id="totalForecastedLabel" text="0" styleClass="metric-value">
+                                        <font><Font size="32"/></font>
+                                    </Label>
+                                    <Label text="students next period" styleClass="metric-subtitle"/>
+                                </VBox>
+                            </HBox>
+
+                            <!-- Forecast Chart and Table -->
+                            <HBox spacing="20" VBox.vgrow="ALWAYS">
+                                <LineChart fx:id="forecastChart" title="Enrollment Trends"
+                                           legendVisible="true" minHeight="300" HBox.hgrow="ALWAYS">
+                                    <xAxis>
+                                        <CategoryAxis label="Period" fx:id="forecastXAxis"/>
+                                    </xAxis>
+                                    <yAxis>
+                                        <NumberAxis label="Enrollment" fx:id="forecastYAxis"/>
+                                    </yAxis>
+                                </LineChart>
+
+                                <TableView fx:id="forecastTable" prefWidth="450" VBox.vgrow="ALWAYS">
+                                    <columns>
+                                        <TableColumn fx:id="forecastCourseColumn" text="Course" prefWidth="150"/>
+                                        <TableColumn fx:id="currentEnrollColumn" text="Current" prefWidth="70"/>
+                                        <TableColumn fx:id="predictedEnrollColumn" text="Predicted" prefWidth="70"/>
+                                        <TableColumn fx:id="capacityColumn" text="Capacity" prefWidth="70"/>
+                                        <TableColumn fx:id="confidenceColumn" text="Confidence" prefWidth="80"/>
+                                    </columns>
+                                </TableView>
+                            </HBox>
+                        </VBox>
+                    </Tab>
+
+                    <!-- Smart Conflict Resolution Tab -->
+                    <Tab text="Smart Conflict Resolution">
+                        <VBox spacing="15" style="-fx-padding: 15;">
+                            <Label text="ML-Ranked Conflict Resolution" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+                            <Label text="Conflicts ranked by severity and impact with intelligent resolution suggestions."
+                                   style="-fx-text-fill: #666666;"/>
+
+                            <!-- Conflict Summary -->
+                            <HBox spacing="15">
+                                <VBox styleClass="metric-card alert-card" HBox.hgrow="ALWAYS">
+                                    <Label text="Critical" styleClass="metric-label"/>
+                                    <Label fx:id="criticalConflictsLabel" text="0" styleClass="metric-value" style="-fx-text-fill: #dc3545;">
+                                        <font><Font size="32"/></font>
+                                    </Label>
+                                    <Label text="immediate action required" styleClass="metric-subtitle"/>
+                                </VBox>
+
+                                <VBox styleClass="metric-card" HBox.hgrow="ALWAYS">
+                                    <Label text="High Priority" styleClass="metric-label"/>
+                                    <Label fx:id="highConflictsLabel" text="0" styleClass="metric-value" style="-fx-text-fill: #ffc107;">
+                                        <font><Font size="32"/></font>
+                                    </Label>
+                                    <Label text="should resolve soon" styleClass="metric-subtitle"/>
+                                </VBox>
+
+                                <VBox styleClass="metric-card" HBox.hgrow="ALWAYS">
+                                    <Label text="Medium Priority" styleClass="metric-label"/>
+                                    <Label fx:id="mediumConflictsLabel" text="0" styleClass="metric-value">
+                                        <font><Font size="32"/></font>
+                                    </Label>
+                                    <Label text="can address later" styleClass="metric-subtitle"/>
+                                </VBox>
+
+                                <VBox styleClass="metric-card" HBox.hgrow="ALWAYS">
+                                    <Label text="Total Conflicts" styleClass="metric-label"/>
+                                    <Label fx:id="totalConflictsLabel" text="0" styleClass="metric-value">
+                                        <font><Font size="32"/></font>
+                                    </Label>
+                                    <Label text="detected in schedule" styleClass="metric-subtitle"/>
+                                </VBox>
+                            </HBox>
+
+                            <HBox spacing="20" VBox.vgrow="ALWAYS">
+                                <!-- Conflict List -->
+                                <VBox spacing="10" HBox.hgrow="ALWAYS">
+                                    <Label text="Ranked Conflicts" style="-fx-font-weight: bold;"/>
+                                    <TableView fx:id="conflictTable" VBox.vgrow="ALWAYS">
+                                        <columns>
+                                            <TableColumn fx:id="conflictRankColumn" text="#" prefWidth="40"/>
+                                            <TableColumn fx:id="conflictTypeColumn" text="Type" prefWidth="100"/>
+                                            <TableColumn fx:id="conflictDescColumn" text="Description" prefWidth="250"/>
+                                            <TableColumn fx:id="conflictSeverityColumn" text="Severity" prefWidth="80"/>
+                                            <TableColumn fx:id="conflictScoreColumn" text="Priority" prefWidth="70"/>
+                                            <TableColumn fx:id="conflictAffectedColumn" text="Affected" prefWidth="70"/>
+                                        </columns>
+                                    </TableView>
+                                </VBox>
+
+                                <!-- Resolution Suggestions -->
+                                <VBox spacing="10" prefWidth="350">
+                                    <Label text="Smart Resolutions" style="-fx-font-weight: bold;"/>
+                                    <Label fx:id="selectedConflictLabel" text="Select a conflict to see resolutions"
+                                           style="-fx-text-fill: #666666;"/>
+                                    <ListView fx:id="resolutionsList" VBox.vgrow="ALWAYS"/>
+                                    <Button fx:id="applyResolutionButton" text="Apply Selected Resolution"
+                                            onAction="#handleApplyResolution" styleClass="primary-button"
+                                            disable="true" maxWidth="Infinity"/>
+                                </VBox>
+                            </HBox>
+                        </VBox>
+                    </Tab>
+
+                    <!-- Optimal Assignment Recommendations Tab -->
+                    <Tab text="Assignment Recommendations">
+                        <VBox spacing="15" style="-fx-padding: 15;">
+                            <Label text="Optimal Assignment Recommendations" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+                            <Label text="AI-powered teacher and room assignment suggestions with match scoring."
+                                   style="-fx-text-fill: #666666;"/>
+
+                            <!-- Recommendations Summary -->
+                            <HBox spacing="15">
+                                <VBox styleClass="metric-card" HBox.hgrow="ALWAYS">
+                                    <Label text="Unassigned Courses" styleClass="metric-label"/>
+                                    <Label fx:id="unassignedCoursesLabel" text="0" styleClass="metric-value">
+                                        <font><Font size="32"/></font>
+                                    </Label>
+                                    <Label text="need teacher assignment" styleClass="metric-subtitle"/>
+                                </VBox>
+
+                                <VBox styleClass="metric-card" HBox.hgrow="ALWAYS">
+                                    <Label text="Avg Match Score" styleClass="metric-label"/>
+                                    <Label fx:id="avgMatchScoreLabel" text="0%" styleClass="metric-value" style="-fx-text-fill: #28a745;">
+                                        <font><Font size="32"/></font>
+                                    </Label>
+                                    <Label text="recommendation quality" styleClass="metric-subtitle"/>
+                                </VBox>
+
+                                <VBox styleClass="metric-card" HBox.hgrow="ALWAYS">
+                                    <Label text="High Confidence" styleClass="metric-label"/>
+                                    <Label fx:id="highConfidenceLabel" text="0" styleClass="metric-value">
+                                        <font><Font size="32"/></font>
+                                    </Label>
+                                    <Label text="strong recommendations" styleClass="metric-subtitle"/>
+                                </VBox>
+
+                                <VBox styleClass="metric-card" HBox.hgrow="ALWAYS">
+                                    <Label text="Available Teachers" styleClass="metric-label"/>
+                                    <Label fx:id="availableTeachersLabel" text="0" styleClass="metric-value">
+                                        <font><Font size="32"/></font>
+                                    </Label>
+                                    <Label text="with capacity" styleClass="metric-subtitle"/>
+                                </VBox>
+                            </HBox>
+
+                            <!-- Teacher Recommendations Table -->
+                            <VBox spacing="10" VBox.vgrow="ALWAYS">
+                                <Label text="Teacher Assignment Recommendations" style="-fx-font-weight: bold;"/>
+                                <TableView fx:id="teacherRecommendationTable" minHeight="200">
+                                    <columns>
+                                        <TableColumn fx:id="recCourseColumn" text="Course" prefWidth="180"/>
+                                        <TableColumn fx:id="recTeacherColumn" text="Recommended Teacher" prefWidth="180"/>
+                                        <TableColumn fx:id="recMatchScoreColumn" text="Match Score" prefWidth="100"/>
+                                        <TableColumn fx:id="recCertColumn" text="Certification" prefWidth="80"/>
+                                        <TableColumn fx:id="recExperienceColumn" text="Experience" prefWidth="80"/>
+                                        <TableColumn fx:id="recWorkloadColumn" text="Workload" prefWidth="80"/>
+                                        <TableColumn fx:id="recActionColumn" text="Action" prefWidth="100"/>
+                                    </columns>
+                                </TableView>
+                            </VBox>
+
+                            <!-- Room Recommendations -->
+                            <VBox spacing="10" VBox.vgrow="ALWAYS">
+                                <HBox alignment="CENTER_LEFT" spacing="15">
+                                    <Label text="Room Assignment Recommendations" style="-fx-font-weight: bold;"/>
+                                    <Region HBox.hgrow="ALWAYS"/>
+                                    <Label text="Select Course:"/>
+                                    <ComboBox fx:id="roomRecCourseCombo" prefWidth="200" onAction="#handleCourseForRoom"/>
+                                    <Label text="Day:"/>
+                                    <ComboBox fx:id="roomRecDayCombo" prefWidth="120">
+                                        <items>
+                                            <FXCollections fx:factory="observableArrayList">
+                                                <String fx:value="MONDAY"/>
+                                                <String fx:value="TUESDAY"/>
+                                                <String fx:value="WEDNESDAY"/>
+                                                <String fx:value="THURSDAY"/>
+                                                <String fx:value="FRIDAY"/>
+                                            </FXCollections>
+                                        </items>
+                                    </ComboBox>
+                                    <Label text="Time:"/>
+                                    <TextField fx:id="roomRecTimeField" promptText="HH:MM" prefWidth="80"/>
+                                    <Button text="Find Room" onAction="#handleFindRoom" styleClass="secondary-button"/>
+                                </HBox>
+
+                                <TableView fx:id="roomRecommendationTable" minHeight="150">
+                                    <columns>
+                                        <TableColumn fx:id="roomRecRoomColumn" text="Room" prefWidth="120"/>
+                                        <TableColumn fx:id="roomRecScoreColumn" text="Score" prefWidth="80"/>
+                                        <TableColumn fx:id="roomRecCapacityColumn" text="Capacity" prefWidth="80"/>
+                                        <TableColumn fx:id="roomRecFeaturesColumn" text="Features" prefWidth="200"/>
+                                        <TableColumn fx:id="roomRecAvailColumn" text="Availability" prefWidth="150"/>
+                                        <TableColumn fx:id="roomRecActionColumn" text="Action" prefWidth="100"/>
+                                    </columns>
+                                </TableView>
+                            </VBox>
+                        </VBox>
+                    </Tab>
+
+                </TabPane>
+            </VBox>
+        </ScrollPane>
+    </center>
+
+    <stylesheets>
+        <String fx:value="@../css/main.css"/>
+    </stylesheets>
+</BorderPane>

@@ -1,0 +1,845 @@
+// ============================================================================
+// FILE: ImportWizardController.java - FIXED VERSION
+// LOCATION: src/main/java/com/eduscheduler/ui/controller/ImportWizardController.java
+// ============================================================================
+// CRITICAL FIX #4: Fixed property binding errors
+// - Removed direct property sets after binding
+// - Property bindings now work correctly
+// - No more "A bound value cannot be set" exceptions
+// ============================================================================
+
+package com.heronix.ui.controller;
+
+import com.heronix.exception.ImportException;
+import com.heronix.model.dto.DataIssue;
+import com.heronix.model.dto.ImportResult;
+import com.heronix.service.FileImportService;
+import com.heronix.service.LenientImportService;
+
+import javafx.application.Platform;
+import javafx.concurrent.Task;
+import javafx.fxml.FXML;
+import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.*;
+import java.nio.file.Files;
+import java.util.List;
+
+/**
+ * Import Wizard Controller - FIXED VERSION
+ * Location:
+ * src/main/java/com/eduscheduler/ui/controller/ImportWizardController.java
+ * 
+ * ✅ FIXED: Property binding errors resolved
+ * - Progress bar and label now bind correctly
+ * - No more runtime exceptions
+ * - Proper lifecycle management
+ * 
+ * Features:
+ * - Multi-step wizard interface
+ * - File selection with validation
+ * - Entity type selection (Teacher, Student, Course, Room)
+ * - Lenient vs Strict import mode toggle
+ * - Real-time progress tracking
+ * - Detailed import results
+ * 
+ * @author Heronix Scheduling System Team
+ * @version 4.0.0 - FIXED BINDING
+ * @since 2025-10-18
+ */
+
+@Slf4j
+@Controller
+@RequiredArgsConstructor
+
+public class ImportWizardController {
+
+    // ========================================================================
+    // DEPENDENCIES
+    // ========================================================================
+
+    private final FileImportService fileImportService;
+
+    @Qualifier("lenientImportService")
+    private final LenientImportService lenientImportService;
+
+    private final com.heronix.service.EnrollmentImportService enrollmentImportService;
+
+    // ========================================================================
+    // FXML FIELDS - STEP CONTAINERS
+    // ========================================================================
+
+    @FXML
+    private VBox step1Box;
+    @FXML
+    private VBox step2Box;
+    @FXML
+    private VBox step3Box;
+
+    // ========================================================================
+    // FXML FIELDS - STEP 1 (FILE SELECTION)
+    // ========================================================================
+
+    @FXML
+    private TextField filePathField;
+    @FXML
+    private Button browseButton;
+    @FXML
+    private VBox fileInfoBox;
+    @FXML
+    private Label fileNameLabel;
+    @FXML
+    private Label fileSizeLabel;
+    @FXML
+    private Label fileTypeLabel;
+
+    // ========================================================================
+    // FXML FIELDS - STEP 2 (CONFIGURATION)
+    // ========================================================================
+
+    @FXML
+    private ComboBox<String> entityTypeComboBox;
+    @FXML
+    private CheckBox lenientModeCheckBox;
+    @FXML
+    private Label modeDescriptionLabel;
+
+    // ========================================================================
+    // FXML FIELDS - STEP 3 (PROGRESS & RESULTS)
+    // ========================================================================
+
+    @FXML
+    private ProgressBar progressBar;
+    @FXML
+    private Label progressLabel;
+    @FXML
+    private TextArea resultTextArea;
+    @FXML
+    private VBox resultBox;
+
+    // ========================================================================
+    // FXML FIELDS - NAVIGATION BUTTONS
+    // ========================================================================
+
+    @FXML
+    private Button nextButton;
+    @FXML
+    private Button backButton;
+    @FXML
+    private Button cancelButton;
+    @FXML
+    private Button finishButton;
+    @FXML
+    private Button importButton;
+    @FXML
+    private Button viewDataReviewButton;
+
+    // ========================================================================
+    // STATE VARIABLES
+    // ========================================================================
+
+    private Stage dialogStage;
+    private File selectedFile;
+    private int currentStep = 1;
+
+    // ✅ CRITICAL: Task reference to manage binding lifecycle
+    private Task<ImportResult> currentImportTask;
+
+    // Store last import result for data review
+    private ImportResult lastImportResult;
+
+    // ========================================================================
+    // INITIALIZATION
+    // ========================================================================
+
+    @FXML
+    public void initialize() {
+        log.info("====================================");
+        log.info("  INITIALIZING IMPORT WIZARD CONTROLLER     ");
+        log.info("====================================");
+
+        try {
+            setupEntityTypes();
+            setupLenientMode();
+            setupStep1();
+            showStep(1);
+
+            log.info("✓ ImportWizardController initialized successfully");
+            log.info("====================================\n");
+
+        } catch (Exception e) {
+            log.error("✗ Error during initialization", e);
+        }
+    }
+
+    /**
+     * Set the dialog stage
+     */
+    public void setDialogStage(Stage dialogStage) {
+        this.dialogStage = dialogStage;
+    }
+
+    /**
+     * Setup entity type combo box
+     */
+    private void setupEntityTypes() {
+        if (entityTypeComboBox != null) {
+            entityTypeComboBox.getItems().addAll(
+                    "Teacher",
+                    "Student",
+                    "Course",
+                    "Room",
+                    "Event",
+                    "Enrollment");
+            entityTypeComboBox.setValue("Teacher");
+        }
+    }
+
+    /**
+     * Setup lenient mode checkbox
+     */
+    private void setupLenientMode() {
+        if (lenientModeCheckBox != null) {
+            lenientModeCheckBox.setSelected(true); // Default to lenient mode
+            lenientModeCheckBox.setOnAction(e -> updateModeDescription());
+            updateModeDescription();
+        }
+    }
+
+    /**
+     * Setup step 1 initial state
+     */
+    private void setupStep1() {
+        if (fileInfoBox != null) {
+            fileInfoBox.setVisible(false);
+        }
+        if (nextButton != null) {
+            nextButton.setDisable(true);
+        }
+    }
+
+    /**
+     * Update mode description based on checkbox
+     */
+    private void updateModeDescription() {
+        if (modeDescriptionLabel == null)
+            return;
+
+        boolean lenient = lenientModeCheckBox.isSelected();
+        if (lenient) {
+            modeDescriptionLabel.setText(
+                    "✓ Lenient Mode: Auto-generates missing data (IDs, emails, etc.). " +
+                            "Records with missing data will be flagged for review.");
+            modeDescriptionLabel.setStyle("-fx-text-fill: #4CAF50;");
+        } else {
+            modeDescriptionLabel.setText(
+                    "⚠️ Strict Mode: Rejects records with missing data. " +
+                            "Only complete records will be imported.");
+            modeDescriptionLabel.setStyle("-fx-text-fill: #FF9800;");
+        }
+    }
+
+    // ========================================================================
+    // NAVIGATION
+    // ========================================================================
+
+    /**
+     * Show specific step
+     */
+    private void showStep(int step) {
+        currentStep = step;
+
+        // Hide all steps
+        if (step1Box != null)
+            step1Box.setVisible(false);
+        if (step2Box != null)
+            step2Box.setVisible(false);
+        if (step3Box != null)
+            step3Box.setVisible(false);
+
+        // Show selected step
+        switch (step) {
+            case 1 -> {
+                if (step1Box != null)
+                    step1Box.setVisible(true);
+                if (backButton != null)
+                    backButton.setVisible(false);
+                if (nextButton != null)
+                    nextButton.setVisible(true);
+                if (importButton != null)
+                    importButton.setVisible(false);
+            }
+            case 2 -> {
+                if (step2Box != null)
+                    step2Box.setVisible(true);
+                if (backButton != null)
+                    backButton.setVisible(true);
+                if (nextButton != null)
+                    nextButton.setVisible(false);
+                if (importButton != null)
+                    importButton.setVisible(true);
+            }
+            case 3 -> {
+                if (step3Box != null)
+                    step3Box.setVisible(true);
+                if (backButton != null)
+                    backButton.setVisible(false);
+                if (nextButton != null)
+                    nextButton.setVisible(false);
+                if (importButton != null)
+                    importButton.setVisible(false);
+            }
+        }
+
+        log.debug("Showing step {}", step);
+    }
+
+    // ========================================================================
+    // BUTTON HANDLERS
+    // ========================================================================
+
+    @FXML
+    private void handleBrowse() {
+        log.info("📂 Browse clicked");
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select File to Import");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("All Supported", "*.xlsx", "*.xls", "*.csv"),
+                new FileChooser.ExtensionFilter("Excel Files", "*.xlsx", "*.xls"),
+                new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+
+        File file = fileChooser.showOpenDialog(dialogStage);
+        if (file != null) {
+            selectedFile = file;
+            filePathField.setText(file.getAbsolutePath());
+
+            // Show file info
+            if (fileInfoBox != null) {
+                fileInfoBox.setVisible(true);
+                fileNameLabel.setText("📄 " + file.getName());
+                fileSizeLabel.setText("💾 " + formatFileSize(file.length()));
+                fileTypeLabel.setText("📋 " + getFileExtension(file.getName()).toUpperCase());
+            }
+
+            // Enable next button
+            if (nextButton != null) {
+                nextButton.setDisable(false);
+            }
+
+            log.info("✅ File selected: {} ({} bytes)", file.getName(), file.length());
+        } else {
+            log.info("❌ File selection cancelled");
+        }
+    }
+
+    @FXML
+    private void handleNext() {
+        log.info("➡️ Next clicked - Step {} → Step {}", currentStep, currentStep + 1);
+
+        if (currentStep == 1 && selectedFile != null) {
+            showStep(2);
+        }
+    }
+
+    @FXML
+    private void handleBack() {
+        log.info("⬅️ Back clicked - Step {} → Step {}", currentStep, currentStep - 1);
+
+        if (currentStep == 2) {
+            showStep(1);
+        }
+    }
+
+    // ========================================================================
+    // ✅ FIXED: IMPORT HANDLER WITH PROPER BINDING
+    // ========================================================================
+
+    @FXML
+    private void handleImport() {
+        log.info("====================================");
+        log.info("   STARTING IMPORT PROCESS ");
+        log.info("====================================");
+
+        // Validation
+        if (selectedFile == null) {
+            showError("No File Selected", "Please select a file to import.");
+            return;
+        }
+
+        String entityType = entityTypeComboBox.getValue();
+        if (entityType == null) {
+            showError("No Entity Type", "Please select an entity type.");
+            return;
+        }
+
+        log.info("Import clicked");
+        log.info("Entity Type: {}", entityType);
+        log.info("File: {}", selectedFile.getName());
+
+        boolean lenientMode = lenientModeCheckBox != null && lenientModeCheckBox.isSelected();
+        log.info("Import Mode: {}", lenientMode ? "LENIENT" : "STRICT");
+
+        showStep(3);
+
+        // ✅ CRITICAL FIX: Create task ONCE and manage binding lifecycle
+        currentImportTask = new Task<>() {
+            @Override
+            protected ImportResult call() throws Exception {
+                updateMessage("Reading file...");
+                updateProgress(10, 100);
+
+                MultipartFile multipartFile = new MockMultipartFile(
+                        selectedFile.getName(),
+                        selectedFile.getName(),
+                        Files.probeContentType(selectedFile.toPath()),
+                        new FileInputStream(selectedFile));
+
+                updateMessage("Importing " + entityType + "...");
+                updateProgress(30, 100);
+
+                ImportResult result;
+
+                if (lenientMode) {
+                    result = switch (entityType.toLowerCase()) {
+                        case "teacher" -> lenientImportService.importTeachersLenient(multipartFile);
+                        case "student" -> lenientImportService.importStudentsLenient(multipartFile);
+                        case "course" -> lenientImportService.importCoursesLenient(multipartFile);
+                        case "room" -> lenientImportService.importRoomsLenient(multipartFile);
+                        case "event" -> fileImportService.importEvents(multipartFile); // No lenient version yet
+                        case "enrollment" -> importEnrollmentsFromMultipartFile(multipartFile);
+                        default -> throw new ImportException("Unknown entity type: " + entityType);
+                    };
+                } else {
+                    result = switch (entityType.toLowerCase()) {
+                        case "teacher" -> fileImportService.importTeachers(multipartFile);
+                        case "student" -> fileImportService.importStudents(multipartFile);
+                        case "course" -> fileImportService.importCourses(multipartFile);
+                        case "room" -> fileImportService.importRooms(multipartFile);
+                        case "event" -> fileImportService.importEvents(multipartFile);
+                        case "enrollment" -> importEnrollmentsFromMultipartFile(multipartFile);
+                        default -> throw new ImportException("Unknown entity type: " + entityType);
+                    };
+                }
+
+                updateProgress(80, 100);
+                updateMessage("Import completed!");
+                updateProgress(100, 100);
+
+                return result;
+            }
+
+            @Override
+            protected void succeeded() {
+                super.succeeded();
+                ImportResult result = getValue();
+
+                log.info("✓ Import completed successfully");
+                log.info("  - Success: {}", result.getSuccessCount());
+                log.info("  - Errors: {}", result.getErrorCount());
+                log.info("  - Warnings: {}", result.getWarningCount());
+
+                // ✅ FIXED: Unbind BEFORE updating UI
+                unbindProgress();
+
+                // Display results
+                displayImportResults(result);
+            }
+
+            @Override
+            protected void failed() {
+                super.failed();
+                Throwable error = getException();
+                log.error("✗ Import failed", error);
+
+                // ✅ FIXED: Unbind BEFORE updating UI
+                unbindProgress();
+
+                Platform.runLater(() -> {
+                    progressLabel.setText("❌ Import Failed");
+                    progressBar.setProgress(0);
+
+                    String errorMessage = "❌ Import failed:\n\n" + error.getMessage();
+                    if (error.getMessage().contains("rollback")) {
+                        errorMessage += "\n\n💡 Tip: Try enabling 'Lenient Mode' to auto-generate missing data.";
+                    }
+
+                    resultTextArea.setText(errorMessage);
+                    if (finishButton != null) {
+                        finishButton.setVisible(true);
+                        finishButton.setDisable(false);
+                    }
+                });
+            }
+        };
+
+        // ✅ FIXED: Bind properties ONLY ONCE
+        progressBar.progressProperty().bind(currentImportTask.progressProperty());
+        progressLabel.textProperty().bind(currentImportTask.messageProperty());
+
+        // Start import thread
+        Thread importThread = new Thread(currentImportTask);
+        importThread.setDaemon(true);
+        importThread.start();
+    }
+
+    /**
+     * ✅ CRITICAL: Unbind progress properties before manual updates
+     */
+    private void unbindProgress() {
+        Platform.runLater(() -> {
+            if (progressBar != null) {
+                progressBar.progressProperty().unbind();
+            }
+            if (progressLabel != null) {
+                progressLabel.textProperty().unbind();
+            }
+        });
+    }
+
+    /**
+     * Display import results
+     */
+    private void displayImportResults(ImportResult result) {
+        // Store result for data review
+        this.lastImportResult = result;
+
+        Platform.runLater(() -> {
+            StringBuilder message = new StringBuilder();
+
+            message.append("====================================\n");
+            message.append("   IMPORT COMPLETED SUCCESSFULLY  \n");
+            message.append("====================================\n\n");
+
+            message.append("📊 SUMMARY:\n");
+            message.append(String.format("   ✅ Success: %d records\n", result.getSuccessCount()));
+            message.append(String.format("   ❌ Errors: %d records\n", result.getErrorCount()));
+            message.append(String.format("   ⚠️  Warnings: %d records\n", result.getWarningCount()));
+            message.append(String.format("   ⏭️  Skipped: %d records\n", result.getSkippedCount()));
+            message.append(String.format("   📝 Incomplete: %d records\n", result.getIncompleteRecords().size()));
+
+            if (!result.getIncompleteRecords().isEmpty()) {
+                message.append("\n💡 TIP: Incomplete records were saved but need review.\n");
+                message.append("   Go to Data Management → Data Review\n");
+                message.append("   to complete missing information.\n");
+            }
+
+            if (!result.getIncompleteRecords().isEmpty()) {
+                message.append("\n====================================\n");
+                message.append("     INCOMPLETE RECORDS\n");
+                message.append("====================================\n\n");
+
+                List<DataIssue> issues = result.getIncompleteRecords();
+                int displayCount = Math.min(10, issues.size());
+
+                for (int i = 0; i < displayCount; i++) {
+                    DataIssue issue = issues.get(i);
+                    message.append("• Row ").append(issue.getRowNumber())
+                            .append(": ").append(issue.getIdentifier())
+                            .append("\n  Missing: ").append(String.join(", ", issue.getMissingFields()))
+                            .append("\n\n");
+                }
+
+                if (issues.size() > displayCount) {
+                    message.append("... and ").append(issues.size() - displayCount)
+                            .append(" more records\n");
+                }
+            }
+
+            if (!result.getErrors().isEmpty()) {
+                message.append("\n====================================\n");
+                message.append("          ERROR DETAILS\n");
+                message.append("======================================\n\n");
+
+                int errorDisplayCount = Math.min(5, result.getErrors().size());
+                for (int i = 0; i < errorDisplayCount; i++) {
+                    message.append("• ").append(result.getErrors().get(i)).append("\n");
+                }
+
+                if (result.getErrors().size() > errorDisplayCount) {
+                    message.append("... and ").append(result.getErrors().size() - errorDisplayCount)
+                            .append(" more errors\n");
+                }
+            }
+
+            resultTextArea.setText(message.toString());
+
+            if (finishButton != null) {
+                finishButton.setVisible(true);
+                finishButton.setDisable(false);
+            }
+
+            if (viewDataReviewButton != null && !result.getIncompleteRecords().isEmpty()) {
+                viewDataReviewButton.setVisible(true);
+            }
+        });
+    }
+
+    /**
+     * Import enrollments from MultipartFile
+     * Converts MultipartFile to File and calls enrollment import service
+     */
+    private ImportResult importEnrollmentsFromMultipartFile(MultipartFile multipartFile) throws Exception {
+        // Convert MultipartFile to File
+        File tempFile = File.createTempFile("enrollment_import_", ".csv");
+        tempFile.deleteOnExit();
+
+        try (FileOutputStream fos = new FileOutputStream(tempFile)) {
+            fos.write(multipartFile.getBytes());
+        }
+
+        // Call enrollment import service
+        com.heronix.service.EnrollmentImportService.ImportResult enrollmentResult =
+            enrollmentImportService.importFromCSV(tempFile, true);
+
+        // Convert to ImportResult expected by UI
+        ImportResult result = new ImportResult("Enrollment Import");
+        result.start();
+
+        // Set counts
+        int successCount = enrollmentResult.getSuccessfulRows();
+        int errorCount = enrollmentResult.getFailedRows();
+
+        for (int i = 0; i < successCount; i++) {
+            result.addSuccess();
+        }
+
+        // Add errors
+        for (String error : enrollmentResult.getErrors()) {
+            result.addError(error);
+        }
+
+        // Add warnings
+        for (String warning : enrollmentResult.getWarnings()) {
+            result.addWarning(warning);
+        }
+
+        result.complete();
+        log.info("Enrollment import completed: {} successful, {} failed", successCount, errorCount);
+
+        return result;
+    }
+
+    @FXML
+    private void handleCancel() {
+        log.info("❌ Cancel clicked");
+        closeDialog();
+    }
+
+    @FXML
+    private void handleFinish() {
+        log.info("✅ Finish clicked");
+        closeDialog();
+    }
+
+    @FXML
+    private void handleViewDataReview() {
+        log.info("📋 View Data Review clicked");
+
+        if (lastImportResult == null || lastImportResult.getIncompleteRecords().isEmpty()) {
+            showInfo("No Incomplete Records",
+                    "There are no incomplete records to review.\n\n" +
+                    "All imported data was complete and valid.");
+            return;
+        }
+
+        // Create detailed review dialog
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle("Data Review - Incomplete Records");
+        dialog.setHeaderText(String.format("Found %d records with missing data",
+            lastImportResult.getIncompleteRecords().size()));
+
+        // Create scrollable text area for incomplete records
+        TextArea reviewArea = new TextArea();
+        reviewArea.setEditable(false);
+        reviewArea.setPrefRowCount(20);
+        reviewArea.setPrefColumnCount(60);
+        reviewArea.setWrapText(true);
+        reviewArea.setStyle("-fx-font-family: 'Consolas', 'Courier New', monospace; -fx-font-size: 12px;");
+
+        StringBuilder content = new StringBuilder();
+        content.append("INCOMPLETE RECORDS REQUIRING REVIEW\n");
+        content.append("=" .repeat(70)).append("\n\n");
+
+        List<DataIssue> issues = lastImportResult.getIncompleteRecords();
+        for (int i = 0; i < issues.size(); i++) {
+            DataIssue issue = issues.get(i);
+            content.append(String.format("Record %d of %d\n", i + 1, issues.size()));
+            content.append("-".repeat(70)).append("\n");
+            content.append(String.format("Entity Type: %s\n", issue.getEntityType()));
+            content.append(String.format("Row Number: %d\n", issue.getRowNumber()));
+            content.append(String.format("Identifier: %s\n", issue.getIdentifier()));
+            content.append(String.format("Missing Fields: %s\n", String.join(", ", issue.getMissingFields())));
+
+            if (issue.getInvalidFields() != null && !issue.getInvalidFields().isEmpty()) {
+                content.append(String.format("Invalid Fields: %s\n", String.join(", ", issue.getInvalidFields())));
+            }
+
+            if (issue.getEntityId() != null) {
+                content.append(String.format("Database ID: %d\n", issue.getEntityId()));
+            }
+
+            content.append("\n");
+        }
+
+        content.append("\n").append("=" .repeat(70)).append("\n");
+        content.append("NEXT STEPS:\n");
+        content.append("1. Note the row numbers and missing fields above\n");
+        content.append("2. Navigate to the appropriate module (Teachers, Students, Courses, etc.)\n");
+        content.append("3. Search for the records by their identifier\n");
+        content.append("4. Edit each record to fill in the missing information\n");
+        content.append("5. Save your changes\n\n");
+        content.append("TIP: You can copy this information using Ctrl+A, then Ctrl+C");
+
+        reviewArea.setText(content.toString());
+
+        // Add to dialog
+        javafx.scene.layout.VBox contentBox = new javafx.scene.layout.VBox(10);
+        contentBox.getChildren().addAll(
+            new Label("The following records were imported but have missing data:"),
+            reviewArea
+        );
+        contentBox.setPadding(new javafx.geometry.Insets(10));
+
+        dialog.getDialogPane().setContent(contentBox);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.CLOSE);
+        dialog.getDialogPane().setPrefWidth(800);
+
+        log.info("Showing data review dialog with {} incomplete records", issues.size());
+        dialog.showAndWait();
+    }
+
+    // ========================================================================
+    // HELPER METHODS
+    // ========================================================================
+
+    /**
+     * Format file size for display
+     */
+    private String formatFileSize(long bytes) {
+        if (bytes < 1024)
+            return bytes + " B";
+        if (bytes < 1024 * 1024)
+            return String.format("%.1f KB", bytes / 1024.0);
+        return String.format("%.1f MB", bytes / (1024.0 * 1024.0));
+    }
+
+    /**
+     * Get file extension
+     */
+    private String getFileExtension(String filename) {
+        int lastDot = filename.lastIndexOf('.');
+        if (lastDot > 0) {
+            return filename.substring(lastDot + 1);
+        }
+        return "";
+    }
+
+    /**
+     * Close dialog
+     */
+    private void closeDialog() {
+        if (dialogStage != null) {
+            dialogStage.close();
+        }
+    }
+
+    /**
+     * Show error alert
+     */
+    private void showError(String title, String message) {
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle(title);
+            alert.setHeaderText(null);
+            alert.setContentText(message);
+            alert.showAndWait();
+        });
+    }
+
+    /**
+     * Show info alert
+     */
+    private void showInfo(String title, String message) {
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle(title);
+            alert.setHeaderText(null);
+            alert.setContentText(message);
+            alert.showAndWait();
+        });
+    }
+
+    // ========================================================================
+    // MOCK MULTIPART FILE (for converting File to MultipartFile)
+    // ========================================================================
+
+    private static class MockMultipartFile implements MultipartFile {
+        private final String name;
+        private final String originalFilename;
+        private final String contentType;
+        private final InputStream inputStream;
+
+        public MockMultipartFile(String name, String originalFilename, String contentType,
+                InputStream inputStream) {
+            this.name = name;
+            this.originalFilename = originalFilename;
+            this.contentType = contentType;
+            this.inputStream = inputStream;
+        }
+
+        @Override
+        public String getName() {
+            return name;
+        }
+
+        @Override
+        public String getOriginalFilename() {
+            return originalFilename;
+        }
+
+        @Override
+        public String getContentType() {
+            return contentType;
+        }
+
+        @Override
+        public boolean isEmpty() {
+            return false;
+        }
+
+        @Override
+        public long getSize() {
+            try {
+                return inputStream.available();
+            } catch (IOException e) {
+                return 0;
+            }
+        }
+
+        @Override
+        public byte[] getBytes() throws IOException {
+            return inputStream.readAllBytes();
+        }
+
+        @Override
+        public InputStream getInputStream() {
+            return inputStream;
+        }
+
+        @Override
+        public void transferTo(java.io.File dest) throws IOException {
+            Files.copy(inputStream, dest.toPath());
+        }
+    }
+}

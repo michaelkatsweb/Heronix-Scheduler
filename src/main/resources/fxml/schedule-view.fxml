@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane fx:id="mainContainer" xmlns="http://javafx.com/javafx/21"
+    xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="com.eduscheduler.ui.controller.ScheduleViewController"
+    stylesheets="@../css/modern-theme.css">
+
+    <!-- TOP: TOOLBAR -->
+    <top>
+        <VBox>
+            <ToolBar fx:id="toolbar" styleClass="toolbar">
+                <Label text="Schedule:" style="-fx-font-weight: bold; -fx-padding: 0 10 0 0;" />
+                <ComboBox fx:id="scheduleComboBox" prefWidth="200" promptText="Select Schedule" />
+
+                <Separator orientation="VERTICAL" />
+
+                <Label text="View:" style="-fx-font-weight: bold; -fx-padding: 0 10 0 10;" />
+                <ComboBox fx:id="viewModeComboBox" prefWidth="150" />
+
+                <Separator orientation="VERTICAL" />
+
+                <TextField fx:id="searchField" promptText="🔍 Search..." prefWidth="200" />
+
+                <Region HBox.hgrow="ALWAYS" />
+
+                <Button fx:id="undoButton" text="↶ Undo" styleClass="toolbar-button" />
+                <Button fx:id="redoButton" text="↷ Redo" styleClass="toolbar-button" />
+                <Button fx:id="refreshButton" text="🔄 Refresh" styleClass="toolbar-button" />
+                <Button fx:id="exportButton" text="📤 Export" styleClass="toolbar-button" />
+                <Button fx:id="printButton" text="🖨️ Print" styleClass="toolbar-button" />
+            </ToolBar>
+
+            <!-- FILTER PANEL -->
+            <HBox fx:id="filterPanel" spacing="10" padding="10"
+                style="-fx-background-color: #f5f5f5;">
+                <Label text="Filters:" style="-fx-font-weight: bold;" />
+                <ComboBox fx:id="teacherFilterCombo" promptText="Teacher" prefWidth="150" />
+                <ComboBox fx:id="courseFilterCombo" promptText="Course" prefWidth="150" />
+                <ComboBox fx:id="roomFilterCombo" promptText="Room" prefWidth="150" />
+                <ComboBox fx:id="departmentFilterCombo" promptText="Department" prefWidth="150" />
+                <Button fx:id="clearFiltersButton" text="Clear Filters"
+                    styleClass="secondary-button" />
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- CENTER: SCHEDULE GRID -->
+    <center>
+        <ScrollPane fx:id="scheduleScrollPane" fitToWidth="true" fitToHeight="true">
+            <GridPane fx:id="scheduleGrid" />
+        </ScrollPane>
+    </center>
+
+    <!-- BOTTOM: STATUS BAR -->
+    <bottom>
+        <HBox spacing="20" padding="10" style="-fx-background-color: #34495e;">
+            <Label fx:id="totalSlotsLabel" text="Total: 0 slots"
+                style="-fx-text-fill: white; -fx-font-size: 13;" />
+            <Separator orientation="VERTICAL" />
+            <Label fx:id="conflictCountLabel" text="Conflicts: 0"
+                style="-fx-text-fill: white; -fx-font-size: 13;" />
+            <Separator orientation="VERTICAL" />
+            <Label fx:id="statusLabel" text="✅ Ready"
+                style="-fx-text-fill: white; -fx-font-size: 13;" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Label text="Heronix Scheduling System v3.0"
+                style="-fx-text-fill: #95a5a6; -fx-font-size: 11;" />
+        </HBox>
+    </bottom>
+
+</BorderPane>

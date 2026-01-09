@@ -1,0 +1,581 @@
+package com.eduscheduler.controller.api;
+
+import com.eduscheduler.api.dto.StudentAuthRequestDTO;
+import com.eduscheduler.api.dto.StudentAuthResponseDTO;
+import com.eduscheduler.model.domain.Student;
+import com.eduscheduler.repository.StudentRepository;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.WriterException;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import jakarta.transaction.Transactional;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.time.LocalDateTime;
+import java.util.*;
+
+/**
+ * Student Portal API Controller
+ *
+ * REST endpoints for EduPro-Student portal application.
+ * Handles student authentication, QR code generation, and profile management.
+ *
+ * Features:
+ * - Student authentication (username/password)
+ * - QR code authentication
+ * - Facial recognition verification
+ * - QR code generation for printing
+ * - Student photo upload
+ *
+ * @author EduScheduler Pro Team
+ * @version 1.0.0
+ * @since December 12, 2025 - Student Portal Integration
+ */
+@Slf4j
+@RestController
+@RequestMapping("/api/auth")
+@RequiredArgsConstructor
+@Tag(name = "Student Portal", description = "Student Portal API endpoints for EduPro-Student app")
+public class StudentApiController {
+
+    private final StudentRepository studentRepository;
+    private final com.eduscheduler.service.FacialRecognitionService facialRecognitionService;
+
+    // Photo storage configuration
+    private static final String PHOTO_BASE_DIR = "./data/student-photos";
+    private static final long MAX_PHOTO_SIZE = 5 * 1024 * 1024; // 5MB
+    private static final Set<String> ALLOWED_EXTENSIONS = Set.of("jpg", "jpeg", "png");
+
+    // ========================================================================
+    // AUTHENTICATION ENDPOINTS
+    // ========================================================================
+
+    @PostMapping("/student/login")
+    @Operation(summary = "Student authentication",
+               description = "Authenticate student using student ID/email and password. Optionally verify with QR code and facial recognition.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Authentication successful"),
+        @ApiResponse(responseCode = "401", description = "Invalid credentials"),
+        @ApiResponse(responseCode = "403", description = "Account inactive or locked")
+    })
+    public ResponseEntity<StudentAuthResponseDTO> authenticateStudent(
+            @RequestBody StudentAuthRequestDTO request) {
+
+        log.info("Student login attempt for: {}", request.getStudentId());
+
+        try {
+            // Find student by student ID or email
+            Optional<Student> studentOpt = findStudent(request.getStudentId());
+
+            if (studentOpt.isEmpty()) {
+                log.warn("Student not found: {}", request.getStudentId());
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(StudentAuthResponseDTO.builder()
+                        .success(false)
+                        .message("Invalid student ID or password")
+                        .build());
+            }
+
+            Student student = studentOpt.get();
+
+            // Check if student is active
+            if (!student.isActive()) {
+                log.warn("Inactive student login attempt: {}", request.getStudentId());
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(StudentAuthResponseDTO.builder()
+                        .success(false)
+                        .message("Account is inactive. Please contact administrator.")
+                        .build());
+            }
+
+            // Check if student is soft-deleted
+            if (Boolean.TRUE.equals(student.getDeleted())) {
+                log.warn("Deleted student login attempt: {}", request.getStudentId());
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(StudentAuthResponseDTO.builder()
+                        .success(false)
+                        .message("Account is not accessible. Please contact administrator.")
+                        .build());
+            }
+
+            // Verify password (default: student ID = password)
+            String expectedPassword = student.getStudentId();  // Default password is student ID
+            if (!expectedPassword.equals(request.getPassword())) {
+                log.warn("Invalid password for student: {}", request.getStudentId());
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(StudentAuthResponseDTO.builder()
+                        .success(false)
+                        .message("Invalid student ID or password")
+                        .build());
+            }
+
+            // QR code verification (if provided)
+            if (request.getQrCodeId() != null && !request.getQrCodeId().isEmpty()) {
+                if (!request.getQrCodeId().equals(student.getQrCodeId())) {
+                    log.warn("QR code mismatch for student: {}", request.getStudentId());
+                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(StudentAuthResponseDTO.builder()
+                            .success(false)
+                            .message("QR code does not match student record")
+                            .build());
+                }
+                log.info("QR code verified for student: {}", request.getStudentId());
+            }
+
+            // Facial recognition verification (if provided)
+            Double faceMatchConfidence = null;
+            Boolean faceVerified = false;
+
+            if (request.getPhotoBase64() != null && !request.getPhotoBase64().isEmpty()) {
+                log.info("Performing facial recognition for student: {}", request.getStudentId());
+
+                // Verify face using FacialRecognitionService
+                com.eduscheduler.service.FacialRecognitionService.VerificationResult result =
+                    facialRecognitionService.verifyFace(
+                        request.getPhotoBase64(),
+                        student.getPhotoPath()
+                    );
+
+                faceMatchConfidence = result.getSimilarityScore();
+                faceVerified = result.isSuccess();
+
+                log.info("Facial verification result: {}", result);
+
+                // If verification failed (not skipped, but actually failed)
+                if (!result.isSuccess() && !result.isSkipped()) {
+                    log.warn("Facial verification failed for student: {} - {}",
+                        request.getStudentId(), result.getMessage());
+
+                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(StudentAuthResponseDTO.builder()
+                            .success(false)
+                            .message(result.getMessage())
+                            .faceMatchConfidence(faceMatchConfidence)
+                            .faceVerified(false)
+                            .build());
+                }
+
+                // If verification was skipped (no photo on file), continue with login
+                if (result.isSkipped()) {
+                    log.info("Facial verification skipped: {}", result.getMessage());
+                }
+
+                // If verification successful
+                if (result.isSuccess() && !result.isSkipped()) {
+                    log.info("✓ Facial verification PASSED for student: {} ({}% match)",
+                        request.getStudentId(), (int)(faceMatchConfidence * 100));
+
+                    // Update last QR scan timestamp
+                    student.setLastQrScan(LocalDateTime.now());
+                    studentRepository.save(student);
+                }
+            }
+
+            // ========================================================================
+            // PIN VERIFICATION (3rd Layer of Security)
+            // ========================================================================
+
+            Boolean pinVerified = false;
+            Boolean accountLocked = false;
+            LocalDateTime lockedUntil = null;
+
+            // Check if account is locked due to failed PIN attempts
+            if (student.getPinLockedUntil() != null) {
+                LocalDateTime now = LocalDateTime.now();
+
+                if (student.getPinLockedUntil().isAfter(now)) {
+                    // Account is still locked
+                    log.warn("Account locked for student: {} (locked until: {})",
+                        request.getStudentId(), student.getPinLockedUntil());
+
+                    return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                        .body(StudentAuthResponseDTO.builder()
+                            .success(false)
+                            .message("Account is locked due to failed PIN attempts. " +
+                                    "Try again after " + student.getPinLockedUntil())
+                            .accountLocked(true)
+                            .lockedUntil(student.getPinLockedUntil())
+                            .build());
+                } else {
+                    // Auto-unlock account (cooldown period expired)
+                    log.info("Auto-unlocking account for student: {}", request.getStudentId());
+                    student.setPinLockedUntil(null);
+                    student.setFailedPinAttempts(0);
+                    studentRepository.save(student);
+                }
+            }
+
+            // Check if PIN is required for this student
+            if (Boolean.TRUE.equals(student.getPinRequired())) {
+                log.info("PIN verification required for student: {}", request.getStudentId());
+
+                // Check if PIN was provided
+                if (request.getPin() == null || request.getPin().isEmpty()) {
+                    log.warn("PIN required but not provided for student: {}",
+                        request.getStudentId());
+
+                    // Return special response indicating PIN is needed
+                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(StudentAuthResponseDTO.builder()
+                            .success(false)
+                            .message("PIN required. Please enter your 4-digit PIN.")
+                            .pinRequired(true)
+                            .qrCodeId(student.getQrCodeId())
+                            .studentIdNumber(student.getStudentId())
+                            .build());
+                }
+
+                // Verify PIN
+                if (student.getPinHash() == null || student.getPinHash().isEmpty()) {
+                    log.error("PIN required but no PIN hash set for student: {}",
+                        request.getStudentId());
+
+                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body(StudentAuthResponseDTO.builder()
+                            .success(false)
+                            .message("PIN configuration error. Please contact administrator.")
+                            .build());
+                }
+
+                // Check PIN using BCrypt
+                boolean pinMatches = BCrypt.checkpw(request.getPin(), student.getPinHash());
+
+                if (!pinMatches) {
+                    // Increment failed attempts
+                    int failedAttempts = (student.getFailedPinAttempts() != null ?
+                        student.getFailedPinAttempts() : 0) + 1;
+                    student.setFailedPinAttempts(failedAttempts);
+
+                    log.warn("Incorrect PIN for student: {} (attempt {}/3)",
+                        request.getStudentId(), failedAttempts);
+
+                    // Lock account after 3 failed attempts
+                    if (failedAttempts >= 3) {
+                        LocalDateTime lockUntil = LocalDateTime.now().plusMinutes(30);
+                        student.setPinLockedUntil(lockUntil);
+
+                        log.warn("Account locked for student: {} (3 failed PIN attempts, " +
+                                "unlocks at: {})", request.getStudentId(), lockUntil);
+
+                        studentRepository.save(student);
+
+                        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                            .body(StudentAuthResponseDTO.builder()
+                                .success(false)
+                                .message("Account locked due to 3 failed PIN attempts. " +
+                                        "Try again after 30 minutes.")
+                                .accountLocked(true)
+                                .lockedUntil(lockUntil)
+                                .build());
+                    }
+
+                    studentRepository.save(student);
+
+                    int attemptsRemaining = 3 - failedAttempts;
+                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(StudentAuthResponseDTO.builder()
+                            .success(false)
+                            .message(String.format("Incorrect PIN. %d attempt%s remaining.",
+                                attemptsRemaining, attemptsRemaining == 1 ? "" : "s"))
+                            .pinRequired(true)
+                            .build());
+                }
+
+                // PIN verified successfully
+                log.info("✓ PIN verification PASSED for student: {}", request.getStudentId());
+
+                // Reset failed attempts and update last verification time
+                student.setFailedPinAttempts(0);
+                student.setLastPinVerification(LocalDateTime.now());
+                studentRepository.save(student);
+
+                pinVerified = true;
+            } else {
+                log.info("PIN not required for student: {}", request.getStudentId());
+            }
+
+            // Successful authentication
+            String fullName = student.getFirstName() + " " + student.getLastName();
+            log.info("Successful student login: {} ({})", fullName, request.getStudentId());
+
+            return ResponseEntity.ok(StudentAuthResponseDTO.builder()
+                .success(true)
+                .message("Authentication successful")
+                .studentId(student.getId())
+                .studentIdNumber(student.getStudentId())
+                .firstName(student.getFirstName())
+                .lastName(student.getLastName())
+                .email(student.getEmail())
+                .gradeLevel(student.getGradeLevel())
+                .qrCodeId(student.getQrCodeId())
+                .photoPath(student.getPhotoPath())
+                .hasIEP(student.getHasIEP())
+                .has504Plan(student.getHas504Plan())
+                .faceMatchConfidence(faceMatchConfidence)
+                .faceVerified(faceVerified)
+                .lastSync(LocalDateTime.now())
+                .build());
+
+        } catch (Exception e) {
+            log.error("Error during student authentication", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(StudentAuthResponseDTO.builder()
+                    .success(false)
+                    .message("Authentication error. Please try again.")
+                    .build());
+        }
+    }
+
+    // ========================================================================
+    // QR CODE GENERATION ENDPOINTS
+    // ========================================================================
+
+    @GetMapping("/student/{studentId}/qrcode")
+    @Operation(summary = "Generate student QR code",
+               description = "Generate a QR code image for the specified student. Returns PNG image.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "QR code generated successfully"),
+        @ApiResponse(responseCode = "404", description = "Student not found")
+    })
+    public ResponseEntity<byte[]> generateQRCode(
+            @Parameter(description = "Student database ID") @PathVariable Long studentId,
+            @Parameter(description = "QR code size in pixels") @RequestParam(defaultValue = "300") int size) {
+
+        log.info("Generating QR code for student ID: {} with size: {}", studentId, size);
+
+        try {
+            // Find student
+            Optional<Student> studentOpt = studentRepository.findById(studentId);
+            if (studentOpt.isEmpty()) {
+                log.warn("Student not found for QR generation: {}", studentId);
+                return ResponseEntity.notFound().build();
+            }
+
+            Student student = studentOpt.get();
+
+            // Ensure student has QR code ID
+            if (student.getQrCodeId() == null || student.getQrCodeId().isEmpty()) {
+                student.setQrCodeId(generateQRCodeId(student));
+                studentRepository.save(student);
+                log.info("Generated new QR code ID for student: {} -> {}",
+                    student.getStudentId(), student.getQrCodeId());
+            }
+
+            // Generate QR code content
+            // Format: STUDENT_ID:EMAIL:QR_CODE_ID
+            String qrContent = String.format("%s:%s:%s",
+                student.getStudentId(),
+                student.getEmail() != null ? student.getEmail() : "",
+                student.getQrCodeId());
+
+            // Generate QR code image
+            byte[] qrCodeImage = generateQRCodeImage(qrContent, size, size);
+
+            return ResponseEntity.ok()
+                .contentType(MediaType.IMAGE_PNG)
+                .body(qrCodeImage);
+
+        } catch (WriterException | IOException e) {
+            log.error("Error generating QR code for student: {}", studentId, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @PostMapping("/student/{studentId}/generate-qrcode")
+    @Transactional
+    @Operation(summary = "Generate/regenerate QR code ID",
+               description = "Generate or regenerate the QR code ID for a student. Use when student doesn't have QR code or needs new one.")
+    public ResponseEntity<Map<String, String>> generateQRCodeId(
+            @PathVariable Long studentId) {
+
+        log.info("Generating QR code ID for student: {}", studentId);
+
+        try {
+            Optional<Student> studentOpt = studentRepository.findById(studentId);
+            if (studentOpt.isEmpty()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            Student student = studentOpt.get();
+            String newQRCodeId = generateQRCodeId(student);
+            student.setQrCodeId(newQRCodeId);
+            studentRepository.save(student);
+
+            Map<String, String> response = new HashMap<>();
+            response.put("success", "true");
+            response.put("qrCodeId", newQRCodeId);
+            response.put("message", "QR code ID generated successfully");
+
+            log.info("QR code ID generated for student {}: {}",
+                student.getStudentId(), newQRCodeId);
+
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            log.error("Error generating QR code ID", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    // ========================================================================
+    // PHOTO UPLOAD ENDPOINTS
+    // ========================================================================
+
+    @PostMapping("/student/{studentId}/upload-photo")
+    @Transactional
+    @Operation(summary = "Upload student photo",
+               description = "Upload a photo for the student. Used for facial recognition and profile display.")
+    public ResponseEntity<Map<String, String>> uploadPhoto(
+            @PathVariable Long studentId,
+            @RequestParam("photo") MultipartFile photo) {
+
+        log.info("Photo upload request for student: {}", studentId);
+
+        try {
+            // Validate student exists
+            Optional<Student> studentOpt = studentRepository.findById(studentId);
+            if (studentOpt.isEmpty()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            Student student = studentOpt.get();
+
+            // Validate file
+            if (photo.isEmpty()) {
+                Map<String, String> error = new HashMap<>();
+                error.put("success", "false");
+                error.put("message", "No file uploaded");
+                return ResponseEntity.badRequest().body(error);
+            }
+
+            // Check file size
+            if (photo.getSize() > MAX_PHOTO_SIZE) {
+                Map<String, String> error = new HashMap<>();
+                error.put("success", "false");
+                error.put("message", "File too large. Maximum size is 5MB");
+                return ResponseEntity.badRequest().body(error);
+            }
+
+            // Check file extension
+            String originalFilename = photo.getOriginalFilename();
+            if (originalFilename == null) {
+                Map<String, String> error = new HashMap<>();
+                error.put("success", "false");
+                error.put("message", "Invalid filename");
+                return ResponseEntity.badRequest().body(error);
+            }
+
+            String extension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1).toLowerCase();
+            if (!ALLOWED_EXTENSIONS.contains(extension)) {
+                Map<String, String> error = new HashMap<>();
+                error.put("success", "false");
+                error.put("message", "Invalid file type. Allowed: JPG, JPEG, PNG");
+                return ResponseEntity.badRequest().body(error);
+            }
+
+            // Create directory structure
+            Path photoDir = Paths.get(PHOTO_BASE_DIR);
+            if (!Files.exists(photoDir)) {
+                Files.createDirectories(photoDir);
+            }
+
+            // Generate filename: {studentId}.{extension}
+            String filename = student.getStudentId() + "." + extension;
+            Path photoPath = photoDir.resolve(filename);
+
+            // Save file
+            Files.copy(photo.getInputStream(), photoPath, StandardCopyOption.REPLACE_EXISTING);
+
+            // Update student record
+            String relativePath = PHOTO_BASE_DIR + "/" + filename;
+            student.setPhotoPath(relativePath);
+            studentRepository.save(student);
+
+            Map<String, String> response = new HashMap<>();
+            response.put("success", "true");
+            response.put("message", "Photo uploaded successfully");
+            response.put("photoPath", relativePath);
+
+            log.info("Photo uploaded for student {}: {}", student.getStudentId(), relativePath);
+
+            return ResponseEntity.ok(response);
+
+        } catch (IOException e) {
+            log.error("Error uploading photo for student: {}", studentId, e);
+            Map<String, String> error = new HashMap<>();
+            error.put("success", "false");
+            error.put("message", "Error saving photo: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+        }
+    }
+
+    // ========================================================================
+    // HELPER METHODS
+    // ========================================================================
+
+    /**
+     * Find student by student ID or email
+     */
+    private Optional<Student> findStudent(String identifier) {
+        if (identifier == null || identifier.isEmpty()) {
+            return Optional.empty();
+        }
+
+        // Try to find by student ID first
+        Optional<Student> byStudentId = studentRepository.findByStudentId(identifier);
+        if (byStudentId.isPresent()) {
+            return byStudentId;
+        }
+
+        // Try to find by email
+        return studentRepository.findByEmail(identifier);
+    }
+
+    /**
+     * Generate unique QR code ID for student
+     * Format: QR-{STUDENT_ID}-{SHORT_UUID}
+     */
+    private String generateQRCodeId(Student student) {
+        String shortUUID = UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+        return String.format("QR-%s-%s", student.getStudentId(), shortUUID);
+    }
+
+    /**
+     * Generate QR code image as byte array
+     */
+    private byte[] generateQRCodeImage(String content, int width, int height)
+            throws WriterException, IOException {
+
+        QRCodeWriter qrCodeWriter = new QRCodeWriter();
+        Map<EncodeHintType, Object> hints = new HashMap<>();
+        hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
+        hints.put(EncodeHintType.MARGIN, 1);
+
+        BitMatrix bitMatrix = qrCodeWriter.encode(content, BarcodeFormat.QR_CODE, width, height, hints);
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        MatrixToImageWriter.writeToStream(bitMatrix, "PNG", outputStream);
+
+        return outputStream.toByteArray();
+    }
+}

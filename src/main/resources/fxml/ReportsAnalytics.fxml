@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.chart.*?>
+
+<!--
+Reports & Analytics View
+Location: src/main/resources/fxml/ReportsAnalytics.fxml
+-->
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.eduscheduler.ui.controller.ReportsAnalyticsController"
+            prefWidth="1200" prefHeight="800">
+
+    <top>
+        <VBox spacing="15" styleClass="header-section">
+            <padding>
+                <Insets top="20" right="20" bottom="10" left="20"/>
+            </padding>
+
+            <HBox alignment="CENTER_LEFT" spacing="15">
+                <Label text="Reports &amp; Analytics" styleClass="page-title">
+                    <font>
+                        <Font name="System Bold" size="24"/>
+                    </font>
+                </Label>
+
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <Button fx:id="refreshButton" text="Refresh" onAction="#handleRefresh"
+                        styleClass="primary-button"/>
+                <Button fx:id="exportReportButton" text="Export Report" onAction="#handleExportReport"
+                        styleClass="secondary-button"/>
+            </HBox>
+
+            <Separator/>
+        </VBox>
+    </top>
+
+    <center>
+        <ScrollPane fitToWidth="true" fitToHeight="true">
+            <VBox spacing="20">
+                <padding>
+                    <Insets top="20" right="20" bottom="20" left="20"/>
+                </padding>
+
+                <!-- Dashboard Metrics Cards -->
+                <VBox spacing="15">
+                    <Label text="Dashboard Overview" styleClass="section-title">
+                        <font>
+                            <Font name="System Bold" size="18"/>
+                        </font>
+                    </Label>
+
+                    <GridPane hgap="15" vgap="15">
+                        <!-- Row 1: Entity Counts -->
+                        <VBox fx:id="teachersCard" styleClass="metric-card" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                            <Label text="Teachers" styleClass="metric-label"/>
+                            <Label fx:id="totalTeachersLabel" text="0" styleClass="metric-value">
+                                <font>
+                                    <Font size="32"/>
+                                </font>
+                            </Label>
+                            <Label fx:id="activeTeachersLabel" text="0 active" styleClass="metric-subtitle"/>
+                        </VBox>
+
+                        <VBox fx:id="coursesCard" styleClass="metric-card" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                            <Label text="Courses" styleClass="metric-label"/>
+                            <Label fx:id="totalCoursesLabel" text="0" styleClass="metric-value">
+                                <font>
+                                    <Font size="32"/>
+                                </font>
+                            </Label>
+                            <Label fx:id="activeCoursesLabel" text="0 active" styleClass="metric-subtitle"/>
+                        </VBox>
+
+                        <VBox fx:id="roomsCard" styleClass="metric-card" GridPane.columnIndex="2" GridPane.rowIndex="0">
+                            <Label text="Rooms" styleClass="metric-label"/>
+                            <Label fx:id="totalRoomsLabel" text="0" styleClass="metric-value">
+                                <font>
+                                    <Font size="32"/>
+                                </font>
+                            </Label>
+                            <Label fx:id="activeRoomsLabel" text="0 active" styleClass="metric-subtitle"/>
+                        </VBox>
+
+                        <VBox fx:id="schedulesCard" styleClass="metric-card" GridPane.columnIndex="3" GridPane.rowIndex="0">
+                            <Label text="Schedules" styleClass="metric-label"/>
+                            <Label fx:id="totalSchedulesLabel" text="0" styleClass="metric-value">
+                                <font>
+                                    <Font size="32"/>
+                                </font>
+                            </Label>
+                            <Label fx:id="publishedSchedulesLabel" text="0 published" styleClass="metric-subtitle"/>
+                        </VBox>
+
+                        <!-- Row 2: Utilization Metrics -->
+                        <VBox fx:id="teacherUtilCard" styleClass="metric-card" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                            <Label text="Teacher Utilization" styleClass="metric-label"/>
+                            <Label fx:id="teacherUtilLabel" text="0%" styleClass="metric-value">
+                                <font>
+                                    <Font size="32"/>
+                                </font>
+                            </Label>
+                            <ProgressBar fx:id="teacherUtilProgress" progress="0" maxWidth="Infinity"/>
+                        </VBox>
+
+                        <VBox fx:id="roomUtilCard" styleClass="metric-card" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                            <Label text="Room Utilization" styleClass="metric-label"/>
+                            <Label fx:id="roomUtilLabel" text="0%" styleClass="metric-value">
+                                <font>
+                                    <Font size="32"/>
+                                </font>
+                            </Label>
+                            <ProgressBar fx:id="roomUtilProgress" progress="0" maxWidth="Infinity"/>
+                        </VBox>
+
+                        <VBox fx:id="efficiencyCard" styleClass="metric-card" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                            <Label text="Overall Efficiency" styleClass="metric-label"/>
+                            <Label fx:id="efficiencyLabel" text="0%" styleClass="metric-value">
+                                <font>
+                                    <Font size="32"/>
+                                </font>
+                            </Label>
+                            <ProgressBar fx:id="efficiencyProgress" progress="0" maxWidth="Infinity"/>
+                        </VBox>
+
+                        <VBox fx:id="conflictsCard" styleClass="metric-card alert-card" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                            <Label text="Total Conflicts" styleClass="metric-label"/>
+                            <Label fx:id="conflictsLabel" text="0" styleClass="metric-value">
+                                <font>
+                                    <Font size="32"/>
+                                </font>
+                            </Label>
+                            <Label fx:id="unresolvedConflictsLabel" text="0 unresolved" styleClass="metric-subtitle"/>
+                        </VBox>
+                    </GridPane>
+                </VBox>
+
+                <Separator/>
+
+                <!-- Charts Section -->
+                <VBox spacing="15">
+                    <Label text="Detailed Analytics" styleClass="section-title">
+                        <font>
+                            <Font name="System Bold" size="18"/>
+                        </font>
+                    </Label>
+
+                    <TabPane tabClosingPolicy="UNAVAILABLE">
+                        <!-- Teacher Workload Tab -->
+                        <Tab text="Teacher Workload">
+                            <VBox spacing="10" style="-fx-padding: 15;">
+                                <HBox alignment="CENTER_LEFT" spacing="10">
+                                    <Label text="Teacher Workload Distribution"/>
+                                    <Region HBox.hgrow="ALWAYS"/>
+                                    <ComboBox fx:id="teacherFilterCombo" promptText="Filter by department"
+                                              onAction="#handleTeacherFilter" prefWidth="200"/>
+                                </HBox>
+                                <BarChart fx:id="teacherWorkloadChart" title="Hours per Teacher"
+                                          legendVisible="false" minHeight="300">
+                                    <xAxis>
+                                        <CategoryAxis label="Teacher" fx:id="teacherXAxis"/>
+                                    </xAxis>
+                                    <yAxis>
+                                        <NumberAxis label="Hours" fx:id="teacherYAxis"/>
+                                    </yAxis>
+                                </BarChart>
+                                <TableView fx:id="teacherWorkloadTable" VBox.vgrow="ALWAYS">
+                                    <columns>
+                                        <TableColumn fx:id="teacherNameColumn" text="Teacher" prefWidth="200"/>
+                                        <TableColumn fx:id="teacherHoursColumn" text="Hours/Week" prefWidth="100"/>
+                                        <TableColumn fx:id="teacherUtilColumn" text="Utilization %" prefWidth="100"/>
+                                        <TableColumn fx:id="teacherStatusColumn" text="Status" prefWidth="100"/>
+                                    </columns>
+                                </TableView>
+                            </VBox>
+                        </Tab>
+
+                        <!-- Room Utilization Tab -->
+                        <Tab text="Room Utilization">
+                            <VBox spacing="10" style="-fx-padding: 15;">
+                                <Label text="Room Usage Statistics"/>
+                                <PieChart fx:id="roomUtilizationChart" title="Room Utilization Distribution"
+                                          minHeight="300"/>
+                                <TableView fx:id="roomUtilizationTable" VBox.vgrow="ALWAYS">
+                                    <columns>
+                                        <TableColumn fx:id="roomNumberColumn" text="Room" prefWidth="100"/>
+                                        <TableColumn fx:id="roomCapacityColumn" text="Capacity" prefWidth="80"/>
+                                        <TableColumn fx:id="roomUsageColumn" text="Usage %" prefWidth="100"/>
+                                        <TableColumn fx:id="roomHoursColumn" text="Hours/Week" prefWidth="100"/>
+                                    </columns>
+                                </TableView>
+                            </VBox>
+                        </Tab>
+
+                        <!-- Schedule Quality Tab -->
+                        <Tab text="Schedule Quality">
+                            <VBox spacing="15" style="-fx-padding: 15;">
+                                <HBox alignment="CENTER_LEFT" spacing="10">
+                                    <Label text="Select Schedule:"/>
+                                    <ComboBox fx:id="scheduleSelectCombo" onAction="#handleScheduleSelection"
+                                              prefWidth="300" promptText="Choose a schedule"/>
+                                    <Region HBox.hgrow="ALWAYS"/>
+                                    <Label fx:id="scheduleQualityLabel" text="Quality Score: N/A"
+                                           style="-fx-font-size: 14; -fx-font-weight: bold;"/>
+                                </HBox>
+
+                                <GridPane hgap="15" vgap="10">
+                                    <Label text="Efficiency Metrics" GridPane.columnIndex="0" GridPane.rowIndex="0"
+                                           style="-fx-font-weight: bold;"/>
+
+                                    <Label text="Optimization Score:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                                    <Label fx:id="optimizationScoreLabel" text="N/A" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                                    <Label text="Teacher Balance:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                                    <Label fx:id="teacherBalanceLabel" text="N/A" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                                    <Label text="Room Efficiency:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                                    <Label fx:id="roomEfficiencyLabel" text="N/A" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+                                    <Label text="Conflict Rate:" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+                                    <Label fx:id="conflictRateLabel" text="N/A" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+                                </GridPane>
+
+                                <VBox spacing="10">
+                                    <Label text="Recommendations" style="-fx-font-weight: bold; -fx-font-size: 14;"/>
+                                    <ListView fx:id="recommendationsListView" prefHeight="200"/>
+                                </VBox>
+                            </VBox>
+                        </Tab>
+
+                        <!-- Lean Metrics Tab -->
+                        <Tab text="Lean Metrics">
+                            <VBox spacing="15" style="-fx-padding: 15;">
+                                <Label text="Lean Six Sigma Metrics" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+
+                                <GridPane hgap="20" vgap="15">
+                                    <VBox styleClass="metric-card" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                                        <Label text="Cycle Time" styleClass="metric-label"/>
+                                        <Label fx:id="cycleTimeLabel" text="N/A" styleClass="metric-value"/>
+                                        <Label text="Minutes per schedule" styleClass="metric-subtitle"/>
+                                    </VBox>
+
+                                    <VBox styleClass="metric-card" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                                        <Label text="Lead Time" styleClass="metric-label"/>
+                                        <Label fx:id="leadTimeLabel" text="N/A" styleClass="metric-value"/>
+                                        <Label text="Minutes from start to finish" styleClass="metric-subtitle"/>
+                                    </VBox>
+
+                                    <VBox styleClass="metric-card" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                                        <Label text="Process Efficiency" styleClass="metric-label"/>
+                                        <Label fx:id="processEfficiencyLabel" text="N/A" styleClass="metric-value"/>
+                                        <ProgressBar fx:id="processEfficiencyProgress" progress="0" maxWidth="Infinity"/>
+                                    </VBox>
+
+                                    <VBox styleClass="metric-card" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                        <Label text="Defect Rate" styleClass="metric-label"/>
+                                        <Label fx:id="defectRateLabel" text="N/A" styleClass="metric-value"/>
+                                        <Label text="Conflicts per 100 slots" styleClass="metric-subtitle"/>
+                                    </VBox>
+                                </GridPane>
+                            </VBox>
+                        </Tab>
+                    </TabPane>
+                </VBox>
+            </VBox>
+        </ScrollPane>
+    </center>
+
+</BorderPane>

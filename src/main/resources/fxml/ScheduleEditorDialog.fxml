@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<!--
+Schedule Editor Dialog
+Location: src/main/resources/fxml/ScheduleEditorDialog.fxml
+-->
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.eduscheduler.ui.controller.ScheduleEditorController"
+            styleClass="dialog-container" prefWidth="1100" prefHeight="700">
+    
+    <top>
+        <VBox spacing="10" BorderPane.alignment="CENTER">
+            <padding>
+                <Insets top="20" right="20" bottom="10" left="20"/>
+            </padding>
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Editing Schedule:" styleClass="section-label"/>
+                <Label fx:id="scheduleNameLabel" styleClass="dialog-title"/>
+            </HBox>
+            <Separator/>
+        </VBox>
+    </top>
+    
+    <center>
+        <SplitPane dividerPositions="0.65" BorderPane.alignment="CENTER">
+            <padding>
+                <Insets top="10" right="20" bottom="10" left="20"/>
+            </padding>
+            
+            <!-- Left: Table View -->
+            <VBox spacing="10">
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="Schedule Slots:" styleClass="section-label"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <CheckBox fx:id="conflictWarningCheck" text="Show conflicts only"/>
+                </HBox>
+                
+                <TableView fx:id="slotsTable" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="courseColumn" text="Course" prefWidth="100"/>
+                        <TableColumn fx:id="teacherColumn" text="Teacher" prefWidth="150"/>
+                        <TableColumn fx:id="roomColumn" text="Room" prefWidth="80"/>
+                        <TableColumn fx:id="dayColumn" text="Day" prefWidth="100"/>
+                        <TableColumn fx:id="timeColumn" text="Time" prefWidth="80"/>
+                    </columns>
+                </TableView>
+                
+                <Label fx:id="conflictLabel" wrapText="true" 
+                       style="-fx-padding: 10; -fx-background-color: #f3f4f6; -fx-background-radius: 5;"/>
+            </VBox>
+            
+            <!-- Right: Edit Form -->
+            <VBox spacing="15">
+                <Label text="Edit Selected Slot:" styleClass="section-label"/>
+                
+                <VBox spacing="10" style="-fx-background-color: #f8fafc; -fx-padding: 15; -fx-background-radius: 8;">
+                    <GridPane hgap="10" vgap="12">
+                        <Label text="Teacher:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                        <ComboBox fx:id="teacherCombo" GridPane.columnIndex="1" GridPane.rowIndex="0" 
+                                  prefWidth="200" promptText="Select teacher"/>
+                        
+                        <Label text="Room:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                        <ComboBox fx:id="roomCombo" GridPane.columnIndex="1" GridPane.rowIndex="1" 
+                                  prefWidth="200" promptText="Select room"/>
+                        
+                        <Label text="Time Slot:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                        <ComboBox fx:id="timeSlotCombo" GridPane.columnIndex="1" GridPane.rowIndex="2" 
+                                  prefWidth="200" promptText="Select time"/>
+                    </GridPane>
+                </VBox>
+                
+                <Separator/>
+                
+                <Label text="Actions:" styleClass="section-label"/>
+                
+                <VBox spacing="8">
+                    <Button fx:id="advancedEditButton" text="✏️ Advanced Edit"
+                            onAction="#handleAdvancedEdit" maxWidth="Infinity"
+                            styleClass="primary-button"
+                            style="-fx-font-weight: bold;"/>
+
+                    <Separator/>
+
+                    <Button fx:id="saveButton" text="💾 Save Changes"
+                            onAction="#handleSave" maxWidth="Infinity"
+                            styleClass="primary-button"/>
+
+                    <Button fx:id="swapButton" text="🔄 Swap Slots"
+                            onAction="#handleSwap" maxWidth="Infinity"
+                            styleClass="secondary-button"/>
+
+                    <Button fx:id="deleteSlotButton" text="🗑️ Delete Slot"
+                            onAction="#handleDeleteSlot" maxWidth="Infinity"
+                            styleClass="danger-button"/>
+                </VBox>
+                
+                <Separator/>
+                
+                <VBox spacing="5" style="-fx-background-color: #fef3c7; -fx-padding: 10; -fx-background-radius: 5;">
+                    <Label text="💡 Tips:" style="-fx-font-weight: bold;"/>
+                    <Label text="• Select a slot to edit" wrapText="true"/>
+                    <Label text="• Double-click for advanced edit" wrapText="true"/>
+                    <Label text="• Advanced Edit: Change course type, add co-teacher, special events" wrapText="true"/>
+                    <Label text="• Red rows indicate conflicts" wrapText="true"/>
+                </VBox>
+            </VBox>
+        </SplitPane>
+    </center>
+    
+    <bottom>
+        <HBox spacing="10" alignment="CENTER_RIGHT" BorderPane.alignment="CENTER">
+            <padding>
+                <Insets top="10" right="20" bottom="20" left="20"/>
+            </padding>
+            <Button text="Close" onAction="#handleCancel" styleClass="secondary-button"/>
+        </HBox>
+    </bottom>
+    
+</BorderPane>

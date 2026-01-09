@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<!--
+    Schedule Configuration View
+    Location: src/main/resources/fxml/ScheduleConfiguration.fxml
+    
+    @version 4.0.0
+    @since 2025-10-11
+-->
+<BorderPane xmlns="http://javafx.com/javafx"
+    xmlns:fx="http://javafx.com/fxml"
+    fx:controller="com.eduscheduler.ui.controller.ScheduleConfigurationController"
+    prefWidth="1000" prefHeight="700"
+    style="-fx-background-color: #ecf0f1;">
+
+    <!-- TOP: HEADER -->
+    <top>
+        <VBox>
+            <HBox
+                style="-fx-background-color: linear-gradient(to bottom, #2c3e50, #34495e); -fx-padding: 20;">
+                <VBox spacing="5" HBox.hgrow="ALWAYS">
+                    <Label text="⚙️ Schedule Configuration" textFill="white"
+                        style="-fx-font-size: 28; -fx-font-weight: bold;" />
+                    <Label
+                        text="Configure school day parameters, lunch periods, breaks, and constraints"
+                        textFill="#bdc3c7" style="-fx-font-size: 14;" />
+                </VBox>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- CENTER: CONFIGURATION TABS -->
+    <center>
+        <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;">
+            <TabPane tabClosingPolicy="UNAVAILABLE" style="-fx-padding: 20;">
+
+                <!-- TAB 1: SCHOOL DAY -->
+                <Tab text="🏫 School Day">
+                    <ScrollPane fitToWidth="true" style="-fx-background-color: white;">
+                        <VBox spacing="20" style="-fx-padding: 30;">
+
+                            <Label text="School Day Timing"
+                                style="-fx-font-size: 18; -fx-font-weight: bold;" />
+
+                            <GridPane hgap="15" vgap="15">
+                                <Label text="School Start Time:" GridPane.columnIndex="0"
+                                    GridPane.rowIndex="0"
+                                    style="-fx-font-weight: bold;" />
+                                <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                                    <Spinner fx:id="schoolStartHour" prefWidth="80" />
+                                    <Label text=":" style="-fx-font-size: 16;" />
+                                    <Spinner fx:id="schoolStartMinute" prefWidth="80" />
+                                </HBox>
+
+                                <Label text="School End Time:" GridPane.columnIndex="0"
+                                    GridPane.rowIndex="1"
+                                    style="-fx-font-weight: bold;" />
+                                <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                    <Spinner fx:id="schoolEndHour" prefWidth="80" />
+                                    <Label text=":" style="-fx-font-size: 16;" />
+                                    <Spinner fx:id="schoolEndMinute" prefWidth="80" />
+                                </HBox>
+                            </GridPane>
+
+                            <Separator />
+
+                            <Label text="Schedule Type &amp; Periods"
+                                style="-fx-font-size: 18; -fx-font-weight: bold;" />
+
+                            <GridPane hgap="15" vgap="15">
+                                <Label text="Schedule Type:" GridPane.columnIndex="0"
+                                    GridPane.rowIndex="0"
+                                    style="-fx-font-weight: bold;" />
+                                <ComboBox fx:id="scheduleTypeCombo" prefWidth="250"
+                                    GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+                                <Label text="Period Duration:" GridPane.columnIndex="0"
+                                    GridPane.rowIndex="1"
+                                    style="-fx-font-weight: bold;" />
+                                <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                    <Spinner fx:id="periodDurationSpinner" prefWidth="100" />
+                                    <Label text="minutes" />
+                                </HBox>
+
+                                <Label text="Periods Per Day:" GridPane.columnIndex="0"
+                                    GridPane.rowIndex="2"
+                                    style="-fx-font-weight: bold;" />
+                                <Spinner fx:id="periodsPerDaySpinner" prefWidth="100"
+                                    GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+                                <Label text="Passing Period:" GridPane.columnIndex="0"
+                                    GridPane.rowIndex="3"
+                                    style="-fx-font-weight: bold;" />
+                                <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                    <Spinner fx:id="passingPeriodDuration" prefWidth="100" />
+                                    <Label text="minutes" />
+                                </HBox>
+                            </GridPane>
+
+                            <Separator />
+
+                            <VBox spacing="10">
+                                <CheckBox fx:id="blockScheduleCheck" text="Enable Block Schedule"
+                                    style="-fx-font-size: 14; -fx-font-weight: bold;" />
+                                <HBox spacing="10" style="-fx-padding: 0 0 0 25;">
+                                    <Label text="Block Duration:" />
+                                    <Spinner fx:id="blockDurationSpinner" prefWidth="100"
+                                        disable="true" />
+                                    <Label text="minutes" />
+                                </HBox>
+                            </VBox>
+
+                        </VBox>
+                    </ScrollPane>
+                </Tab>
+
+                <!-- TAB 2: LUNCH & BREAKS -->
+                <Tab text="🍽️ Lunch &amp; Breaks">
+                    <ScrollPane fitToWidth="true" style="-fx-background-color: white;">
+                        <VBox spacing="20" style="-fx-padding: 30;">
+
+                            <VBox spacing="15">
+                                <CheckBox fx:id="enableLunchCheck" text="Enable Lunch Period"
+                                    style="-fx-font-size: 16; -fx-font-weight: bold;" />
+
+                                <GridPane hgap="15" vgap="15" style="-fx-padding: 0 0 0 25;">
+                                    <Label text="Lunch Start Time:" GridPane.columnIndex="0"
+                                        GridPane.rowIndex="0"
+                                        style="-fx-font-weight: bold;" />
+                                    <HBox spacing="10" GridPane.columnIndex="1"
+                                        GridPane.rowIndex="0">
+                                        <Spinner fx:id="lunchStartHour" prefWidth="80" />
+                                        <Label text=":" style="-fx-font-size: 16;" />
+                                        <Spinner fx:id="lunchStartMinute" prefWidth="80" />
+                                    </HBox>
+
+                                    <Label text="Lunch Duration:" GridPane.columnIndex="0"
+                                        GridPane.rowIndex="1"
+                                        style="-fx-font-weight: bold;" />
+                                    <HBox spacing="10" GridPane.columnIndex="1"
+                                        GridPane.rowIndex="1">
+                                        <Spinner fx:id="lunchDurationSpinner" prefWidth="100" />
+                                        <Label text="minutes" />
+                                    </HBox>
+
+                                    <Label text="Lunch Waves:" GridPane.columnIndex="0"
+                                        GridPane.rowIndex="2"
+                                        style="-fx-font-weight: bold;" />
+                                    <HBox spacing="10" GridPane.columnIndex="1"
+                                        GridPane.rowIndex="2">
+                                        <Spinner fx:id="lunchWavesSpinner" prefWidth="100" />
+                                        <Label text="(separate lunch periods)" />
+                                    </HBox>
+                                </GridPane>
+                            </VBox>
+
+                            <Separator />
+
+                            <VBox spacing="15">
+                                <CheckBox fx:id="morningBreakCheck" text="Enable Morning Break"
+                                    style="-fx-font-size: 16; -fx-font-weight: bold;" />
+
+                                <GridPane hgap="15" vgap="15" style="-fx-padding: 0 0 0 25;">
+                                    <Label text="Break Time:" GridPane.columnIndex="0"
+                                        GridPane.rowIndex="0"
+                                        style="-fx-font-weight: bold;" />
+                                    <HBox spacing="10" GridPane.columnIndex="1"
+                                        GridPane.rowIndex="0">
+                                        <Spinner fx:id="morningBreakHour" prefWidth="80"
+                                            disable="true" />
+                                        <Label text=":" style="-fx-font-size: 16;" />
+                                        <Spinner fx:id="morningBreakMinute" prefWidth="80"
+                                            disable="true" />
+                                    </HBox>
+
+                                    <Label text="Duration:" GridPane.columnIndex="0"
+                                        GridPane.rowIndex="1"
+                                        style="-fx-font-weight: bold;" />
+                                    <HBox spacing="10" GridPane.columnIndex="1"
+                                        GridPane.rowIndex="1">
+                                        <Spinner fx:id="morningBreakDuration" prefWidth="100"
+                                            disable="true" />
+                                        <Label text="minutes" />
+                                    </HBox>
+                                </GridPane>
+                            </VBox>
+
+                            <Separator />
+
+                            <VBox spacing="15">
+                                <CheckBox fx:id="afternoonBreakCheck" text="Enable Afternoon Break"
+                                    style="-fx-font-size: 16; -fx-font-weight: bold;" />
+
+                                <GridPane hgap="15" vgap="15" style="-fx-padding: 0 0 0 25;">
+                                    <Label text="Break Time:" GridPane.columnIndex="0"
+                                        GridPane.rowIndex="0"
+                                        style="-fx-font-weight: bold;" />
+                                    <HBox spacing="10" GridPane.columnIndex="1"
+                                        GridPane.rowIndex="0">
+                                        <Spinner fx:id="afternoonBreakHour" prefWidth="80"
+                                            disable="true" />
+                                        <Label text=":" style="-fx-font-size: 16;" />
+                                        <Spinner fx:id="afternoonBreakMinute" prefWidth="80"
+                                            disable="true" />
+                                    </HBox>
+
+                                    <Label text="Duration:" GridPane.columnIndex="0"
+                                        GridPane.rowIndex="1"
+                                        style="-fx-font-weight: bold;" />
+                                    <HBox spacing="10" GridPane.columnIndex="1"
+                                        GridPane.rowIndex="1">
+                                        <Spinner fx:id="afternoonBreakDuration" prefWidth="100"
+                                            disable="true" />
+                                        <Label text="minutes" />
+                                    </HBox>
+                                </GridPane>
+                            </VBox>
+
+                        </VBox>
+                    </ScrollPane>
+                </Tab>
+
+                <!-- TAB 3: TEACHER CONSTRAINTS -->
+                <Tab text="👤 Teacher Constraints">
+                    <ScrollPane fitToWidth="true" style="-fx-background-color: white;">
+                        <VBox spacing="20" style="-fx-padding: 30;">
+
+                            <Label text="Teacher Workload Limits"
+                                style="-fx-font-size: 18; -fx-font-weight: bold;" />
+
+                            <GridPane hgap="15" vgap="15">
+                                <Label text="Max Consecutive Hours:" GridPane.columnIndex="0"
+                                    GridPane.rowIndex="0"
+                                    style="-fx-font-weight: bold;" />
+                                <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                                    <Spinner fx:id="maxConsecutiveHours" prefWidth="100" />
+                                    <Label text="hours without break" />
+                                </HBox>
+
+                                <Label text="Max Classes Per Day:" GridPane.columnIndex="0"
+                                    GridPane.rowIndex="1"
+                                    style="-fx-font-weight: bold;" />
+                                <Spinner fx:id="maxClassesPerDay" prefWidth="100"
+                                    GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                                <Label text="Max Daily Hours:" GridPane.columnIndex="0"
+                                    GridPane.rowIndex="2"
+                                    style="-fx-font-weight: bold;" />
+                                <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                    <Spinner fx:id="maxDailyHours" prefWidth="100" />
+                                    <Label text="hours total" />
+                                </HBox>
+
+                                <Label text="Min Prep Periods:" GridPane.columnIndex="0"
+                                    GridPane.rowIndex="3"
+                                    style="-fx-font-weight: bold;" />
+                                <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                    <Spinner fx:id="minPrepPeriods" prefWidth="100" />
+                                    <Label text="per day" />
+                                </HBox>
+                            </GridPane>
+
+                            <Separator />
+
+                            <CheckBox fx:id="requireLunchBreakCheck"
+                                text="Require lunch break for all teachers"
+                                style="-fx-font-size: 14; -fx-font-weight: bold;" />
+
+                        </VBox>
+                    </ScrollPane>
+                </Tab>
+
+                <!-- TAB 4: ROOM SETTINGS -->
+                <Tab text="🏫 Room Settings">
+                    <ScrollPane fitToWidth="true" style="-fx-background-color: white;">
+                        <VBox spacing="20" style="-fx-padding: 30;">
+
+                            <Label text="Room Capacity &amp; Sharing"
+                                style="-fx-font-size: 18; -fx-font-weight: bold;" />
+
+                            <GridPane hgap="15" vgap="15">
+                                <Label text="Default Room Capacity:" GridPane.columnIndex="0"
+                                    GridPane.rowIndex="0"
+                                    style="-fx-font-weight: bold;" />
+                                <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                                    <Spinner fx:id="defaultRoomCapacity" prefWidth="100" />
+                                    <Label text="students" />
+                                </HBox>
+
+                                <Label text="Capacity Buffer:" GridPane.columnIndex="0"
+                                    GridPane.rowIndex="1"
+                                    style="-fx-font-weight: bold;" />
+                                <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                    <Spinner fx:id="capacityBufferPercent" prefWidth="100" />
+                                    <Label text="% over capacity allowed" />
+                                </HBox>
+                            </GridPane>
+
+                            <Separator />
+
+                            <CheckBox fx:id="allowRoomSharingCheck"
+                                text="Allow room sharing between classes"
+                                style="-fx-font-size: 14; -fx-font-weight: bold;" />
+
+                        </VBox>
+                    </ScrollPane>
+                </Tab>
+
+                <!-- TAB 5: ADVANCED -->
+                <Tab text="🔧 Advanced">
+                    <ScrollPane fitToWidth="true" style="-fx-background-color: white;">
+                        <VBox spacing="20" style="-fx-padding: 30;">
+
+                            <Label text="Advanced Schedule Options"
+                                style="-fx-font-size: 18; -fx-font-weight: bold;" />
+
+                            <VBox spacing="15">
+                                <CheckBox fx:id="enableRotatingCheck"
+                                    text="Enable Rotating Schedule (A/B days)"
+                                    style="-fx-font-size: 14; -fx-font-weight: bold;" />
+                                <HBox spacing="10" style="-fx-padding: 0 0 0 25;">
+                                    <Label text="Rotation Days:" />
+                                    <TextField fx:id="rotatingDaysField" promptText="A,B"
+                                        prefWidth="150" disable="true" />
+                                </HBox>
+                            </VBox>
+
+                            <Separator />
+
+                            <VBox spacing="15">
+                                <CheckBox fx:id="enableFlexModCheck" text="Enable Flex-Mod Schedule"
+                                    style="-fx-font-size: 14; -fx-font-weight: bold;" />
+                                <HBox spacing="10" style="-fx-padding: 0 0 0 25;">
+                                    <Label text="Mod Duration:" />
+                                    <Spinner fx:id="flexModDuration" prefWidth="100" disable="true" />
+                                    <Label text="minutes" />
+                                </HBox>
+                            </VBox>
+
+                        </VBox>
+                    </ScrollPane>
+                </Tab>
+
+            </TabPane>
+        </ScrollPane>
+    </center>
+
+    <!-- BOTTOM: ACTIONS & STATUS -->
+    <bottom>
+        <VBox>
+            <Separator />
+            <HBox spacing="15" alignment="CENTER_LEFT"
+                style="-fx-padding: 15; -fx-background-color: white;">
+
+                <Button fx:id="loadTemplateButton" text="📋 Load Template"
+                    style="-fx-background-color: #9b59b6; -fx-text-fill: white; -fx-padding: 10 20; -fx-font-size: 14; -fx-cursor: hand;" />
+
+                <Button fx:id="resetButton" text="↶ Reset to Defaults"
+                    style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-padding: 10 20; -fx-font-size: 14; -fx-cursor: hand;" />
+
+                <Region HBox.hgrow="ALWAYS" />
+
+                <Label fx:id="statusLabel" text="Ready"
+                    style="-fx-font-size: 13; -fx-font-weight: bold;" />
+
+                <Region HBox.hgrow="ALWAYS" />
+
+                <Button fx:id="saveButton" text="💾 Save Configuration"
+                    style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-padding: 10 25; -fx-font-size: 14; -fx-font-weight: bold; -fx-cursor: hand;" />
+
+            </HBox>
+        </VBox>
+    </bottom>
+
+</BorderPane>

@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.eduscheduler.ui.controller.TeacherDialogController"
+            prefWidth="900" prefHeight="750">
+
+    <top>
+        <VBox spacing="10" style="-fx-background-color: #3498db;">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+            <Label fx:id="dialogTitle" text="Add New Teacher" textFill="white">
+                <font>
+                    <Font name="System Bold" size="24"/>
+                </font>
+            </Label>
+            <Label text="Enter teacher information below" textFill="white">
+                <font>
+                    <Font size="14"/>
+                </font>
+            </Label>
+        </VBox>
+    </top>
+
+    <center>
+        <TabPane fx:id="teacherTabPane" tabClosingPolicy="UNAVAILABLE">
+
+            <!-- TAB 1: BASIC INFO -->
+            <Tab text="Basic Info">
+                <ScrollPane fitToWidth="true" style="-fx-background-color: white;">
+                    <VBox spacing="15">
+                        <padding>
+                            <Insets top="20" right="20" bottom="20" left="20"/>
+                        </padding>
+
+                        <!-- Name -->
+                        <VBox spacing="5">
+                            <Label text="Full Name *" style="-fx-font-weight: bold;"/>
+                            <TextField fx:id="nameField" promptText="e.g., Dr. Sarah Johnson"/>
+                            <Label fx:id="nameError" textFill="red" visible="false" managed="false"/>
+                        </VBox>
+
+                        <!-- First Name -->
+                        <VBox spacing="5">
+                            <Label text="First Name" style="-fx-font-weight: bold;"/>
+                            <TextField fx:id="firstNameField" promptText="e.g., Sarah"/>
+                            <Label text="Optional - For CSV/Excel imports and reports"
+                                   style="-fx-font-size: 11; -fx-text-fill: gray;"/>
+                        </VBox>
+
+                        <!-- Last Name -->
+                        <VBox spacing="5">
+                            <Label text="Last Name" style="-fx-font-weight: bold;"/>
+                            <TextField fx:id="lastNameField" promptText="e.g., Johnson"/>
+                            <Label text="Optional - For CSV/Excel imports and reports"
+                                   style="-fx-font-size: 11; -fx-text-fill: gray;"/>
+                        </VBox>
+
+                        <!-- Employee ID -->
+                        <VBox spacing="5">
+                            <Label text="Employee ID *" style="-fx-font-weight: bold;"/>
+                            <TextField fx:id="employeeIdField" promptText="e.g., EMP001"/>
+                            <Label fx:id="employeeIdError" textFill="red" visible="false" managed="false"/>
+                        </VBox>
+
+                        <!-- Email -->
+                        <VBox spacing="5">
+                            <Label text="Email Address *" style="-fx-font-weight: bold;"/>
+                            <TextField fx:id="emailField" promptText="e.g., teacher@school.edu"/>
+                            <Label fx:id="emailError" textFill="red" visible="false" managed="false"/>
+                        </VBox>
+
+                        <!-- Phone -->
+                        <VBox spacing="5">
+                            <Label text="Phone Number" style="-fx-font-weight: bold;"/>
+                            <TextField fx:id="phoneField" promptText="e.g., 555-0123"/>
+                        </VBox>
+
+                        <!-- Department -->
+                        <VBox spacing="5">
+                            <Label text="Department *" style="-fx-font-weight: bold;"/>
+                            <ComboBox fx:id="departmentCombo" promptText="Select Department" prefWidth="800"/>
+                            <Label fx:id="departmentError" textFill="red" visible="false" managed="false"/>
+                        </VBox>
+
+                        <!-- Certification Type -->
+                        <VBox spacing="5">
+                            <Label text="Certification Type *" style="-fx-font-weight: bold;"/>
+                            <ComboBox fx:id="certificationTypeCombo" promptText="Select Certification Type" prefWidth="800"/>
+                            <Label text="Primary certification level (Professional, Temporary, etc.)"
+                                   style="-fx-font-size: 11; -fx-text-fill: gray;"/>
+                        </VBox>
+
+                        <!-- Teacher Role -->
+                        <VBox spacing="5">
+                            <Label text="Teacher Role *" style="-fx-font-weight: bold;"/>
+                            <ComboBox fx:id="teacherRoleCombo" promptText="Select Role" prefWidth="800"/>
+                            <Label text="Primary role - All roles (Teacher, Co-Teacher, Paraprofessional, etc.) can have certifications and course assignments"
+                                   style="-fx-font-size: 11; -fx-text-fill: gray;"/>
+                        </VBox>
+
+                        <!-- Max Hours Per Week -->
+                        <VBox spacing="5">
+                            <Label text="Max Hours Per Week *" style="-fx-font-weight: bold;"/>
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <Spinner fx:id="maxHoursSpinner" prefWidth="100" editable="true"/>
+                                <Label text="hours/week"/>
+                            </HBox>
+                        </VBox>
+
+                        <!-- Max Consecutive Hours -->
+                        <VBox spacing="5">
+                            <Label text="Max Consecutive Hours *" style="-fx-font-weight: bold;"/>
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <Spinner fx:id="maxConsecutiveSpinner" prefWidth="100" editable="true"/>
+                                <Label text="hours consecutively"/>
+                            </HBox>
+                        </VBox>
+
+                        <!-- Preferred Break Minutes -->
+                        <VBox spacing="5">
+                            <Label text="Preferred Break Minutes" style="-fx-font-weight: bold;"/>
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <Spinner fx:id="preferredBreakSpinner" prefWidth="100" editable="true"/>
+                                <Label text="minutes between classes"/>
+                            </HBox>
+                            <Label text="Optional - Recommended break time between consecutive classes"
+                                   style="-fx-font-size: 11; -fx-text-fill: gray;"/>
+                        </VBox>
+
+                        <!-- Priority Level -->
+                        <VBox spacing="5">
+                            <Label text="Priority Level *" style="-fx-font-weight: bold;"/>
+                            <ComboBox fx:id="priorityCombo" promptText="Select Priority" prefWidth="800"/>
+                            <Label text="Q1: Urgent and Important - Core subjects"
+                                   style="-fx-font-size: 11; -fx-text-fill: gray;"/>
+                        </VBox>
+
+                        <!-- Active Status -->
+                        <VBox spacing="5">
+                            <CheckBox fx:id="activeCheckbox" text="Active (Teacher is currently employed)"
+                                      selected="true" style="-fx-font-weight: bold;"/>
+                        </VBox>
+
+                        <Label text="* Required fields" style="-fx-font-style: italic; -fx-text-fill: gray;"/>
+                    </VBox>
+                </ScrollPane>
+            </Tab>
+
+            <!-- TAB 2: CERTIFICATIONS -->
+            <Tab text="Certifications">
+                <ScrollPane fitToWidth="true" style="-fx-background-color: white;">
+                    <VBox spacing="15">
+                        <padding>
+                            <Insets top="20" right="20" bottom="20" left="20"/>
+                        </padding>
+
+                        <!-- Manual Certifications (Simple Text) -->
+                        <VBox spacing="5">
+                            <Label text="Manual Certifications (Quick Entry)" style="-fx-font-weight: bold;"/>
+                            <TextArea fx:id="manualCertificationsArea" promptText="Enter certifications, one per line or comma-separated&#10;Example:&#10;Math 6-12&#10;Science 9-12, ESE&#10;Elementary Education K-6"
+                                      prefRowCount="4" wrapText="true"
+                                      style="-fx-border-color: #3498db; -fx-border-width: 2;"/>
+                            <Label text="Quick entry for simple certifications. For detailed state-specific certifications with expiration dates, use 'Add Certification' below."
+                                   style="-fx-font-size: 11; -fx-text-fill: gray;"/>
+                        </VBox>
+
+                        <!-- Subject Certifications -->
+                        <VBox spacing="5">
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <Label text="Subject Certifications (All Roles)" style="-fx-font-weight: bold;"/>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Button text="+ Add Certification" onAction="#handleAddCertification"
+                                        style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-size: 11;"/>
+                            </HBox>
+                            <ListView fx:id="certificationsListView" prefHeight="200"
+                                      style="-fx-border-color: #cccccc; -fx-border-width: 1;"/>
+                            <Label text="Add multiple certifications from any US state. Co-teachers and other roles can also be certified teachers."
+                                   style="-fx-font-size: 11; -fx-text-fill: gray;"/>
+                        </VBox>
+
+                        <Separator/>
+
+                        <!-- Certification Compliance Details -->
+                        <Label text="Certification Compliance Details" style="-fx-font-weight: bold; -fx-font-size: 14;"/>
+
+                        <GridPane hgap="10" vgap="10" fx:id="certificationGrid">
+                            <!-- Fields will be added programmatically in controller -->
+                        </GridPane>
+                    </VBox>
+                </ScrollPane>
+            </Tab>
+
+            <!-- TAB 3: COURSE ASSIGNMENTS -->
+            <Tab text="Course Assignments">
+                <ScrollPane fitToWidth="true" style="-fx-background-color: white;">
+                    <VBox spacing="15">
+                        <padding>
+                            <Insets top="20" right="20" bottom="20" left="20"/>
+                        </padding>
+
+                        <!-- Qualified to Teach (Course Assignments) -->
+                        <VBox spacing="5">
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <Label text="Qualified to Teach (Assign Multiple Courses)" style="-fx-font-weight: bold;"/>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Button text="+ Assign Course" onAction="#handleAssignCourse"
+                                        style="-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-font-size: 11;"/>
+                            </HBox>
+                            <ListView fx:id="assignedCoursesListView" prefHeight="400"
+                                      style="-fx-border-color: #cccccc; -fx-border-width: 1;"/>
+                            <Label text="Select all courses this person is qualified to teach. Teachers, Co-Teachers, and Paraprofessionals can all have course assignments."
+                                   style="-fx-font-size: 11; -fx-text-fill: gray;"/>
+                        </VBox>
+                    </VBox>
+                </ScrollPane>
+            </Tab>
+
+            <!-- TAB 4: CREDENTIALS AND COMPLIANCE -->
+            <Tab text="Credentials &amp; Compliance">
+                <TabPane fx:id="complianceSubTabPane" tabClosingPolicy="UNAVAILABLE" side="LEFT">
+
+                    <!-- SUB-TAB 1: Background Checks and I-9 -->
+                    <Tab text="Background &amp; I-9">
+                        <ScrollPane fitToWidth="true" style="-fx-background-color: white;">
+                            <GridPane hgap="10" vgap="10" fx:id="backgroundGrid">
+                                <padding>
+                                    <Insets top="20" right="20" bottom="20" left="20"/>
+                                </padding>
+                                <!-- Fields will be added programmatically in controller -->
+                            </GridPane>
+                        </ScrollPane>
+                    </Tab>
+
+                    <!-- SUB-TAB 3: Health and Safety -->
+                    <Tab text="Health &amp; Safety">
+                        <ScrollPane fitToWidth="true" style="-fx-background-color: white;">
+                            <GridPane hgap="10" vgap="10" fx:id="healthGrid">
+                                <padding>
+                                    <Insets top="20" right="20" bottom="20" left="20"/>
+                                </padding>
+                                <!-- Fields will be added programmatically in controller -->
+                            </GridPane>
+                        </ScrollPane>
+                    </Tab>
+
+                    <!-- SUB-TAB 4: Education and Employment -->
+                    <Tab text="Education &amp; Employment">
+                        <ScrollPane fitToWidth="true" style="-fx-background-color: white;">
+                            <GridPane hgap="10" vgap="10" fx:id="educationGrid">
+                                <padding>
+                                    <Insets top="20" right="20" bottom="20" left="20"/>
+                                </padding>
+                                <!-- Fields will be added programmatically in controller -->
+                            </GridPane>
+                        </ScrollPane>
+                    </Tab>
+
+                </TabPane>
+            </Tab>
+
+            <!-- TAB 5: NOTES & SPECIAL ASSIGNMENTS -->
+            <Tab text="Notes">
+                <ScrollPane fitToWidth="true" style="-fx-background-color: white;">
+                    <VBox spacing="15">
+                        <padding>
+                            <Insets top="20" right="20" bottom="20" left="20"/>
+                        </padding>
+
+                        <!-- Notes -->
+                        <VBox spacing="5">
+                            <Label text="Notes (Optional)" style="-fx-font-weight: bold;"/>
+                            <TextArea fx:id="notesArea" promptText="Additional notes about this teacher..."
+                                      prefRowCount="5" wrapText="true"/>
+                        </VBox>
+
+                        <!-- Special Assignment -->
+                        <VBox spacing="5">
+                            <Label text="Special Assignment (Optional)" style="-fx-font-weight: bold;"/>
+                            <TextArea fx:id="specialAssignmentArea" promptText="e.g., Cafeteria Duty, Hall Monitor, Bus Duty, Detention..."
+                                      prefRowCount="4" wrapText="true"/>
+                            <Label text="Track special duties like cafeteria duty, hall monitoring, bus duty, detention, etc."
+                                   style="-fx-font-size: 11; -fx-text-fill: gray;"/>
+                        </VBox>
+                    </VBox>
+                </ScrollPane>
+            </Tab>
+
+        </TabPane>
+    </center>
+
+    <bottom>
+        <HBox spacing="10" alignment="CENTER_RIGHT" style="-fx-background-color: #f5f5f5;">
+            <padding>
+                <Insets top="15" right="15" bottom="15" left="15"/>
+            </padding>
+            <Button text="Cancel" onAction="#handleCancel" prefWidth="100"
+                    style="-fx-background-color: #95a5a6; -fx-text-fill: white;"/>
+            <Button text="Save Teacher" onAction="#handleSave" prefWidth="120"
+                    style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold;"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

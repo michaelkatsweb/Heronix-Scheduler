@@ -1,0 +1,547 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<!--
+IEP Wizard - Comprehensive IEP Creation & Management
+Location: src/main/resources/fxml/IEPWizard.fxml
+Purpose: Guide special education coordinators through creating/editing IEPs
+Features: 7-step wizard with validation, auto-calculations, and comprehensive data collection
+-->
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.eduscheduler.ui.controller.IEPWizardController"
+            styleClass="root"
+            prefWidth="1000" prefHeight="750">
+
+    <!-- TOP: HEADER WITH PROGRESS INDICATOR -->
+    <top>
+        <VBox styleClass="card-header" spacing="10">
+            <padding>
+                <Insets top="20" right="20" bottom="15" left="20"/>
+            </padding>
+
+            <!-- Title Bar -->
+            <HBox alignment="CENTER_LEFT" spacing="15">
+                <Label text="IEP Wizard" styleClass="label-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="studentNameLabel" text="Student: [Select Student]" styleClass="label-subtitle"/>
+            </HBox>
+
+            <!-- Progress Indicator -->
+            <HBox spacing="10" alignment="CENTER">
+                <!-- Step 1 -->
+                <VBox alignment="CENTER" spacing="5" styleClass="wizard-step" fx:id="step1Indicator">
+                    <Label text="1" styleClass="step-number"/>
+                    <Label text="Basic Info" styleClass="step-label"/>
+                </VBox>
+                <Separator prefWidth="40" styleClass="step-separator"/>
+
+                <!-- Step 2 -->
+                <VBox alignment="CENTER" spacing="5" styleClass="wizard-step" fx:id="step2Indicator">
+                    <Label text="2" styleClass="step-number"/>
+                    <Label text="Disability" styleClass="step-label"/>
+                </VBox>
+                <Separator prefWidth="40" styleClass="step-separator"/>
+
+                <!-- Step 3 -->
+                <VBox alignment="CENTER" spacing="5" styleClass="wizard-step" fx:id="step3Indicator">
+                    <Label text="3" styleClass="step-number"/>
+                    <Label text="Services" styleClass="step-label"/>
+                </VBox>
+                <Separator prefWidth="40" styleClass="step-separator"/>
+
+                <!-- Step 4 -->
+                <VBox alignment="CENTER" spacing="5" styleClass="wizard-step" fx:id="step4Indicator">
+                    <Label text="4" styleClass="step-number"/>
+                    <Label text="LRE" styleClass="step-label"/>
+                </VBox>
+                <Separator prefWidth="40" styleClass="step-separator"/>
+
+                <!-- Step 5 -->
+                <VBox alignment="CENTER" spacing="5" styleClass="wizard-step" fx:id="step5Indicator">
+                    <Label text="5" styleClass="step-number"/>
+                    <Label text="Support" styleClass="step-label"/>
+                </VBox>
+                <Separator prefWidth="40" styleClass="step-separator"/>
+
+                <!-- Step 6 -->
+                <VBox alignment="CENTER" spacing="5" styleClass="wizard-step" fx:id="step6Indicator">
+                    <Label text="6" styleClass="step-number"/>
+                    <Label text="Goals" styleClass="step-label"/>
+                </VBox>
+                <Separator prefWidth="40" styleClass="step-separator"/>
+
+                <!-- Step 7 -->
+                <VBox alignment="CENTER" spacing="5" styleClass="wizard-step" fx:id="step7Indicator">
+                    <Label text="7" styleClass="step-number"/>
+                    <Label text="Review" styleClass="step-label"/>
+                </VBox>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- CENTER: STEP CONTENT -->
+    <center>
+        <StackPane fx:id="stepContainer" styleClass="wizard-content">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <!-- STEP 1: STUDENT SELECTION & BASIC INFO -->
+            <ScrollPane fx:id="step1Panel" fitToWidth="true" styleClass="scroll-pane">
+                <VBox spacing="20" styleClass="form-container">
+                    <Label text="Step 1: Student Selection &amp; Basic Information" styleClass="wizard-step-title"/>
+
+                    <!-- Student Selection -->
+                    <VBox spacing="8">
+                        <Label text="Select Student:" styleClass="label-bold"/>
+                        <ComboBox fx:id="studentCombo" promptText="Select a student"
+                                  prefWidth="400" styleClass="combo-box"/>
+                        <Label text="If student is already set, this field will be disabled"
+                               styleClass="label-hint"/>
+                    </VBox>
+
+                    <Separator/>
+
+                    <!-- IEP Number -->
+                    <HBox spacing="15" alignment="CENTER_LEFT">
+                        <VBox spacing="8" HBox.hgrow="ALWAYS">
+                            <Label text="IEP Number:" styleClass="label-bold"/>
+                            <TextField fx:id="iepNumberField" promptText="IEP-YYYY-NNNNNN"
+                                       prefWidth="250" styleClass="text-field"/>
+                            <Label text="Leave blank to auto-generate" styleClass="label-hint"/>
+                        </VBox>
+                        <Button text="Auto-Generate" onAction="#handleGenerateIEPNumber"
+                                styleClass="button-secondary" prefWidth="150"/>
+                    </HBox>
+
+                    <Separator/>
+
+                    <!-- Dates Section -->
+                    <HBox spacing="20">
+                        <VBox spacing="8" HBox.hgrow="ALWAYS">
+                            <Label text="Effective Date:" styleClass="label-bold"/>
+                            <DatePicker fx:id="effectiveDatePicker" promptText="Select date"
+                                        styleClass="date-picker" prefWidth="200"/>
+                            <Label text="Date IEP becomes active" styleClass="label-hint"/>
+                        </VBox>
+
+                        <VBox spacing="8" HBox.hgrow="ALWAYS">
+                            <Label text="Expiration Date:" styleClass="label-bold"/>
+                            <DatePicker fx:id="expirationDatePicker" promptText="Select date"
+                                        styleClass="date-picker" prefWidth="200"/>
+                            <Label text="Automatically set to 1 year from effective date"
+                                   styleClass="label-hint"/>
+                        </VBox>
+                    </HBox>
+
+                    <HBox spacing="20">
+                        <VBox spacing="8" HBox.hgrow="ALWAYS">
+                            <Label text="Annual Review Date:" styleClass="label-bold"/>
+                            <DatePicker fx:id="annualReviewDatePicker" promptText="Select date"
+                                        styleClass="date-picker" prefWidth="200"/>
+                            <Label text="Date for annual review (typically 1 year)" styleClass="label-hint"/>
+                        </VBox>
+
+                        <VBox spacing="8" HBox.hgrow="ALWAYS">
+                            <Label text="IEP Status:" styleClass="label-bold"/>
+                            <ComboBox fx:id="statusCombo" promptText="Select status"
+                                      styleClass="combo-box" prefWidth="200"/>
+                            <Label text="Current status of this IEP" styleClass="label-hint"/>
+                        </VBox>
+                    </HBox>
+                </VBox>
+            </ScrollPane>
+
+            <!-- STEP 2: ELIGIBILITY & DISABILITY -->
+            <ScrollPane fx:id="step2Panel" fitToWidth="true" styleClass="scroll-pane" visible="false">
+                <VBox spacing="20" styleClass="form-container">
+                    <Label text="Step 2: Eligibility &amp; Disability Information" styleClass="wizard-step-title"/>
+
+                    <!-- Primary Disability -->
+                    <VBox spacing="8">
+                        <Label text="Primary Disability Category:" styleClass="label-bold"/>
+                        <ComboBox fx:id="disabilityCategoryCombo" promptText="Select disability category"
+                                  prefWidth="500" styleClass="combo-box"/>
+                        <Label text="Select the student's primary disability category (required)"
+                               styleClass="label-hint"/>
+                    </VBox>
+
+                    <Separator/>
+
+                    <!-- Secondary Disability -->
+                    <VBox spacing="8">
+                        <Label text="Secondary Disability Category (Optional):" styleClass="label-bold"/>
+                        <ComboBox fx:id="secondaryDisabilityCategoryCombo"
+                                  promptText="Select secondary disability (if applicable)"
+                                  prefWidth="500" styleClass="combo-box"/>
+                        <Label text="Some students may have multiple disabilities" styleClass="label-hint"/>
+                    </VBox>
+
+                    <Separator/>
+
+                    <!-- Eligibility Determination Date -->
+                    <VBox spacing="8">
+                        <Label text="Eligibility Determination Date:" styleClass="label-bold"/>
+                        <DatePicker fx:id="eligibilityDatePicker" promptText="Select date"
+                                    styleClass="date-picker" prefWidth="250"/>
+                        <Label text="Date when eligibility for special education was determined"
+                               styleClass="label-hint"/>
+                    </VBox>
+
+                    <Separator/>
+
+                    <!-- Disability Information Panel -->
+                    <VBox spacing="10" styleClass="info-panel">
+                        <Label text="Disability Categories (IDEA 2004):" styleClass="label-bold"/>
+                        <TextArea wrapText="true" editable="false" prefRowCount="8"
+                                  text="• Specific Learning Disability (SLD)&#10;• Speech or Language Impairment&#10;• Other Health Impairment (OHI)&#10;• Autism Spectrum Disorder&#10;• Emotional Disturbance&#10;• Intellectual Disability&#10;• Multiple Disabilities&#10;• Hearing Impairment&#10;• Orthopedic Impairment&#10;• Visual Impairment&#10;• Deaf-Blindness&#10;• Traumatic Brain Injury (TBI)&#10;• Developmental Delay"
+                                  styleClass="text-area"/>
+                    </VBox>
+                </VBox>
+            </ScrollPane>
+
+            <!-- STEP 3: SERVICES & MINUTES -->
+            <ScrollPane fx:id="step3Panel" fitToWidth="true" styleClass="scroll-pane" visible="false">
+                <VBox spacing="20" styleClass="form-container">
+                    <Label text="Step 3: Related Services &amp; Service Minutes" styleClass="wizard-step-title"/>
+
+                    <!-- Speech Therapy -->
+                    <HBox spacing="15" alignment="CENTER_LEFT" styleClass="service-row">
+                        <CheckBox fx:id="speechTherapyCheck" text="Speech Therapy"
+                                  styleClass="check-box-large" prefWidth="200"/>
+                        <VBox spacing="5" HBox.hgrow="ALWAYS">
+                            <Label text="Minutes per Week:" styleClass="label"/>
+                            <TextField fx:id="speechMinutesField" promptText="0"
+                                       disable="true" prefWidth="120" styleClass="text-field"/>
+                        </VBox>
+                    </HBox>
+
+                    <!-- Occupational Therapy -->
+                    <HBox spacing="15" alignment="CENTER_LEFT" styleClass="service-row">
+                        <CheckBox fx:id="occupationalTherapyCheck" text="Occupational Therapy (OT)"
+                                  styleClass="check-box-large" prefWidth="200"/>
+                        <VBox spacing="5" HBox.hgrow="ALWAYS">
+                            <Label text="Minutes per Week:" styleClass="label"/>
+                            <TextField fx:id="otMinutesField" promptText="0"
+                                       disable="true" prefWidth="120" styleClass="text-field"/>
+                        </VBox>
+                    </HBox>
+
+                    <!-- Physical Therapy -->
+                    <HBox spacing="15" alignment="CENTER_LEFT" styleClass="service-row">
+                        <CheckBox fx:id="physicalTherapyCheck" text="Physical Therapy (PT)"
+                                  styleClass="check-box-large" prefWidth="200"/>
+                        <VBox spacing="5" HBox.hgrow="ALWAYS">
+                            <Label text="Minutes per Week:" styleClass="label"/>
+                            <TextField fx:id="ptMinutesField" promptText="0"
+                                       disable="true" prefWidth="120" styleClass="text-field"/>
+                        </VBox>
+                    </HBox>
+
+                    <!-- Counseling -->
+                    <HBox spacing="15" alignment="CENTER_LEFT" styleClass="service-row">
+                        <CheckBox fx:id="counselingCheck" text="Counseling Services"
+                                  styleClass="check-box-large" prefWidth="200"/>
+                        <VBox spacing="5" HBox.hgrow="ALWAYS">
+                            <Label text="Minutes per Week:" styleClass="label"/>
+                            <TextField fx:id="counselingMinutesField" promptText="0"
+                                       disable="true" prefWidth="120" styleClass="text-field"/>
+                        </VBox>
+                    </HBox>
+
+                    <!-- Behavioral Support -->
+                    <HBox spacing="15" alignment="CENTER_LEFT" styleClass="service-row">
+                        <CheckBox fx:id="behavioralSupportCheck" text="Behavioral Support Services"
+                                  styleClass="check-box-large" prefWidth="200"/>
+                        <VBox spacing="5" HBox.hgrow="ALWAYS">
+                            <Label text="Minutes per Week:" styleClass="label"/>
+                            <TextField fx:id="behavioralMinutesField" promptText="0"
+                                       disable="true" prefWidth="120" styleClass="text-field"/>
+                        </VBox>
+                    </HBox>
+
+                    <Separator/>
+
+                    <!-- Total Service Minutes -->
+                    <HBox spacing="15" alignment="CENTER_LEFT" styleClass="total-row">
+                        <Label text="Total Service Minutes per Week:" styleClass="label-bold"/>
+                        <Label fx:id="totalServiceMinutesLabel" text="0 minutes"
+                               styleClass="label-value" style="-fx-font-size: 18; -fx-text-fill: #4ade80;"/>
+                    </HBox>
+
+                    <Label text="Note: Service minutes will be automatically calculated based on your selections"
+                           styleClass="label-hint" wrapText="true"/>
+                </VBox>
+            </ScrollPane>
+
+            <!-- STEP 4: LRE & PLACEMENT -->
+            <ScrollPane fx:id="step4Panel" fitToWidth="true" styleClass="scroll-pane" visible="false">
+                <VBox spacing="20" styleClass="form-container">
+                    <Label text="Step 4: Least Restrictive Environment (LRE) &amp; Placement" styleClass="wizard-step-title"/>
+
+                    <!-- General Education Percentage -->
+                    <VBox spacing="10">
+                        <Label text="Time in General Education:" styleClass="label-bold"/>
+                        <HBox spacing="15" alignment="CENTER_LEFT">
+                            <Slider fx:id="generalEdSlider" min="0" max="100" value="80"
+                                    showTickLabels="true" showTickMarks="true" majorTickUnit="20"
+                                    minorTickCount="4" prefWidth="500" styleClass="slider"/>
+                            <TextField fx:id="generalEdPercentField" text="80"
+                                       prefWidth="80" styleClass="text-field"/>
+                            <Label text="%" styleClass="label"/>
+                        </HBox>
+                        <Label fx:id="generalEdStatusLabel" text="Highly Inclusive (80%+ in General Ed)"
+                               styleClass="label-success" wrapText="true"/>
+                    </VBox>
+
+                    <Separator/>
+
+                    <!-- Special Education Percentage (Auto-calculated) -->
+                    <VBox spacing="8">
+                        <Label text="Time in Special Education (Auto-calculated):" styleClass="label-bold"/>
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <Label fx:id="specialEdPercentLabel" text="20%"
+                                   styleClass="label-value" style="-fx-font-size: 18;"/>
+                            <Label text="of the school day" styleClass="label"/>
+                        </HBox>
+                    </VBox>
+
+                    <Separator/>
+
+                    <!-- Placement Setting -->
+                    <VBox spacing="8">
+                        <Label text="Placement Setting:" styleClass="label-bold"/>
+                        <ComboBox fx:id="placementSettingCombo" promptText="Select placement setting"
+                                  prefWidth="500" styleClass="combo-box"/>
+                        <Label text="Select the educational environment that best describes this student's placement"
+                               styleClass="label-hint"/>
+                    </VBox>
+
+                    <Separator/>
+
+                    <!-- LRE Justification -->
+                    <VBox spacing="8">
+                        <Label text="LRE Justification:" styleClass="label-bold"/>
+                        <TextArea fx:id="lreJustificationArea"
+                                  promptText="Explain why this placement is the least restrictive environment appropriate for this student's needs...&#10;&#10;Consider:&#10;• Why is this placement necessary?&#10;• What supports were considered for general education?&#10;• How does this placement benefit the student?&#10;• What is the plan for increasing time in general education?"
+                                  prefRowCount="8" wrapText="true" styleClass="text-area"/>
+                        <Label text="A thorough justification helps ensure compliance with LRE requirements"
+                               styleClass="label-hint"/>
+                    </VBox>
+                </VBox>
+            </ScrollPane>
+
+            <!-- STEP 5: ACCOMMODATIONS & SUPPORT -->
+            <ScrollPane fx:id="step5Panel" fitToWidth="true" styleClass="scroll-pane" visible="false">
+                <VBox spacing="20" styleClass="form-container">
+                    <Label text="Step 5: Accommodations, Modifications &amp; Support Services" styleClass="wizard-step-title"/>
+
+                    <!-- Accommodations -->
+                    <VBox spacing="8">
+                        <Label text="Accommodations:" styleClass="label-bold"/>
+                        <TextArea fx:id="accommodationsArea"
+                                  promptText="List accommodations (changes in HOW student learns)...&#10;&#10;Examples:&#10;• Extended time on tests (1.5x or 2x)&#10;• Preferential seating (front of class, away from distractions)&#10;• Use of calculator&#10;• Tests read aloud&#10;• Frequent breaks&#10;• Small group testing&#10;• Visual aids and graphic organizers"
+                                  prefRowCount="6" wrapText="true" styleClass="text-area"/>
+                    </VBox>
+
+                    <!-- Modifications -->
+                    <VBox spacing="8">
+                        <Label text="Modifications:" styleClass="label-bold"/>
+                        <TextArea fx:id="modificationsArea"
+                                  promptText="List modifications (changes in WHAT student learns)...&#10;&#10;Examples:&#10;• Reduced number of questions/problems&#10;• Simplified reading materials&#10;• Modified grading criteria&#10;• Alternative assignments&#10;• Reduced writing requirements"
+                                  prefRowCount="5" wrapText="true" styleClass="text-area"/>
+                    </VBox>
+
+                    <!-- Assistive Technology -->
+                    <VBox spacing="8">
+                        <Label text="Assistive Technology:" styleClass="label-bold"/>
+                        <TextArea fx:id="assistiveTechnologyArea"
+                                  promptText="List assistive technology devices or software...&#10;&#10;Examples:&#10;• Text-to-speech software&#10;• Speech-to-text software&#10;• FM system for hearing&#10;• Tablet/iPad with apps&#10;• Augmentative communication device&#10;• Adaptive keyboard/mouse"
+                                  prefRowCount="5" wrapText="true" styleClass="text-area"/>
+                    </VBox>
+
+                    <Separator/>
+
+                    <!-- Support Services Checkboxes -->
+                    <VBox spacing="12">
+                        <Label text="Support Services:" styleClass="label-bold"/>
+
+                        <CheckBox fx:id="coTeachingCheck" text="Requires Co-Teaching"
+                                  styleClass="check-box"/>
+
+                        <HBox spacing="15" alignment="CENTER_LEFT">
+                            <CheckBox fx:id="paraprofessionalCheck" text="Requires Paraprofessional Support"
+                                      styleClass="check-box" prefWidth="300"/>
+                            <VBox spacing="5">
+                                <Label text="Hours per Day:" styleClass="label"/>
+                                <TextField fx:id="paraHoursField" promptText="0.0"
+                                           disable="true" prefWidth="100" styleClass="text-field"/>
+                            </VBox>
+                        </HBox>
+
+                        <CheckBox fx:id="pullOutServicesCheck" text="Requires Pull-Out Services (student leaves general ed)"
+                                  styleClass="check-box"/>
+
+                        <CheckBox fx:id="pushInServicesCheck" text="Requires Push-In Services (support in general ed)"
+                                  styleClass="check-box"/>
+
+                        <CheckBox fx:id="transportationCheck" text="Requires Transportation Services"
+                                  styleClass="check-box"/>
+
+                        <CheckBox fx:id="extendedSchoolYearCheck" text="Eligible for Extended School Year (ESY)"
+                                  styleClass="check-box"/>
+                    </VBox>
+                </VBox>
+            </ScrollPane>
+
+            <!-- STEP 6: GOALS & MONITORING -->
+            <ScrollPane fx:id="step6Panel" fitToWidth="true" styleClass="scroll-pane" visible="false">
+                <VBox spacing="20" styleClass="form-container">
+                    <Label text="Step 6: Annual Goals &amp; Progress Monitoring" styleClass="wizard-step-title"/>
+
+                    <!-- Annual Goals -->
+                    <VBox spacing="8">
+                        <Label text="Annual Goals:" styleClass="label-bold"/>
+                        <TextArea fx:id="annualGoalsArea"
+                                  promptText="List the student's measurable annual goals...&#10;&#10;Format each goal using SMART criteria:&#10;• Specific: What exactly will the student do?&#10;• Measurable: How will progress be measured?&#10;• Achievable: Is it realistic for this student?&#10;• Relevant: Does it align with student needs?&#10;• Time-bound: By when? (typically 1 year)&#10;&#10;Example:&#10;Goal 1 (Reading): By May 2025, [Student] will read grade-level text at 120 words per minute with 95% accuracy as measured by curriculum-based assessments administered quarterly."
+                                  prefRowCount="10" wrapText="true" styleClass="text-area"/>
+                    </VBox>
+
+                    <Separator/>
+
+                    <!-- Progress Monitoring -->
+                    <VBox spacing="8">
+                        <Label text="Progress Monitoring Frequency:" styleClass="label-bold"/>
+                        <ComboBox fx:id="progressMonitoringCombo" promptText="Select frequency"
+                                  prefWidth="300" styleClass="combo-box"/>
+                        <Label text="How often will progress toward goals be reported to parents?"
+                               styleClass="label-hint"/>
+                    </VBox>
+
+                    <Separator/>
+
+                    <!-- Parent Concerns -->
+                    <VBox spacing="8">
+                        <Label text="Parent Concerns:" styleClass="label-bold"/>
+                        <TextArea fx:id="parentConcernsArea"
+                                  promptText="Document parent concerns and input regarding the student's education...&#10;&#10;Examples:&#10;• Parent is concerned about reading progress&#10;• Parent wants more communication about behavior&#10;• Parent requests homework modifications&#10;• Parent interested in assistive technology options"
+                                  prefRowCount="5" wrapText="true" styleClass="text-area"/>
+                    </VBox>
+
+                    <Separator/>
+
+                    <!-- Transition Plan -->
+                    <VBox spacing="8">
+                        <Label text="Transition Plan (for students 14+):" styleClass="label-bold"/>
+                        <TextArea fx:id="transitionPlanArea"
+                                  promptText="For students age 14 and older, document transition planning...&#10;&#10;Address:&#10;• Post-secondary education goals&#10;• Career/employment goals&#10;• Independent living goals&#10;• Transition services needed&#10;• Agency involvement&#10;• Student preferences and interests"
+                                  prefRowCount="6" wrapText="true" styleClass="text-area"/>
+                        <Label text="Required for students age 14 and older (transition to adulthood)"
+                               styleClass="label-hint"/>
+                    </VBox>
+                </VBox>
+            </ScrollPane>
+
+            <!-- STEP 7: CASE MANAGEMENT & REVIEW -->
+            <ScrollPane fx:id="step7Panel" fitToWidth="true" styleClass="scroll-pane" visible="false">
+                <VBox spacing="20" styleClass="form-container">
+                    <Label text="Step 7: Case Management &amp; Final Review" styleClass="wizard-step-title"/>
+
+                    <!-- Case Manager Information -->
+                    <VBox spacing="12">
+                        <Label text="Case Manager Information:" styleClass="label-bold"/>
+
+                        <HBox spacing="15">
+                            <VBox spacing="5" HBox.hgrow="ALWAYS">
+                                <Label text="Case Manager Name:" styleClass="label"/>
+                                <TextField fx:id="caseManagerNameField"
+                                           promptText="First Last"
+                                           styleClass="text-field"/>
+                            </VBox>
+
+                            <VBox spacing="5" HBox.hgrow="ALWAYS">
+                                <Label text="Email:" styleClass="label"/>
+                                <TextField fx:id="caseManagerEmailField"
+                                           promptText="email@school.edu"
+                                           styleClass="text-field"/>
+                            </VBox>
+                        </HBox>
+
+                        <VBox spacing="5">
+                            <Label text="Phone:" styleClass="label"/>
+                            <TextField fx:id="caseManagerPhoneField"
+                                       promptText="(555) 123-4567"
+                                       prefWidth="250" styleClass="text-field"/>
+                        </VBox>
+                    </VBox>
+
+                    <Separator/>
+
+                    <!-- Special Education Teacher -->
+                    <VBox spacing="8">
+                        <Label text="Primary Special Education Teacher:" styleClass="label-bold"/>
+                        <ComboBox fx:id="specialEdTeacherCombo" promptText="Select teacher"
+                                  prefWidth="400" styleClass="combo-box"/>
+                        <Label text="The primary special education teacher responsible for this student"
+                               styleClass="label-hint"/>
+                    </VBox>
+
+                    <Separator/>
+
+                    <!-- Additional Notes -->
+                    <VBox spacing="8">
+                        <Label text="Additional Notes:" styleClass="label-bold"/>
+                        <TextArea fx:id="notesArea"
+                                  promptText="Any additional notes, comments, or information not covered in other sections..."
+                                  prefRowCount="4" wrapText="true" styleClass="text-area"/>
+                    </VBox>
+
+                    <Separator/>
+
+                    <!-- IEP Summary (Read-Only Review) -->
+                    <VBox spacing="10" styleClass="summary-panel">
+                        <Label text="IEP Summary:" styleClass="label-bold"/>
+                        <TextArea fx:id="summaryArea" editable="false" wrapText="true"
+                                  prefRowCount="12" styleClass="text-area-readonly"/>
+                    </VBox>
+
+                    <Separator/>
+
+                    <!-- Verification -->
+                    <HBox spacing="10" alignment="CENTER_LEFT"
+                          style="-fx-background-color: rgba(52, 211, 153, 0.1); -fx-padding: 15; -fx-background-radius: 8;">
+                        <CheckBox fx:id="verificationCheck"
+                                  text="I verify that the information in this IEP is accurate and complete"
+                                  styleClass="check-box-large"/>
+                    </HBox>
+                </VBox>
+            </ScrollPane>
+
+        </StackPane>
+    </center>
+
+    <!-- BOTTOM: NAVIGATION BUTTONS -->
+    <bottom>
+        <HBox spacing="15" alignment="CENTER_RIGHT" styleClass="button-bar">
+            <padding>
+                <Insets top="15" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <Button fx:id="cancelButton" text="Cancel" onAction="#handleCancel"
+                    styleClass="button-secondary" prefWidth="100"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button fx:id="previousButton" text="Previous" onAction="#handlePrevious"
+                    styleClass="button-secondary" prefWidth="100" disable="true"/>
+            <Button fx:id="nextButton" text="Next" onAction="#handleNext"
+                    styleClass="button-primary" prefWidth="100"/>
+            <Button fx:id="finishButton" text="Finish" onAction="#handleFinish"
+                    styleClass="button-success" prefWidth="100" visible="false"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

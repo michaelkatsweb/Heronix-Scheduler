@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<!--
+Schedule Viewer - Calendar-Based Schedule Display
+Location: src/main/resources/fxml/ScheduleViewer.fxml
+Controller: com.eduscheduler.ui.controller.ScheduleViewerController
+
+UPDATED: 2025-11-03
+Fixed emoji encoding and improved UI styling
+-->
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.eduscheduler.ui.controller.ScheduleViewerController"
+            fx:id="rootPane"
+            styleClass="root">
+
+    <!-- ================================================================ -->
+    <!-- TOP: Header & Toolbar -->
+    <!-- ================================================================ -->
+    <top>
+        <VBox spacing="0" styleClass="card" style=" -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);">
+
+            <!-- Header -->
+            <HBox alignment="CENTER_LEFT" spacing="15"
+                  style="-fx-padding: 20; -fx-border-width: 0 0 1 0; -fx-border-color: rgba(91, 141, 239, 0.25);">
+
+                <Label text="📅 Schedule Viewer"
+                       styleClass="label-title"/>
+
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <!-- Action Buttons -->
+                <Button fx:id="todayButton" text="📆 Today" onAction="#handleToday"
+                        styleClass="button">
+                    <tooltip>
+                        <Tooltip text="Jump to today's date"/>
+                    </tooltip>
+                </Button>
+
+                <Button fx:id="refreshButton" text="🔄 Refresh" onAction="#handleRefresh"
+                        styleClass="button-primary">
+                    <tooltip>
+                        <Tooltip text="Reload schedule data"/>
+                    </tooltip>
+                </Button>
+
+                <Button fx:id="exportButton" text="📤 Export" onAction="#handleExport"
+                        styleClass="button-success">
+                    <tooltip>
+                        <Tooltip text="Export schedule to file"/>
+                    </tooltip>
+                </Button>
+
+                <Button fx:id="printButton" text="🖨 Print" onAction="#handlePrint"
+                        styleClass="button-primary">
+                    <tooltip>
+                        <Tooltip text="Print current view"/>
+                    </tooltip>
+                </Button>
+
+                <Button fx:id="settingsButton" text="⚙ Settings" onAction="#handleSettings"
+                        styleClass="button-warning">
+                    <tooltip>
+                        <Tooltip text="Display settings"/>
+                    </tooltip>
+                </Button>
+            </HBox>
+
+            <!-- Toolbar: Filters & Navigation -->
+            <GridPane hgap="15" vgap="10" styleClass="card" style="-fx-padding: 15;">
+
+                <!-- Schedule Selection -->
+                <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                    <Label text="Schedule:" style="-fx-font-weight: bold; -fx-text-fill: #e8eaed; -fx-font-size: 13;"/>
+                    <ComboBox fx:id="scheduleComboBox" prefWidth="250" promptText="Select a schedule..."
+                              style="-fx-font-size: 13;">
+                        <tooltip>
+                            <Tooltip text="Select which schedule to view"/>
+                        </tooltip>
+                    </ComboBox>
+                </VBox>
+
+                <!-- View Type -->
+                <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                    <Label text="View Type:" style="-fx-font-weight: bold; -fx-text-fill: #e8eaed; -fx-font-size: 13;"/>
+                    <ComboBox fx:id="viewTypeCombo" prefWidth="180" promptText="Select view..."
+                              style="-fx-font-size: 13;">
+                        <tooltip>
+                            <Tooltip text="Choose how to display the schedule"/>
+                        </tooltip>
+                    </ComboBox>
+                </VBox>
+
+                <!-- Date Picker -->
+                <VBox spacing="5" GridPane.columnIndex="2" GridPane.rowIndex="0">
+                    <Label text="Date:" style="-fx-font-weight: bold; -fx-text-fill: #e8eaed; -fx-font-size: 13;"/>
+                    <DatePicker fx:id="datePicker" prefWidth="180" style="-fx-font-size: 13;">
+                        <tooltip>
+                            <Tooltip text="Select date to view"/>
+                        </tooltip>
+                    </DatePicker>
+                </VBox>
+
+                <!-- Search Field -->
+                <VBox spacing="5" GridPane.columnIndex="3" GridPane.rowIndex="0">
+                    <Label text="Search:" style="-fx-font-weight: bold; -fx-text-fill: #e8eaed; -fx-font-size: 13;"/>
+                    <TextField fx:id="searchField"
+                              promptText="Search courses, teachers, rooms..."
+                              prefWidth="250"
+                              onAction="#handleSearch"
+                              style="-fx-font-size: 13;">
+                        <tooltip>
+                            <Tooltip text="Filter schedule slots by keyword"/>
+                        </tooltip>
+                    </TextField>
+                </VBox>
+
+                <!-- Legend Button -->
+                <VBox spacing="5" GridPane.columnIndex="4" GridPane.rowIndex="0">
+                    <Label text="Legend:" style="-fx-font-weight: bold; -fx-text-fill: #e8eaed; -fx-font-size: 13;"/>
+                    <Button text="🎨 Show Legend" onAction="#handleShowLegend"
+                            styleClass="button-primary">
+                        <tooltip>
+                            <Tooltip text="Show color legend"/>
+                        </tooltip>
+                    </Button>
+                </VBox>
+            </GridPane>
+
+            <!-- Navigation Bar -->
+            <HBox spacing="10" alignment="CENTER" styleClass="card" style="-fx-padding: 10; -fx-border-width: 1 0 0 0; -fx-border-color: rgba(91, 141, 239, 0.25);">
+
+                <Button fx:id="previousButton" text="◀ Previous" onAction="#handlePrevious"
+                        styleClass="button">
+                    <tooltip>
+                        <Tooltip text="Navigate to previous period"/>
+                    </tooltip>
+                </Button>
+
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <Label fx:id="selectedDateLabel" text="Select a date"
+                       style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <Button fx:id="nextButton" text="Next ▶" onAction="#handleNext"
+                        styleClass="button">
+                    <tooltip>
+                        <Tooltip text="Navigate to next period"/>
+                    </tooltip>
+                </Button>
+            </HBox>
+
+            <!-- Info Bar -->
+            <HBox spacing="20" styleClass="card" style="-fx-padding: 10 15; -fx-border-width: 1 0 0 0; -fx-border-color: rgba(91, 141, 239, 0.25);">
+
+                <Label fx:id="scheduleInfoLabel" text="No schedule selected"
+                       style="-fx-font-size: 13; -fx-text-fill: #2c3e50;"/>
+
+                <Separator orientation="VERTICAL"/>
+
+                <Label text="💡 Tip: Click on any slot to view details"
+                       style="-fx-font-size: 12; -fx-text-fill: #7f8c8d; -fx-font-style: italic;"/>
+
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <Label text="✅ Ready"
+                       style="-fx-font-size: 13; -fx-text-fill: #27ae60; -fx-font-weight: bold;"/>
+            </HBox>
+
+        </VBox>
+    </top>
+
+    <!-- ================================================================ -->
+    <!-- CENTER: Calendar/Table View -->
+    <!-- ================================================================ -->
+    <center>
+        <StackPane style="-fx-padding: 15;">
+
+            <!-- Tab Pane for switching between Calendar and Table views -->
+            <TabPane fx:id="viewTabPane" tabClosingPolicy="UNAVAILABLE" styleClass="card" style=" -fx-background-radius: 8;">
+
+                <!-- Calendar View Tab -->
+                <Tab text="📅 Calendar View">
+                    <ScrollPane fx:id="calendarScrollPane"
+                               fitToWidth="true"
+                               styleClass="card" style="">
+
+                        <GridPane fx:id="calendarGrid"
+                                 styleClass="card" style=" -fx-padding: 20; -fx-hgap: 2; -fx-vgap: 2;">
+                            <!-- Calendar grid will be populated dynamically -->
+                            <Label text="Calendar view will be rendered here"
+                                   style="-fx-font-size: 16; -fx-text-fill: #95a5a6; -fx-padding: 50;"
+                                   GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                        </GridPane>
+
+                    </ScrollPane>
+                </Tab>
+
+                <!-- Table View Tab -->
+                <Tab text="📊 Table View">
+                    <BorderPane style="-fx-padding: 10;">
+
+                        <center>
+                            <TableView fx:id="scheduleTable"
+                                      styleClass="card" style=" -fx-font-size: 13;">
+
+                                <columns>
+                                    <TableColumn fx:id="dayColumn" text="Day" prefWidth="100"/>
+                                    <TableColumn fx:id="timeColumn" text="Time" prefWidth="120"/>
+                                    <TableColumn fx:id="courseColumn" text="Course" prefWidth="200"/>
+                                    <TableColumn fx:id="teacherColumn" text="Teacher" prefWidth="150"/>
+                                    <TableColumn fx:id="roomColumn" text="Room" prefWidth="100"/>
+                                    <TableColumn fx:id="statusColumn" text="Status" prefWidth="120"/>
+                                </columns>
+
+                                <placeholder>
+                                    <Label text="No schedule data available. Select a schedule to view."
+                                           style="-fx-font-size: 14; -fx-text-fill: #95a5a6;"/>
+                                </placeholder>
+                            </TableView>
+                        </center>
+
+                    </BorderPane>
+                </Tab>
+
+            </TabPane>
+
+        </StackPane>
+    </center>
+
+    <!-- ================================================================ -->
+    <!-- RIGHT: Details Sidebar (Optional - can be toggled) -->
+    <!-- ================================================================ -->
+    <right>
+        <VBox fx:id="sidebarPane" spacing="0" prefWidth="350" visible="false" managed="false"
+              styleClass="card" style=" -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 15, 0, -3, 0);">
+
+            <!-- Sidebar Header -->
+            <HBox alignment="CENTER_LEFT" spacing="10"
+                  styleClass="card" style="-fx-padding: 15;">
+                <Label text="📚 Slot Details"
+                       style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: white;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="✖" onAction="#handleCloseDetails"
+                        style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 18; -fx-cursor: hand; -fx-padding: 5 10;">
+                    <tooltip>
+                        <Tooltip text="Close details panel"/>
+                    </tooltip>
+                </Button>
+            </HBox>
+
+            <!-- Details Content -->
+            <ScrollPane fitToWidth="true" styleClass="card" style="" VBox.vgrow="ALWAYS">
+                <VBox spacing="15" style="-fx-padding: 15;">
+
+                    <!-- Details Text Area -->
+                    <TextArea fx:id="detailsTextArea"
+                             editable="false"
+                             wrapText="true"
+                             prefRowCount="20"
+                             style="-fx-control-inner-background: rgba(26, 31, 46, 0.6); -fx-border-width: 0; -fx-font-family: 'Segoe UI', 'Consolas', monospace; -fx-font-size: 12;"/>
+
+                    <Separator/>
+
+                    <!-- Conflicts List -->
+                    <VBox spacing="5">
+                        <Label text="⚠ Conflicts:" style="-fx-font-weight: bold; -fx-text-fill: #e74c3c; -fx-font-size: 14;"/>
+                        <ListView fx:id="conflictsList"
+                                 prefHeight="150"
+                                 style="-fx-background-color: #fff5f5; -fx-border-color: #e74c3c; -fx-border-width: 1; -fx-border-radius: 5; -fx-font-size: 12;">
+                            <placeholder>
+                                <Label text="No conflicts detected"
+                                       style="-fx-text-fill: #27ae60; -fx-font-size: 13;"/>
+                            </placeholder>
+                        </ListView>
+                    </VBox>
+
+                    <Separator/>
+
+                    <!-- Action Buttons -->
+                    <VBox spacing="10">
+
+                        <Button text="✏ Edit This Slot" maxWidth="Infinity"
+                                styleClass="button-primary">
+                            <tooltip>
+                                <Tooltip text="Edit this schedule slot"/>
+                            </tooltip>
+                        </Button>
+
+                        <Button text="🔄 Assign Substitute" maxWidth="Infinity"
+                                style="-fx-background-color: #f39c12; -fx-text-fill: white; -fx-padding: 12; -fx-cursor: hand; -fx-background-radius: 5; -fx-font-weight: bold; -fx-font-size: 13;">
+                            <tooltip>
+                                <Tooltip text="Assign a substitute teacher"/>
+                            </tooltip>
+                        </Button>
+
+                        <Button text="🗑 Remove Slot" maxWidth="Infinity"
+                                style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-padding: 12; -fx-cursor: hand; -fx-background-radius: 5; -fx-font-weight: bold; -fx-font-size: 13;">
+                            <tooltip>
+                                <Tooltip text="Remove this schedule slot"/>
+                            </tooltip>
+                        </Button>
+
+                    </VBox>
+
+                </VBox>
+            </ScrollPane>
+
+        </VBox>
+    </right>
+
+</BorderPane>

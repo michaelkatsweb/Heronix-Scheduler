@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<!--
+Database Cleanup Dialog
+Location: src/main/resources/fxml/DatabaseCleanupDialog.fxml
+-->
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.eduscheduler.ui.controller.DatabaseCleanupController"
+      spacing="15" styleClass="dialog-container">
+    
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+    
+    <!-- Header -->
+    <Label text="Database Cleanup" styleClass="dialog-title"/>
+    <Separator/>
+    
+    <!-- Cleanup Options -->
+    <VBox spacing="10">
+        <Label text="Cleanup Options:" styleClass="section-label"/>
+        
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="Purge schedules before:"/>
+            <DatePicker fx:id="purgeBeforeDatePicker" prefWidth="150"/>
+            <CheckBox fx:id="archiveInsteadCheckBox" text="Archive instead of delete"/>
+        </HBox>
+        
+        <CheckBox fx:id="purgeDraftsCheckBox" text="Delete all DRAFT schedules"/>
+        <CheckBox fx:id="purgeArchivedCheckBox" text="Delete all ARCHIVED schedules"/>
+        <CheckBox fx:id="cleanOrphanedCheckBox" text="Clean orphaned schedule slots" selected="true"/>
+    </VBox>
+    
+    <Separator/>
+    
+    <!-- Preview -->
+    <VBox spacing="5" VBox.vgrow="ALWAYS">
+        <Label text="Preview:" styleClass="section-label"/>
+        <TextArea fx:id="previewTextArea" editable="false" 
+                  wrapText="true" prefHeight="150" styleClass="preview-area"/>
+    </VBox>
+    
+    <!-- Progress -->
+    <HBox alignment="CENTER">
+        <ProgressIndicator fx:id="progressIndicator" visible="false"/>
+    </HBox>
+    
+    <!-- Buttons -->
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Button fx:id="executeButton" text="Execute Cleanup" 
+                onAction="#handleExecute" styleClass="primary-button"/>
+        <Button fx:id="cancelButton" text="Cancel" 
+                onAction="#handleCancel" styleClass="secondary-button"/>
+    </HBox>
+    
+</VBox>

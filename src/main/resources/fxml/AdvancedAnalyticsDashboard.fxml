@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.chart.*?>
+<?import java.lang.String?>
+
+<!--
+Advanced Analytics Dashboard
+Features: Teacher Burnout Risk, SPED Compliance, What-If Scenarios, Prep Time Equity
+Location: src/main/resources/fxml/AdvancedAnalyticsDashboard.fxml
+-->
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.eduscheduler.ui.controller.AdvancedAnalyticsDashboardController"
+            prefWidth="1200" prefHeight="800">
+
+    <top>
+        <VBox spacing="15" styleClass="header-section">
+            <padding>
+                <Insets top="20" right="20" bottom="10" left="20"/>
+            </padding>
+
+            <HBox alignment="CENTER_LEFT" spacing="15">
+                <Label text="Advanced Analytics" styleClass="page-title">
+                    <font>
+                        <Font name="System Bold" size="24"/>
+                    </font>
+                </Label>
+
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <Button fx:id="refreshButton" text="Refresh All" onAction="#handleRefresh"
+                        styleClass="primary-button"/>
+                <Button fx:id="exportButton" text="Export Report" onAction="#handleExport"
+                        styleClass="secondary-button"/>
+            </HBox>
+
+            <Separator/>
+        </VBox>
+    </top>
+
+    <center>
+        <ScrollPane fitToWidth="true" fitToHeight="true">
+            <VBox spacing="20">
+                <padding>
+                    <Insets top="20" right="20" bottom="20" left="20"/>
+                </padding>
+
+                <TabPane tabClosingPolicy="UNAVAILABLE" fx:id="analyticsTabPane">
+
+                    <!-- Teacher Burnout Risk Tab -->
+                    <Tab text="Burnout Risk Analysis">
+                        <VBox spacing="15" style="-fx-padding: 15;">
+                            <Label text="Teacher Burnout Risk Assessment" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+                            <Label text="Multi-factor analysis of teacher workload, stress indicators, and burnout risk."
+                                   style="-fx-text-fill: #666666;"/>
+
+                            <!-- Summary Cards -->
+                            <HBox spacing="15">
+                                <VBox styleClass="metric-card alert-card" HBox.hgrow="ALWAYS">
+                                    <Label text="High Risk" styleClass="metric-label"/>
+                                    <Label fx:id="highRiskCountLabel" text="0" styleClass="metric-value" style="-fx-text-fill: #dc3545;">
+                                        <font><Font size="32"/></font>
+                                    </Label>
+                                    <Label text="teachers at high risk" styleClass="metric-subtitle"/>
+                                </VBox>
+
+                                <VBox styleClass="metric-card" HBox.hgrow="ALWAYS">
+                                    <Label text="Moderate Risk" styleClass="metric-label"/>
+                                    <Label fx:id="moderateRiskCountLabel" text="0" styleClass="metric-value" style="-fx-text-fill: #ffc107;">
+                                        <font><Font size="32"/></font>
+                                    </Label>
+                                    <Label text="teachers at moderate risk" styleClass="metric-subtitle"/>
+                                </VBox>
+
+                                <VBox styleClass="metric-card" HBox.hgrow="ALWAYS">
+                                    <Label text="Low Risk" styleClass="metric-label"/>
+                                    <Label fx:id="lowRiskCountLabel" text="0" styleClass="metric-value" style="-fx-text-fill: #28a745;">
+                                        <font><Font size="32"/></font>
+                                    </Label>
+                                    <Label text="teachers healthy" styleClass="metric-subtitle"/>
+                                </VBox>
+
+                                <VBox styleClass="metric-card" HBox.hgrow="ALWAYS">
+                                    <Label text="Average Score" styleClass="metric-label"/>
+                                    <Label fx:id="avgBurnoutScoreLabel" text="0" styleClass="metric-value">
+                                        <font><Font size="32"/></font>
+                                    </Label>
+                                    <Label text="across all teachers" styleClass="metric-subtitle"/>
+                                </VBox>
+                            </HBox>
+
+                            <!-- Burnout Risk Table -->
+                            <TableView fx:id="burnoutRiskTable" VBox.vgrow="ALWAYS" minHeight="300">
+                                <columns>
+                                    <TableColumn fx:id="burnoutTeacherColumn" text="Teacher" prefWidth="180"/>
+                                    <TableColumn fx:id="burnoutScoreColumn" text="Risk Score" prefWidth="100"/>
+                                    <TableColumn fx:id="burnoutLevelColumn" text="Risk Level" prefWidth="100"/>
+                                    <TableColumn fx:id="workloadColumn" text="Workload" prefWidth="100"/>
+                                    <TableColumn fx:id="backToBackColumn" text="Back-to-Back" prefWidth="100"/>
+                                    <TableColumn fx:id="prepCountColumn" text="Preps" prefWidth="80"/>
+                                    <TableColumn fx:id="spedPercentColumn" text="SPED %" prefWidth="80"/>
+                                    <TableColumn fx:id="burnoutRecommendationColumn" text="Recommendation" prefWidth="250"/>
+                                </columns>
+                            </TableView>
+                        </VBox>
+                    </Tab>
+
+                    <!-- SPED Compliance Tab -->
+                    <Tab text="SPED Compliance">
+                        <VBox spacing="15" style="-fx-padding: 15;">
+                            <Label text="SPED Minutes Compliance Tracker" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+                            <Label text="Track scheduled vs IEP-required service minutes for special education students."
+                                   style="-fx-text-fill: #666666;"/>
+
+                            <!-- Compliance Summary -->
+                            <HBox spacing="15">
+                                <VBox styleClass="metric-card" HBox.hgrow="ALWAYS">
+                                    <Label text="Total IEP Students" styleClass="metric-label"/>
+                                    <Label fx:id="totalIEPStudentsLabel" text="0" styleClass="metric-value">
+                                        <font><Font size="32"/></font>
+                                    </Label>
+                                </VBox>
+
+                                <VBox styleClass="metric-card" HBox.hgrow="ALWAYS">
+                                    <Label text="Compliant" styleClass="metric-label"/>
+                                    <Label fx:id="compliantStudentsLabel" text="0" styleClass="metric-value" style="-fx-text-fill: #28a745;">
+                                        <font><Font size="32"/></font>
+                                    </Label>
+                                    <Label text="students meeting requirements" styleClass="metric-subtitle"/>
+                                </VBox>
+
+                                <VBox styleClass="metric-card alert-card" HBox.hgrow="ALWAYS">
+                                    <Label text="Non-Compliant" styleClass="metric-label"/>
+                                    <Label fx:id="nonCompliantStudentsLabel" text="0" styleClass="metric-value" style="-fx-text-fill: #dc3545;">
+                                        <font><Font size="32"/></font>
+                                    </Label>
+                                    <Label text="students below requirements" styleClass="metric-subtitle"/>
+                                </VBox>
+
+                                <VBox styleClass="metric-card" HBox.hgrow="ALWAYS">
+                                    <Label text="Compliance Rate" styleClass="metric-label"/>
+                                    <Label fx:id="complianceRateLabel" text="0%" styleClass="metric-value">
+                                        <font><Font size="32"/></font>
+                                    </Label>
+                                    <ProgressBar fx:id="complianceProgress" progress="0" maxWidth="Infinity"/>
+                                </VBox>
+                            </HBox>
+
+                            <!-- Compliance Table -->
+                            <TableView fx:id="spedComplianceTable" VBox.vgrow="ALWAYS" minHeight="300">
+                                <columns>
+                                    <TableColumn fx:id="spedStudentColumn" text="Student" prefWidth="180"/>
+                                    <TableColumn fx:id="requiredMinutesColumn" text="Required Min" prefWidth="100"/>
+                                    <TableColumn fx:id="scheduledMinutesColumn" text="Scheduled Min" prefWidth="100"/>
+                                    <TableColumn fx:id="compliancePercentColumn" text="Compliance %" prefWidth="100"/>
+                                    <TableColumn fx:id="complianceStatusColumn" text="Status" prefWidth="100"/>
+                                    <TableColumn fx:id="shortfallColumn" text="Shortfall" prefWidth="100"/>
+                                    <TableColumn fx:id="serviceTypesColumn" text="Service Types" prefWidth="200"/>
+                                </columns>
+                            </TableView>
+                        </VBox>
+                    </Tab>
+
+                    <!-- What-If Scenarios Tab -->
+                    <Tab text="What-If Scenarios">
+                        <VBox spacing="15" style="-fx-padding: 15;">
+                            <Label text="What-If Scenario Simulator" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+                            <Label text="Simulate schedule changes and analyze their impact before implementation."
+                                   style="-fx-text-fill: #666666;"/>
+
+                            <HBox spacing="20">
+                                <!-- Scenario Builder -->
+                                <VBox spacing="10" prefWidth="350">
+                                    <Label text="Build Scenario" style="-fx-font-weight: bold;"/>
+
+                                    <GridPane hgap="10" vgap="10">
+                                        <Label text="Scenario Type:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                                        <ComboBox fx:id="scenarioTypeCombo" prefWidth="200" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                                        <!-- Note: Items are populated in controller initialize() method -->
+
+                                        <Label text="Select Entity:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                                        <ComboBox fx:id="scenarioEntityCombo" prefWidth="200" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                                        <Label text="Parameter:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                                        <Spinner fx:id="scenarioParamSpinner" prefWidth="200" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                                        <Label text="Description:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                                        <TextField fx:id="scenarioDescField" prefWidth="200" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                                    </GridPane>
+
+                                    <Button text="Run Simulation" onAction="#handleRunSimulation" styleClass="primary-button"/>
+                                </VBox>
+
+                                <!-- Simulation Results -->
+                                <VBox spacing="10" HBox.hgrow="ALWAYS">
+                                    <Label text="Simulation Results" style="-fx-font-weight: bold;"/>
+
+                                    <GridPane fx:id="simulationResultsGrid" hgap="20" vgap="10">
+                                        <Label text="Impact Score:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                                        <Label fx:id="impactScoreLabel" text="--" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                                        <Label text="Affected Classes:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                                        <Label fx:id="affectedClassesLabel" text="--" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                                        <Label text="New Conflicts:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                                        <Label fx:id="newConflictsLabel" text="--" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                                        <Label text="Feasibility:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                                        <Label fx:id="feasibilityLabel" text="--" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                                    </GridPane>
+
+                                    <Label text="Recommendations:" style="-fx-font-weight: bold;"/>
+                                    <ListView fx:id="whatIfRecommendationsList" prefHeight="150"/>
+                                </VBox>
+                            </HBox>
+                        </VBox>
+                    </Tab>
+
+                    <!-- Prep Time Equity Tab -->
+                    <Tab text="Prep Time Equity">
+                        <VBox spacing="15" style="-fx-padding: 15;">
+                            <Label text="Prep Time Equity Dashboard" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+                            <Label text="Analyze preparation time distribution across teachers for equitable workloads."
+                                   style="-fx-text-fill: #666666;"/>
+
+                            <!-- Equity Summary -->
+                            <HBox spacing="15">
+                                <VBox styleClass="metric-card" HBox.hgrow="ALWAYS">
+                                    <Label text="Equity Index" styleClass="metric-label"/>
+                                    <Label fx:id="equityIndexLabel" text="0.00" styleClass="metric-value">
+                                        <font><Font size="32"/></font>
+                                    </Label>
+                                    <Label text="1.0 = perfect equity" styleClass="metric-subtitle"/>
+                                    <ProgressBar fx:id="equityProgress" progress="0" maxWidth="Infinity"/>
+                                </VBox>
+
+                                <VBox styleClass="metric-card" HBox.hgrow="ALWAYS">
+                                    <Label text="Average Prep Minutes" styleClass="metric-label"/>
+                                    <Label fx:id="avgPrepMinutesLabel" text="0" styleClass="metric-value">
+                                        <font><Font size="32"/></font>
+                                    </Label>
+                                    <Label text="per day per teacher" styleClass="metric-subtitle"/>
+                                </VBox>
+
+                                <VBox styleClass="metric-card" HBox.hgrow="ALWAYS">
+                                    <Label text="Below Average" styleClass="metric-label"/>
+                                    <Label fx:id="belowAvgCountLabel" text="0" styleClass="metric-value" style="-fx-text-fill: #dc3545;">
+                                        <font><Font size="32"/></font>
+                                    </Label>
+                                    <Label text="teachers need more prep" styleClass="metric-subtitle"/>
+                                </VBox>
+
+                                <VBox styleClass="metric-card" HBox.hgrow="ALWAYS">
+                                    <Label text="Standard Deviation" styleClass="metric-label"/>
+                                    <Label fx:id="prepStdDevLabel" text="0" styleClass="metric-value">
+                                        <font><Font size="32"/></font>
+                                    </Label>
+                                    <Label text="lower is better" styleClass="metric-subtitle"/>
+                                </VBox>
+                            </HBox>
+
+                            <!-- Prep Time Chart and Table -->
+                            <HBox spacing="20" VBox.vgrow="ALWAYS">
+                                <BarChart fx:id="prepTimeChart" title="Prep Time Distribution"
+                                          legendVisible="false" minHeight="300" HBox.hgrow="ALWAYS">
+                                    <xAxis>
+                                        <CategoryAxis label="Teacher" fx:id="prepXAxis"/>
+                                    </xAxis>
+                                    <yAxis>
+                                        <NumberAxis label="Minutes" fx:id="prepYAxis"/>
+                                    </yAxis>
+                                </BarChart>
+
+                                <TableView fx:id="prepEquityTable" prefWidth="400" VBox.vgrow="ALWAYS">
+                                    <columns>
+                                        <TableColumn fx:id="prepTeacherColumn" text="Teacher" prefWidth="150"/>
+                                        <TableColumn fx:id="prepMinutesColumn" text="Prep Min" prefWidth="80"/>
+                                        <TableColumn fx:id="prepDifferenceColumn" text="vs Avg" prefWidth="80"/>
+                                        <TableColumn fx:id="prepStatusColumn" text="Status" prefWidth="80"/>
+                                    </columns>
+                                </TableView>
+                            </HBox>
+                        </VBox>
+                    </Tab>
+
+                </TabPane>
+            </VBox>
+        </ScrollPane>
+    </center>
+
+    <stylesheets>
+        <String fx:value="@../css/main.css"/>
+    </stylesheets>
+</BorderPane>

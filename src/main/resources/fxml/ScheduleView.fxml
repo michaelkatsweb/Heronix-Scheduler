@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<!--
+    Schedule View - Interactive Master Schedule Grid
+    Location: src/main/resources/fxml/ScheduleView.fxml
+    
+    Complete implementation with:
+    ✅ Color-coded schedule blocks
+    ✅ Interactive hover effects
+    ✅ Detailed tooltips
+    ✅ Filter and search
+    ✅ Multiple view modes
+    ✅ Conflict detection
+    
+    @version 2.0.0
+    @since 2025-10-11
+-->
+<BorderPane xmlns="http://javafx.com/javafx"
+    xmlns:fx="http://javafx.com/fxml"
+    fx:id="mainContainer"
+    fx:controller="com.eduscheduler.ui.controller.ScheduleViewController"
+    prefWidth="1500" prefHeight="950"
+    style="-fx-background-color: #ecf0f1;">
+
+    <!-- ================================================================ -->
+    <!-- TOP: HEADER & TOOLBAR                                            -->
+    <!-- ================================================================ -->
+    <top>
+        <VBox>
+            <!-- Header -->
+            <HBox style="-fx-background-color: linear-gradient(to bottom, #2c3e50, #34495e); -fx-padding: 20;">
+                <VBox spacing="5" HBox.hgrow="ALWAYS">
+                    <Label text="📅 Master Schedule Grid" textFill="white">
+                        <font>
+                            <Font name="System Bold" size="28" />
+                        </font>
+                    </Label>
+                    <Label text="Interactive schedule viewer with color-coded conflict detection"
+                        textFill="#bdc3c7">
+                        <font>
+                            <Font size="14" />
+                        </font>
+                    </Label>
+                </VBox>
+
+                <!-- Statistics Panel -->
+                <VBox spacing="8" alignment="CENTER_RIGHT" style="-fx-padding: 0 20 0 0;">
+                    <HBox spacing="15">
+                        <VBox alignment="CENTER_RIGHT">
+                            <Label text="TOTAL SLOTS" textFill="#bdc3c7" style="-fx-font-size: 10;"/>
+                            <Label fx:id="totalSlotsLabel" text="0" textFill="white" 
+                                   style="-fx-font-size: 18; -fx-font-weight: bold;"/>
+                        </VBox>
+                        <Separator orientation="VERTICAL" style="-fx-background-color: #bdc3c7;"/>
+                        <VBox alignment="CENTER_RIGHT">
+                            <Label text="CONFLICTS" textFill="#bdc3c7" style="-fx-font-size: 10;"/>
+                            <Label fx:id="conflictCountLabel" text="0" textFill="#e74c3c" 
+                                   style="-fx-font-size: 18; -fx-font-weight: bold;"/>
+                        </VBox>
+                    </HBox>
+                </VBox>
+            </HBox>
+
+            <!-- Toolbar -->
+            <ToolBar fx:id="toolbar" style="-fx-background-color: white; -fx-padding: 12 20; -fx-border-width: 0 0 2 0; -fx-border-color: #e0e0e0;">
+                <HBox spacing="20" alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
+                    
+                    <!-- Schedule Selector -->
+                    <VBox spacing="3">
+                        <Label text="Select Schedule" style="-fx-font-size: 11; -fx-text-fill: #7f8c8d;"/>
+                        <ComboBox fx:id="scheduleComboBox" prefWidth="250" promptText="Choose a schedule...">
+                            <tooltip>
+                                <Tooltip text="Select a schedule to view"/>
+                            </tooltip>
+                        </ComboBox>
+                    </VBox>
+                    
+                    <Separator orientation="VERTICAL"/>
+                    
+                    <!-- View Mode Selector -->
+                    <VBox spacing="3">
+                        <Label text="View Mode" style="-fx-font-size: 11; -fx-text-fill: #7f8c8d;"/>
+                        <ComboBox fx:id="viewModeComboBox" prefWidth="150" promptText="Week View">
+                            <tooltip>
+                                <Tooltip text="Change how the schedule is displayed"/>
+                            </tooltip>
+                        </ComboBox>
+                    </VBox>
+                    
+                    <Separator orientation="VERTICAL"/>
+                    
+                    <!-- Search -->
+                    <VBox spacing="3">
+                        <Label text="Search" style="-fx-font-size: 11; -fx-text-fill: #7f8c8d;"/>
+                        <TextField fx:id="searchField" promptText="🔍 Search courses, teachers, rooms..." 
+                                   prefWidth="300"
+                                   style="-fx-background-radius: 5; -fx-border-radius: 5; -fx-border-color: #ddd; -fx-border-width: 1;">
+                            <tooltip>
+                                <Tooltip text="Type to filter schedule by course, teacher, or room"/>
+                            </tooltip>
+                        </TextField>
+                    </VBox>
+                    
+                    <Region HBox.hgrow="ALWAYS"/>
+                    
+                    <!-- Action Buttons -->
+                    <HBox spacing="10">
+                        <Button fx:id="undoButton" text="↶ Undo" 
+                                style="-fx-background-color: #f39c12; -fx-text-fill: white; -fx-padding: 8 20; -fx-background-radius: 5; -fx-cursor: hand;">
+                            <tooltip>
+                                <Tooltip text="Undo last change (Ctrl+Z)"/>
+                            </tooltip>
+                        </Button>
+                        
+                        <Button fx:id="redoButton" text="↷ Redo" 
+                                style="-fx-background-color: #f39c12; -fx-text-fill: white; -fx-padding: 8 20; -fx-background-radius: 5; -fx-cursor: hand;">
+                            <tooltip>
+                                <Tooltip text="Redo last undone change (Ctrl+Y)"/>
+                            </tooltip>
+                        </Button>
+                        
+                        <Separator orientation="VERTICAL"/>
+                        
+                        <Button fx:id="refreshButton" text="🔄 Refresh" 
+                                style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-padding: 8 20; -fx-background-radius: 5; -fx-cursor: hand;">
+                            <tooltip>
+                                <Tooltip text="Reload schedule data"/>
+                            </tooltip>
+                        </Button>
+                        
+                        <Button fx:id="exportButton" text="📤 Export" 
+                                style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-padding: 8 20; -fx-background-radius: 5; -fx-cursor: hand;">
+                            <tooltip>
+                                <Tooltip text="Export to PDF, Excel, or iCalendar"/>
+                            </tooltip>
+                        </Button>
+                        
+                        <Button fx:id="printButton" text="🖨️ Print" 
+                                style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-padding: 8 20; -fx-background-radius: 5; -fx-cursor: hand;">
+                            <tooltip>
+                                <Tooltip text="Print schedule"/>
+                            </tooltip>
+                        </Button>
+                    </HBox>
+                    
+                </HBox>
+            </ToolBar>
+            
+        </VBox>
+    </top>
+
+    <!-- ================================================================ -->
+    <!-- LEFT: FILTER PANEL                                               -->
+    <!-- ================================================================ -->
+    <left>
+        <VBox fx:id="filterPanel" spacing="15" 
+              style="-fx-background-color: white; -fx-padding: 20; -fx-border-width: 0 2 0 0; -fx-border-color: #e0e0e0;"
+              prefWidth="280">
+            
+            <!-- Filter Header -->
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label text="🔍 Filters" style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button fx:id="clearFiltersButton" text="Clear" 
+                        style="-fx-font-size: 11; -fx-background-color: transparent; -fx-text-fill: #3498db; -fx-cursor: hand; -fx-underline: true;">
+                    <tooltip>
+                        <Tooltip text="Clear all filters"/>
+                    </tooltip>
+                </Button>
+            </HBox>
+            
+            <Separator/>
+            
+            <!-- Teacher Filter -->
+            <VBox spacing="5">
+                <Label text="👤 Teacher" style="-fx-font-weight: bold; -fx-text-fill: #34495e;"/>
+                <ComboBox fx:id="teacherFilterCombo" prefWidth="240" promptText="All Teachers">
+                    <tooltip>
+                        <Tooltip text="Filter by teacher"/>
+                    </tooltip>
+                </ComboBox>
+            </VBox>
+            
+            <!-- Course Filter -->
+            <VBox spacing="5">
+                <Label text="📚 Course" style="-fx-font-weight: bold; -fx-text-fill: #34495e;"/>
+                <ComboBox fx:id="courseFilterCombo" prefWidth="240" promptText="All Courses">
+                    <tooltip>
+                        <Tooltip text="Filter by course"/>
+                    </tooltip>
+                </ComboBox>
+            </VBox>
+            
+            <!-- Room Filter -->
+            <VBox spacing="5">
+                <Label text="🏫 Room" style="-fx-font-weight: bold; -fx-text-fill: #34495e;"/>
+                <ComboBox fx:id="roomFilterCombo" prefWidth="240" promptText="All Rooms">
+                    <tooltip>
+                        <Tooltip text="Filter by room"/>
+                    </tooltip>
+                </ComboBox>
+            </VBox>
+            
+            <!-- Department Filter -->
+            <VBox spacing="5">
+                <Label text="🎓 Department" style="-fx-font-weight: bold; -fx-text-fill: #34495e;"/>
+                <ComboBox fx:id="departmentFilterCombo" prefWidth="240" promptText="All Departments">
+                    <tooltip>
+                        <Tooltip text="Filter by department"/>
+                    </tooltip>
+                </ComboBox>
+            </VBox>
+            
+            <Separator/>
+            
+            <!-- Legend -->
+            <VBox spacing="10">
+                <Label text="📊 Color Legend" style="-fx-font-weight: bold; -fx-text-fill: #34495e;"/>
+                
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Region style="-fx-background-color: #c8e6c9; -fx-pref-width: 30; -fx-pref-height: 20; -fx-background-radius: 3; -fx-border-color: #81c784; -fx-border-width: 2; -fx-border-radius: 3;"/>
+                    <Label text="Normal" style="-fx-text-fill: #555;"/>
+                </HBox>
+                
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Region style="-fx-background-color: #fff9c4; -fx-pref-width: 30; -fx-pref-height: 20; -fx-background-radius: 3; -fx-border-color: #fdd835; -fx-border-width: 2; -fx-border-radius: 3;"/>
+                    <Label text="Warning" style="-fx-text-fill: #555;"/>
+                </HBox>
+                
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Region style="-fx-background-color: #ffcdd2; -fx-pref-width: 30; -fx-pref-height: 20; -fx-background-radius: 3; -fx-border-color: #e57373; -fx-border-width: 2; -fx-border-radius: 3;"/>
+                    <Label text="Conflict" style="-fx-text-fill: #555;"/>
+                </HBox>
+                
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Region style="-fx-background-color: #bbdefb; -fx-pref-width: 30; -fx-pref-height: 20; -fx-background-radius: 3; -fx-border-color: #64b5f6; -fx-border-width: 2; -fx-border-radius: 3;"/>
+                    <Label text="Event" style="-fx-text-fill: #555;"/>
+                </HBox>
+                
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Region style="-fx-background-color: #e0e0e0; -fx-pref-width: 30; -fx-pref-height: 20; -fx-background-radius: 3; -fx-border-color: #9e9e9e; -fx-border-width: 2; -fx-border-radius: 3;"/>
+                    <Label text="Unavailable" style="-fx-text-fill: #555;"/>
+                </HBox>
+            </VBox>
+            
+            <Region VBox.vgrow="ALWAYS"/>
+            
+            <!-- Tips -->
+            <VBox spacing="8" style="-fx-background-color: #f8f9fa; -fx-padding: 12; -fx-background-radius: 5;">
+                <Label text="💡 Quick Tips" style="-fx-font-weight: bold; -fx-text-fill: #2c3e50; -fx-font-size: 12;"/>
+                <Label text="• Drag blocks to move them" wrapText="true" style="-fx-text-fill: #7f8c8d; -fx-font-size: 11;"/>
+                <Label text="• Green zones = valid drop" wrapText="true" style="-fx-text-fill: #7f8c8d; -fx-font-size: 11;"/>
+                <Label text="• Red zones = conflict" wrapText="true" style="-fx-text-fill: #7f8c8d; -fx-font-size: 11;"/>
+                <Label text="• Double-click to quick edit" wrapText="true" style="-fx-text-fill: #7f8c8d; -fx-font-size: 11;"/>
+                <Label text="• Hover for details" wrapText="true" style="-fx-text-fill: #7f8c8d; -fx-font-size: 11;"/>
+            </VBox>
+            
+        </VBox>
+    </left>
+
+    <!-- ================================================================ -->
+    <!-- CENTER: SCHEDULE GRID                                            -->
+    <!-- ================================================================ -->
+    <center>
+        <StackPane style="-fx-background-color: #f8f9fa; -fx-padding: 15;">
+            
+            <!-- Scroll Pane for Grid -->
+            <ScrollPane fx:id="scheduleScrollPane" 
+                       fitToWidth="true"
+                       fitToHeight="true"
+                       style="-fx-background-color: transparent; -fx-background: transparent;">
+                
+                <!-- Main Grid -->
+                <GridPane fx:id="scheduleGrid" 
+                         style="-fx-background-color: #f8f9fa; -fx-padding: 10;">
+                    <!-- Grid will be populated dynamically by controller -->
+                    <!-- Headers, time labels, and schedule blocks are created in Java -->
+                </GridPane>
+                
+            </ScrollPane>
+            
+        </StackPane>
+    </center>
+
+    <!-- ================================================================ -->
+    <!-- BOTTOM: STATUS BAR                                               -->
+    <!-- ================================================================ -->
+    <bottom>
+        <HBox fx:id="statusBar" spacing="20" alignment="CENTER_LEFT" 
+              style="-fx-background-color: white; -fx-padding: 12 20; -fx-border-width: 2 0 0 0; -fx-border-color: #e0e0e0;">
+            
+            <Label fx:id="statusLabel" text="✅ Ready" 
+                   style="-fx-font-size: 13; -fx-font-weight: bold; -fx-text-fill: #27ae60;"/>
+            
+            <Separator orientation="VERTICAL"/>
+            
+            <Label text="💡 Drag schedule blocks to move them • Double-click to edit • Green zones = valid, Red = conflict" 
+                   style="-fx-font-size: 12; -fx-text-fill: #7f8c8d; -fx-font-style: italic;"/>
+            
+            <Region HBox.hgrow="ALWAYS"/>
+            
+            <Label text="Heronix Scheduling System v2.0" 
+                   style="-fx-font-size: 11; -fx-text-fill: #95a5a6;"/>
+            
+        </HBox>
+    </bottom>
+
+</BorderPane>

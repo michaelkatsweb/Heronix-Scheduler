@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.eduscheduler.controller.CourseRecommendationDashboardController"
+            styleClass="root">
+
+    <top>
+        <VBox spacing="10" styleClass="card">
+            <padding>
+                <Insets top="15" right="15" bottom="15" left="15"/>
+            </padding>
+
+            <!-- Title and Actions -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="🤖 Course Recommendation Dashboard" styleClass="header-large"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="Generate Recommendations" onAction="#handleGenerateRecommendations" styleClass="button-primary"/>
+                <Button text="Refresh" onAction="#handleRefresh" styleClass="button"/>
+            </HBox>
+
+            <!-- Filter Bar -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Student:" styleClass="label"/>
+                <ComboBox fx:id="studentFilterComboBox" promptText="All Students" prefWidth="200" onAction="#handleStudentFilterChange"/>
+                <Region prefWidth="20"/>
+                <Label text="Status:" styleClass="label"/>
+                <ComboBox fx:id="statusFilterComboBox" promptText="All" prefWidth="150" onAction="#handleStatusFilterChange"/>
+                <Region prefWidth="20"/>
+                <Label text="Priority:" styleClass="label"/>
+                <ComboBox fx:id="priorityFilterComboBox" promptText="All" prefWidth="150" onAction="#handlePriorityFilterChange"/>
+                <Region prefWidth="20"/>
+                <Label text="Type:" styleClass="label"/>
+                <ComboBox fx:id="typeFilterComboBox" promptText="All Types" prefWidth="150" onAction="#handleTypeFilterChange"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="Clear Filters" onAction="#handleClearFilters" styleClass="button"/>
+            </HBox>
+
+            <!-- Summary Statistics -->
+            <GridPane hgap="15" vgap="5">
+                <columnConstraints>
+                    <ColumnConstraints percentWidth="25"/>
+                    <ColumnConstraints percentWidth="25"/>
+                    <ColumnConstraints percentWidth="25"/>
+                    <ColumnConstraints percentWidth="25"/>
+                </columnConstraints>
+
+                <!-- Total Recommendations -->
+                <VBox GridPane.columnIndex="0" GridPane.rowIndex="0" spacing="2">
+                    <Label text="Total Recommendations" styleClass="label-small"/>
+                    <Label fx:id="totalRecommendationsLabel" text="0" styleClass="stat-value" style="-fx-font-size: 24;"/>
+                </VBox>
+
+                <!-- Pending -->
+                <VBox GridPane.columnIndex="1" GridPane.rowIndex="0" spacing="2">
+                    <HBox alignment="CENTER_LEFT" spacing="5">
+                        <Label text="⏳" style="-fx-font-size: 14;"/>
+                        <Label text="Pending Review" styleClass="label-small, accent-warning"/>
+                    </HBox>
+                    <Label fx:id="pendingRecommendationsLabel" text="0" styleClass="stat-value, accent-warning" style="-fx-font-size: 24;"/>
+                </VBox>
+
+                <!-- Accepted -->
+                <VBox GridPane.columnIndex="2" GridPane.rowIndex="0" spacing="2">
+                    <HBox alignment="CENTER_LEFT" spacing="5">
+                        <Label text="✓" style="-fx-font-size: 14;"/>
+                        <Label text="Accepted" styleClass="label-small, accent-success"/>
+                    </HBox>
+                    <Label fx:id="acceptedRecommendationsLabel" text="0" styleClass="stat-value, accent-success" style="-fx-font-size: 24;"/>
+                </VBox>
+
+                <!-- Rejected -->
+                <VBox GridPane.columnIndex="3" GridPane.rowIndex="0" spacing="2">
+                    <HBox alignment="CENTER_LEFT" spacing="5">
+                        <Label text="✗" style="-fx-font-size: 14;"/>
+                        <Label text="Rejected" styleClass="label-small, accent-danger"/>
+                    </HBox>
+                    <Label fx:id="rejectedRecommendationsLabel" text="0" styleClass="stat-value, accent-danger" style="-fx-font-size: 24;"/>
+                </VBox>
+            </GridPane>
+        </VBox>
+    </top>
+
+    <center>
+        <SplitPane dividerPositions="0.7" VBox.vgrow="ALWAYS">
+            <!-- Left: Recommendations Table -->
+            <VBox spacing="5">
+                <padding>
+                    <Insets top="10" right="10" bottom="10" left="10"/>
+                </padding>
+
+                <Label text="Recommendations List" styleClass="section-header"/>
+
+                <TableView fx:id="recommendationsTable" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="studentColumn" text="Student" prefWidth="150"/>
+                        <TableColumn fx:id="courseColumn" text="Recommended Course" prefWidth="200"/>
+                        <TableColumn fx:id="schoolYearColumn" text="School Year" prefWidth="100"/>
+                        <TableColumn fx:id="typeColumn" text="Type" prefWidth="120"/>
+                        <TableColumn fx:id="priorityColumn" text="Priority" prefWidth="80"/>
+                        <TableColumn fx:id="confidenceColumn" text="Confidence" prefWidth="100"/>
+                        <TableColumn fx:id="statusColumn" text="Status" prefWidth="100"/>
+                        <TableColumn fx:id="reasonColumn" text="Reason" prefWidth="250"/>
+                    </columns>
+                </TableView>
+
+                <!-- Action Buttons -->
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Button text="Accept Selected" onAction="#handleAcceptSelected" styleClass="button-success"/>
+                    <Button text="Reject Selected" onAction="#handleRejectSelected" styleClass="button-danger"/>
+                    <Button text="View Details" onAction="#handleViewDetails" styleClass="button"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Label fx:id="statusLabel" text="Ready" styleClass="label"/>
+                </HBox>
+            </VBox>
+
+            <!-- Right: Recommendation Details Panel -->
+            <VBox spacing="10" styleClass="card">
+                <padding>
+                    <Insets top="10" right="10" bottom="10" left="10"/>
+                </padding>
+
+                <Label text="Recommendation Details" styleClass="section-header"/>
+
+                <Separator/>
+
+                <!-- Student Info -->
+                <VBox spacing="5">
+                    <Label text="Student Information" styleClass="label-small" style="-fx-font-weight: bold;"/>
+                    <GridPane hgap="10" vgap="5">
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="35"/>
+                            <ColumnConstraints percentWidth="65"/>
+                        </columnConstraints>
+
+                        <Label text="Name:" GridPane.columnIndex="0" GridPane.rowIndex="0" styleClass="label-small"/>
+                        <Label fx:id="detailStudentNameLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                        <Label text="Grade Level:" GridPane.columnIndex="0" GridPane.rowIndex="1" styleClass="label-small"/>
+                        <Label fx:id="detailGradeLevelLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                        <Label text="GPA:" GridPane.columnIndex="0" GridPane.rowIndex="2" styleClass="label-small"/>
+                        <Label fx:id="detailGPALabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                    </GridPane>
+                </VBox>
+
+                <Separator/>
+
+                <!-- Recommended Course -->
+                <VBox spacing="5">
+                    <Label text="Recommended Course" styleClass="label-small" style="-fx-font-weight: bold;"/>
+                    <GridPane hgap="10" vgap="5">
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="35"/>
+                            <ColumnConstraints percentWidth="65"/>
+                        </columnConstraints>
+
+                        <Label text="Course:" GridPane.columnIndex="0" GridPane.rowIndex="0" styleClass="label-small"/>
+                        <Label fx:id="detailCourseNameLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                        <Label text="Course Code:" GridPane.columnIndex="0" GridPane.rowIndex="1" styleClass="label-small"/>
+                        <Label fx:id="detailCourseCodeLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+                        <Label text="Subject:" GridPane.columnIndex="0" GridPane.rowIndex="2" styleClass="label-small"/>
+                        <Label fx:id="detailSubjectLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                        <Label text="Credits:" GridPane.columnIndex="0" GridPane.rowIndex="3" styleClass="label-small"/>
+                        <Label fx:id="detailCreditsLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                    </GridPane>
+                </VBox>
+
+                <Separator/>
+
+                <!-- Recommendation Details -->
+                <VBox spacing="5">
+                    <Label text="Recommendation Analysis" styleClass="label-small" style="-fx-font-weight: bold;"/>
+                    <GridPane hgap="10" vgap="5">
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="35"/>
+                            <ColumnConstraints percentWidth="65"/>
+                        </columnConstraints>
+
+                        <Label text="Type:" GridPane.columnIndex="0" GridPane.rowIndex="0" styleClass="label-small"/>
+                        <Label fx:id="detailTypeLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                        <Label text="Priority:" GridPane.columnIndex="0" GridPane.rowIndex="1" styleClass="label-small"/>
+                        <HBox GridPane.columnIndex="1" GridPane.rowIndex="1" spacing="5" alignment="CENTER_LEFT">
+                            <Label fx:id="detailPriorityLabel" text="-"/>
+                            <ProgressBar fx:id="detailPriorityBar" prefWidth="100" progress="0.0"/>
+                        </HBox>
+
+                        <Label text="Confidence:" GridPane.columnIndex="0" GridPane.rowIndex="2" styleClass="label-small"/>
+                        <HBox GridPane.columnIndex="1" GridPane.rowIndex="2" spacing="5" alignment="CENTER_LEFT">
+                            <Label fx:id="detailConfidenceLabel" text="-"/>
+                            <ProgressBar fx:id="detailConfidenceBar" prefWidth="100" progress="0.0"/>
+                        </HBox>
+
+                        <Label text="Status:" GridPane.columnIndex="0" GridPane.rowIndex="3" styleClass="label-small"/>
+                        <Label fx:id="detailStatusLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+                        <Label text="School Year:" GridPane.columnIndex="0" GridPane.rowIndex="4" styleClass="label-small"/>
+                        <Label fx:id="detailSchoolYearLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+                    </GridPane>
+                </VBox>
+
+                <Separator/>
+
+                <!-- Reasoning -->
+                <VBox spacing="5" VBox.vgrow="ALWAYS">
+                    <Label text="Reasoning" styleClass="label-small" style="-fx-font-weight: bold;"/>
+                    <TextArea fx:id="detailReasoningText" wrapText="true" editable="false" VBox.vgrow="ALWAYS" promptText="No recommendation selected"/>
+                </VBox>
+
+                <Separator/>
+
+                <!-- Alternative Recommendations -->
+                <VBox spacing="5">
+                    <Label text="Alternative Recommendations" styleClass="label-small" style="-fx-font-weight: bold;"/>
+                    <ListView fx:id="alternativesListView" prefHeight="100"/>
+                </VBox>
+
+                <Separator/>
+
+                <!-- Actions -->
+                <VBox spacing="8">
+                    <Button text="Accept Recommendation" onAction="#handleAcceptCurrent" styleClass="button-success" prefWidth="Infinity"/>
+                    <Button text="Reject Recommendation" onAction="#handleRejectCurrent" styleClass="button-danger" prefWidth="Infinity"/>
+                    <Button text="View Student's Academic Plan" onAction="#handleViewStudentPlan" styleClass="button" prefWidth="Infinity"/>
+                </VBox>
+            </VBox>
+        </SplitPane>
+    </center>
+
+    <bottom>
+        <HBox spacing="10" alignment="CENTER_LEFT" styleClass="card">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            <Label text="Course Recommendation Dashboard" styleClass="label"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="lastUpdatedLabel" text="Last updated: Never" styleClass="label-small"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

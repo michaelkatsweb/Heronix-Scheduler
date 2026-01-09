@@ -1,0 +1,128 @@
+// Location: src/main/java/com/eduscheduler/service/TeacherService.java
+package com.heronix.service;
+
+import com.heronix.model.domain.Teacher;
+import java.util.List;
+
+/**
+ * Teacher Service Interface
+ * Defines operations for managing teachers
+ *
+ * @author Heronix Scheduling System Team
+ * @version 2.0.0 - Added CRUD operations
+ * @since 2025-10-25
+ */
+public interface TeacherService {
+
+    /**
+     * Get all active teachers
+     * @return List of active teachers
+     */
+    List<Teacher> getAllActiveTeachers();
+
+    /**
+     * Get teacher by ID
+     * @param id Teacher ID
+     * @return Teacher object
+     */
+    Teacher getTeacherById(Long id);
+
+    /**
+     * Get all teachers (including inactive)
+     * @return List of all teachers
+     */
+    List<Teacher> findAll();
+
+    /**
+     * Create a new teacher
+     * @param teacher Teacher to create
+     * @return Created teacher with ID
+     */
+    Teacher createTeacher(Teacher teacher);
+
+    /**
+     * Update an existing teacher
+     * @param teacher Teacher with updated information
+     * @return Updated teacher
+     */
+    Teacher updateTeacher(Teacher teacher);
+
+    /**
+     * Delete a teacher by ID
+     * @param id Teacher ID to delete
+     */
+    void deleteTeacher(Long id);
+
+    /**
+     * Soft delete - deactivate a teacher
+     * @param id Teacher ID to deactivate
+     */
+    void deactivateTeacher(Long id);
+
+    /**
+     * Activate a teacher
+     * @param id Teacher ID to activate
+     */
+    void activateTeacher(Long id);
+
+    /**
+     * Search teachers by name
+     * @param searchTerm Search term to match against teacher name
+     * @return List of matching teachers
+     */
+    List<Teacher> searchByName(String searchTerm);
+
+    /**
+     * Get teachers by department
+     * @param department Department name
+     * @return List of teachers in the department
+     */
+    List<Teacher> findByDepartment(String department);
+
+    /**
+     * Load teacher with all collections eagerly fetched for UI display
+     * Uses three-step fetch to avoid Hibernate's MultipleBagFetchException
+     *
+     * @param teacherId Teacher ID
+     * @return Teacher with all collections loaded
+     */
+    Teacher loadTeacherWithCollections(Long teacherId);
+
+    /**
+     * Load all teachers with collections (certifications AND courses) for UI display
+     * Uses two-step fetch to avoid Hibernate's MultipleBagFetchException:
+     * 1. Load teachers with certifications
+     * 2. Initialize courses collection in same transaction
+     *
+     * @return List of teachers with all collections loaded
+     */
+    List<Teacher> findAllWithCollectionsForUI();
+
+    // ========================================================================
+    // SOFT DELETE OPERATIONS
+    // ========================================================================
+
+    /**
+     * Soft delete a teacher (mark as deleted without removing from database)
+     * Preserves historical data for schedules, grades, attendance records
+     * Prevents foreign key constraint violations
+     *
+     * @param teacherId Teacher ID to soft delete
+     * @param deletedBy Username of administrator performing the deletion
+     */
+    void softDelete(Long teacherId, String deletedBy);
+
+    /**
+     * Restore a soft-deleted teacher
+     *
+     * @param teacherId Teacher ID to restore
+     */
+    void restoreDeleted(Long teacherId);
+
+    /**
+     * Get all soft-deleted teachers (for audit/recovery)
+     *
+     * @return List of deleted teachers
+     */
+    List<Teacher> getDeleted();
+}
