@@ -362,6 +362,6 @@ Location: src/main/resources/fxml/FederationDashboard.fxml
     </center>
 
     <stylesheets>
-        <String fx:value="@../css/main.css"/>
+        <String fx:value="@../css/main-style.css"/>
     </stylesheets>
 </BorderPane>

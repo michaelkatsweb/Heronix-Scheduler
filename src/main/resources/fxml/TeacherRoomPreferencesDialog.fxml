@@ -136,7 +136,7 @@
     </buttonTypes>
 
     <stylesheets>
-        <String fx:value="@../css/styles.css"/>
+        <String fx:value="@../css/main-style.css"/>
     </stylesheets>
 
 </DialogPane>
