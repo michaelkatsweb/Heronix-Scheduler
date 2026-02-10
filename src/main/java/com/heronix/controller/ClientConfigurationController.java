@@ -35,7 +35,7 @@ public class ClientConfigurationController {
     // Configuration values from application.properties
     // IT can edit these in the backend's application.properties file
 
-    @Value("${heronix.client.server-url:http://localhost:8080}")
+    @Value("${heronix.client.server-url:http://localhost:9590}")
     private String primaryServerUrl;
 
     @Value("${heronix.client.fallback-servers:}")

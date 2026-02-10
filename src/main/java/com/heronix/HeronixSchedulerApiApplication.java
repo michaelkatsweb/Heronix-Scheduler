@@ -58,12 +58,12 @@ public class HeronixSchedulerApiApplication {
         log.info("╚═══════════════════════════════════════════════════════════════╝");
         log.info("");
         log.info("REST API Endpoints:");
-        log.info("  • Health:      http://localhost:8080/actuator/health");
-        log.info("  • Discovery:   http://localhost:8080/api/config/discovery");
-        log.info("  • Config:      http://localhost:8080/api/config/client");
+        log.info("  • Health:      http://localhost:9590/actuator/health");
+        log.info("  • Discovery:   http://localhost:9590/api/config/discovery");
+        log.info("  • Config:      http://localhost:9590/api/config/client");
         log.info("");
         log.info("H2 Console:");
-        log.info("  • URL:         http://localhost:8080/h2-console");
+        log.info("  • URL:         http://localhost:9590/h2-console");
         log.info("  • JDBC URL:    jdbc:h2:file:./data/eduscheduler");
         log.info("  • Username:    sa");
         log.info("  • Password:    (blank)");
