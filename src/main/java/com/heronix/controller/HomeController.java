@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
  * Location: src/main/java/com/eduscheduler/controller/HomeController.java
  * 
  * Redirects root URL (/) to H2 console or a welcome page
- * Prevents 404/403 errors when accessing http://localhost:8080
+ * Prevents 404/403 errors when accessing http://localhost:9590
  * 
  * @author Heronix Scheduling System Team
  * @version 1.0.0

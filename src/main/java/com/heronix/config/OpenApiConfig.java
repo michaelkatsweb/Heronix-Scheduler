@@ -17,8 +17,8 @@ import java.util.List;
  * OpenAPI/Swagger Configuration
  *
  * Provides REST API documentation at:
- * - Swagger UI: http://localhost:8080/swagger-ui.html
- * - OpenAPI JSON: http://localhost:8080/v3/api-docs
+ * - Swagger UI: http://localhost:9590/swagger-ui.html
+ * - OpenAPI JSON: http://localhost:9590/v3/api-docs
  *
  * @author Heronix Scheduling System Team
  * @version 1.0.0

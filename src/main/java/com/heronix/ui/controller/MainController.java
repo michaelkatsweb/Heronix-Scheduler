@@ -1054,7 +1054,7 @@ public class MainController {
     public void handleDatabaseConsole() {
         log.info("Action: Database Console");
         showInfo("Database Console",
-                "H2 Console available at:\nhttp://localhost:8080/h2-console\n\n" +
+                "H2 Console available at:\nhttp://localhost:9590/h2-console\n\n" +
                         "JDBC URL: jdbc:h2:file:./data/eduscheduler\n" +
                         "Username: sa\nPassword: (leave blank)");
     }
@@ -1066,7 +1066,7 @@ public class MainController {
     public void handleH2Console() {
         log.info("Opening H2 Console in browser...");
         try {
-            String url = "http://localhost:8080/h2-console";
+            String url = "http://localhost:9590/h2-console";
 
             // Try to open in default browser
             if (java.awt.Desktop.isDesktopSupported()) {
@@ -1091,7 +1091,7 @@ public class MainController {
             showError("Browser Error",
                 "Could not open browser automatically.\n\n" +
                 "Please manually navigate to:\n" +
-                "http://localhost:8080/h2-console\n\n" +
+                "http://localhost:9590/h2-console\n\n" +
                 "Connection Details:\n" +
                 "JDBC URL: jdbc:h2:file:./data/eduscheduler\n" +
                 "Username: sa\n" +
@@ -1176,7 +1176,7 @@ public class MainController {
                 "2. Copy file: ./data/eduscheduler.mv.db\n" +
                 "3. Save as: ./data/" + backupFilename + "\n\n" +
                 "Method 2: Export SQL\n" +
-                "1. Open H2 Console: http://localhost:8080/h2-console\n" +
+                "1. Open H2 Console: http://localhost:9590/h2-console\n" +
                 "2. Run: SCRIPT TO 'backup.sql';\n" +
                 "3. Save the generated SQL file\n\n" +
                 "Restore from Backup:\n" +
